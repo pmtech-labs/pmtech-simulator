@@ -1,6 +1,8 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   BarChart3,
+  Dumbbell,
+
   GraduationCap,
   History,
   LayoutDashboard,
