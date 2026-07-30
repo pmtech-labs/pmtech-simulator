@@ -1,4 +1,4 @@
-import type { CaseCluster, Question } from "@/types/exam";
+import type { CaseCluster, DomainCode, Question } from "@/types/exam";
 
 /**
  * DATOS SIMULADOS
@@ -202,12 +202,13 @@ export const MOCK_USER = {
 };
 
 export const MOCK_EXAM_HISTORY = [
-  { id: "ex-07", date: "24 jul 2026", mode: "Simulación completa", questions: 180, score: 71, duration: "3h 52m", status: "Aprobado" },
-  { id: "ex-06", date: "17 jul 2026", mode: "Práctica · Entorno", questions: 40, score: 58, duration: "48m", status: "Por debajo" },
-  { id: "ex-05", date: "11 jul 2026", mode: "Solo casos", questions: 25, score: 64, duration: "37m", status: "Ajustado" },
-  { id: "ex-04", date: "03 jul 2026", mode: "Simulación completa", questions: 180, score: 66, duration: "4h 01m", status: "Ajustado" },
-  { id: "ex-03", date: "27 jun 2026", mode: "Práctica · Personas", questions: 40, score: 78, duration: "44m", status: "Aprobado" },
+  { id: "ex-07", date: "24 jul 2026", mode: "Simulación completa", questions: 180, score: 71, duration: "3h 52m", status: "Aprobado", domains: ["people", "process", "business"] as DomainCode[], scoreByDomain: { people: 76, process: 70, business: 64 } },
+  { id: "ex-06", date: "17 jul 2026", mode: "Práctica · Entorno", questions: 40, score: 58, duration: "48m", status: "Por debajo", domains: ["business"] as DomainCode[], scoreByDomain: { business: 58 } },
+  { id: "ex-05", date: "11 jul 2026", mode: "Solo casos", questions: 25, score: 64, duration: "37m", status: "Ajustado", domains: ["process", "business"] as DomainCode[], scoreByDomain: { process: 67, business: 60 } },
+  { id: "ex-04", date: "03 jul 2026", mode: "Simulación completa", questions: 180, score: 66, duration: "4h 01m", status: "Ajustado", domains: ["people", "process", "business"] as DomainCode[], scoreByDomain: { people: 70, process: 65, business: 61 } },
+  { id: "ex-03", date: "27 jun 2026", mode: "Práctica · Personas", questions: 40, score: 78, duration: "44m", status: "Aprobado", domains: ["people"] as DomainCode[], scoreByDomain: { people: 78 } },
 ];
+
 
 export const MOCK_TASK_MASTERY = [
   { code: "P-1", title: "Gestionar el conflicto", domain: "people" as const, mastery: 82 },

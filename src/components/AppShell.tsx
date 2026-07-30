@@ -1,6 +1,8 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   BarChart3,
+  Dumbbell,
+
   GraduationCap,
   History,
   LayoutDashboard,
@@ -18,10 +20,12 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { to: "/", label: "Panel", icon: LayoutDashboard },
   { to: "/examen", label: "Simulación", icon: Target },
+  { to: "/practica", label: "Práctica por dominios", icon: Dumbbell },
   { to: "/historial", label: "Historial", icon: History },
   { to: "/progreso", label: "Mi progreso", icon: BarChart3 },
   { to: "/perfil", label: "Perfil y licencia", icon: UserCog },
 ] as const;
+
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
