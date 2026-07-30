@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
+import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { EarnedValueChart } from "@/components/exam/EarnedValueChart";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { MatchingQuestion } from "@/components/exam/MatchingQuestion";
@@ -371,6 +372,10 @@ function Results({
             </Link>
           </div>
         </div>
+
+        <DistractorAnalytics
+          items={questions.map((q) => ({ question: q, answer: answers[q.id] }))}
+        />
 
         <h2 className="text-base font-semibold">Revisión detallada</h2>
         {questions.map((q, i) => (

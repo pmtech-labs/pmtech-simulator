@@ -3,6 +3,7 @@ import { CheckCircle2, ChevronRight, Clock, RotateCcw, Target, XCircle } from "l
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
+import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { MatchingQuestion } from "@/components/exam/MatchingQuestion";
 import { OptionList } from "@/components/exam/OptionList";
@@ -204,6 +205,10 @@ function PracticePage() {
               ))}
             </div>
           </section>
+
+          <DistractorAnalytics
+            items={drill.map((q, i) => ({ question: q, answer: answers[i] }))}
+          />
 
           <section className="space-y-4">
             <h2 className="text-sm font-semibold">Revisión</h2>
