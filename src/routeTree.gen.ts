@@ -16,6 +16,7 @@ import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PracticaRouteImport } from './routes/practica'
 import { Route as ProgresoRouteImport } from './routes/progreso'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,34 +53,41 @@ const ProgresoRoute = ProgresoRouteImport.update({
   path: '/progreso',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/examen': typeof ExamenRoute
   '/historial': typeof HistorialRoute
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/examen': typeof ExamenRoute
   '/historial': typeof HistorialRoute
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/examen': typeof ExamenRoute
   '/historial': typeof HistorialRoute
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,15 +99,16 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/practica'
     | '/progreso'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/examen'
     | '/historial'
     | '/perfil'
     | '/practica'
     | '/progreso'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -109,11 +118,12 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/practica'
     | '/progreso'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   ExamenRoute: typeof ExamenRoute
   HistorialRoute: typeof HistorialRoute
   PerfilRoute: typeof PerfilRoute
@@ -172,12 +182,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgresoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   ExamenRoute: ExamenRoute,
   HistorialRoute: HistorialRoute,
   PerfilRoute: PerfilRoute,
