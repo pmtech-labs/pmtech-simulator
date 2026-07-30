@@ -1,4 +1,4 @@
-import type { CaseCluster, Question } from "@/types/exam";
+import type { CaseCluster, DomainCode, Question } from "@/types/exam";
 
 /**
  * DATOS SIMULADOS
