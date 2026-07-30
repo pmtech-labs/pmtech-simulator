@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -56,6 +57,11 @@ export function AdminLogin({ onSignedIn }: { onSignedIn: () => void }) {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
           />
+        </div>
+        <div className="text-right">
+          <Link to="/forgot-password" className="text-xs font-medium text-primary hover:underline">
+            ¿Olvidaste tu contraseña?
+          </Link>
         </div>
         {error && <p className="text-xs text-destructive">{error}</p>}
         <button
