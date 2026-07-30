@@ -1,10 +1,9 @@
 import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { AdminLogin } from "@/components/admin/AdminLogin";
-import { supabase } from "@/integrations/supabase/client";
 import { checkIsAdmin } from "@/services/adminService";
 
 export const Route = createFileRoute("/admin")({
@@ -23,7 +22,6 @@ export const Route = createFileRoute("/admin")({
 
 function AdminLayout() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState<string | null>(null);
 
   const access = useQuery({
     queryKey: ["admin-access"],
@@ -32,17 +30,13 @@ function AdminLayout() {
     refetchOnWindowFocus: false,
   });
 
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
-  }, [access.data]);
+  const denied = Boolean(access.data && access.data.authenticated && !access.data.isAdmin);
 
   useEffect(() => {
-    if (access.data && access.data.authenticated && !access.data.isAdmin) {
-      navigate({ to: "/", replace: true });
-    }
-  }, [access.data, navigate]);
+    if (denied) navigate({ to: "/", replace: true });
+  }, [denied, navigate]);
 
-  if (access.isPending || access.isFetching) {
+  if (access.isPending) {
     return (
       <div className="grid min-h-screen place-items-center bg-muted/40">
         <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
@@ -58,13 +52,5 @@ function AdminLayout() {
     return <div className="min-h-screen bg-muted/40" />;
   }
 
-  return <AdminContext.Provider value={{ email }}>{<Outlet />}</AdminContext.Provider>;
-}
-
-import { createContext, useContext } from "react";
-
-const AdminContext = createContext<{ email: string | null }>({ email: null });
-
-export function useAdminEmail() {
-  return useContext(AdminContext).email;
+  return <Outlet />;
 }
