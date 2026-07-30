@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          role?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       case_clusters: {
         Row: {
           created_at: string | null
@@ -260,6 +281,13 @@ export type Database = {
             referencedRelation: "questions"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "exam_items_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "v_question_stats"
+            referencedColumns: ["question_id"]
+          },
         ]
       }
       exams: {
@@ -318,6 +346,74 @@ export type Database = {
           },
         ]
       }
+      generation_jobs: {
+        Row: {
+          approach: Database["public"]["Enums"]["approach_type"] | null
+          completed_at: string | null
+          connector_id: string | null
+          count_failed: number | null
+          count_generated: number | null
+          count_requested: number
+          created_at: string | null
+          difficulty_max: number | null
+          difficulty_min: number | null
+          error_message: string | null
+          focus_tags: string[] | null
+          format: Database["public"]["Enums"]["item_format"]
+          id: string
+          requested_by: string | null
+          started_at: string | null
+          status: string
+          task_ids: string[]
+        }
+        Insert: {
+          approach?: Database["public"]["Enums"]["approach_type"] | null
+          completed_at?: string | null
+          connector_id?: string | null
+          count_failed?: number | null
+          count_generated?: number | null
+          count_requested: number
+          created_at?: string | null
+          difficulty_max?: number | null
+          difficulty_min?: number | null
+          error_message?: string | null
+          focus_tags?: string[] | null
+          format?: Database["public"]["Enums"]["item_format"]
+          id?: string
+          requested_by?: string | null
+          started_at?: string | null
+          status?: string
+          task_ids: string[]
+        }
+        Update: {
+          approach?: Database["public"]["Enums"]["approach_type"] | null
+          completed_at?: string | null
+          connector_id?: string | null
+          count_failed?: number | null
+          count_generated?: number | null
+          count_requested?: number
+          created_at?: string | null
+          difficulty_max?: number | null
+          difficulty_min?: number | null
+          error_message?: string | null
+          focus_tags?: string[] | null
+          format?: Database["public"]["Enums"]["item_format"]
+          id?: string
+          requested_by?: string | null
+          started_at?: string | null
+          status?: string
+          task_ids?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generation_jobs_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "llm_connectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       licenses: {
         Row: {
           created_at: string | null
@@ -361,6 +457,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      llm_connectors: {
+        Row: {
+          api_base_url: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_active: boolean | null
+          model_id: string
+          name: string
+          provider: string
+          secret_id: string
+        }
+        Insert: {
+          api_base_url?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          model_id: string
+          name: string
+          provider: string
+          secret_id: string
+        }
+        Update: {
+          api_base_url?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          model_id?: string
+          name?: string
+          provider?: string
+          secret_id?: string
+        }
+        Relationships: []
       }
       plans: {
         Row: {
@@ -579,6 +711,48 @@ export type Database = {
       }
     }
     Views: {
+      v_exam_stats: {
+        Row: {
+          avg_score_pct: number | null
+          first_exam_at: string | null
+          last_exam_at: string | null
+          mode: Database["public"]["Enums"]["exam_mode"] | null
+          status: string | null
+          total_exams: number | null
+        }
+        Relationships: []
+      }
+      v_question_stats: {
+        Row: {
+          domain_name: string | null
+          format: Database["public"]["Enums"]["item_format"] | null
+          item_type: Database["public"]["Enums"]["item_type"] | null
+          question_id: string | null
+          status: Database["public"]["Enums"]["item_status"] | null
+          success_rate_pct: number | null
+          task_id: string | null
+          task_title: string | null
+          times_answered: number | null
+          times_correct: number | null
+          times_used_in_exams: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "eco_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "questions_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "v_task_coverage"
+            referencedColumns: ["task_id"]
+          },
+        ]
+      }
       v_task_coverage: {
         Row: {
           domain_code: string | null
@@ -598,6 +772,7 @@ export type Database = {
       }
     }
     Functions: {
+      is_admin: { Args: { p_user_id: string }; Returns: boolean }
       upsert_task_mastery: {
         Args: { p_is_correct: boolean; p_task_id: string; p_user_id: string }
         Returns: undefined
@@ -609,6 +784,14 @@ export type Database = {
           task_id: string
           task_title: string
         }[]
+      }
+      vault_create_secret_for_connector: {
+        Args: { p_name: string; p_secret_value: string }
+        Returns: string
+      }
+      vault_read_secret_for_connector: {
+        Args: { p_secret_id: string }
+        Returns: string
       }
     }
     Enums: {
