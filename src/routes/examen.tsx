@@ -373,6 +373,10 @@ function Results({
           </div>
         </div>
 
+        <DistractorAnalytics
+          items={questions.map((q) => ({ question: q, answer: answers[q.id] }))}
+        />
+
         <h2 className="text-base font-semibold">Revisión detallada</h2>
         {questions.map((q, i) => (
           <div key={q.id} className="space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-5">
