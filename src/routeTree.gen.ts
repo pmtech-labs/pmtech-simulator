@@ -18,6 +18,7 @@ import { Route as PracticaRouteImport } from './routes/practica'
 import { Route as ProgresoRouteImport } from './routes/progreso'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
+import { Route as AdminGenerateRouteImport } from './routes/admin.generate'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +65,11 @@ const AdminConnectorsRoute = AdminConnectorsRouteImport.update({
   path: '/connectors',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminGenerateRoute = AdminGenerateRouteImport.update({
+  id: '/generate',
+  path: '/generate',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/admin/connectors': typeof AdminConnectorsRoute
+  '/admin/generate': typeof AdminGenerateRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/admin/connectors': typeof AdminConnectorsRoute
+  '/admin/generate': typeof AdminGenerateRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/admin/connectors': typeof AdminConnectorsRoute
+  '/admin/generate': typeof AdminGenerateRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/practica'
     | '/progreso'
     | '/admin/connectors'
+    | '/admin/generate'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/practica'
     | '/progreso'
     | '/admin/connectors'
+    | '/admin/generate'
     | '/admin'
   id:
     | '__root__'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/practica'
     | '/progreso'
     | '/admin/connectors'
+    | '/admin/generate'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -208,16 +220,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminConnectorsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/generate': {
+      id: '/admin/generate'
+      path: '/generate'
+      fullPath: '/admin/generate'
+      preLoaderRoute: typeof AdminGenerateRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
   AdminConnectorsRoute: typeof AdminConnectorsRoute
+  AdminGenerateRoute: typeof AdminGenerateRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminConnectorsRoute: AdminConnectorsRoute,
+  AdminGenerateRoute: AdminGenerateRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
