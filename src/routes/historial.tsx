@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
+import { ExportCenter } from "@/components/export/ExportCenter";
+
 import { MOCK_EXAM_HISTORY } from "@/data/mockData";
 import { cn } from "@/lib/utils";
 
