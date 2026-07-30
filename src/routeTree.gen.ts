@@ -12,10 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ExamenRouteImport } from './routes/examen'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PracticaRouteImport } from './routes/practica'
 import { Route as ProgresoRouteImport } from './routes/progreso'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
 import { Route as AdminGenerateRouteImport } from './routes/admin.generate'
@@ -36,6 +38,11 @@ const ExamenRoute = ExamenRouteImport.update({
   path: '/examen',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HistorialRoute = HistorialRouteImport.update({
   id: '/historial',
   path: '/historial',
@@ -54,6 +61,11 @@ const PracticaRoute = PracticaRouteImport.update({
 const ProgresoRoute = ProgresoRouteImport.update({
   id: '/progreso',
   path: '/progreso',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -81,10 +93,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/examen': typeof ExamenRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/generate': typeof AdminGenerateRoute
   '/admin/review': typeof AdminReviewRoute
@@ -93,10 +107,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/examen': typeof ExamenRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/generate': typeof AdminGenerateRoute
   '/admin/review': typeof AdminReviewRoute
@@ -107,10 +123,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/examen': typeof ExamenRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/generate': typeof AdminGenerateRoute
   '/admin/review': typeof AdminReviewRoute
@@ -122,10 +140,12 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/examen'
+    | '/forgot-password'
     | '/historial'
     | '/perfil'
     | '/practica'
     | '/progreso'
+    | '/reset-password'
     | '/admin/connectors'
     | '/admin/generate'
     | '/admin/review'
@@ -134,10 +154,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/examen'
+    | '/forgot-password'
     | '/historial'
     | '/perfil'
     | '/practica'
     | '/progreso'
+    | '/reset-password'
     | '/admin/connectors'
     | '/admin/generate'
     | '/admin/review'
@@ -147,10 +169,12 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/examen'
+    | '/forgot-password'
     | '/historial'
     | '/perfil'
     | '/practica'
     | '/progreso'
+    | '/reset-password'
     | '/admin/connectors'
     | '/admin/generate'
     | '/admin/review'
@@ -161,10 +185,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   ExamenRoute: typeof ExamenRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistorialRoute: typeof HistorialRoute
   PerfilRoute: typeof PerfilRoute
   PracticaRoute: typeof PracticaRoute
   ProgresoRoute: typeof ProgresoRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -188,6 +214,13 @@ declare module '@tanstack/react-router' {
       path: '/examen'
       fullPath: '/examen'
       preLoaderRoute: typeof ExamenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/historial': {
@@ -216,6 +249,13 @@ declare module '@tanstack/react-router' {
       path: '/progreso'
       fullPath: '/progreso'
       preLoaderRoute: typeof ProgresoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -269,10 +309,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   ExamenRoute: ExamenRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   HistorialRoute: HistorialRoute,
   PerfilRoute: PerfilRoute,
   PracticaRoute: PracticaRoute,
   ProgresoRoute: ProgresoRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
