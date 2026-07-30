@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ExamenRouteImport } from './routes/examen'
 import { Route as HistorialRouteImport } from './routes/historial'
+import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as ProgresoRouteImport } from './routes/progreso'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const HistorialRoute = HistorialRouteImport.update({
   path: '/historial',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PerfilRoute = PerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProgresoRoute = ProgresoRouteImport.update({
   id: '/progreso',
   path: '/progreso',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/examen': typeof ExamenRoute
   '/historial': typeof HistorialRoute
+  '/perfil': typeof PerfilRoute
   '/progreso': typeof ProgresoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/examen': typeof ExamenRoute
   '/historial': typeof HistorialRoute
+  '/perfil': typeof PerfilRoute
   '/progreso': typeof ProgresoRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/examen': typeof ExamenRoute
   '/historial': typeof HistorialRoute
+  '/perfil': typeof PerfilRoute
   '/progreso': typeof ProgresoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/examen' | '/historial' | '/progreso'
+  fullPaths: '/' | '/examen' | '/historial' | '/perfil' | '/progreso'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/examen' | '/historial' | '/progreso'
-  id: '__root__' | '/' | '/examen' | '/historial' | '/progreso'
+  to: '/' | '/examen' | '/historial' | '/perfil' | '/progreso'
+  id: '__root__' | '/' | '/examen' | '/historial' | '/perfil' | '/progreso'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExamenRoute: typeof ExamenRoute
   HistorialRoute: typeof HistorialRoute
+  PerfilRoute: typeof PerfilRoute
   ProgresoRoute: typeof ProgresoRoute
 }
 
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistorialRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/perfil': {
+      id: '/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof PerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/progreso': {
       id: '/progreso'
       path: '/progreso'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExamenRoute: ExamenRoute,
   HistorialRoute: HistorialRoute,
+  PerfilRoute: PerfilRoute,
   ProgresoRoute: ProgresoRoute,
 }
 export const routeTree = rootRouteImport
