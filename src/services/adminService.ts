@@ -112,12 +112,12 @@ async function callFunction<T>(
   options: {
     method?: "GET" | "POST" | "PATCH" | "DELETE";
     query?: Record<string, string | number | boolean | undefined | null>;
-    body?: Record<string, unknown>;
+    body?: unknown;
   } = {},
 ): Promise<T> {
   const { data, error } = await supabase.functions.invoke<T>(`${name}${qs(options.query ?? {})}`, {
     method: options.method ?? "GET",
-    ...(options.body !== undefined ? { body: options.body } : {}),
+    ...(options.body !== undefined ? { body: options.body as Record<string, unknown> } : {}),
   });
 
   if (error) {
