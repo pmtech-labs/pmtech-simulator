@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ExamenRouteImport } from './routes/examen'
+import { Route as HistorialRouteImport } from './routes/historial'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const ExamenRoute = ExamenRouteImport.update({
   path: '/examen',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HistorialRoute = HistorialRouteImport.update({
+  id: '/historial',
+  path: '/historial',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/examen': typeof ExamenRoute
+  '/historial': typeof HistorialRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/examen': typeof ExamenRoute
+  '/historial': typeof HistorialRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/examen': typeof ExamenRoute
+  '/historial': typeof HistorialRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/examen'
+  fullPaths: '/' | '/examen' | '/historial'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/examen'
-  id: '__root__' | '/' | '/examen'
+  to: '/' | '/examen' | '/historial'
+  id: '__root__' | '/' | '/examen' | '/historial'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExamenRoute: typeof ExamenRoute
+  HistorialRoute: typeof HistorialRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExamenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/historial': {
+      id: '/historial'
+      path: '/historial'
+      fullPath: '/historial'
+      preLoaderRoute: typeof HistorialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExamenRoute: ExamenRoute,
+  HistorialRoute: HistorialRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
