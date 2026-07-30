@@ -23,8 +23,10 @@ export const Route = createFileRoute("/historial")({
 function HistoryPage() {
   return (
     <AppShell title="Historial de exámenes" subtitle="Todas tus sesiones registradas">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-5xl space-y-5">
+        <ExportCenter />
         <div className="overflow-hidden rounded-2xl border border-border bg-card">
+
           <div className="hidden grid-cols-[1fr_1.2fr_auto_auto_auto_auto] gap-4 border-b border-border px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground sm:grid">
             <span>Fecha</span>
             <span>Modo</span>
