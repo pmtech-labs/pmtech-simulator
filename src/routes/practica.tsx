@@ -205,6 +205,10 @@ function PracticePage() {
             </div>
           </section>
 
+          <DistractorAnalytics
+            items={drill.map((q, i) => ({ question: q, answer: answers[i] }))}
+          />
+
           <section className="space-y-4">
             <h2 className="text-sm font-semibold">Revisión</h2>
             {drill.map((q, i) => {
