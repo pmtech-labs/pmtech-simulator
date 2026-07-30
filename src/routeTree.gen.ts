@@ -10,15 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ExamenRouteImport } from './routes/examen'
 import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PracticaRouteImport } from './routes/practica'
 import { Route as ProgresoRouteImport } from './routes/progreso'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
+import { Route as AdminGenerateRouteImport } from './routes/admin.generate'
+import { Route as AdminReviewRouteImport } from './routes/admin.review'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExamenRoute = ExamenRouteImport.update({
@@ -46,14 +56,39 @@ const ProgresoRoute = ProgresoRouteImport.update({
   path: '/progreso',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminConnectorsRoute = AdminConnectorsRouteImport.update({
+  id: '/connectors',
+  path: '/connectors',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminGenerateRoute = AdminGenerateRouteImport.update({
+  id: '/generate',
+  path: '/generate',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminReviewRoute = AdminReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/examen': typeof ExamenRoute
   '/historial': typeof HistorialRoute
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
+  '/admin/connectors': typeof AdminConnectorsRoute
+  '/admin/generate': typeof AdminGenerateRoute
+  '/admin/review': typeof AdminReviewRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,34 +97,69 @@ export interface FileRoutesByTo {
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
+  '/admin/connectors': typeof AdminConnectorsRoute
+  '/admin/generate': typeof AdminGenerateRoute
+  '/admin/review': typeof AdminReviewRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/examen': typeof ExamenRoute
   '/historial': typeof HistorialRoute
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
+  '/admin/connectors': typeof AdminConnectorsRoute
+  '/admin/generate': typeof AdminGenerateRoute
+  '/admin/review': typeof AdminReviewRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/examen' | '/historial' | '/perfil' | '/practica' | '/progreso'
+    | '/'
+    | '/admin'
+    | '/examen'
+    | '/historial'
+    | '/perfil'
+    | '/practica'
+    | '/progreso'
+    | '/admin/connectors'
+    | '/admin/generate'
+    | '/admin/review'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/examen' | '/historial' | '/perfil' | '/practica' | '/progreso'
-  id:
-    | '__root__'
+  to:
     | '/'
     | '/examen'
     | '/historial'
     | '/perfil'
     | '/practica'
     | '/progreso'
+    | '/admin/connectors'
+    | '/admin/generate'
+    | '/admin/review'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/examen'
+    | '/historial'
+    | '/perfil'
+    | '/practica'
+    | '/progreso'
+    | '/admin/connectors'
+    | '/admin/generate'
+    | '/admin/review'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   ExamenRoute: typeof ExamenRoute
   HistorialRoute: typeof HistorialRoute
   PerfilRoute: typeof PerfilRoute
@@ -104,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/examen': {
@@ -141,11 +218,56 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgresoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/connectors': {
+      id: '/admin/connectors'
+      path: '/connectors'
+      fullPath: '/admin/connectors'
+      preLoaderRoute: typeof AdminConnectorsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/generate': {
+      id: '/admin/generate'
+      path: '/generate'
+      fullPath: '/admin/generate'
+      preLoaderRoute: typeof AdminGenerateRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/review': {
+      id: '/admin/review'
+      path: '/review'
+      fullPath: '/admin/review'
+      preLoaderRoute: typeof AdminReviewRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminConnectorsRoute: typeof AdminConnectorsRoute
+  AdminGenerateRoute: typeof AdminGenerateRoute
+  AdminReviewRoute: typeof AdminReviewRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminConnectorsRoute: AdminConnectorsRoute,
+  AdminGenerateRoute: AdminGenerateRoute,
+  AdminReviewRoute: AdminReviewRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   ExamenRoute: ExamenRoute,
   HistorialRoute: HistorialRoute,
   PerfilRoute: PerfilRoute,
