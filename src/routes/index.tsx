@@ -766,7 +766,17 @@ function Training() {
     <section id="formacion" className="border-y border-border bg-secondary/40">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-          <div>
+          <Reveal>
+            <figure className="group mb-8 overflow-hidden rounded-2xl border border-border shadow-panel">
+              <img
+                src={trainingSession}
+                alt="Sesión de formación PMP en directo con un grupo de profesionales"
+                loading="lazy"
+                width={1200}
+                height={912}
+                className="h-56 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 sm:h-64"
+              />
+            </figure>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-accent-foreground">
               <GraduationCap className="h-3.5 w-3.5 text-accent" />
               Formación PMP® · 35 horas
@@ -788,7 +798,10 @@ function Training() {
                 "Revisión de tu solicitud y de tu experiencia antes de aplicar",
                 "Modalidad individual o in-company para equipos",
               ].map((item) => (
-                <li key={item} className="flex items-start gap-2">
+                <li
+                  key={item}
+                  className="flex items-start gap-2 transition-transform duration-300 hover:translate-x-1"
+                >
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
                   <span>{item}</span>
                 </li>
@@ -798,8 +811,10 @@ function Training() {
               Déjanos tus datos y te enviamos programa, fechas y precio sin compromiso. Nada
               de llamadas comerciales insistentes.
             </p>
-          </div>
-          <TrainingContactForm />
+          </Reveal>
+          <Reveal delay={140}>
+            <TrainingContactForm />
+          </Reveal>
         </div>
       </div>
     </section>
