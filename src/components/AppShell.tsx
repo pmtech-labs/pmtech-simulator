@@ -156,7 +156,7 @@ export function AppShell({
     <>
       <div className="flex min-h-screen w-full bg-background">
         <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-sidebar-border lg:block">
-          <SidebarInner onExamClick={() => setShowExamConfirm(true)} />
+          <SidebarInner onExamClick={openExamConfirm} />
         </aside>
 
         {open && (
@@ -169,7 +169,7 @@ export function AppShell({
             <div className="absolute left-0 top-0 h-full w-64 shadow-panel">
               <SidebarInner
                 onNavigate={() => setOpen(false)}
-                onExamClick={() => setShowExamConfirm(true)}
+                onExamClick={openExamConfirm}
               />
             </div>
           </div>
