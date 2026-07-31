@@ -353,7 +353,7 @@ function QuestionRow({
       </tr>
       {open && (
         <tr>
-          <td colSpan={8} className="bg-muted/40 px-4 py-3 text-sm">
+          <td colSpan={9} className="bg-muted/40 px-4 py-3 text-sm">
             {q.cluster_scenario && (
               <div className="mb-3 rounded-md border border-border bg-card p-3">
                 <p className="text-[11px] font-semibold uppercase text-muted-foreground">Escenario del caso</p>
