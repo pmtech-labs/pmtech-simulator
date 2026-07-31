@@ -284,6 +284,13 @@ function Header() {
             <a href="#como-funciona" onClick={() => setOpen(false)}>
               Cómo funciona
             </a>
+            <a href="#opiniones" onClick={() => setOpen(false)}>
+              Opiniones
+            </a>
+            <a href="#sobre-nosotros" onClick={() => setOpen(false)}>
+              Sobre nosotros
+            </a>
+
             <a href="#precios" onClick={() => setOpen(false)}>
               Precios
             </a>
