@@ -147,6 +147,10 @@ function ProgressPage() {
           )}
         </section>
 
+        <StudyPlanCard steps={studyPlan} />
+
+
+
         <section className="rounded-2xl border border-accent bg-warning-soft p-5">
 
           <div className="flex items-start gap-3">
