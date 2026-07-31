@@ -100,11 +100,23 @@ function ExamPage() {
   const startedRef = useRef(false);
 
   const [session, setSession] = useState<ExamSession | null>(null);
+  const [resume, setResume] = useState<ExamProgress | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     if (startedRef.current) return;
     startedRef.current = true;
+
+    if (search.reanudar === "1") {
+      const saved = loadExamProgress();
+      if (saved) {
+        setResume(saved);
+        setSession(saved.session);
+        return;
+      }
+    }
+
+    clearExamProgress();
     startExam({
       mode,
       domains: search.dominio ? [search.dominio] : undefined,
@@ -113,7 +125,8 @@ function ExamPage() {
     })
       .then(setSession)
       .catch((e: Error) => setLoadError(e.message));
-  }, [mode, search.dominio, search.unidad, search.preguntas]);
+  }, [mode, search.dominio, search.unidad, search.preguntas, search.reanudar]);
+
 
   if (loadError) {
     return (
