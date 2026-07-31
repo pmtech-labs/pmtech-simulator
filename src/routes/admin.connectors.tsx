@@ -145,6 +145,14 @@ function ConnectorsPage() {
                       <Star className="h-3.5 w-3.5" /> Predeterminado
                     </button>
                   )}
+                  <button
+                    type="button"
+                    onClick={() => setEditing(c)}
+                    className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-secondary"
+                  >
+                    <Pencil className="h-3.5 w-3.5" /> Editar
+                  </button>
+
                   {c.is_active && (
                     <button
                       disabled={deactivate.isPending}
