@@ -23,6 +23,8 @@ import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as Pmbok8RouteImport } from './routes/pmbok-8'
+import { Route as PmtechVsPmiStudyHallRouteImport } from './routes/pmtech-vs-pmi-study-hall'
+import { Route as PmtechVsPrepcastRouteImport } from './routes/pmtech-vs-prepcast'
 import { Route as PracticaRouteImport } from './routes/practica'
 import { Route as ProgresoRouteImport } from './routes/progreso'
 import { Route as RegistroRouteImport } from './routes/registro'
@@ -106,6 +108,16 @@ const Pmbok8Route = Pmbok8RouteImport.update({
   path: '/pmbok-8',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PmtechVsPmiStudyHallRoute = PmtechVsPmiStudyHallRouteImport.update({
+  id: '/pmtech-vs-pmi-study-hall',
+  path: '/pmtech-vs-pmi-study-hall',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PmtechVsPrepcastRoute = PmtechVsPrepcastRouteImport.update({
+  id: '/pmtech-vs-prepcast',
+  path: '/pmtech-vs-prepcast',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PracticaRoute = PracticaRouteImport.update({
   id: '/practica',
   path: '/practica',
@@ -182,6 +194,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
+  '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
+  '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/registro': typeof RegistroRoute
@@ -209,6 +223,8 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
+  '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
+  '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/registro': typeof RegistroRoute
@@ -238,6 +254,8 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
+  '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
+  '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/registro': typeof RegistroRoute
@@ -268,6 +286,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/perfil'
     | '/pmbok-8'
+    | '/pmtech-vs-pmi-study-hall'
+    | '/pmtech-vs-prepcast'
     | '/practica'
     | '/progreso'
     | '/registro'
@@ -295,6 +315,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/perfil'
     | '/pmbok-8'
+    | '/pmtech-vs-pmi-study-hall'
+    | '/pmtech-vs-prepcast'
     | '/practica'
     | '/progreso'
     | '/registro'
@@ -323,6 +345,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/perfil'
     | '/pmbok-8'
+    | '/pmtech-vs-pmi-study-hall'
+    | '/pmtech-vs-prepcast'
     | '/practica'
     | '/progreso'
     | '/registro'
@@ -352,6 +376,8 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PerfilRoute: typeof PerfilRoute
   Pmbok8Route: typeof Pmbok8Route
+  PmtechVsPmiStudyHallRoute: typeof PmtechVsPmiStudyHallRoute
+  PmtechVsPrepcastRoute: typeof PmtechVsPrepcastRoute
   PracticaRoute: typeof PracticaRoute
   ProgresoRoute: typeof ProgresoRoute
   RegistroRoute: typeof RegistroRoute
@@ -459,6 +485,20 @@ declare module '@tanstack/react-router' {
       path: '/pmbok-8'
       fullPath: '/pmbok-8'
       preLoaderRoute: typeof Pmbok8RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pmtech-vs-pmi-study-hall': {
+      id: '/pmtech-vs-pmi-study-hall'
+      path: '/pmtech-vs-pmi-study-hall'
+      fullPath: '/pmtech-vs-pmi-study-hall'
+      preLoaderRoute: typeof PmtechVsPmiStudyHallRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pmtech-vs-prepcast': {
+      id: '/pmtech-vs-prepcast'
+      path: '/pmtech-vs-prepcast'
+      fullPath: '/pmtech-vs-prepcast'
+      preLoaderRoute: typeof PmtechVsPrepcastRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/practica': {
@@ -581,6 +621,8 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PerfilRoute: PerfilRoute,
   Pmbok8Route: Pmbok8Route,
+  PmtechVsPmiStudyHallRoute: PmtechVsPmiStudyHallRoute,
+  PmtechVsPrepcastRoute: PmtechVsPrepcastRoute,
   PracticaRoute: PracticaRoute,
   ProgresoRoute: ProgresoRoute,
   RegistroRoute: RegistroRoute,
@@ -592,3 +634,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
