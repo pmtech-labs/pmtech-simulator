@@ -24,6 +24,8 @@ import {
 import { AboutUs } from "@/components/landing/AboutUs";
 import { SocialProof } from "@/components/landing/SocialProof";
 import { NewsletterSignup } from "@/components/landing/NewsletterSignup";
+import { Guarantees } from "@/components/landing/Guarantees";
+import { LeadWizard } from "@/components/landing/LeadWizard";
 import { Reveal } from "@/components/landing/Reveal";
 import heroDashboard from "@/assets/hero-dashboard.jpg";
 import diagnosticAbstract from "@/assets/diagnostic-abstract.jpg";
@@ -257,6 +259,9 @@ function Header() {
           <a href="#sobre-nosotros" className="transition-colors hover:text-foreground">
             Sobre nosotros
           </a>
+          <a href="#garantias" className="transition-colors hover:text-foreground">
+            Garantías
+          </a>
           <a href="#precios" className="transition-colors hover:text-foreground">
             Precios
           </a>
@@ -310,6 +315,9 @@ function Header() {
               Sobre nosotros
             </a>
 
+            <a href="#garantias" onClick={() => setOpen(false)}>
+              Garantías
+            </a>
             <a href="#precios" onClick={() => setOpen(false)}>
               Precios
             </a>
@@ -318,6 +326,9 @@ function Header() {
             </a>
             <a href="#faq" onClick={() => setOpen(false)}>
               Preguntas frecuentes
+            </a>
+            <a href="#contacto" onClick={() => setOpen(false)}>
+              Contacto
             </a>
 
             <Link to="/dashboard" onClick={() => setOpen(false)}>
@@ -738,6 +749,12 @@ function Footer() {
             <a href="#formacion" className="hover:text-foreground">
               Formación PMP
             </a>
+            <a href="#garantias" className="hover:text-foreground">
+              Garantías
+            </a>
+            <a href="#contacto" className="hover:text-foreground">
+              Contacto
+            </a>
             <a href="#boletin" className="hover:text-foreground">
               Boletín
             </a>
@@ -853,12 +870,14 @@ function LandingPage() {
         <SocialProof />
         <Features />
         <HowItWorks />
+        <Guarantees />
         <AboutUs />
         <Pricing />
         <Training />
         <FAQ />
         <Newsletter />
         <FinalCta />
+        <LeadWizard />
       </main>
       <Footer />
     </div>
