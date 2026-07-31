@@ -8,9 +8,11 @@ import type { AnswerValue, CaseCluster, Question } from "@/types/exam";
  */
 
 export interface StartExamParams {
-  mode: "full_sim" | "domain_drill" | "case_only" | "custom";
+  mode: "full_sim" | "domain_drill" | "case_only" | "custom" | "unit_quiz" | "cumulative";
   domains?: string[];
   totalQuestions?: number;
+  /** Obligatorio en `unit_quiz` (esa lección) y en `cumulative` (hasta esa lección). */
+  unitId?: string;
 }
 
 export interface ExamSession {
@@ -20,6 +22,7 @@ export interface ExamSession {
   clusters: Record<string, CaseCluster>;
   timeLimitSeconds: number;
 }
+
 
 export async function startExam(params: StartExamParams): Promise<ExamSession> {
   // TODO: backend — invocar Edge Function `start_exam` (genera exams + exam_items)
