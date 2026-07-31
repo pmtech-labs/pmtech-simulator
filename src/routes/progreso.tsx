@@ -148,7 +148,7 @@ function ProgressPage() {
           )}
         </section>
 
-        <UnitProgressCard />
+        <UnitAnalytics />
 
         <StudyPlanCard steps={studyPlan} />
 
