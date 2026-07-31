@@ -210,7 +210,7 @@ function StatsTable({
             </tr>
           }
         >
-          {rows.map((r) => (
+          {visibleRows.map((r) => (
             <tr key={r.question_id} className="align-top">
               <td className="max-w-md px-3 py-2">
                 <button
