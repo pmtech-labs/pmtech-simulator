@@ -28,6 +28,7 @@ export const Route = createFileRoute("/api/public/bootstrap-admin")({
           return Response.json({ error: "email y password (min. 10) requeridos" }, { status: 400 });
         }
 
+        try {
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
         let userId: string | null = null;
@@ -66,6 +67,9 @@ export const Route = createFileRoute("/api/public/bootstrap-admin")({
         }
 
         return Response.json({ ok: true, user_id: userId, email });
+        } catch (e) {
+          return Response.json({ error: String(e) }, { status: 500 });
+        }
       },
     },
   },
