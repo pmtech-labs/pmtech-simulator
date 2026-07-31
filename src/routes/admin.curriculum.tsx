@@ -142,9 +142,34 @@ function CurriculumPage() {
             }
           >
             {rows.map((u, i) => (
-              <tr key={u.id} className="align-top">
+              <tr
+                key={u.id}
+                draggable
+                onDragStart={() => setDragId(u.id)}
+                onDragEnd={() => {
+                  setDragId(null);
+                  setOverId(null);
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  if (dragId && dragId !== u.id) setOverId(u.id);
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  handleDrop(u.id);
+                }}
+                className={cn(
+                  "align-top",
+                  dragId === u.id && "opacity-50",
+                  overId === u.id && "bg-secondary",
+                )}
+              >
                 <td className="px-3 py-2 text-muted-foreground">
                   <div className="flex items-center gap-1">
+                    <GripVertical
+                      className="h-3.5 w-3.5 cursor-grab text-muted-foreground/70"
+                      aria-hidden
+                    />
                     <span className="num w-5">{u.sequence}</span>
                     <div className="flex flex-col">
                       <button
@@ -166,6 +191,7 @@ function CurriculumPage() {
                     </div>
                   </div>
                 </td>
+
                 <td className="px-3 py-2">
                   <p className="font-medium">{u.title}</p>
                   {u.description && (
