@@ -148,7 +148,7 @@ function UnitRow({
             <div className="mt-4 flex flex-wrap gap-2">
               <Link
                 to="/practica"
-                search={{ modo: "unit_quiz", unidad: unit.id }}
+                search={{ modo: "unit_quiz", unidad: unit.id, repaso: undefined }}
                 className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground"
               >
                 <BookOpen className="h-4 w-4" /> Practicar esta lección
@@ -163,7 +163,7 @@ function UnitRow({
               {canCumulative ? (
                 <Link
                   to="/practica"
-                  search={{ modo: "cumulative", unidad: unit.id }}
+                  search={{ modo: "cumulative", unidad: unit.id, repaso: undefined }}
                   className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-semibold transition-colors hover:bg-secondary"
                 >
                   <Layers className="h-4 w-4" /> Simulacro acumulativo hasta aquí
