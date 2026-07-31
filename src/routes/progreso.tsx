@@ -150,6 +150,8 @@ function ProgressPage() {
 
         <UnitProgressCard />
 
+        <StudyPlanCard steps={studyPlan} />
+
 
 
         <section className="rounded-2xl border border-accent bg-warning-soft p-5">
