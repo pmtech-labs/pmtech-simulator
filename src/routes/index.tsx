@@ -21,7 +21,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AboutUs } from "@/components/landing/AboutUs";
+import { SocialProof } from "@/components/landing/SocialProof";
 import { NewsletterSignup } from "@/components/landing/NewsletterSignup";
+
 import { TrainingContactForm } from "@/components/landing/TrainingContactForm";
 import { PLANS } from "@/services/checkoutService";
 
@@ -229,8 +232,11 @@ function Header() {
           <a href="#caracteristicas" className="transition-colors hover:text-foreground">
             Características
           </a>
-          <a href="#como-funciona" className="transition-colors hover:text-foreground">
-            Cómo funciona
+          <a href="#opiniones" className="transition-colors hover:text-foreground">
+            Opiniones
+          </a>
+          <a href="#sobre-nosotros" className="transition-colors hover:text-foreground">
+            Sobre nosotros
           </a>
           <a href="#precios" className="transition-colors hover:text-foreground">
             Precios
@@ -241,6 +247,7 @@ function Header() {
           <a href="#faq" className="transition-colors hover:text-foreground">
             Preguntas frecuentes
           </a>
+
 
         </nav>
 
@@ -277,6 +284,13 @@ function Header() {
             <a href="#como-funciona" onClick={() => setOpen(false)}>
               Cómo funciona
             </a>
+            <a href="#opiniones" onClick={() => setOpen(false)}>
+              Opiniones
+            </a>
+            <a href="#sobre-nosotros" onClick={() => setOpen(false)}>
+              Sobre nosotros
+            </a>
+
             <a href="#precios" onClick={() => setOpen(false)}>
               Precios
             </a>
@@ -643,9 +657,16 @@ function Footer() {
             <a href="#caracteristicas" className="hover:text-foreground">
               Características
             </a>
+            <a href="#opiniones" className="hover:text-foreground">
+              Opiniones
+            </a>
+            <a href="#sobre-nosotros" className="hover:text-foreground">
+              Sobre nosotros
+            </a>
             <a href="#precios" className="hover:text-foreground">
               Precios
             </a>
+
             <a href="#formacion" className="hover:text-foreground">
               Formación PMP
             </a>
@@ -746,8 +767,10 @@ function LandingPage() {
       <main>
         <Hero />
         <ProblemSolution />
+        <SocialProof />
         <Features />
         <HowItWorks />
+        <AboutUs />
         <Pricing />
         <Training />
         <EarlyAccess />
@@ -759,4 +782,5 @@ function LandingPage() {
     </div>
   );
 }
+
 
