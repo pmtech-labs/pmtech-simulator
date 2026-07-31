@@ -16,6 +16,7 @@ export interface LlmConnector {
   model_id: string;
   api_base_url: string | null;
   is_active: boolean;
+  is_default?: boolean;
   created_at: string;
 }
 
@@ -178,6 +179,14 @@ export interface CreateConnectorInput {
 
 export async function createConnector(input: CreateConnectorInput) {
   return callFunction<{ id?: string }>("admin_connectors", { method: "POST", body: input });
+}
+
+/** Marca un conector como predeterminado. El trigger de BD desmarca el anterior. */
+export async function setDefaultConnector(id: string) {
+  return callFunction<{ ok?: boolean }>("admin_connectors", {
+    method: "PATCH",
+    body: { id, is_default: true },
+  });
 }
 
 export async function deactivateConnector(id: string) {
