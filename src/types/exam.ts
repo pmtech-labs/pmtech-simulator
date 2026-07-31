@@ -59,6 +59,10 @@ export interface Question {
   domain: DomainCode;
   approach: "predictive" | "agile" | "hybrid";
   difficulty: 1 | 2 | 3;
+  /** Sección del examen completo a la que pertenece el ítem (1-3). */
+  sectionNumber?: number;
+  /** Diagnóstico de error asociado a fallar este ítem (modos formativos). */
+  errorType?: ErrorType;
   explanation: {
     correct: string;
     distractors: { optionId: string; text: string }[];
