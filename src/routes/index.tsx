@@ -364,7 +364,7 @@ function Hero() {
       />
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
           {/* Columna de texto */}
           <div className="max-w-xl lg:max-w-none">
             <Reveal>
@@ -375,8 +375,8 @@ function Hero() {
             </Reveal>
 
             <Reveal delay={80}>
-              <h1 className="mt-5 text-pretty font-display text-[1.9rem] font-bold leading-[1.1] tracking-tight text-hero-foreground drop-shadow-sm sm:text-[2.25rem] lg:text-[2.65rem]">
-                Diagnostica{" "}
+              <h1 className="mt-5 text-pretty font-display text-[1.9rem] font-bold leading-[1.12] tracking-tight text-hero-foreground drop-shadow-sm sm:text-[2.25rem] lg:text-[2.5rem]">
+                Descubre{" "}
                 <span className="relative inline-block text-accent">
                   por qué fallas
                   <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-gradient-to-r from-accent via-accent/70 to-transparent" />
