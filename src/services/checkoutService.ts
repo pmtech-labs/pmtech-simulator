@@ -2,14 +2,30 @@ export interface CheckoutParams {
   planCode: "basica_3m" | "premium_6m";
 }
 
+export interface CheckoutResult {
+  url: string | null;
+  /** true mientras el cobro online no esté activado (sin cuenta de Stripe propia). */
+  unavailable: boolean;
+  planCode: CheckoutParams["planCode"];
+}
+
 /**
  * Punto de integración de pago aislado.
- * TODO: backend — sustituir por Stripe Checkout (Edge Function que crea la sesión).
+ *
+ * TODO: Stripe — createCheckoutSession() debe invocar una Edge Function que cree
+ * una sesión real de Stripe Checkout con client_reference_id = user.id y
+ * metadata.plan_code, y devolver session.url para redirigir con
+ * `window.location.href = url`. Requiere STRIPE_SECRET_KEY configurada
+ * (pendiente: cuenta de Stripe propia).
+ *
+ * Hasta entonces NO se simula ningún pago ni se activa ninguna licencia.
  */
-export async function createCheckoutSession({ planCode }: CheckoutParams) {
-  await new Promise((r) => setTimeout(r, 900));
-  return { url: null as string | null, simulated: true, planCode };
+export async function createCheckoutSession({ planCode }: CheckoutParams): Promise<CheckoutResult> {
+  return { url: null, unavailable: true, planCode };
 }
+
+/** Contacto para activación manual de licencia mientras no hay cobro online. */
+export const SALES_EMAIL = "info@pmtechsimulator.com";
 
 export const PLANS = [
   {

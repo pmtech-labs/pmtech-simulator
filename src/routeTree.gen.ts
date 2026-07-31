@@ -20,6 +20,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PracticaRouteImport } from './routes/practica'
 import { Route as ProgresoRouteImport } from './routes/progreso'
+import { Route as RegistroRouteImport } from './routes/registro'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -83,6 +84,11 @@ const ProgresoRoute = ProgresoRouteImport.update({
   path: '/progreso',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegistroRoute = RegistroRouteImport.update({
+  id: '/registro',
+  path: '/registro',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
+  '/registro': typeof RegistroRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/connectors': typeof AdminConnectorsRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
+  '/registro': typeof RegistroRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/connectors': typeof AdminConnectorsRoute
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
+  '/registro': typeof RegistroRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/connectors': typeof AdminConnectorsRoute
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/practica'
     | '/progreso'
+    | '/registro'
     | '/reset-password'
     | '/sitemap.xml'
     | '/admin/connectors'
@@ -212,6 +222,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/practica'
     | '/progreso'
+    | '/registro'
     | '/reset-password'
     | '/sitemap.xml'
     | '/admin/connectors'
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/practica'
     | '/progreso'
+    | '/registro'
     | '/reset-password'
     | '/sitemap.xml'
     | '/admin/connectors'
@@ -253,6 +265,7 @@ export interface RootRouteChildren {
   PerfilRoute: typeof PerfilRoute
   PracticaRoute: typeof PracticaRoute
   ProgresoRoute: typeof ProgresoRoute
+  RegistroRoute: typeof RegistroRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
@@ -334,6 +347,13 @@ declare module '@tanstack/react-router' {
       path: '/progreso'
       fullPath: '/progreso'
       preLoaderRoute: typeof ProgresoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/registro': {
+      id: '/registro'
+      path: '/registro'
+      fullPath: '/registro'
+      preLoaderRoute: typeof RegistroRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -418,6 +438,7 @@ const rootRouteChildren: RootRouteChildren = {
   PerfilRoute: PerfilRoute,
   PracticaRoute: PracticaRoute,
   ProgresoRoute: ProgresoRoute,
+  RegistroRoute: RegistroRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
