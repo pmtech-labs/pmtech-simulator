@@ -61,6 +61,9 @@ export interface AdminQuestion {
   times_used_in_exams?: number | null;
   success_rate_pct?: number | null;
   created_at?: string;
+  generation_provider?: string | null;
+  generation_model_id?: string | null;
+  generation_connector_name?: string | null;
 }
 
 export interface TaskCoverageRow {
