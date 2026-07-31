@@ -8,7 +8,18 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { MarketingShell } from "@/components/landing/MarketingShell";
+import {
+  ComparisonMatrix,
+  type ComparisonRow,
+} from "@/components/landing/ComparisonMatrix";
 import { Reveal } from "@/components/landing/Reveal";
+
+export interface SeoComparison {
+  title: string;
+  ourName: string;
+  competitorName: string;
+  rows: ComparisonRow[];
+}
 
 export interface SeoSection {
   h2: string;
@@ -34,6 +45,7 @@ interface SeoLandingPageProps {
   intro: string;
   highlights: string[];
   sections: SeoSection[];
+  comparison?: SeoComparison;
   faqs: SeoFaq[];
   related: RelatedLink[];
   ctaTitle: string;
@@ -46,6 +58,7 @@ export function SeoLandingPage({
   intro,
   highlights,
   sections,
+  comparison,
   faqs,
   related,
   ctaTitle,
@@ -95,6 +108,16 @@ export function SeoLandingPage({
       </section>
 
       <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+        {comparison && (
+          <Reveal>
+            <ComparisonMatrix
+              title={comparison.title}
+              ourName={comparison.ourName}
+              competitorName={comparison.competitorName}
+              rows={comparison.rows}
+            />
+          </Reveal>
+        )}
         {sections.map((section) => (
           <Reveal key={section.h2}>
             <section className="mb-12">

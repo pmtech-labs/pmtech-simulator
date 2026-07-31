@@ -79,26 +79,87 @@ function Page() {
         "Mastery por las 26 tareas del ECO 2026",
         "Ruta guiada de 14 lecciones con simulacros acumulativos",
       ]}
-      sections={[
-        {
-          h2: "Comparativa rápida",
-          table: {
-            headers: ["Criterio", "PMTech Simulator", "PrepCast PM Exam Simulator"],
-            rows: [
-              ["Idioma", "Español neutro", "Inglés"],
-              ["Enfoque", "Diagnóstico del razonamiento", "Volumen de preguntas y exámenes"],
-              [
-                "Análisis de fallos",
-                "Ocho patrones de error + distractores A-D",
-                "Explicaciones e informes por dominio",
-              ],
-              ["Ruta de estudio", "14 lecciones con desbloqueo por mastery", "Preparación libre por exámenes"],
-              ["Simulacro oficial", "180 preguntas, 3 secciones, descansos", "Exámenes completos cronometrados"],
-              ["Exportación", "PDF de resultados y CSV de historial", "Informes dentro de la plataforma"],
-              ["Acceso inicial", "Diagnóstico gratuito al registrarte", "Prueba limitada de preguntas"],
-            ],
+      comparison={{
+        title: "Comparativa interactiva por área",
+        ourName: "PMTech Simulator",
+        competitorName: "PrepCast",
+        rows: [
+          {
+            feature: "Idioma del contenido",
+            category: "Funciones",
+            ours: { verdict: "yes", label: "Español neutro nativo" },
+            theirs: { verdict: "no", label: "Solo inglés" },
+            detail:
+              "El PM Exam Simulator de PrepCast está íntegramente en inglés. Un candidato hispanohablante suma una carga cognitiva que nada tiene que ver con su dominio de la materia.",
           },
-        },
+          {
+            feature: "Tamaño del banco de preguntas",
+            category: "Funciones",
+            ours: { verdict: "partial", label: "Banco enfocado y depurado" },
+            theirs: { verdict: "yes", label: "Banco muy amplio" },
+            detail:
+              "PrepCast gana en volumen. En la práctica casi nadie completa más de 2.000 preguntas antes del examen, y hacerlo sin analizar los fallos repite el mismo error el día de la prueba.",
+          },
+          {
+            feature: "Exportación de resultados",
+            category: "Funciones",
+            ours: { verdict: "yes", label: "PDF + CSV filtrable" },
+            theirs: { verdict: "partial", label: "Informes en plataforma" },
+            detail:
+              "Descargas el informe de cada simulacro en PDF y exportas el historial completo en CSV filtrable por dominio.",
+          },
+          {
+            feature: "Diagnóstico del error",
+            category: "Metodología",
+            ours: { verdict: "yes", label: "8 patrones + distractores A-D" },
+            theirs: { verdict: "partial", label: "Explicaciones por dominio" },
+            detail:
+              "Además de explicar la respuesta correcta, PMTech clasifica el motivo del fallo y analiza qué distractores eliges con más frecuencia y qué revela eso de tu razonamiento.",
+          },
+          {
+            feature: "Granularidad del progreso",
+            category: "Metodología",
+            ours: { verdict: "yes", label: "Mastery por las 26 tareas ECO" },
+            theirs: { verdict: "partial", label: "Informes por dominio" },
+            detail:
+              "El mastery por tarea del ECO 2026 te dice exactamente qué repasar, en lugar de un porcentaje agregado por dominio.",
+          },
+          {
+            feature: "Ruta de estudio guiada",
+            category: "Metodología",
+            ours: { verdict: "yes", label: "14 lecciones con desbloqueo" },
+            theirs: { verdict: "no", label: "Preparación libre" },
+            detail:
+              "PrepCast plantea preparación libre por exámenes. PMTech ordena el camino en 14 lecciones que se desbloquean por mastery y cierran con simulacros acumulativos.",
+          },
+          {
+            feature: "Simulacro con formato oficial",
+            category: "Experiencia de simulación",
+            ours: { verdict: "yes", label: "180 preguntas, 3 secciones" },
+            theirs: { verdict: "yes", label: "Exámenes cronometrados" },
+            detail:
+              "Los dos ofrecen examen completo cronometrado. PMTech añade los descansos de 10 minutos y el bloqueo de secciones cerradas para replicar la fatiga real.",
+          },
+          {
+            feature: "Aviso de preguntas repetidas",
+            category: "Experiencia de simulación",
+            ours: { verdict: "yes", label: "Alerta si supera el 30 %" },
+            theirs: { verdict: "no", label: "No disponible" },
+            detail:
+              "Cuando más del 30 % del simulacro ya lo habías visto, el resultado lo advierte para que no confundas memoria con preparación.",
+          },
+          {
+            feature: "Ecosistema formativo",
+            category: "Experiencia de simulación",
+            ours: { verdict: "partial", label: "Simulador + ruta de estudio" },
+            theirs: { verdict: "yes", label: "Curso, podcast y materiales" },
+            detail:
+              "PrepCast ofrece un ecosistema completo en inglés (curso de 35 horas, podcast, libros). PMTech se concentra en simulación y diagnóstico en español.",
+          },
+        ],
+      }}
+      sections={[
+
         {
           h2: "Dónde gana PrepCast",
           bullets: [

@@ -79,26 +79,87 @@ function Page() {
         "Formato oficial replicado: 180 preguntas y tres secciones",
         "Recomendación clara según tu nivel de inglés y tu fecha de examen",
       ]}
-      sections={[
-        {
-          h2: "Comparativa rápida",
-          table: {
-            headers: ["Criterio", "PMTech Simulator", "PMI Study Hall"],
-            rows: [
-              ["Idioma del contenido", "Español neutro, redactado de origen", "Inglés"],
-              ["Origen", "Equipo independiente de formadores PMP", "Project Management Institute"],
-              [
-                "Diagnóstico de errores",
-                "Ocho patrones de razonamiento por pregunta",
-                "Puntuación por dominio y explicación",
-              ],
-              ["Simulacro completo", "180 preguntas, 3 secciones, descansos", "Sí, exámenes completos"],
-              ["Ruta de estudio", "14 lecciones con mastery por tarea ECO", "Contenido de estudio y minis"],
-              ["Modelo de precio", "Plan gratuito + planes en euros", "Suscripción trimestral en dólares"],
-              ["Prueba sin pagar", "Diagnóstico gratuito al registrarte", "Versión de muestra limitada"],
-            ],
+      comparison={{
+        title: "Comparativa interactiva por área",
+        ourName: "PMTech Simulator",
+        competitorName: "PMI Study Hall",
+        rows: [
+          {
+            feature: "Idioma del contenido",
+            category: "Funciones",
+            ours: { verdict: "yes", label: "Español neutro nativo" },
+            theirs: { verdict: "no", label: "Solo inglés" },
+            detail:
+              "PMTech redacta cada escenario directamente en español neutro, cuidando el matiz que decide la respuesta. Study Hall solo existe en inglés; el traductor del navegador altera precisamente esos matices situacionales.",
           },
-        },
+          {
+            feature: "Origen del contenido",
+            category: "Funciones",
+            ours: { verdict: "partial", label: "Formadores PMP independientes" },
+            theirs: { verdict: "yes", label: "Project Management Institute" },
+            detail:
+              "Study Hall lo publica el propio PMI, la organización que escribe el examen, así que su estilo de enunciado es el más fiel posible. PMTech lo elabora un equipo independiente de formadores certificados PMP, alineado con el ECO 2026.",
+          },
+          {
+            feature: "Exportación de resultados",
+            category: "Funciones",
+            ours: { verdict: "yes", label: "PDF + CSV filtrable" },
+            theirs: { verdict: "partial", label: "Informes en plataforma" },
+            detail:
+              "Puedes descargar el informe de cada simulacro en PDF y exportar todo tu historial en CSV filtrable por dominio para analizarlo por tu cuenta.",
+          },
+          {
+            feature: "Diagnóstico del error",
+            category: "Metodología",
+            ours: { verdict: "yes", label: "8 patrones de razonamiento" },
+            theirs: { verdict: "partial", label: "Puntuación por dominio" },
+            detail:
+              "Cada fallo se clasifica por tipo —secuencia, rol, conocimiento, interpretación del enunciado, sesgo predictivo/ágil— para que corrijas el patrón, no la pregunta suelta.",
+          },
+          {
+            feature: "Granularidad del progreso",
+            category: "Metodología",
+            ours: { verdict: "yes", label: "Mastery por las 26 tareas ECO" },
+            theirs: { verdict: "partial", label: "Por dominio" },
+            detail:
+              "Saber que fallas en 'Proceso' no dice qué estudiar. PMTech mide el dominio de cada una de las 26 tareas del ECO 2026 y prioriza las que más te penalizan.",
+          },
+          {
+            feature: "Ruta de estudio guiada",
+            category: "Metodología",
+            ours: { verdict: "yes", label: "14 lecciones con desbloqueo" },
+            theirs: { verdict: "partial", label: "Contenido de estudio libre" },
+            detail:
+              "Las 14 lecciones se desbloquean por mastery y cierran con simulacros acumulativos, de modo que avanzas solo cuando consolidas lo anterior.",
+          },
+          {
+            feature: "Simulacro con formato oficial",
+            category: "Experiencia de simulación",
+            ours: { verdict: "yes", label: "180 preguntas, 3 secciones" },
+            theirs: { verdict: "yes", label: "Exámenes completos" },
+            detail:
+              "Ambos replican el examen completo. PMTech reproduce además los dos descansos de 10 minutos y bloquea las secciones ya cerradas, igual que el examen real.",
+          },
+          {
+            feature: "Aviso de preguntas repetidas",
+            category: "Experiencia de simulación",
+            ours: { verdict: "yes", label: "Alerta si supera el 30 %" },
+            theirs: { verdict: "no", label: "No disponible" },
+            detail:
+              "Si más del 30 % del simulacro ya lo habías visto, PMTech lo avisa en el resultado para que la nota no te dé una falsa sensación de preparación.",
+          },
+          {
+            feature: "Prueba sin pagar",
+            category: "Experiencia de simulación",
+            ours: { verdict: "yes", label: "Diagnóstico gratuito" },
+            theirs: { verdict: "partial", label: "Muestra limitada" },
+            detail:
+              "El diagnóstico gratuito de 5 preguntas te devuelve tu patrón de error dominante antes de decidir si pagas nada.",
+          },
+        ],
+      }}
+      sections={[
+
         {
           h2: "Dónde gana PMI Study Hall",
           bullets: [
