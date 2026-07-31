@@ -183,7 +183,16 @@ function ReviewPage() {
             onChange={(e) => { setMaxSuccess(e.target.value); setPage(1); }}
             className={cn(inputCls, "w-32")}
           />
+          <select value={model} onChange={(e) => setModel(e.target.value)} className={inputCls}>
+            <option value="">Todos los modelos</option>
+            {modelOptions.map((m) => (
+              <option key={m} value={m}>
+                {m === "__manual__" ? "Manual" : m}
+              </option>
+            ))}
+          </select>
         </div>
+
 
         {selected.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 p-3 text-xs">
