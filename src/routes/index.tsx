@@ -350,13 +350,12 @@ function Header() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      {/* Fondo limpio con degradado vertical suave */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-primary via-primary to-background" />
+    <section className="relative overflow-hidden bg-primary">
+      {/* Decoración sutil sobre fondo primario sólido */}
       <div className="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-accent/20 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 top-20 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.12] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
+        className="pointer-events-none absolute inset-0 opacity-[0.12]"
         style={{
           backgroundImage:
             "linear-gradient(to right, var(--hero-muted) 1px, transparent 1px), linear-gradient(to bottom, var(--hero-muted) 1px, transparent 1px)",
@@ -365,9 +364,9 @@ function Hero() {
       />
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.35fr_0.65fr] lg:gap-14">
-          {/* Columna de texto: ancha para pocas líneas */}
-          <div className="max-w-2xl lg:max-w-none">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-10">
+          {/* Columna de texto */}
+          <div className="max-w-xl lg:max-w-none">
             <Reveal>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-3 py-1 text-xs font-semibold text-hero-foreground shadow-lift backdrop-blur">
                 <Sparkles className="h-3.5 w-3.5 animate-pulse text-accent" />
@@ -376,19 +375,19 @@ function Hero() {
             </Reveal>
 
             <Reveal delay={80}>
-              <h1 className="mt-5 text-pretty font-display text-[2.1rem] font-bold leading-[1.08] tracking-tight text-hero-foreground drop-shadow-sm sm:text-[2.65rem] lg:text-[2.9rem]">
-                El simulador PMP que diagnostica{" "}
+              <h1 className="mt-5 text-pretty font-display text-[2.25rem] font-bold leading-[1.08] tracking-tight text-hero-foreground drop-shadow-sm sm:text-5xl lg:text-[2.75rem]">
+                Diagnostica{" "}
                 <span className="relative inline-block text-accent">
                   por qué fallas
                   <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-gradient-to-r from-accent via-accent/70 to-transparent" />
-                </span>
-                , no solo cuánto
+                </span>{" "}
+                en el PMP, no solo cuánto
               </h1>
             </Reveal>
 
             <Reveal delay={150}>
-              <p className="mt-5 max-w-xl text-pretty text-base leading-relaxed text-hero-muted sm:text-lg">
-                8 tipos de error, 26 tareas del ECO 2026 y un plan de estudio personalizado para
+              <p className="mt-5 max-w-lg text-pretty text-base leading-relaxed text-hero-muted sm:text-lg">
+                8 tipos de error, 26 tareas ECO 2026 y un plan de estudio personalizado para
                 reforzar lo que realmente te suspende.
               </p>
             </Reveal>
@@ -414,7 +413,7 @@ function Hero() {
               </p>
             </Reveal>
 
-            {/* Stats en fila horizontal, más compactos */}
+            {/* Stats en fila horizontal */}
             <Reveal delay={300}>
               <div className="mt-8 flex flex-wrap gap-5 sm:gap-7">
                 {STATS.map((s) => (
@@ -431,10 +430,10 @@ function Hero() {
             </Reveal>
           </div>
 
-          {/* Columna visual: mockup flotante */}
+          {/* Columna visual: mockup flotante grande */}
           <Reveal delay={180} className="relative">
-            <div className="relative mx-auto max-w-md lg:max-w-none">
-              <div className="absolute -inset-4 rounded-[2rem] bg-accent/20 blur-2xl" />
+            <div className="relative mx-auto max-w-xl lg:max-w-none">
+              <div className="absolute -inset-6 rounded-[2.5rem] bg-accent/20 blur-3xl" />
               <figure className="group relative overflow-hidden rounded-2xl border border-hero-foreground/15 bg-hero-foreground/5 shadow-2xl backdrop-blur-sm transition-transform duration-500 hover:scale-[1.02]">
                 <img
                   src={heroDashboard}
@@ -445,7 +444,7 @@ function Hero() {
                   className="w-full transition-transform duration-700 ease-out group-hover:scale-105"
                 />
               </figure>
-              <div className="pointer-events-none absolute -bottom-6 -right-6 hidden h-32 w-32 rounded-full bg-accent/30 blur-2xl lg:block" />
+              <div className="pointer-events-none absolute -bottom-8 -right-8 hidden h-40 w-40 rounded-full bg-accent/30 blur-2xl lg:block" />
             </div>
           </Reveal>
         </div>
