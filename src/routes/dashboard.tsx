@@ -14,9 +14,12 @@ import {
   DomainLevelBadge,
   DomainMasteryLegend,
 } from "@/components/progress/DomainMasteryLegend";
-import { DOMAINS, MOCK_EXAM_HISTORY, MOCK_USER } from "@/data/mockData";
+import { RequireAuth } from "@/components/auth/RequireAuth";
+import { DOMAINS } from "@/data/mockData";
+import { useCurrentUser, useExamHistory } from "@/hooks/useCandidateData";
 
 export const Route = createFileRoute("/dashboard")({
+  ssr: false,
   head: () => ({
     meta: [
       { title: "Panel del alumno · Simulador PMP ECO 2026" },
@@ -32,7 +35,11 @@ export const Route = createFileRoute("/dashboard")({
       },
     ],
   }),
-  component: Dashboard,
+  component: () => (
+    <RequireAuth>
+      <Dashboard />
+    </RequireAuth>
+  ),
 });
 
 function Ring({ value }: { value: number }) {
@@ -56,7 +63,24 @@ function Ring({ value }: { value: number }) {
 }
 
 function Dashboard() {
-  const u = MOCK_USER;
+  const { data: u, isLoading } = useCurrentUser();
+  const { data: history = [] } = useExamHistory();
+
+  if (isLoading || !u) {
+    return (
+      <AppShell title="Panel" subtitle="Cargando tu preparación…">
+        <div className="mx-auto max-w-6xl space-y-4">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="h-32 animate-pulse rounded-2xl border border-border bg-card" />
+          ))}
+        </div>
+      </AppShell>
+    );
+  }
+
+  const weakest = [...DOMAINS].sort(
+    (a, b) => u.masteryByDomain[a.code] - u.masteryByDomain[b.code],
+  )[0];
 
   return (
     <AppShell title={`Hola, ${u.name.split(" ")[0]}`} subtitle="Tu preparación para el examen PMP (ECO 2026)">
@@ -74,8 +98,9 @@ function Dashboard() {
               <div className="min-w-0">
                 <h2 className="text-lg font-semibold">Nivel de preparación</h2>
                 <p className="mt-1 max-w-sm text-sm leading-relaxed text-muted-foreground">
-                  Estás cerca del umbral recomendado (75 %). Tu punto débil sigue siendo
-                  <strong className="text-foreground"> Entorno de negocio</strong>.
+                  Umbral recomendado: 75 %. Tu punto más débil ahora mismo es
+                  <strong className="text-foreground"> {weakest.name}</strong> (
+                  {u.masteryByDomain[weakest.code]} %).
                 </p>
               </div>
             </div>
@@ -127,7 +152,7 @@ function Dashboard() {
                 <Link
                   key={d.code}
                   to="/examen"
-                  search={{ modo: "dominio", dominio: d.code }}
+                  search={{ modo: "domain_drill" as const, dominio: d.code, preguntas: 10 }}
                   className="flex items-center justify-between gap-2 rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-secondary"
                 >
                   <span className="min-w-0 truncate">{d.name}</span>
@@ -146,13 +171,16 @@ function Dashboard() {
             <History className="h-5 w-5 text-muted-foreground" />
             <h3 className="mt-3 text-base font-semibold">Historial de exámenes</h3>
             <ul className="mt-3 space-y-2">
-              {MOCK_EXAM_HISTORY.slice(0, 3).map((e) => (
+              {history.slice(0, 3).map((e) => (
                 <li key={e.id} className="flex items-center justify-between gap-3 text-sm">
                   <span className="min-w-0 truncate text-muted-foreground">{e.mode}</span>
                   <span className="num shrink-0 font-semibold">{e.score}%</span>
                 </li>
               ))}
             </ul>
+            {!history.length && (
+              <p className="mt-3 text-sm text-muted-foreground">Aún no has completado exámenes.</p>
+            )}
             <Link
               to="/historial"
               className="mt-auto inline-flex items-center gap-1.5 pt-4 text-sm font-semibold text-foreground hover:underline"
@@ -192,8 +220,8 @@ function Dashboard() {
           </div>
           <p className="mt-4 flex items-start gap-2 rounded-lg bg-warning-soft p-3 text-xs leading-relaxed text-accent-foreground">
             <TrendingUp className="mt-0.5 h-4 w-4 shrink-0" />
-            Recomendación: dedica la próxima sesión a <strong>Entorno de negocio · Tarea 2</strong>
-            (cambios de cumplimiento), tu tarea con menor dominio (48 %).
+            Recomendación: dedica la próxima sesión a <strong>{weakest.name}</strong>, tu área con
+            menor dominio ({u.masteryByDomain[weakest.code]} %).
           </p>
         </section>
       </div>

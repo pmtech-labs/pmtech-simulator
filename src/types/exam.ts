@@ -35,8 +35,8 @@ export interface CaseCluster {
   id: string;
   title: string;
   scenarioText: string[];
-  /** Serie de valor ganado para el gráfico SVG interactivo */
-  evChart: {
+  /** Serie de valor ganado para el gráfico SVG interactivo (opcional) */
+  evChart?: {
     labels: string[];
     pv: number[];
     ev: number[];

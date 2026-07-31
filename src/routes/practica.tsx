@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+
+import { RequireAuth } from "@/components/auth/RequireAuth";
 import { useQuery } from "@tanstack/react-query";
 import { BookOpen, CheckCircle2, ChevronRight, Clock, Info, Layers, RotateCcw, Target, XCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -43,7 +45,12 @@ export const Route = createFileRoute("/practica")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: PracticePage,
+  ssr: false,
+  component: () => (
+    <RequireAuth>
+      <PracticePage />
+    </RequireAuth>
+  ),
 });
 
 const ALL_DOMAINS: DomainCode[] = ["people", "process", "business"];

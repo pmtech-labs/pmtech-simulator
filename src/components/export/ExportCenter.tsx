@@ -2,7 +2,8 @@ import { Download, FileSpreadsheet, FileText, Filter } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
-import { MOCK_EXAM_HISTORY, MOCK_QUESTIONS } from "@/data/mockData";
+import { MOCK_QUESTIONS } from "@/data/mockData";
+import type { ExamHistoryRow } from "@/services/userService";
 import { DOMAIN_LABELS, buildCsv, downloadCsv, escapeHtml, openPrintablePdf } from "@/lib/export";
 import { cn } from "@/lib/utils";
 import type { DomainCode } from "@/types/exam";
@@ -10,15 +11,15 @@ import type { DomainCode } from "@/types/exam";
 const ALL_DOMAINS: DomainCode[] = ["people", "process", "business"];
 const today = "30 jul 2026";
 
-export function ExportCenter() {
+export function ExportCenter({ exams: source = [] }: { exams?: ExamHistoryRow[] }) {
   const [selected, setSelected] = useState<DomainCode[]>(ALL_DOMAINS);
 
   const toggle = (d: DomainCode) =>
     setSelected((prev) => (prev.includes(d) ? prev.filter((v) => v !== d) : [...prev, d]));
 
   const exams = useMemo(
-    () => MOCK_EXAM_HISTORY.filter((e) => e.domains.some((d) => selected.includes(d))),
-    [selected],
+    () => source.filter((e) => e.domains.some((d) => selected.includes(d))),
+    [selected, source],
   );
   const questions = useMemo(
     () => MOCK_QUESTIONS.filter((q) => selected.includes(q.domain)),

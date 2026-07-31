@@ -5,6 +5,9 @@ import { useState } from "react";
 export function EarnedValueChart({ chart }: { chart: CaseCluster["evChart"] }) {
   const [hover, setHover] = useState<number | null>(null);
 
+  if (!chart) return null;
+
+
   const W = 320;
   const H = 170;
   const padL = 34;

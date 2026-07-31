@@ -32,6 +32,7 @@ import diagnosticAbstract from "@/assets/diagnostic-abstract.jpg";
 import trainingSession from "@/assets/training-session.jpg";
 
 import { TrainingContactForm } from "@/components/landing/TrainingContactForm";
+import { PlanCta } from "@/components/landing/PlanCta";
 import { PLANS } from "@/services/checkoutService";
 
 const SITE_URL = "https://pmtech-simulator.lovable.app";
@@ -277,7 +278,7 @@ function Header() {
 
         <div className="hidden items-center gap-3 md:flex">
           <Link
-            to="/dashboard"
+            to="/login"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             Iniciar sesión
@@ -331,7 +332,7 @@ function Header() {
               Contacto
             </a>
 
-            <Link to="/dashboard" onClick={() => setOpen(false)}>
+            <Link to="/login" onClick={() => setOpen(false)}>
               Iniciar sesión
             </Link>
             <a
@@ -652,16 +653,15 @@ function Pricing() {
                 ))}
               </ul>
 
-              <Link
-                to="/dashboard"
+              <PlanCta
+                planCode={plan.code}
+                label={`Elegir ${plan.name}`}
                 className={
                   isPremium
                     ? "mt-6 flex items-center justify-center gap-1.5 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
                     : "mt-6 flex items-center justify-center gap-1.5 rounded-lg border border-border bg-secondary px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary/70"
                 }
-              >
-                Elegir {plan.name} <ArrowRight className="h-4 w-4" />
-              </Link>
+              />
             </div>
             </Reveal>
           );
@@ -770,7 +770,7 @@ function Footer() {
               FAQ
             </a>
 
-            <Link to="/dashboard" className="hover:text-foreground">
+            <Link to="/login" className="hover:text-foreground">
               Iniciar sesión
             </Link>
           </nav>

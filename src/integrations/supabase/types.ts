@@ -702,6 +702,7 @@ export type Database = {
           explanation: string
           focus_tags: string[] | null
           format: Database["public"]["Enums"]["item_format"]
+          generation_job_id: string | null
           id: string
           item_type: Database["public"]["Enums"]["item_type"]
           options: Json
@@ -727,6 +728,7 @@ export type Database = {
           explanation: string
           focus_tags?: string[] | null
           format?: Database["public"]["Enums"]["item_format"]
+          generation_job_id?: string | null
           id?: string
           item_type?: Database["public"]["Enums"]["item_type"]
           options: Json
@@ -752,6 +754,7 @@ export type Database = {
           explanation?: string
           focus_tags?: string[] | null
           format?: Database["public"]["Enums"]["item_format"]
+          generation_job_id?: string | null
           id?: string
           item_type?: Database["public"]["Enums"]["item_type"]
           options?: Json
@@ -778,6 +781,13 @@ export type Database = {
             columns: ["eco_version_id"]
             isOneToOne: false
             referencedRelation: "eco_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "questions_generation_job_id_fkey"
+            columns: ["generation_job_id"]
+            isOneToOne: false
+            referencedRelation: "generation_jobs"
             referencedColumns: ["id"]
           },
           {
@@ -940,11 +950,22 @@ export type Database = {
       }
       v_question_stats: {
         Row: {
+          approach: Database["public"]["Enums"]["approach_type"] | null
+          cluster_id: string | null
+          cluster_scenario: string | null
+          correct_answer: Json | null
+          created_at: string | null
+          difficulty: number | null
+          domain_code: string | null
           domain_name: string | null
+          explanation: string | null
           format: Database["public"]["Enums"]["item_format"] | null
+          generation_job_id: string | null
           item_type: Database["public"]["Enums"]["item_type"] | null
+          options: Json | null
           question_id: string | null
           status: Database["public"]["Enums"]["item_status"] | null
+          stem: string | null
           success_rate_pct: number | null
           task_id: string | null
           task_title: string | null
@@ -953,6 +974,20 @@ export type Database = {
           times_used_in_exams: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "questions_cluster_id_fkey"
+            columns: ["cluster_id"]
+            isOneToOne: false
+            referencedRelation: "case_clusters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "questions_generation_job_id_fkey"
+            columns: ["generation_job_id"]
+            isOneToOne: false
+            referencedRelation: "generation_jobs"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "questions_task_id_fkey"
             columns: ["task_id"]

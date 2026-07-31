@@ -8,13 +8,15 @@ import {
   Coffee,
   Info,
   ListChecks,
+  Loader2,
   Pause,
   Play,
   Sparkles,
   X,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { RequireAuth } from "@/components/auth/RequireAuth";
 import { ResultReportButton } from "@/components/export/ResultReportButton";
 import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { EarnedValueChart } from "@/components/exam/EarnedValueChart";
@@ -22,37 +24,58 @@ import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { MatchingQuestion } from "@/components/exam/MatchingQuestion";
 import { FlagButton, OptionList } from "@/components/exam/OptionList";
 import { QuestionNavigator } from "@/components/exam/QuestionNavigator";
+import { BREAK_SECONDS } from "@/data/mockData";
+import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 import {
-  BREAK_SECONDS,
-  CLUSTER,
-  EXAM_SECTIONS,
-  MOCK_FINISH_SUMMARY,
-  MOCK_QUESTIONS,
-} from "@/data/mockData";
-import { isAnswerCorrect } from "@/services/examService";
-import type { AnswerValue } from "@/types/exam";
+  finishExam,
+  startExam,
+  submitAnswer,
+  type AnswerFeedback,
+  type ExamMode,
+  type ExamSession,
+  type FinishSummary,
+} from "@/services/examService";
+import type { AnswerValue, DomainCode, Question } from "@/types/exam";
 import { cn } from "@/lib/utils";
 
+interface ExamSearch {
+  modo?: ExamMode;
+  dominio?: DomainCode;
+  unidad?: string;
+  preguntas?: number;
+}
+
 export const Route = createFileRoute("/examen")({
+  ssr: false,
+  validateSearch: (search: Record<string, unknown>): ExamSearch => ({
+    modo: typeof search.modo === "string" ? (search.modo as ExamMode) : undefined,
+    dominio: typeof search.dominio === "string" ? (search.dominio as DomainCode) : undefined,
+    unidad: typeof search.unidad === "string" ? search.unidad : undefined,
+    preguntas: typeof search.preguntas === "number" ? search.preguntas : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Simulación de examen · Simulador PMP ECO 2026" },
       {
         name: "description",
         content:
-          "Motor de examen PMP en 3 secciones cronometradas con descansos, clusters de caso, ítems de emparejamiento y preguntas situacionales.",
+          "Motor de examen PMP en secciones cronometradas con descansos, clusters de caso y preguntas situacionales reales.",
       },
       { property: "og:title", content: "Simulación de examen PMP ECO 2026" },
       {
         property: "og:description",
-        content: "Tres secciones cronometradas, descansos de 10 minutos y formato de examen real.",
+        content: "Secciones cronometradas, descansos y formato de examen real.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: ExamPage,
+  component: () => (
+    <RequireAuth>
+      <ExamPage />
+    </RequireAuth>
+  ),
 });
-
-const TOTAL_DISPLAY = 180;
 
 function fmt(s: number) {
   const h = Math.floor(s / 3600);
@@ -68,21 +91,109 @@ function fmtShort(s: number) {
 }
 
 function ExamPage() {
-  const questions = MOCK_QUESTIONS;
+  const search = Route.useSearch();
+  const mode: ExamMode = search.modo ?? "full_sim";
+  const startedRef = useRef(false);
+
+  const [session, setSession] = useState<ExamSession | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    startExam({
+      mode,
+      domains: search.dominio ? [search.dominio] : undefined,
+      unitId: search.unidad,
+      totalQuestions: search.preguntas,
+    })
+      .then(setSession)
+      .catch((e: Error) => setLoadError(e.message));
+  }, [mode, search.dominio, search.unidad, search.preguntas]);
+
+  if (loadError) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-background px-4">
+        <div className="max-w-sm rounded-2xl border border-border bg-card p-6 text-center">
+          <AlertTriangle className="mx-auto h-6 w-6 text-destructive" />
+          <h1 className="mt-3 text-base font-semibold">No hemos podido iniciar el examen</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{loadError}</p>
+          <Link
+            to="/dashboard"
+            className="mt-4 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          >
+            Volver al panel
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-background">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" /> Preparando tu examen…
+        </div>
+      </div>
+    );
+  }
+
+  if (!session.questions.length) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-background px-4">
+        <div className="max-w-sm rounded-2xl border border-border bg-card p-6 text-center">
+          <Info className="mx-auto h-6 w-6 text-muted-foreground" />
+          <h1 className="mt-3 text-base font-semibold">Sin preguntas disponibles</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            No hay ítems publicados para esta configuración todavía. Prueba con otro modo o dominio.
+          </p>
+          <Link
+            to="/dashboard"
+            className="mt-4 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          >
+            Volver al panel
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {import.meta.env.DEV && (
+        <p className="bg-warning-soft px-4 py-1.5 text-center text-[11px] text-accent-foreground">
+          Entorno de pruebas: el banco de preguntas está en construcción, la variedad de ítems aún
+          es limitada.
+        </p>
+      )}
+      <ExamRunner session={session} />
+    </>
+  );
+}
+
+function ExamRunner({ session }: { session: ExamSession }) {
+  const formative = session.mode !== "full_sim";
+  const questions = session.questions;
+  const sections = session.sections;
+
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
+  const [feedback, setFeedback] = useState<Record<string, AnswerFeedback>>({});
+  const [checking, setChecking] = useState(false);
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
   const [paused, setPaused] = useState(false);
-  const [finished, setFinished] = useState(false);
+  const [summary, setSummary] = useState<FinishSummary | null>(null);
+  const [finishing, setFinishing] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
 
-  // --- Secciones cronometradas independientes (full_sim) ---
   const [sectionIdx, setSectionIdx] = useState(0);
-  const section = EXAM_SECTIONS[sectionIdx];
-  const [seconds, setSeconds] = useState(EXAM_SECTIONS[0].seconds);
+  const section = sections[sectionIdx];
+  const [seconds, setSeconds] = useState(sections[0].seconds);
   const [onBreak, setOnBreak] = useState(false);
   const [breakSeconds, setBreakSeconds] = useState(BREAK_SECONDS);
+  const questionStart = useRef(Date.now());
 
   const sectionQuestions = useMemo(
     () => questions.filter((q) => (q.sectionNumber ?? 1) === section.sectionNumber),
@@ -95,12 +206,17 @@ function ExamPage() {
 
   const q = questions[index];
   const answer = answers[q.id];
+  const qFeedback = feedback[q.id];
 
   useEffect(() => {
-    if (paused || finished || onBreak) return;
+    questionStart.current = Date.now();
+  }, [index]);
+
+  useEffect(() => {
+    if (paused || summary || onBreak) return;
     const t = setInterval(() => setSeconds((s) => Math.max(0, s - 1)), 1000);
     return () => clearInterval(t);
-  }, [paused, finished, onBreak]);
+  }, [paused, summary, onBreak]);
 
   useEffect(() => {
     if (!onBreak) return;
@@ -108,17 +224,20 @@ function ExamPage() {
     return () => clearInterval(t);
   }, [onBreak]);
 
-  useEffect(() => {
-    if (onBreak && breakSeconds === 0) endBreak();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onBreak, breakSeconds]);
-
-  const score = useMemo(() => {
-    const correct = questions.filter((question) => isAnswerCorrect(question, answers[question.id])).length;
-    return { correct, pct: Math.round((correct / questions.length) * 100) };
-  }, [answers, questions]);
+  const send = useCallback(
+    async (question: Question, value: AnswerValue) => {
+      const spent = Math.round((Date.now() - questionStart.current) / 1000);
+      const res = await submitAnswer(session.examId, question.id, value, spent);
+      if (res.isCorrect !== undefined) {
+        setFeedback((prev) => ({ ...prev, [question.id]: res }));
+      }
+      return res;
+    },
+    [session.examId],
+  );
 
   const toggleOption = (id: string) => {
+    if (qFeedback) return;
     setAnswers((prev) => {
       const current = (prev[q.id] as string[]) ?? [];
       if (q.format === "mc_multi") {
@@ -129,35 +248,106 @@ function ExamPage() {
     });
   };
 
-  function closeSection() {
-    if (sectionIdx === EXAM_SECTIONS.length - 1) {
-      setFinished(true);
+  const check = async () => {
+    if (!answer) return;
+    setChecking(true);
+    await send(q, answer);
+    setChecking(false);
+  };
+
+  const saveSilently = async () => {
+    if (!answer || feedback[q.id]) return;
+    await send(q, answer);
+  };
+
+  async function finalize() {
+    setFinishing(true);
+    if (!formative) await saveSilently();
+    try {
+      const result = await finishExam(session.examId);
+      setSummary(result);
+    } catch (e) {
+      setSummary({
+        examId: session.examId,
+        scorePct: 0,
+        scoreByDomain: {},
+        scoreByApproach: {},
+        newItemsCount: 0,
+        repeatedItemsCount: 0,
+        disclaimer: e instanceof Error ? e.message : "",
+        interpretationNote: null,
+      });
+    } finally {
+      setFinishing(false);
+    }
+  }
+
+  async function closeSection() {
+    if (!formative) await saveSilently();
+    if (sectionIdx === sections.length - 1) {
+      await finalize();
       return;
     }
     setBreakSeconds(BREAK_SECONDS);
     setOnBreak(true);
   }
 
-  function endBreak() {
+  const endBreak = useCallback(() => {
     const nextIdx = sectionIdx + 1;
-    if (nextIdx >= EXAM_SECTIONS.length) {
-      setOnBreak(false);
-      setFinished(true);
+    setOnBreak(false);
+    if (nextIdx >= sections.length) {
+      void finalize();
       return;
     }
-    setOnBreak(false);
     setSectionIdx(nextIdx);
-    setSeconds(EXAM_SECTIONS[nextIdx].seconds);
+    setSeconds(sections[nextIdx].seconds);
     const first = questions.findIndex(
-      (item) => (item.sectionNumber ?? 1) === EXAM_SECTIONS[nextIdx].sectionNumber,
+      (item) => (item.sectionNumber ?? 1) === sections[nextIdx].sectionNumber,
     );
     setIndex(first === -1 ? 0 : first);
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sectionIdx, sections, questions]);
+
+  useEffect(() => {
+    if (onBreak && breakSeconds === 0) endBreak();
+  }, [onBreak, breakSeconds, endBreak]);
 
   const answeredCount = Object.keys(answers).length;
 
-  if (finished) {
-    return <Results questions={questions} answers={answers} score={score} />;
+  if (summary) {
+    return (
+      <Results
+        questions={questions.map((question) => {
+          const f = feedback[question.id];
+          if (!f) return question;
+          return {
+            ...question,
+            correctAnswer: f.correctAnswer ?? [],
+            errorType: f.errorType,
+            explanation: {
+              correct: f.explanation ?? "",
+              distractors: [],
+              reference: f.errorType
+                ? `Tipo de error: ${ERROR_TYPE_SHORT[f.errorType]} · ${ERROR_TYPE_LABELS[f.errorType]}`
+                : "Explicación del banco ECO 2026",
+            },
+          };
+        })}
+        answers={answers}
+        summary={summary}
+        reviewAvailable={Object.keys(feedback).length > 0}
+      />
+    );
+  }
+
+  if (finishing) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-background">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" /> Calculando tu resultado…
+        </div>
+      </div>
+    );
   }
 
   if (onBreak) {
@@ -185,23 +375,22 @@ function ExamPage() {
     );
   }
 
+  const cluster = q.clusterId ? session.clusters[q.clusterId] : undefined;
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-30 border-b border-border bg-card">
         <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6">
           <div className="min-w-0">
             <p className="num truncate text-sm font-semibold">
-              Sección {section.sectionNumber} de {EXAM_SECTIONS.length} · Pregunta {index + 1} de{" "}
-              {TOTAL_DISPLAY}
-              <span className="ml-2 text-xs font-normal text-muted-foreground">
-                (demo de {questions.length})
-              </span>
+              {sections.length > 1 && `Sección ${section.sectionNumber} de ${sections.length} · `}
+              Pregunta {index + 1} de {questions.length}
             </p>
             <div className="mt-1.5 h-1.5 w-full max-w-md overflow-hidden rounded-full bg-muted">
               <div
                 className="h-full rounded-full bg-accent transition-all"
                 style={{
-                  width: `${((index - firstIndexOfSection + 1) / sectionQuestions.length) * 100}%`,
+                  width: `${((index - firstIndexOfSection + 1) / Math.max(1, sectionQuestions.length)) * 100}%`,
                 }}
               />
             </div>
@@ -262,16 +451,16 @@ function ExamPage() {
             </span>
           </div>
 
-          {q.itemType === "case_child" ? (
+          {cluster ? (
             <div className="grid gap-5 lg:grid-cols-2">
               <aside className="space-y-3 rounded-2xl border border-border bg-card p-4 lg:sticky lg:top-24 lg:self-start">
-                <h2 className="text-sm font-semibold">{CLUSTER.title}</h2>
-                {CLUSTER.scenarioText.map((p, i) => (
+                <h2 className="text-sm font-semibold">{cluster.title}</h2>
+                {cluster.scenarioText.map((p, i) => (
                   <p key={i} className="text-sm leading-relaxed text-muted-foreground">
                     {p}
                   </p>
                 ))}
-                <EarnedValueChart chart={CLUSTER.evChart} />
+                <EarnedValueChart chart={cluster.evChart} />
               </aside>
               <div className="space-y-4">
                 <QuestionBody />
@@ -291,7 +480,7 @@ function ExamPage() {
             answers={answers}
             flagged={flagged}
             onSelect={setIndex}
-            activeSection={section.sectionNumber}
+            activeSection={sections.length > 1 ? section.sectionNumber : undefined}
           />
           <p className="num mt-4 border-t border-border pt-3 text-xs text-muted-foreground">
             {answeredCount} de {questions.length} respondidas
@@ -301,7 +490,11 @@ function ExamPage() {
 
       {navOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <button className="absolute inset-0 bg-foreground/40" onClick={() => setNavOpen(false)} aria-label="Cerrar" />
+          <button
+            className="absolute inset-0 bg-foreground/40"
+            onClick={() => setNavOpen(false)}
+            aria-label="Cerrar"
+          />
           <div className="absolute bottom-0 w-full rounded-t-2xl border-t border-border bg-card p-4">
             <div className="mb-3 flex items-center justify-between">
               <p className="text-sm font-semibold">Preguntas</p>
@@ -314,7 +507,7 @@ function ExamPage() {
               current={index}
               answers={answers}
               flagged={flagged}
-              activeSection={section.sectionNumber}
+              activeSection={sections.length > 1 ? section.sectionNumber : undefined}
               onSelect={(i) => {
                 setIndex(i);
                 setNavOpen(false);
@@ -362,7 +555,7 @@ function ExamPage() {
               <button
                 onClick={() => {
                   setConfirming(false);
-                  setFinished(true);
+                  void finalize();
                 }}
                 className="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
               >
@@ -381,26 +574,56 @@ function ExamPage() {
       <>
         <p className="text-[15px] font-medium leading-relaxed">{q.stem}</p>
 
-        {q.format === "matching" ? (
+        {q.format === "matching" && q.matching ? (
           <MatchingQuestion
-            payload={q.matching!}
+            payload={q.matching}
             value={(answer as Record<string, string>) ?? {}}
+            disabled={Boolean(qFeedback)}
             onChange={(next) => setAnswers((prev) => ({ ...prev, [q.id]: next }))}
           />
         ) : (
           <OptionList
-            options={q.options!}
+            options={q.options ?? []}
             selected={(answer as string[]) ?? []}
             multi={q.format === "mc_multi"}
+            disabled={Boolean(qFeedback)}
+            correctAnswer={qFeedback?.correctAnswer}
             onToggle={toggleOption}
           />
         )}
 
-        <p className="flex items-start gap-2 rounded-lg bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground">
-          <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-          En la simulación completa no se muestra si aciertas o fallas: verás la corrección y las
-          explicaciones al terminar el examen, igual que en el examen oficial.
-        </p>
+        {formative ? (
+          qFeedback ? (
+            <ExplanationPanel
+              question={{
+                ...q,
+                correctAnswer: qFeedback.correctAnswer ?? [],
+                explanation: {
+                  correct: qFeedback.explanation ?? "",
+                  distractors: [],
+                  reference: qFeedback.errorType
+                    ? `Tipo de error: ${ERROR_TYPE_SHORT[qFeedback.errorType]} · ${ERROR_TYPE_LABELS[qFeedback.errorType]}`
+                    : "Explicación del banco ECO 2026",
+                },
+              }}
+              answer={answer}
+            />
+          ) : (
+            <button
+              onClick={check}
+              disabled={!answer || checking}
+              className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground disabled:opacity-50"
+            >
+              {checking && <Loader2 className="h-4 w-4 animate-spin" />} Comprobar respuesta
+            </button>
+          )
+        ) : (
+          <p className="flex items-start gap-2 rounded-lg bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground">
+            <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+            En la simulación completa no se muestra si aciertas o fallas: verás la corrección al
+            terminar el examen, igual que en el examen oficial.
+          </p>
+        )}
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
           <FlagButton
@@ -417,17 +640,20 @@ function ExamPage() {
             </button>
             {isLastOfSection ? (
               <button
-                onClick={closeSection}
+                onClick={() => void closeSection()}
                 className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground"
               >
-                {sectionIdx === EXAM_SECTIONS.length - 1
+                {sectionIdx === sections.length - 1
                   ? "Finalizar examen"
                   : `Cerrar sección ${section.sectionNumber}`}
                 <ChevronRight className="h-4 w-4" />
               </button>
             ) : (
               <button
-                onClick={() => setIndex((i) => i + 1)}
+                onClick={() => {
+                  void saveSilently();
+                  setIndex((i) => i + 1);
+                }}
                 className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground"
               >
                 Siguiente <ChevronRight className="h-4 w-4" />
@@ -443,14 +669,17 @@ function ExamPage() {
 function Results({
   questions,
   answers,
-  score,
+  summary,
+  reviewAvailable,
 }: {
-  questions: typeof MOCK_QUESTIONS;
+  questions: Question[];
   answers: Record<string, AnswerValue>;
-  score: { correct: number; pct: number };
+  summary: FinishSummary;
+  reviewAvailable: boolean;
 }) {
-  const { newItemsCount, repeatedItemsCount, interpretationNote, disclaimer } = MOCK_FINISH_SUMMARY;
-  const totalItems = newItemsCount + repeatedItemsCount;
+  const totalItems = summary.newItemsCount + summary.repeatedItemsCount;
+  const correct = Math.round((summary.scorePct / 100) * questions.length);
+  const reviewable = questions.filter((q) => q.correctAnswer.length);
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 sm:px-6">
@@ -458,24 +687,28 @@ function Results({
         <div className="rounded-2xl border border-border bg-card p-6 text-center">
           <CircleCheck className="mx-auto h-7 w-7 text-success" />
           <h1 className="mt-3 font-display text-2xl font-bold">Examen finalizado</h1>
-          <p className="num mt-2 font-display text-5xl font-bold">{score.pct}%</p>
+          <p className="num mt-2 font-display text-5xl font-bold">{summary.scorePct}%</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            {score.correct} de {questions.length} respuestas correctas
+            {correct} de {questions.length} respuestas correctas
           </p>
-          <p className="num mt-2 inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground">
-            <Sparkles className="h-3.5 w-3.5" />
-            {newItemsCount} de {totalItems} preguntas eran nuevas para ti
-          </p>
+          {totalItems > 0 && (
+            <p className="num mt-2 inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground">
+              <Sparkles className="h-3.5 w-3.5" />
+              {summary.newItemsCount} de {totalItems} preguntas eran nuevas para ti
+            </p>
+          )}
 
-          <p className="mt-4 flex items-start gap-2 rounded-lg border border-border bg-muted/50 p-3 text-left text-xs leading-relaxed text-muted-foreground">
-            <Info className="mt-0.5 h-4 w-4 shrink-0" />
-            {disclaimer}
-          </p>
+          {summary.disclaimer && (
+            <p className="mt-4 flex items-start gap-2 rounded-lg border border-border bg-muted/50 p-3 text-left text-xs leading-relaxed text-muted-foreground">
+              <Info className="mt-0.5 h-4 w-4 shrink-0" />
+              {summary.disclaimer}
+            </p>
+          )}
 
-          {interpretationNote && (
+          {summary.interpretationNote && (
             <p className="mt-4 flex items-start gap-2 rounded-lg border border-accent bg-warning-soft p-3 text-left text-xs leading-relaxed text-accent-foreground">
               <Info className="mt-0.5 h-4 w-4 shrink-0" />
-              {interpretationNote}
+              {summary.interpretationNote}
             </p>
           )}
 
@@ -492,54 +725,66 @@ function Results({
             <ResultReportButton
               report={{
                 title: "Informe de resultado · Simulación PMP",
-                subtitle: `Puntuación ${score.pct}% · ${score.correct} de ${questions.length} correctas · ${newItemsCount} de ${totalItems} preguntas nuevas`,
-                scorePct: score.pct,
-                correct: score.correct,
+                subtitle: `Puntuación ${summary.scorePct}% · ${correct} de ${questions.length} correctas`,
+                scorePct: summary.scorePct,
+                correct,
                 total: questions.length,
                 extraRows: [
-                  { label: "Preguntas nuevas", value: `${newItemsCount} de ${totalItems}` },
-                  { label: "Preguntas repetidas", value: String(repeatedItemsCount) },
-                  ...(interpretationNote ? [{ label: "Nota de interpretación", value: interpretationNote }] : []),
+                  { label: "Preguntas nuevas", value: `${summary.newItemsCount} de ${totalItems}` },
+                  { label: "Preguntas repetidas", value: String(summary.repeatedItemsCount) },
+                  ...(summary.interpretationNote
+                    ? [{ label: "Nota de interpretación", value: summary.interpretationNote }]
+                    : []),
                 ],
-                items: questions.map((q) => ({ question: q, answer: answers[q.id] })),
+                items: reviewable.map((q) => ({ question: q, answer: answers[q.id] })),
               }}
             />
           </div>
-
         </div>
 
-        <DistractorAnalytics
-          items={questions.map((q) => ({ question: q, answer: answers[q.id] }))}
-        />
+        {reviewAvailable ? (
+          <>
+            <DistractorAnalytics
+              items={reviewable.map((q) => ({ question: q, answer: answers[q.id] }))}
+            />
 
-        <h2 className="text-base font-semibold">Revisión detallada</h2>
-        {questions.map((q, i) => (
-          <div key={q.id} className="space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-5">
-            <p className="text-sm font-medium leading-relaxed">
-              <span className="num mr-2 text-muted-foreground">{i + 1}.</span>
-              {q.stem}
-            </p>
-            {q.format === "matching" ? (
-              <MatchingQuestion
-                payload={q.matching!}
-                value={(answers[q.id] as Record<string, string>) ?? {}}
-                reveal
-                disabled
-                onChange={() => {}}
-              />
-            ) : (
-              <OptionList
-                options={q.options!}
-                selected={(answers[q.id] as string[]) ?? []}
-                multi={q.format === "mc_multi"}
-                disabled
-                correctAnswer={q.correctAnswer}
-                onToggle={() => {}}
-              />
-            )}
-            <ExplanationPanel question={q} answer={answers[q.id]} />
-          </div>
-        ))}
+            <h2 className="text-base font-semibold">Revisión detallada</h2>
+            {reviewable.map((q, i) => (
+              <div key={q.id} className="space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-5">
+                <p className="text-sm font-medium leading-relaxed">
+                  <span className="num mr-2 text-muted-foreground">{i + 1}.</span>
+                  {q.stem}
+                </p>
+                {q.format === "matching" && q.matching ? (
+                  <MatchingQuestion
+                    payload={q.matching}
+                    value={(answers[q.id] as Record<string, string>) ?? {}}
+                    reveal
+                    disabled
+                    onChange={() => {}}
+                  />
+                ) : (
+                  <OptionList
+                    options={q.options ?? []}
+                    selected={(answers[q.id] as string[]) ?? []}
+                    multi={q.format === "mc_multi"}
+                    disabled
+                    correctAnswer={q.correctAnswer}
+                    onToggle={() => {}}
+                  />
+                )}
+                <ExplanationPanel question={q} answer={answers[q.id]} />
+              </div>
+            ))}
+          </>
+        ) : (
+          <p className="flex items-start gap-2 rounded-2xl border border-border bg-card p-5 text-sm leading-relaxed text-muted-foreground">
+            <Info className="mt-0.5 h-4 w-4 shrink-0" />
+            En la simulación completa la corrección pregunta a pregunta no se muestra en pantalla.
+            Consulta tu desglose por dominio en <strong>Mi progreso</strong> y repasa tus fallos en
+            los modos de práctica formativa.
+          </p>
+        )}
       </div>
     </div>
   );

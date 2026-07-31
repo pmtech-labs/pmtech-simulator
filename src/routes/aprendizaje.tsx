@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+
+import { RequireAuth } from "@/components/auth/RequireAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import {
@@ -42,7 +44,12 @@ export const Route = createFileRoute("/aprendizaje")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: LearningPathPage,
+  ssr: false,
+  component: () => (
+    <RequireAuth>
+      <LearningPathPage />
+    </RequireAuth>
+  ),
 });
 
 function DomainBadges({ domains }: { domains: LearningPathUnit["domains"] }) {
