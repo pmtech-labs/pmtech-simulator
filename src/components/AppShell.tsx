@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { to: "/", label: "Panel", icon: LayoutDashboard },
+  { to: "/aprendizaje", label: "Ruta de aprendizaje", icon: Route },
   { to: "/examen", label: "Simulación", icon: Target },
   { to: "/practica", label: "Práctica por dominios", icon: Dumbbell },
   { to: "/historial", label: "Historial", icon: History },
