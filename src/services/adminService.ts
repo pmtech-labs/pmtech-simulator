@@ -190,6 +190,43 @@ export async function setDefaultConnector(id: string) {
   return setDefaultConnectorFn({ data: { id } });
 }
 
+export interface UpdateConnectorInput {
+  id: string;
+  name?: string;
+  model_id?: string;
+  api_base_url?: string;
+  /** Solo si el admin quiere rotar la clave. Se omite para mantener la actual. */
+  api_key?: string;
+}
+
+/** Actualiza un conector existente (mismo proxy servidor que el predeterminado). */
+export async function updateConnector(input: UpdateConnectorInput) {
+  return patchConnectorFn({ data: input });
+}
+
+export interface ProviderModel {
+  id: string;
+  label?: string;
+}
+
+/**
+ * Consulta en vivo los modelos disponibles del proveedor.
+ * Modo A: { provider, api_key } — con la clave recién tecleada (no se persiste).
+ * Modo B: { connector_id } — usa la clave ya guardada en Vault, sin exponerla.
+ */
+export async function listProviderModels(
+  input:
+    | { provider: ConnectorProvider; api_key: string; api_base_url?: string }
+    | { connector_id: string },
+): Promise<ProviderModel[]> {
+  const payload = await callFunction<{ models?: ProviderModel[] }>("admin_list_models", {
+    method: "POST",
+    body: input,
+  });
+  const models = (payload as { models?: ProviderModel[] })?.models ?? [];
+  return models;
+}
+
 export async function deactivateConnector(id: string) {
   return callFunction<{ ok?: boolean }>("admin_connectors", {
     method: "DELETE",
@@ -197,6 +234,7 @@ export async function deactivateConnector(id: string) {
     body: { id },
   });
 }
+
 
 /* ----------------------------- Jobs de generación -------------------------- */
 
