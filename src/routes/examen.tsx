@@ -191,35 +191,42 @@ function ExamPage() {
           es limitada.
         </p>
       )}
-      <ExamRunner session={session} />
+      <ExamRunner session={session} resume={resume} />
     </>
   );
 }
 
-function ExamRunner({ session }: { session: ExamSession }) {
+function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamProgress | null }) {
   const formative = session.mode !== "full_sim";
   const questions = session.questions;
   const sections = session.sections;
 
-  const [index, setIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
-  const [feedback, setFeedback] = useState<Record<string, AnswerFeedback>>({});
+  const initialSection = Math.min(Math.max(resume?.sectionIdx ?? 0, 0), sections.length - 1);
+
+  const [index, setIndex] = useState(resume?.index ?? 0);
+  const [answers, setAnswers] = useState<Record<string, AnswerValue>>(resume?.answers ?? {});
+  const [feedback, setFeedback] = useState<Record<string, AnswerFeedback>>(resume?.feedback ?? {});
   const [checking, setChecking] = useState(false);
-  const [flagged, setFlagged] = useState<Record<string, boolean>>({});
+  const [flagged, setFlagged] = useState<Record<string, boolean>>(resume?.flagged ?? {});
   const [paused, setPaused] = useState(false);
   const [summary, setSummary] = useState<FinishSummary | null>(null);
   const [finishing, setFinishing] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
 
-  const [sectionIdx, setSectionIdx] = useState(0);
+  const [sectionIdx, setSectionIdx] = useState(initialSection);
   const section = sections[sectionIdx];
-  const [seconds, setSeconds] = useState(sections[0].seconds);
+  const [seconds, setSeconds] = useState(
+    resume?.secondsLeft && resume.secondsLeft > 0
+      ? Math.min(resume.secondsLeft, sections[initialSection].seconds)
+      : sections[initialSection].seconds,
+  );
   const [onBreak, setOnBreak] = useState(false);
   const [breakSeconds, setBreakSeconds] = useState(BREAK_SECONDS);
   const questionStart = useRef(Date.now());
   /** Marca de tiempo de fin de la sección actual (ms). Evita desfases cuando la pestaña se suspende. */
-  const deadline = useRef<number>(Date.now() + sections[0].seconds * 1000);
+  const deadline = useRef<number>(Date.now() + sections[initialSection].seconds * 1000);
+
 
   const sectionQuestions = useMemo(
     () => questions.filter((q) => (q.sectionNumber ?? 1) === section.sectionNumber),
