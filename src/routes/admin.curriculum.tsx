@@ -155,7 +155,9 @@ function CurriculumPage() {
             <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             Las unidades en <strong className="mx-1 text-foreground">borrador</strong> no son
             seleccionables por los candidatos en ningún modo de práctica. Una unidad sin tareas ECO
-            mapeadas no puede publicarse.
+            mapeadas no puede publicarse. Arrastra una fila (o usa las flechas) para reordenar: la
+            secuencia se guarda al soltar y se mantiene al publicar.
+
           </p>
 
           <DataTable
