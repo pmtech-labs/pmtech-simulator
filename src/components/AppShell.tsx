@@ -17,7 +17,9 @@ import { useState, type ReactNode } from "react";
 
 import { useCurrentUser } from "@/hooks/useCandidateData";
 import { signOutCandidate } from "@/services/authService";
+import { clearExamProgress, describeProgress, loadExamProgress } from "@/lib/examResume";
 import { cn } from "@/lib/utils";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -132,20 +134,29 @@ export function AppShell({
 }) {
   const [open, setOpen] = useState(false);
   const [showExamConfirm, setShowExamConfirm] = useState(false);
+  const [inProgress, setInProgress] = useState<ReturnType<typeof describeProgress> | null>(null);
   const { data: user } = useCurrentUser();
   const navigate = useNavigate();
 
-  const startExam = () => {
+  const openExamConfirm = () => {
+    const saved = loadExamProgress();
+    setInProgress(saved ? describeProgress(saved) : null);
+    setShowExamConfirm(true);
+  };
+
+  const startExam = (resume: boolean) => {
     setShowExamConfirm(false);
     setOpen(false);
-    void navigate({ to: "/examen" });
+    if (!resume) clearExamProgress();
+    void navigate({ to: "/examen", search: resume ? { reanudar: "1" } : {} });
   };
+
 
   return (
     <>
       <div className="flex min-h-screen w-full bg-background">
         <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-sidebar-border lg:block">
-          <SidebarInner onExamClick={() => setShowExamConfirm(true)} />
+          <SidebarInner onExamClick={openExamConfirm} />
         </aside>
 
         {open && (
@@ -158,7 +169,7 @@ export function AppShell({
             <div className="absolute left-0 top-0 h-full w-64 shadow-panel">
               <SidebarInner
                 onNavigate={() => setOpen(false)}
-                onExamClick={() => setShowExamConfirm(true)}
+                onExamClick={openExamConfirm}
               />
             </div>
           </div>
@@ -217,20 +228,31 @@ export function AppShell({
       <Dialog open={showExamConfirm} onOpenChange={setShowExamConfirm}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>¿Iniciar simulación de examen?</DialogTitle>
+            <DialogTitle>
+              {inProgress ? "Tienes una simulación en curso" : "¿Iniciar simulación de examen?"}
+            </DialogTitle>
             <DialogDescription>
-              Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener
-              disponibilidad antes de empezar.
+              {inProgress
+                ? `Dejaste sin terminar “${inProgress.label}” con ${inProgress.answered} de ${inProgress.total} preguntas respondidas. Puedes retomarla donde la dejaste o empezar una nueva desde cero.`
+                : "Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener disponibilidad antes de empezar."}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2 sm:gap-0">
             <Button variant="outline" onClick={() => setShowExamConfirm(false)}>
               Cancelar
             </Button>
-            <Button onClick={startExam}>Comenzar simulación</Button>
+            {inProgress && (
+              <Button variant="outline" onClick={() => startExam(false)}>
+                Empezar de cero
+              </Button>
+            )}
+            <Button onClick={() => startExam(Boolean(inProgress))}>
+              {inProgress ? "Reanudar simulación" : "Comenzar simulación"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
     </>
   );
 }

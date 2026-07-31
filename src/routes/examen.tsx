@@ -27,6 +27,13 @@ import { QuestionNavigator } from "@/components/exam/QuestionNavigator";
 import { BREAK_SECONDS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 import {
+  clearExamProgress,
+  loadExamProgress,
+  saveExamProgress,
+  type ExamProgress,
+} from "@/lib/examResume";
+
+import {
   finishExam,
   startExam,
   submitAnswer,
@@ -43,6 +50,8 @@ interface ExamSearch {
   dominio?: DomainCode;
   unidad?: string;
   preguntas?: number;
+  /** "1" para reanudar la simulación guardada en curso. */
+  reanudar?: string;
 }
 
 export const Route = createFileRoute("/examen")({
@@ -52,7 +61,9 @@ export const Route = createFileRoute("/examen")({
     dominio: typeof search.dominio === "string" ? (search.dominio as DomainCode) : undefined,
     unidad: typeof search.unidad === "string" ? search.unidad : undefined,
     preguntas: typeof search.preguntas === "number" ? search.preguntas : undefined,
+    reanudar: typeof search.reanudar === "string" ? search.reanudar : undefined,
   }),
+
   head: () => ({
     meta: [
       { title: "Simulación de examen · Simulador PMP ECO 2026" },
@@ -96,11 +107,23 @@ function ExamPage() {
   const startedRef = useRef(false);
 
   const [session, setSession] = useState<ExamSession | null>(null);
+  const [resume, setResume] = useState<ExamProgress | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     if (startedRef.current) return;
     startedRef.current = true;
+
+    if (search.reanudar === "1") {
+      const saved = loadExamProgress();
+      if (saved) {
+        setResume(saved);
+        setSession(saved.session);
+        return;
+      }
+    }
+
+    clearExamProgress();
     startExam({
       mode,
       domains: search.dominio ? [search.dominio] : undefined,
@@ -109,7 +132,8 @@ function ExamPage() {
     })
       .then(setSession)
       .catch((e: Error) => setLoadError(e.message));
-  }, [mode, search.dominio, search.unidad, search.preguntas]);
+  }, [mode, search.dominio, search.unidad, search.preguntas, search.reanudar]);
+
 
   if (loadError) {
     return (
@@ -167,35 +191,42 @@ function ExamPage() {
           es limitada.
         </p>
       )}
-      <ExamRunner session={session} />
+      <ExamRunner session={session} resume={resume} />
     </>
   );
 }
 
-function ExamRunner({ session }: { session: ExamSession }) {
+function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamProgress | null }) {
   const formative = session.mode !== "full_sim";
   const questions = session.questions;
   const sections = session.sections;
 
-  const [index, setIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
-  const [feedback, setFeedback] = useState<Record<string, AnswerFeedback>>({});
+  const initialSection = Math.min(Math.max(resume?.sectionIdx ?? 0, 0), sections.length - 1);
+
+  const [index, setIndex] = useState(resume?.index ?? 0);
+  const [answers, setAnswers] = useState<Record<string, AnswerValue>>(resume?.answers ?? {});
+  const [feedback, setFeedback] = useState<Record<string, AnswerFeedback>>(resume?.feedback ?? {});
   const [checking, setChecking] = useState(false);
-  const [flagged, setFlagged] = useState<Record<string, boolean>>({});
+  const [flagged, setFlagged] = useState<Record<string, boolean>>(resume?.flagged ?? {});
   const [paused, setPaused] = useState(false);
   const [summary, setSummary] = useState<FinishSummary | null>(null);
   const [finishing, setFinishing] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
 
-  const [sectionIdx, setSectionIdx] = useState(0);
+  const [sectionIdx, setSectionIdx] = useState(initialSection);
   const section = sections[sectionIdx];
-  const [seconds, setSeconds] = useState(sections[0].seconds);
+  const [seconds, setSeconds] = useState(
+    resume?.secondsLeft && resume.secondsLeft > 0
+      ? Math.min(resume.secondsLeft, sections[initialSection].seconds)
+      : sections[initialSection].seconds,
+  );
   const [onBreak, setOnBreak] = useState(false);
   const [breakSeconds, setBreakSeconds] = useState(BREAK_SECONDS);
   const questionStart = useRef(Date.now());
   /** Marca de tiempo de fin de la sección actual (ms). Evita desfases cuando la pestaña se suspende. */
-  const deadline = useRef<number>(Date.now() + sections[0].seconds * 1000);
+  const deadline = useRef<number>(Date.now() + sections[initialSection].seconds * 1000);
+
 
   const sectionQuestions = useMemo(
     () => questions.filter((q) => (q.sectionNumber ?? 1) === section.sectionNumber),
@@ -344,8 +375,26 @@ function ExamRunner({ session }: { session: ExamSession }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seconds, onBreak, summary, paused]);
 
+  // Guardado local del progreso para poder reanudar la simulación más tarde.
+  useEffect(() => {
+    if (summary) {
+      clearExamProgress();
+      return;
+    }
+    saveExamProgress({
+      mode: session.mode,
+      session,
+      index,
+      answers,
+      feedback,
+      flagged,
+      sectionIdx,
+      secondsLeft: seconds,
+    });
+  }, [session, index, answers, feedback, flagged, sectionIdx, seconds, summary]);
 
   const answeredCount = Object.keys(answers).length;
+
 
   if (summary) {
     return (
