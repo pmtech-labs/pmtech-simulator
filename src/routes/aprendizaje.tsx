@@ -74,6 +74,7 @@ function UnitRow({
   isRecommended,
   isLast,
   canCumulative,
+  cumulativeBlockReason,
   onOpenDetail,
 }: {
   unit: LearningPathUnit;
@@ -81,6 +82,7 @@ function UnitRow({
   isRecommended: boolean;
   isLast: boolean;
   canCumulative: boolean;
+  cumulativeBlockReason: string | null;
   onOpenDetail: () => void;
 }) {
   const evaluable = unit.taskIds.length > 0;
@@ -203,12 +205,17 @@ function UnitRow({
               ) : (
                 <span
                   className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-dashed border-border px-3 py-2 text-sm font-medium text-muted-foreground"
-                  title="El acumulativo se activa a partir de la lección 2"
+                  title={cumulativeBlockReason ?? "El acumulativo se activa a partir de la lección 2"}
                 >
-                  <Lock className="h-4 w-4" /> Acumulativo no disponible
+                  <Lock className="h-4 w-4" /> Acumulativo bloqueado
                 </span>
               )}
             </div>
+            {!canCumulative && cumulativeBlockReason && (
+              <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
+                {cumulativeBlockReason}
+              </p>
+            )}
           </>
         ) : (
           <p className="mt-4 flex items-start gap-2 rounded-lg bg-warning-soft p-3 text-xs leading-relaxed text-accent-foreground">
@@ -220,6 +227,32 @@ function UnitRow({
       </div>
     </li>
   );
+}
+
+/** Dominio mínimo exigido en las lecciones previas para desbloquear el acumulativo. */
+const CUMULATIVE_MASTERY_THRESHOLD = 60;
+
+/** Devuelve null si el acumulativo es válido; si no, el motivo del bloqueo. */
+function cumulativeBlockReasonFor(
+  unit: LearningPathUnit,
+  allUnits: LearningPathUnit[],
+): string | null {
+  if (unit.sequence < 2) {
+    return "El simulacro acumulativo se activa a partir de la lección 2.";
+  }
+  const previous = allUnits.filter((u) => u.sequence < unit.sequence && u.taskIds.length > 0);
+  if (!previous.length) {
+    return "Aún no hay lecciones evaluables anteriores que acumular.";
+  }
+  const weak = previous.filter((u) => (u.masteryPct ?? 0) < CUMULATIVE_MASTERY_THRESHOLD);
+  if (weak.length) {
+    const list = weak
+      .slice(0, 3)
+      .map((u) => `${u.sequence} (${u.masteryPct ?? 0}%)`)
+      .join(", ");
+    return `Necesitas al menos ${CUMULATIVE_MASTERY_THRESHOLD}% de dominio en las lecciones previas. Pendientes: ${list}${weak.length > 3 ? "…" : ""}.`;
+  }
+  return null;
 }
 
 function LearningPathPage() {
@@ -327,7 +360,8 @@ function LearningPathPage() {
                 isRecommended={recommended?.id === u.id}
                 onOpenDetail={() => setDetailUnit(u)}
                 isLast={i === units.length - 1}
-                canCumulative={u.sequence >= 2}
+                canCumulative={cumulativeBlockReasonFor(u, units) === null}
+                cumulativeBlockReason={cumulativeBlockReasonFor(u, units)}
               />
             ))}
           </ol>
