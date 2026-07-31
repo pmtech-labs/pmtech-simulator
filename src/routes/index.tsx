@@ -686,22 +686,27 @@ function FAQ() {
 function FinalCta() {
   return (
     <section className="mx-auto max-w-5xl px-4 pb-20 sm:px-6">
-      <div className="rounded-3xl bg-primary px-6 py-14 text-center text-primary-foreground sm:px-12">
-        <ClipboardList className="mx-auto h-10 w-10 text-accent" />
-        <h2 className="mt-4 font-display text-2xl font-bold sm:text-3xl">
-          Deja de practicar para un examen que ya no existe
-        </h2>
-        <p className="mx-auto mt-3 max-w-lg text-sm text-primary-foreground/70">
-          Empieza hoy con el único simulador en español calibrado al ECO 2026 desde el primer
-          día.
-        </p>
-        <a
-          href="#precios"
-          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
-        >
-          Ver planes <ArrowRight className="h-4 w-4" />
-        </a>
-      </div>
+      <Reveal>
+        <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-14 text-center text-primary-foreground sm:px-12">
+          <div className="pointer-events-none absolute -left-20 -top-20 h-56 w-56 rounded-full bg-accent/25 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -right-10 h-56 w-56 rounded-full bg-accent/15 blur-3xl" />
+          <ClipboardList className="mx-auto h-10 w-10 text-accent" />
+          <h2 className="mt-4 font-display text-2xl font-bold sm:text-3xl">
+            Deja de practicar para un examen que ya no existe
+          </h2>
+          <p className="mx-auto mt-3 max-w-lg text-sm text-primary-foreground/70">
+            Empieza hoy con el único simulador en español calibrado al ECO 2026 desde el primer
+            día.
+          </p>
+          <a
+            href="#precios"
+            className="group mt-6 inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-16px_var(--accent)]"
+          >
+            Ver planes
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </a>
+        </div>
+      </Reveal>
     </section>
   );
 }
