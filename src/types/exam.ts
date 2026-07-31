@@ -2,6 +2,24 @@ export type DomainCode = "people" | "process" | "business";
 
 export type QuestionFormat = "mc_single" | "mc_multi" | "matching";
 
+/** Diagnóstico de tipo de error devuelto por `submit_answer` en modos formativos. */
+export type ErrorType =
+  | "knowledge"
+  | "interpretation"
+  | "sequence"
+  | "role"
+  | "approach"
+  | "reading"
+  | "analysis"
+  | "time";
+
+/** Sección cronometrada independiente del examen completo (full_sim). */
+export interface ExamSection {
+  sectionNumber: number;
+  count: number;
+  seconds: number;
+}
+
 export interface Option {
   id: string;
   label: string;
