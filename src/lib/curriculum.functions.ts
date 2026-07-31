@@ -17,15 +17,11 @@ export interface AdminCourseUnit {
   taskIds: string[];
 }
 
-async function assertAdmin(context: { supabase: any; userId: string }) {
-  const { data, error } = await context.supabase.rpc("is_admin", { p_user_id: context.userId });
-  if (error || !data) throw new Error("No autorizado: se requiere rol de administrador.");
-}
-
 export const listAdminCourseUnits = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<AdminCourseUnit[]> => {
-    await assertAdmin(context as never);
+    const admin = await context.supabase.rpc("is_admin", { p_user_id: context.userId });
+    if (admin.error || !admin.data) throw new Error("No autorizado: se requiere rol de administrador.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const { data: units, error } = await supabaseAdmin
@@ -63,7 +59,8 @@ export const saveCourseUnit = createServerFn({ method: "POST" })
     return input;
   })
   .handler(async ({ data, context }) => {
-    await assertAdmin(context as never);
+    const admin = await context.supabase.rpc("is_admin", { p_user_id: context.userId });
+    if (admin.error || !admin.data) throw new Error("No autorizado: se requiere rol de administrador.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     let unitId = data.id;
@@ -112,7 +109,8 @@ export const setCourseUnitStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { id: string; status: "draft" | "published" }) => input)
   .handler(async ({ data, context }) => {
-    await assertAdmin(context as never);
+    const admin = await context.supabase.rpc("is_admin", { p_user_id: context.userId });
+    if (admin.error || !admin.data) throw new Error("No autorizado: se requiere rol de administrador.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     if (data.status === "published") {
@@ -140,7 +138,8 @@ export const deleteCourseUnit = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { id: string }) => input)
   .handler(async ({ data, context }) => {
-    await assertAdmin(context as never);
+    const admin = await context.supabase.rpc("is_admin", { p_user_id: context.userId });
+    if (admin.error || !admin.data) throw new Error("No autorizado: se requiere rol de administrador.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     await supabaseAdmin.from("course_unit_tasks").delete().eq("course_unit_id", data.id);
     const { error } = await supabaseAdmin.from("course_units").delete().eq("id", data.id);
