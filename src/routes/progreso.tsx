@@ -30,6 +30,8 @@ function ProgressPage() {
   const isPremium = MOCK_USER.plan === "premium_6m";
   const errorStats = [...MOCK_ERROR_TYPE_STATS].sort((a, b) => b.occurrences - a.occurrences);
   const maxErrors = Math.max(...errorStats.map((s) => s.occurrences), 1);
+  const studyPlan = buildStudyPlan(MOCK_ERROR_TYPE_STATS);
+
 
   return (
     <AppShell title="Mi progreso" subtitle="Analítica de brecha por dominio y tarea ECO">
