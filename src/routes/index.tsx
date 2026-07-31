@@ -401,20 +401,19 @@ function Hero() {
           </Reveal>
         </div>
 
-        <Reveal delay={300}>
-          <div className="relative mx-auto mt-14 max-w-4xl">
-            <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-b from-accent/20 to-transparent blur-2xl" />
-            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-panel transition-transform duration-500 hover:-translate-y-1">
-              <img
-                src={heroDashboard}
-                alt="Panel de analítica del simulador PMP con dominio por tareas ECO y patrón de errores"
-                width={1408}
-                height={1008}
-                className="w-full"
-              />
-            </div>
+        <div className="relative mx-auto mt-14 max-w-4xl">
+          <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-b from-accent/20 to-transparent blur-2xl" />
+          <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-panel transition-transform duration-500 hover:-translate-y-1">
+            <img
+              src={heroDashboard}
+              alt="Panel de analítica del simulador PMP con dominio por tareas ECO y patrón de errores"
+              width={1408}
+              height={1008}
+              fetchPriority="high"
+              className="w-full"
+            />
           </div>
-        </Reveal>
+        </div>
 
         <div className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
           {STATS.map((s, i) => (
