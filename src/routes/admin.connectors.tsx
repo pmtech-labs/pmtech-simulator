@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2, Plus, Star } from "lucide-react";
-import { useState } from "react";
+import { Loader2, Pencil, Plus, RefreshCw, Star } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { AdminShell, DataTable, Pager } from "@/components/admin/AdminShell";
@@ -10,9 +10,14 @@ import {
   createConnector,
   deactivateConnector,
   listConnectors,
+  listProviderModels,
   setDefaultConnector,
+  updateConnector,
   type ConnectorProvider,
+  type LlmConnector,
+  type ProviderModel,
 } from "@/services/adminService";
+
 
 export const Route = createFileRoute("/admin/connectors")({
   component: ConnectorsPage,
