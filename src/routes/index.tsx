@@ -24,6 +24,10 @@ import {
 import { AboutUs } from "@/components/landing/AboutUs";
 import { SocialProof } from "@/components/landing/SocialProof";
 import { NewsletterSignup } from "@/components/landing/NewsletterSignup";
+import { Reveal } from "@/components/landing/Reveal";
+import heroDashboard from "@/assets/hero-dashboard.jpg";
+import diagnosticAbstract from "@/assets/diagnostic-abstract.jpg";
+import trainingSession from "@/assets/training-session.jpg";
 
 import { TrainingContactForm } from "@/components/landing/TrainingContactForm";
 import { PLANS } from "@/services/checkoutService";
@@ -337,57 +341,92 @@ function Hero() {
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--secondary),_transparent_60%)]" />
+      <div className="pointer-events-none absolute -left-32 top-10 -z-10 h-72 w-72 rounded-full bg-accent/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 top-40 -z-10 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.35] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+        }}
+      />
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-accent-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-accent" />
-            Diagnóstico de 8 tipos de error · 26 tareas del ECO 2026
-          </span>
-          <h1 className="mt-6 text-balance font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-            El único simulador PMP en español que te dice
-            <br />
-            <span className="text-accent-foreground">por qué fallas, no solo cuánto</span>
-          </h1>
+          <Reveal>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-3 py-1 text-xs font-semibold text-accent-foreground shadow-lift backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5 animate-pulse text-accent" />
+              Diagnóstico de 8 tipos de error · 26 tareas del ECO 2026
+            </span>
+          </Reveal>
+          <Reveal delay={80}>
+            <h1 className="mt-6 text-balance font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+              El único simulador PMP en español que te dice
+              <br />
+              <span className="relative inline-block text-accent-foreground">
+                por qué fallas, no solo cuánto
+                <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-gradient-to-r from-accent via-accent/60 to-transparent" />
+              </span>
+            </h1>
+          </Reveal>
 
-          <p className="mx-auto mt-6 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Otros te dan un porcentaje y la respuesta correcta. Nosotros clasificamos cada fallo
-            en uno de los 8 tipos de error del razonamiento PMP —secuencia, rol, enfoque,
-            lectura…—, lo cruzamos con tu dominio en las 26 tareas del ECO y te devolvemos un
-            plan de estudio con qué practicar mañana.
-          </p>
+          <Reveal delay={150}>
+            <p className="mx-auto mt-6 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Otros te dan un porcentaje y la respuesta correcta. Nosotros clasificamos cada fallo
+              en uno de los 8 tipos de error del razonamiento PMP —secuencia, rol, enfoque,
+              lectura…—, lo cruzamos con tu dominio en las 26 tareas del ECO y te devolvemos un
+              plan de estudio con qué practicar mañana.
+            </p>
+          </Reveal>
 
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a
-              href="#precios"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-panel transition-transform hover:-translate-y-0.5"
-            >
-              Ver planes y precios <ArrowRight className="h-4 w-4" />
-            </a>
-            <a
-              href="#como-funciona"
-              className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:bg-secondary"
-            >
-              Cómo funciona
-            </a>
-          </div>
-          <p className="mt-4 text-xs text-muted-foreground">
-            Sin compromiso de permanencia · Cancela cuando quieras · No afiliado a PMI
-          </p>
+          <Reveal delay={220}>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a
+                href="#precios"
+                className="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-panel transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-16px_var(--primary)]"
+              >
+                Ver planes y precios
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </a>
+              <a
+                href="#como-funciona"
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:bg-secondary"
+              >
+                Cómo funciona
+              </a>
+            </div>
+            <p className="mt-4 text-xs text-muted-foreground">
+              Sin compromiso de permanencia · Cancela cuando quieras · No afiliado a PMI
+            </p>
+          </Reveal>
         </div>
 
-        <div className="mx-auto mt-14 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
-          {STATS.map((s) => (
-            <div
-              key={s.label}
-              className="rounded-2xl border border-border bg-card p-4 text-center shadow-lift"
-            >
-              <p className="num font-display text-2xl font-bold text-foreground sm:text-3xl">
-                {s.value}
-              </p>
-              <p className="mt-1 text-[11px] leading-tight text-muted-foreground sm:text-xs">
-                {s.label}
-              </p>
-            </div>
+        <div className="relative mx-auto mt-14 max-w-4xl">
+          <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-b from-accent/20 to-transparent blur-2xl" />
+          <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-panel transition-transform duration-500 hover:-translate-y-1">
+            <img
+              src={heroDashboard}
+              alt="Panel de analítica del simulador PMP con dominio por tareas ECO y patrón de errores"
+              width={1408}
+              height={1008}
+              fetchPriority="high"
+              className="w-full"
+            />
+          </div>
+        </div>
+
+        <div className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+          {STATS.map((s, i) => (
+            <Reveal key={s.label} delay={i * 90}>
+              <div className="group rounded-2xl border border-border bg-card p-4 text-center shadow-lift transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
+                <p className="num font-display text-2xl font-bold text-foreground transition-colors group-hover:text-accent-foreground sm:text-3xl">
+                  {s.value}
+                </p>
+                <p className="mt-1 text-[11px] leading-tight text-muted-foreground sm:text-xs">
+                  {s.label}
+                </p>
+              </div>
+            </Reveal>
           ))}
         </div>
       </div>
@@ -398,39 +437,58 @@ function Hero() {
 function ProblemSolution() {
   return (
     <section className="border-y border-border bg-secondary/40">
-      <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
-        <div className="grid gap-8 md:grid-cols-2">
-          <div className="rounded-2xl border border-border bg-card p-6">
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              El problema
-            </p>
-            <h3 className="mt-2 text-lg font-semibold">
-              Hacer 1.000 preguntas no te dice por qué fallas
-            </h3>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Los simuladores te devuelven un porcentaje y la letra correcta. Pero suspender el PMP
-              casi nunca es falta de teoría: es elegir la acción válida en el momento equivocado,
-              decidir por alguien que no te corresponde o aplicar lógica predictiva en un contexto
-              ágil. Un número de aciertos no distingue nada de eso — y repetir preguntas que ya
-              conoces infla tu nota y te da una falsa sensación de estar listo.
-            </p>
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
+            <Reveal>
+              <div className="h-full rounded-2xl border border-border bg-card p-6 transition-shadow duration-300 hover:shadow-panel">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  El problema
+                </p>
+                <h3 className="mt-2 text-lg font-semibold">
+                  Hacer 1.000 preguntas no te dice por qué fallas
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  Los simuladores te devuelven un porcentaje y la letra correcta. Pero suspender el
+                  PMP casi nunca es falta de teoría: es elegir la acción válida en el momento
+                  equivocado, decidir por alguien que no te corresponde o aplicar lógica predictiva
+                  en un contexto ágil. Un número de aciertos no distingue nada de eso — y repetir
+                  preguntas que ya conoces infla tu nota y te da una falsa sensación de estar listo.
+                </p>
+              </div>
+            </Reveal>
+            <Reveal delay={120}>
+              <div className="relative h-full overflow-hidden rounded-2xl border border-accent/40 bg-card p-6 shadow-panel">
+                <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-accent/15 blur-2xl" />
+                <p className="text-xs font-semibold uppercase tracking-wide text-accent-foreground">
+                  La solución
+                </p>
+                <h3 className="mt-2 text-lg font-semibold">
+                  Un motor de diagnóstico del razonamiento, no un banco de preguntas
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  Cada fallo se clasifica en uno de los 8 tipos de error (secuencia, rol, enfoque,
+                  lectura, análisis, interpretación, conocimiento, tiempo) y se acumula en tu
+                  perfil. De ahí sale tu plan de estudio, tu dominio en cada una de las 26 tareas
+                  del ECO y tu ruta de 14 lecciones. Además te decimos cuántas preguntas eran
+                  nuevas y cuántas repetidas, para que tu nota signifique algo.
+                </p>
+              </div>
+            </Reveal>
           </div>
-          <div className="rounded-2xl border border-accent/40 bg-card p-6 shadow-panel">
-            <p className="text-xs font-semibold uppercase tracking-wide text-accent-foreground">
-              La solución
-            </p>
-            <h3 className="mt-2 text-lg font-semibold">
-              Un motor de diagnóstico del razonamiento, no un banco de preguntas
-            </h3>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Cada fallo se clasifica en uno de los 8 tipos de error (secuencia, rol, enfoque,
-              lectura, análisis, interpretación, conocimiento, tiempo) y se acumula en tu perfil.
-              De ahí sale tu plan de estudio, tu dominio en cada una de las 26 tareas del ECO y
-              tu ruta de 14 lecciones. Además te decimos cuántas preguntas eran nuevas y cuántas
-              repetidas, para que tu nota signifique algo.
-            </p>
 
-          </div>
+          <Reveal delay={200}>
+            <figure className="group overflow-hidden rounded-3xl border border-border shadow-panel">
+              <img
+                src={diagnosticAbstract}
+                alt="Representación del árbol de decisión del razonamiento PMP con la ruta correcta destacada"
+                loading="lazy"
+                width={1200}
+                height={912}
+                className="w-full transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+            </figure>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -440,28 +498,30 @@ function ProblemSolution() {
 function Features() {
   return (
     <section id="caracteristicas" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-      <div className="mx-auto max-w-2xl text-center">
-        <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-          Lo que hace diferente a este simulador
-        </h2>
-        <p className="mt-3 text-muted-foreground">
-          No es marketing — es arquitectura. Cada punto de abajo existe en el producto, no en la
-          promesa.
-        </p>
-      </div>
+      <Reveal>
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            Lo que hace diferente a este simulador
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            No es marketing — es arquitectura. Cada punto de abajo existe en el producto, no en la
+            promesa.
+          </p>
+        </div>
+      </Reveal>
 
       <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {FEATURES.map((f) => (
-          <div
-            key={f.title}
-            className="rounded-2xl border border-border bg-card p-6 transition-shadow hover:shadow-panel"
-          >
-            <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary">
-              <f.icon className="h-5 w-5 text-foreground" />
+        {FEATURES.map((f, i) => (
+          <Reveal key={f.title} delay={(i % 3) * 90}>
+            <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
+              <div className="pointer-events-none absolute inset-x-0 -top-24 h-32 bg-gradient-to-b from-accent/15 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary transition-colors duration-300 group-hover:bg-accent/20">
+                <f.icon className="h-5 w-5 text-foreground transition-transform duration-300 group-hover:scale-110" />
+              </div>
+              <h3 className="mt-4 text-base font-semibold">{f.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.description}</p>
             </div>
-            <h3 className="mt-4 text-base font-semibold">{f.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.description}</p>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -472,29 +532,31 @@ function HowItWorks() {
   return (
     <section id="como-funciona" className="border-y border-border bg-secondary/40">
       <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-            Cómo funciona
-          </h2>
-          <p className="mt-3 text-muted-foreground">
-            De cero a examen, en cuatro pasos claros.
-          </p>
-        </div>
+        <Reveal>
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+              Cómo funciona
+            </h2>
+            <p className="mt-3 text-muted-foreground">De cero a examen, en cuatro pasos claros.</p>
+          </div>
+        </Reveal>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((step, i) => (
-            <div key={step.number} className="relative rounded-2xl border border-border bg-card p-5">
-              <span className="num font-display text-3xl font-bold text-border">
-                {step.number}
-              </span>
-              <h3 className="mt-3 text-sm font-semibold">{step.title}</h3>
-              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                {step.description}
-              </p>
-              {i < STEPS.length - 1 && (
-                <ArrowRight className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-muted-foreground/40 lg:block" />
-              )}
-            </div>
+            <Reveal key={step.number} delay={i * 100}>
+              <div className="group relative h-full rounded-2xl border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
+                <span className="num font-display text-3xl font-bold text-border transition-colors duration-300 group-hover:text-accent">
+                  {step.number}
+                </span>
+                <h3 className="mt-3 text-sm font-semibold">{step.title}</h3>
+                <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                  {step.description}
+                </p>
+                {i < STEPS.length - 1 && (
+                  <ArrowRight className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-muted-foreground/40 lg:block" />
+                )}
+              </div>
+            </Reveal>
           ))}
         </div>
       </div>
@@ -505,27 +567,32 @@ function HowItWorks() {
 function Pricing() {
   return (
     <section id="precios" className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
-      <div className="mx-auto max-w-2xl text-center">
-        <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-          Planes simples, sin letra pequeña
-        </h2>
-        <p className="mt-3 text-muted-foreground">
-          Elige según cuánta profundidad de diagnóstico necesitas. Cambia de plan cuando quieras.
-        </p>
-      </div>
+      <Reveal>
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            Planes simples, sin letra pequeña
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Elige según cuánta profundidad de diagnóstico necesitas. Cambia de plan cuando quieras.
+          </p>
+        </div>
+      </Reveal>
 
       <div className="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
-        {PLANS.map((plan) => {
+        {PLANS.map((plan, i) => {
           const isPremium = plan.code === "premium_6m";
           return (
+            <Reveal key={plan.code} delay={i * 120} className="h-full">
             <div
-              key={plan.code}
               className={
                 isPremium
-                  ? "relative rounded-2xl border-2 border-accent bg-card p-6 shadow-panel"
-                  : "relative rounded-2xl border border-border bg-card p-6"
+                  ? "relative h-full overflow-hidden rounded-2xl border-2 border-accent bg-card p-6 shadow-panel transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_50px_-24px_var(--accent)]"
+                  : "relative h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel"
               }
             >
+              {isPremium && (
+                <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-accent/15 blur-2xl" />
+              )}
               {isPremium && (
                 <span className="absolute -top-3 left-6 rounded-full bg-accent px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-accent-foreground">
                   Recomendado
@@ -577,6 +644,7 @@ function Pricing() {
                 Elegir {plan.name} <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
+            </Reveal>
           );
         })}
       </div>
@@ -617,22 +685,27 @@ function FAQ() {
 function FinalCta() {
   return (
     <section className="mx-auto max-w-5xl px-4 pb-20 sm:px-6">
-      <div className="rounded-3xl bg-primary px-6 py-14 text-center text-primary-foreground sm:px-12">
-        <ClipboardList className="mx-auto h-10 w-10 text-accent" />
-        <h2 className="mt-4 font-display text-2xl font-bold sm:text-3xl">
-          Deja de practicar para un examen que ya no existe
-        </h2>
-        <p className="mx-auto mt-3 max-w-lg text-sm text-primary-foreground/70">
-          Empieza hoy con el único simulador en español calibrado al ECO 2026 desde el primer
-          día.
-        </p>
-        <a
-          href="#precios"
-          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
-        >
-          Ver planes <ArrowRight className="h-4 w-4" />
-        </a>
-      </div>
+      <Reveal>
+        <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-14 text-center text-primary-foreground sm:px-12">
+          <div className="pointer-events-none absolute -left-20 -top-20 h-56 w-56 rounded-full bg-accent/25 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -right-10 h-56 w-56 rounded-full bg-accent/15 blur-3xl" />
+          <ClipboardList className="mx-auto h-10 w-10 text-accent" />
+          <h2 className="mt-4 font-display text-2xl font-bold sm:text-3xl">
+            Deja de practicar para un examen que ya no existe
+          </h2>
+          <p className="mx-auto mt-3 max-w-lg text-sm text-primary-foreground/70">
+            Empieza hoy con el único simulador en español calibrado al ECO 2026 desde el primer
+            día.
+          </p>
+          <a
+            href="#precios"
+            className="group mt-6 inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-16px_var(--accent)]"
+          >
+            Ver planes
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </a>
+        </div>
+      </Reveal>
     </section>
   );
 }
@@ -692,7 +765,17 @@ function Training() {
     <section id="formacion" className="border-y border-border bg-secondary/40">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-          <div>
+          <Reveal>
+            <figure className="group mb-8 overflow-hidden rounded-2xl border border-border shadow-panel">
+              <img
+                src={trainingSession}
+                alt="Sesión de formación PMP en directo con un grupo de profesionales"
+                loading="lazy"
+                width={1200}
+                height={912}
+                className="h-56 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 sm:h-64"
+              />
+            </figure>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-accent-foreground">
               <GraduationCap className="h-3.5 w-3.5 text-accent" />
               Formación PMP® · 35 horas
@@ -714,7 +797,10 @@ function Training() {
                 "Revisión de tu solicitud y de tu experiencia antes de aplicar",
                 "Modalidad individual o in-company para equipos",
               ].map((item) => (
-                <li key={item} className="flex items-start gap-2">
+                <li
+                  key={item}
+                  className="flex items-start gap-2 transition-transform duration-300 hover:translate-x-1"
+                >
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
                   <span>{item}</span>
                 </li>
@@ -724,8 +810,10 @@ function Training() {
               Déjanos tus datos y te enviamos programa, fechas y precio sin compromiso. Nada
               de llamadas comerciales insistentes.
             </p>
-          </div>
-          <TrainingContactForm />
+          </Reveal>
+          <Reveal delay={140}>
+            <TrainingContactForm />
+          </Reveal>
         </div>
       </div>
     </section>
