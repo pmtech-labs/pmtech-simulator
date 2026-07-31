@@ -20,6 +20,7 @@ import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PracticaRouteImport } from './routes/practica'
 import { Route as ProgresoRouteImport } from './routes/progreso'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
 import { Route as AdminCurriculumRouteImport } from './routes/admin.curriculum'
@@ -81,6 +82,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -119,6 +125,7 @@ export interface FileRoutesByFullPath {
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
@@ -136,6 +143,7 @@ export interface FileRoutesByTo {
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
@@ -155,6 +163,7 @@ export interface FileRoutesById {
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
@@ -175,6 +184,7 @@ export interface FileRouteTypes {
     | '/practica'
     | '/progreso'
     | '/reset-password'
+    | '/sitemap.xml'
     | '/admin/connectors'
     | '/admin/curriculum'
     | '/admin/generate'
@@ -192,6 +202,7 @@ export interface FileRouteTypes {
     | '/practica'
     | '/progreso'
     | '/reset-password'
+    | '/sitemap.xml'
     | '/admin/connectors'
     | '/admin/curriculum'
     | '/admin/generate'
@@ -210,6 +221,7 @@ export interface FileRouteTypes {
     | '/practica'
     | '/progreso'
     | '/reset-password'
+    | '/sitemap.xml'
     | '/admin/connectors'
     | '/admin/curriculum'
     | '/admin/generate'
@@ -229,6 +241,7 @@ export interface RootRouteChildren {
   PracticaRoute: typeof PracticaRoute
   ProgresoRoute: typeof ProgresoRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -310,6 +323,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -378,6 +398,7 @@ const rootRouteChildren: RootRouteChildren = {
   PracticaRoute: PracticaRoute,
   ProgresoRoute: ProgresoRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
