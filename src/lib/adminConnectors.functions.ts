@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
@@ -19,14 +20,13 @@ export const setDefaultConnectorFn = createServerFn({ method: "POST" })
 
     const url = process.env.SUPABASE_URL!;
     const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
-    const authHeader = (context.supabase as unknown as { rest?: unknown }) && undefined;
-    void authHeader;
+    const token = (getRequest()?.headers.get("authorization") ?? "").replace("Bearer ", "");
 
     const res = await fetch(`${url}/functions/v1/admin_connectors`, {
       method: "PATCH",
       headers: {
         apikey: key,
-        Authorization: `Bearer ${context.accessToken}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ id: data.id, is_default: true }),
