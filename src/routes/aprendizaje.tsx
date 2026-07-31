@@ -7,6 +7,7 @@ import {
   Layers,
   Lock,
   MapPin,
+  RotateCcw,
   Sparkles,
 } from "lucide-react";
 
@@ -151,6 +152,13 @@ function UnitRow({
                 className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground"
               >
                 <BookOpen className="h-4 w-4" /> Practicar esta lección
+              </Link>
+              <Link
+                to="/practica"
+                search={{ modo: "unit_quiz", unidad: unit.id, repaso: "errores" }}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-accent bg-warning-soft px-3 py-2 text-sm font-semibold text-accent-foreground transition-colors hover:brightness-95"
+              >
+                <RotateCcw className="h-4 w-4" /> Repasar mis errores de esta unidad
               </Link>
               {canCumulative ? (
                 <Link
