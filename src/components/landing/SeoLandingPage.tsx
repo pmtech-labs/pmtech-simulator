@@ -45,6 +45,7 @@ interface SeoLandingPageProps {
   intro: string;
   highlights: string[];
   sections: SeoSection[];
+  comparison?: SeoComparison;
   faqs: SeoFaq[];
   related: RelatedLink[];
   ctaTitle: string;
@@ -57,6 +58,7 @@ export function SeoLandingPage({
   intro,
   highlights,
   sections,
+  comparison,
   faqs,
   related,
   ctaTitle,
