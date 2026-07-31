@@ -330,6 +330,21 @@ function ExamRunner({ session }: { session: ExamSession }) {
     if (onBreak && breakSeconds === 0) endBreak();
   }, [onBreak, breakSeconds, endBreak]);
 
+  // Fin de tiempo de la sección: se cierra automáticamente.
+  const timeUp = useRef(false);
+  useEffect(() => {
+    if (onBreak || summary || paused) return;
+    if (seconds > 0) {
+      timeUp.current = false;
+      return;
+    }
+    if (timeUp.current) return;
+    timeUp.current = true;
+    void closeSection();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seconds, onBreak, summary, paused]);
+
+
   const answeredCount = Object.keys(answers).length;
 
   if (summary) {
