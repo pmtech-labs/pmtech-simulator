@@ -352,7 +352,7 @@ function Hero() {
   return (
     <section className="relative overflow-hidden">
       {/* Imagen de fondo + degradado para legibilidad */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 z-0">
         <img
           src={heroDashboard}
           alt="Panel de analítica del simulador PMP con dominio por tareas ECO y patrón de errores"
@@ -375,7 +375,7 @@ function Hero() {
         />
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:py-32">
+      <div className="mx-auto relative z-10 max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:py-32">
         <div className="mx-auto max-w-3xl text-center">
           <Reveal>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-3 py-1 text-xs font-semibold text-hero-foreground shadow-lift backdrop-blur">
