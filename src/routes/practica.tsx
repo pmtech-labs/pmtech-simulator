@@ -18,6 +18,13 @@ import { listPublishedUnits } from "@/services/curriculumService";
 import type { AnswerValue, DomainCode, Question } from "@/types/exam";
 
 export const Route = createFileRoute("/practica")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    modo:
+      search.modo === "unit_quiz" || search.modo === "cumulative" || search.modo === "domain_drill"
+        ? (search.modo as "unit_quiz" | "cumulative" | "domain_drill")
+        : undefined,
+    unidad: typeof search.unidad === "string" ? search.unidad : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Práctica por dominios · Simulador PMP ECO 2026" },
@@ -64,9 +71,10 @@ function fmtTime(seconds: number) {
 }
 
 function PracticePage() {
+  const search = Route.useSearch();
   const [selected, setSelected] = useState<DomainCode[]>(["process"]);
-  const [mode, setMode] = useState<PracticeMode>("domain_drill");
-  const [unitId, setUnitId] = useState<string>("");
+  const [mode, setMode] = useState<PracticeMode>(search.modo ?? "domain_drill");
+  const [unitId, setUnitId] = useState<string>(search.unidad ?? "");
   const [drill, setDrill] = useState<Question[] | null>(null);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, AnswerValue>>({});

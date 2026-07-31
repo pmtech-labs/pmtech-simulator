@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AprendizajeRouteImport } from './routes/aprendizaje'
 import { Route as ExamenRouteImport } from './routes/examen'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HistorialRouteImport } from './routes/historial'
@@ -32,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AprendizajeRoute = AprendizajeRouteImport.update({
+  id: '/aprendizaje',
+  path: '/aprendizaje',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExamenRoute = ExamenRouteImport.update({
@@ -98,6 +104,7 @@ const AdminReviewRoute = AdminReviewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/aprendizaje': typeof AprendizajeRoute
   '/examen': typeof ExamenRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/aprendizaje': typeof AprendizajeRoute
   '/examen': typeof ExamenRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/aprendizaje': typeof AprendizajeRoute
   '/examen': typeof ExamenRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/aprendizaje'
     | '/examen'
     | '/forgot-password'
     | '/historial'
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/aprendizaje'
     | '/examen'
     | '/forgot-password'
     | '/historial'
@@ -179,6 +190,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/aprendizaje'
     | '/examen'
     | '/forgot-password'
     | '/historial'
@@ -196,6 +208,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  AprendizajeRoute: typeof AprendizajeRoute
   ExamenRoute: typeof ExamenRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistorialRoute: typeof HistorialRoute
@@ -219,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aprendizaje': {
+      id: '/aprendizaje'
+      path: '/aprendizaje'
+      fullPath: '/aprendizaje'
+      preLoaderRoute: typeof AprendizajeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/examen': {
@@ -329,6 +349,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  AprendizajeRoute: AprendizajeRoute,
   ExamenRoute: ExamenRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HistorialRoute: HistorialRoute,
