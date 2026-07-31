@@ -32,6 +32,7 @@ import diagnosticAbstract from "@/assets/diagnostic-abstract.jpg";
 import trainingSession from "@/assets/training-session.jpg";
 
 import { TrainingContactForm } from "@/components/landing/TrainingContactForm";
+import { PlanCta } from "@/components/landing/PlanCta";
 import { PLANS } from "@/services/checkoutService";
 
 const SITE_URL = "https://pmtech-simulator.lovable.app";
@@ -652,17 +653,15 @@ function Pricing() {
                 ))}
               </ul>
 
-              <Link
-                to="/registro"
-                search={{ plan: plan.code }}
+              <PlanCta
+                planCode={plan.code}
+                label={`Elegir ${plan.name}`}
                 className={
                   isPremium
                     ? "mt-6 flex items-center justify-center gap-1.5 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
                     : "mt-6 flex items-center justify-center gap-1.5 rounded-lg border border-border bg-secondary px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary/70"
                 }
-              >
-                Elegir {plan.name} <ArrowRight className="h-4 w-4" />
-              </Link>
+              />
             </div>
             </Reveal>
           );
