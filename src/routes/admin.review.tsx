@@ -39,6 +39,7 @@ function ReviewPage() {
   const [approach, setApproach] = useState("");
   const [minUsed, setMinUsed] = useState("");
   const [maxSuccess, setMaxSuccess] = useState("");
+  const [model, setModel] = useState("");
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -65,7 +66,20 @@ function ReviewPage() {
     queryFn: () => listQuestions(filters, page, PAGE_SIZE),
   });
 
-  const rows = questions.data?.rows ?? [];
+  const allRows = questions.data?.rows ?? [];
+  const modelOptions = useMemo(() => {
+    const set = new Set<string>();
+    for (const r of allRows) set.add(r.generation_model_id ?? "__manual__");
+    return Array.from(set).sort();
+  }, [allRows]);
+  const rows = useMemo(
+    () =>
+      model
+        ? allRows.filter((r) => (r.generation_model_id ?? "__manual__") === model)
+        : allRows,
+    [allRows, model],
+  );
+
 
   const changeStatus = useMutation({
     mutationFn: ({ ids, status }: { ids: string[]; status: string }) => updateQuestionsStatus(ids, status),
@@ -169,7 +183,16 @@ function ReviewPage() {
             onChange={(e) => { setMaxSuccess(e.target.value); setPage(1); }}
             className={cn(inputCls, "w-32")}
           />
+          <select value={model} onChange={(e) => setModel(e.target.value)} className={inputCls}>
+            <option value="">Todos los modelos</option>
+            {modelOptions.map((m) => (
+              <option key={m} value={m}>
+                {m === "__manual__" ? "Manual" : m}
+              </option>
+            ))}
+          </select>
         </div>
+
 
         {selected.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 p-3 text-xs">
@@ -206,6 +229,7 @@ function ReviewPage() {
                   <th className="px-3 py-2">Enunciado</th>
                   <th className="px-3 py-2">Estado</th>
                   <th className="px-3 py-2">Dominio / Tarea</th>
+                  <th className="px-3 py-2">Generado con</th>
                   <th className="px-3 py-2">Dif.</th>
                   <th className="px-3 py-2">Usos</th>
                   <th className="px-3 py-2">% acierto</th>
@@ -227,7 +251,12 @@ function ReviewPage() {
                 />
               ))}
             </DataTable>
-            <Pager page={page} pageSize={PAGE_SIZE} total={questions.data?.total ?? rows.length} onPage={setPage} />
+            <Pager
+              page={page}
+              pageSize={PAGE_SIZE}
+              total={model ? rows.length : (questions.data?.total ?? rows.length)}
+              onPage={setPage}
+            />
           </>
         )}
       </div>
@@ -296,6 +325,11 @@ function QuestionRow({
           <br />
           {q.task_title ?? "—"}
         </td>
+        <td className="px-3 py-2 text-xs">
+          <span className="rounded-md bg-muted px-2 py-0.5 font-medium text-muted-foreground">
+            {q.generation_model_id ?? "Manual"}
+          </span>
+        </td>
         <td className="num px-3 py-2">{q.difficulty ?? "—"}</td>
         <td className="num px-3 py-2">{q.times_used_in_exams ?? 0}</td>
         <td className="num px-3 py-2">{q.success_rate_pct ?? "—"}</td>
@@ -324,7 +358,7 @@ function QuestionRow({
       </tr>
       {open && (
         <tr>
-          <td colSpan={8} className="bg-muted/40 px-4 py-3 text-sm">
+          <td colSpan={9} className="bg-muted/40 px-4 py-3 text-sm">
             {q.cluster_scenario && (
               <div className="mb-3 rounded-md border border-border bg-card p-3">
                 <p className="text-[11px] font-semibold uppercase text-muted-foreground">Escenario del caso</p>
@@ -358,6 +392,11 @@ function QuestionRow({
             <p className="mt-2 text-xs text-muted-foreground">
               Tarea: {q.task_title ?? q.task_id} · Enfoque: {q.approach} · Formato: {q.format} · Tipo:{" "}
               {q.item_type} · Dificultad: {q.difficulty ?? "—"}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {q.generation_model_id
+                ? `Generado con ${q.generation_connector_name ?? "conector desconocido"} (${q.generation_provider ?? "—"} · ${q.generation_model_id})`
+                : "Creado manualmente"}
             </p>
           </td>
         </tr>

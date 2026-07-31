@@ -538,6 +538,13 @@ export type Database = {
             referencedRelation: "llm_connectors"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "generation_jobs_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "v_question_stats"
+            referencedColumns: ["generation_connector_id"]
+          },
         ]
       }
       licenses: {
@@ -963,7 +970,11 @@ export type Database = {
           domain_name: string | null
           explanation: string | null
           format: Database["public"]["Enums"]["item_format"] | null
+          generation_connector_id: string | null
+          generation_connector_name: string | null
           generation_job_id: string | null
+          generation_model_id: string | null
+          generation_provider: string | null
           item_type: Database["public"]["Enums"]["item_type"] | null
           options: Json | null
           question_id: string | null
