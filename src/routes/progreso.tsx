@@ -2,6 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, LineChart, Lock, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
+import {
+  DomainLevelBadge,
+  DomainMasteryLegend,
+} from "@/components/progress/DomainMasteryLegend";
 import { StudyPlanCard } from "@/components/progress/StudyPlanCard";
 import { UnitAnalytics } from "@/components/progress/UnitAnalytics";
 import { DOMAINS, MOCK_ERROR_TYPE_STATS, MOCK_TASK_MASTERY, MOCK_USER } from "@/data/mockData";
