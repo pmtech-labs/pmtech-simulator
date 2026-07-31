@@ -351,30 +351,43 @@ function Header() {
 function Hero() {
   return (
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--secondary),_transparent_60%)]" />
-      <div className="pointer-events-none absolute -left-32 top-10 -z-10 h-72 w-72 rounded-full bg-accent/20 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 top-40 -z-10 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
-      <div
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.35] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-        }}
-      />
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      {/* Imagen de fondo + degradado para legibilidad */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src={heroDashboard}
+          alt="Panel de analítica del simulador PMP con dominio por tareas ECO y patrón de errores"
+          width={1408}
+          height={1008}
+          fetchPriority="high"
+          className="h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-primary/85" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary via-primary/70 to-background" />
+        <div className="pointer-events-none absolute -left-32 top-10 h-72 w-72 rounded-full bg-accent/25 blur-3xl" />
+        <div className="pointer-events-none absolute -right-24 top-40 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.18] [mask-image:radial-gradient(ellipse_at_top,black,transparent_75%)]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, var(--hero-muted) 1px, transparent 1px), linear-gradient(to bottom, var(--hero-muted) 1px, transparent 1px)",
+            backgroundSize: "56px 56px",
+          }}
+        />
+      </div>
+
+      <div className="mx-auto relative z-10 max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:py-32">
         <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-3 py-1 text-xs font-semibold text-accent-foreground shadow-lift backdrop-blur">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-3 py-1 text-xs font-semibold text-hero-foreground shadow-lift backdrop-blur">
               <Sparkles className="h-3.5 w-3.5 animate-pulse text-accent" />
               Diagnóstico de 8 tipos de error · 26 tareas del ECO 2026
             </span>
           </Reveal>
           <Reveal delay={80}>
-            <h1 className="mt-6 text-balance font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 text-balance font-display text-4xl font-bold leading-tight tracking-tight text-hero-foreground drop-shadow-sm sm:text-5xl lg:text-6xl">
               El único simulador PMP en español que te dice
               <br />
-              <span className="relative inline-block text-accent-foreground">
+              <span className="relative inline-block text-accent">
                 por qué fallas, no solo cuánto
                 <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-gradient-to-r from-accent via-accent/60 to-transparent" />
               </span>
@@ -382,7 +395,7 @@ function Hero() {
           </Reveal>
 
           <Reveal delay={150}>
-            <p className="mx-auto mt-6 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
+            <p className="mx-auto mt-6 max-w-xl text-balance text-base leading-relaxed text-hero-muted sm:text-lg">
               Otros te dan un porcentaje y la respuesta correcta. Nosotros clasificamos cada fallo
               en uno de los 8 tipos de error del razonamiento PMP —secuencia, rol, enfoque,
               lectura…—, lo cruzamos con tu dominio en las 26 tareas del ECO y te devolvemos un
@@ -394,39 +407,25 @@ function Hero() {
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
                 href="#precios"
-                className="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-panel transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-16px_var(--primary)]"
+                className="group inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground shadow-panel transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-16px_var(--accent)]"
               >
                 Ver planes y precios
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
               <a
                 href="#como-funciona"
-                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:bg-secondary"
+                className="inline-flex items-center gap-2 rounded-lg border border-hero-foreground/25 bg-hero-foreground/10 px-6 py-3 text-sm font-semibold text-hero-foreground backdrop-blur transition-colors hover:bg-hero-foreground/20"
               >
                 Cómo funciona
               </a>
             </div>
-            <p className="mt-4 text-xs text-muted-foreground">
+            <p className="mt-4 text-xs text-hero-muted">
               Sin compromiso de permanencia · Cancela cuando quieras · No afiliado a PMI
             </p>
           </Reveal>
         </div>
 
-        <div className="relative mx-auto mt-14 max-w-4xl">
-          <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-b from-accent/20 to-transparent blur-2xl" />
-          <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-panel transition-transform duration-500 hover:-translate-y-1">
-            <img
-              src={heroDashboard}
-              alt="Panel de analítica del simulador PMP con dominio por tareas ECO y patrón de errores"
-              width={1408}
-              height={1008}
-              fetchPriority="high"
-              className="w-full"
-            />
-          </div>
-        </div>
-
-        <div className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="mx-auto mt-14 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
           {STATS.map((s, i) => (
             <Reveal key={s.label} delay={i * 90}>
               <div className="group rounded-2xl border border-border bg-card p-4 text-center shadow-lift transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">

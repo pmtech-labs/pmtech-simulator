@@ -41,6 +41,8 @@
   --color-danger-soft: var(--danger-soft);
   --color-warning: var(--warning);
   --color-warning-soft: var(--warning-soft);
+  --color-hero-foreground: var(--hero-foreground);
+  --color-hero-muted: var(--hero-muted);
   --color-people: var(--people);
   --color-process: var(--process);
   --color-business: var(--business);
@@ -84,6 +86,8 @@
   --danger-soft: oklch(0.96 0.03 25);
   --warning: oklch(0.72 0.15 72);
   --warning-soft: oklch(0.965 0.04 80);
+  --hero-foreground: oklch(0.99 0.004 250);
+  --hero-muted: oklch(0.9 0.012 250);
   --people: oklch(0.55 0.12 250);
   --process: oklch(0.55 0.1 190);
   --business: oklch(0.6 0.13 300);
@@ -123,6 +127,8 @@
   --danger-soft: oklch(0.29 0.06 25);
   --warning: oklch(0.78 0.14 72);
   --warning-soft: oklch(0.3 0.06 80);
+  --hero-foreground: oklch(0.99 0.004 250);
+  --hero-muted: oklch(0.88 0.012 250);
   --people: oklch(0.68 0.12 250);
   --process: oklch(0.7 0.1 190);
   --business: oklch(0.72 0.12 300);
