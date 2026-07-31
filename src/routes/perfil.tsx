@@ -3,6 +3,10 @@ import { Check, CreditCard, Loader2, Mail, ShieldCheck, User } from "lucide-reac
 import { useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
+import {
+  DomainLevelBadge,
+  DomainMasteryLegend,
+} from "@/components/progress/DomainMasteryLegend";
 import { DOMAINS, MOCK_USER } from "@/data/mockData";
 import { PLANS, createCheckoutSession } from "@/services/checkoutService";
 import { cn } from "@/lib/utils";
@@ -74,13 +78,21 @@ function ProfilePage() {
           </div>
 
           <div className="rounded-2xl border border-border bg-card p-5">
-            <h2 className="text-base font-semibold">Estadísticas por dominio</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-base font-semibold">Estadísticas por dominio</h2>
+              <DomainMasteryLegend />
+            </div>
             <div className="mt-4 space-y-4">
               {DOMAINS.map((d) => (
                 <div key={d.code}>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium">{d.name}</span>
-                    <span className="num text-muted-foreground">{MOCK_USER.masteryByDomain[d.code]}%</span>
+                  <div className="flex items-center justify-between gap-2 text-sm">
+                    <span className="min-w-0 truncate font-medium">{d.name}</span>
+                    <div className="flex shrink-0 items-center gap-2">
+                      <span className="num text-muted-foreground">
+                        {MOCK_USER.masteryByDomain[d.code]}%
+                      </span>
+                      <DomainLevelBadge pct={MOCK_USER.masteryByDomain[d.code]} />
+                    </div>
                   </div>
                   <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-muted">
                     <div

@@ -10,6 +10,10 @@ import {
 } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
+import {
+  DomainLevelBadge,
+  DomainMasteryLegend,
+} from "@/components/progress/DomainMasteryLegend";
 import { DOMAINS, MOCK_EXAM_HISTORY, MOCK_USER } from "@/data/mockData";
 
 export const Route = createFileRoute("/dashboard")({
@@ -111,20 +115,28 @@ function Dashboard() {
           </Link>
 
           <div className="rounded-2xl border border-border bg-card p-5">
-            <Layers className="h-5 w-5 text-muted-foreground" />
-            <h3 className="mt-3 text-base font-semibold">Práctica por dominios</h3>
+            <div className="flex items-start justify-between">
+              <div>
+                <Layers className="h-5 w-5 text-muted-foreground" />
+                <h3 className="mt-3 text-base font-semibold">Práctica por dominios</h3>
+              </div>
+              <DomainMasteryLegend />
+            </div>
             <div className="mt-3 space-y-2">
               {DOMAINS.map((d) => (
                 <Link
                   key={d.code}
                   to="/examen"
                   search={{ modo: "dominio", dominio: d.code }}
-                  className="flex items-center justify-between rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-secondary"
+                  className="flex items-center justify-between gap-2 rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-secondary"
                 >
                   <span className="min-w-0 truncate">{d.name}</span>
-                  <span className="num shrink-0 text-xs text-muted-foreground">
-                    {u.masteryByDomain[d.code]}% · {d.weight}%
-                  </span>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <span className="num text-xs text-muted-foreground">
+                      {u.masteryByDomain[d.code]}%
+                    </span>
+                    <DomainLevelBadge pct={u.masteryByDomain[d.code]} />
+                  </div>
                 </Link>
               ))}
             </div>
