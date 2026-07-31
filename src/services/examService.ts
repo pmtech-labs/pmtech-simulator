@@ -180,17 +180,29 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
     | { section_number: number; total_questions: number; time_limit_seconds: number }[]
     | null;
 
+  const fallbackFor = (count: number) => Math.max(300, count * 90);
+
   const sections: ExamSection[] = rawSections?.length
-    ? rawSections.map((s) => ({
-        sectionNumber: s.section_number,
-        count: s.total_questions,
-        seconds: s.time_limit_seconds,
-      }))
+    ? rawSections.map((s) => {
+        const count =
+          Number(s.total_questions) ||
+          questions.filter((q) => (q.sectionNumber ?? 1) === s.section_number).length ||
+          1;
+        const seconds = Number(s.time_limit_seconds);
+        return {
+          sectionNumber: s.section_number,
+          count,
+          seconds: Number.isFinite(seconds) && seconds > 0 ? seconds : fallbackFor(count),
+        };
+      })
     : [
         {
           sectionNumber: 1,
           count: questions.length,
-          seconds: data.time_limit_seconds ?? Math.max(300, questions.length * 90),
+          seconds:
+            Number(data.time_limit_seconds) > 0
+              ? Number(data.time_limit_seconds)
+              : fallbackFor(questions.length),
         },
       ];
 
@@ -199,7 +211,8 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
     mode: params.mode,
     questions,
     clusters,
-    timeLimitSeconds: data.time_limit_seconds ?? sections.reduce((a, s) => a + s.seconds, 0),
+    timeLimitSeconds: sections.reduce((a, s) => a + s.seconds, 0),
+
     sections,
   };
 }

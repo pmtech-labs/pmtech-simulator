@@ -194,6 +194,8 @@ function ExamRunner({ session }: { session: ExamSession }) {
   const [onBreak, setOnBreak] = useState(false);
   const [breakSeconds, setBreakSeconds] = useState(BREAK_SECONDS);
   const questionStart = useRef(Date.now());
+  /** Marca de tiempo de fin de la sección actual (ms). Evita desfases cuando la pestaña se suspende. */
+  const deadline = useRef<number>(Date.now() + sections[0].seconds * 1000);
 
   const sectionQuestions = useMemo(
     () => questions.filter((q) => (q.sectionNumber ?? 1) === section.sectionNumber),
@@ -213,16 +215,32 @@ function ExamRunner({ session }: { session: ExamSession }) {
   }, [index]);
 
   useEffect(() => {
-    if (paused || summary || onBreak) return;
-    const t = setInterval(() => setSeconds((s) => Math.max(0, s - 1)), 1000);
+    if (summary || onBreak) return;
+    if (paused) {
+      // Al pausar, congelamos el tiempo restante actual.
+      return;
+    }
+    deadline.current = Date.now() + seconds * 1000;
+    const tick = () => {
+      const left = Math.max(0, Math.round((deadline.current - Date.now()) / 1000));
+      setSeconds(left);
+    };
+    const t = setInterval(tick, 500);
     return () => clearInterval(t);
-  }, [paused, summary, onBreak]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused, summary, onBreak, sectionIdx]);
 
   useEffect(() => {
     if (!onBreak) return;
-    const t = setInterval(() => setBreakSeconds((s) => Math.max(0, s - 1)), 1000);
+    const end = Date.now() + breakSeconds * 1000;
+    const t = setInterval(
+      () => setBreakSeconds(Math.max(0, Math.round((end - Date.now()) / 1000))),
+      500,
+    );
     return () => clearInterval(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onBreak]);
+
 
   const send = useCallback(
     async (question: Question, value: AnswerValue) => {
@@ -311,6 +329,21 @@ function ExamRunner({ session }: { session: ExamSession }) {
   useEffect(() => {
     if (onBreak && breakSeconds === 0) endBreak();
   }, [onBreak, breakSeconds, endBreak]);
+
+  // Fin de tiempo de la sección: se cierra automáticamente.
+  const timeUp = useRef(false);
+  useEffect(() => {
+    if (onBreak || summary || paused) return;
+    if (seconds > 0) {
+      timeUp.current = false;
+      return;
+    }
+    if (timeUp.current) return;
+    timeUp.current = true;
+    void closeSection();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seconds, onBreak, summary, paused]);
+
 
   const answeredCount = Object.keys(answers).length;
 
