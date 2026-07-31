@@ -80,7 +80,13 @@ function NavLinks({
   );
 }
 
-function SidebarInner({ onNavigate }: { onNavigate?: () => void }) {
+function SidebarInner({
+  onNavigate,
+  onExamClick,
+}: {
+  onNavigate?: () => void;
+  onExamClick?: () => void;
+}) {
   const { data: user } = useCurrentUser();
   return (
     <div className="flex h-full flex-col gap-6 bg-sidebar p-4">
@@ -96,7 +102,7 @@ function SidebarInner({ onNavigate }: { onNavigate?: () => void }) {
         </div>
       </div>
 
-      <NavLinks onNavigate={onNavigate} />
+      <NavLinks onNavigate={onNavigate} onExamClick={onExamClick} />
 
       <div className="mt-auto rounded-xl border border-sidebar-border bg-sidebar-accent/50 p-3">
         <div className="flex items-center gap-2 text-sidebar-accent-foreground">
