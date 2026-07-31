@@ -206,6 +206,12 @@ function CurriculumPage() {
                       <Pencil className="h-3 w-3" /> Editar
                     </button>
                     <button
+                      onClick={() => setPreviewId(u.id)}
+                      className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs font-medium hover:bg-secondary"
+                    >
+                      <FileSearch className="h-3 w-3" /> Vista previa
+                    </button>
+                    <button
                       onClick={() =>
                         statusMutation.mutate({
                           id: u.id,
