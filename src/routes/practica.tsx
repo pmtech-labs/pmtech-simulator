@@ -18,6 +18,13 @@ import { listPublishedUnits } from "@/services/curriculumService";
 import type { AnswerValue, DomainCode, Question } from "@/types/exam";
 
 export const Route = createFileRoute("/practica")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    modo:
+      search.modo === "unit_quiz" || search.modo === "cumulative" || search.modo === "domain_drill"
+        ? (search.modo as "unit_quiz" | "cumulative" | "domain_drill")
+        : undefined,
+    unidad: typeof search.unidad === "string" ? search.unidad : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Práctica por dominios · Simulador PMP ECO 2026" },
