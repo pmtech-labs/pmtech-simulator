@@ -199,7 +199,16 @@ const FAQS = [
     q: "¿Sirve si estoy usando otro material de estudio (Rita Mulcahy, PMBOK, etc.)?",
     a: "Sí, es el complemento natural. El simulador no sustituye la formación estructurada — está pensado para practicar y diagnosticar errores sobre lo que ya estás estudiando.",
   },
+  {
+    q: "¿Necesito las 35 horas de formación para presentarme al examen PMP?",
+    a: "Sí. PMI exige 35 horas de formación en dirección de proyectos (además de la experiencia gestionando proyectos) para admitir tu solicitud. Impartimos esa formación en español y puedes pedir programa y fechas desde el formulario de la sección Formación.",
+  },
+  {
+    q: "¿Puedo contratar la formación para todo mi equipo?",
+    a: "Sí, tenemos modalidad in-company con calendario adaptado y licencias del simulador para cada participante. Indícalo en el formulario de contacto y te preparamos una propuesta.",
+  },
 ];
+
 
 function Header() {
   const [open, setOpen] = useState(false);
