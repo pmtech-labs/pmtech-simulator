@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
+import { ResultReportButton } from "@/components/export/ResultReportButton";
 import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { EarnedValueChart } from "@/components/exam/EarnedValueChart";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
