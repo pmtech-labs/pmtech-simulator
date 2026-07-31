@@ -132,14 +132,23 @@ export function AppShell({
 }) {
   const [open, setOpen] = useState(false);
   const [showExamConfirm, setShowExamConfirm] = useState(false);
+  const [inProgress, setInProgress] = useState<ReturnType<typeof describeProgress> | null>(null);
   const { data: user } = useCurrentUser();
   const navigate = useNavigate();
 
-  const startExam = () => {
+  const openExamConfirm = () => {
+    const saved = loadExamProgress();
+    setInProgress(saved ? describeProgress(saved) : null);
+    setShowExamConfirm(true);
+  };
+
+  const startExam = (resume: boolean) => {
     setShowExamConfirm(false);
     setOpen(false);
-    void navigate({ to: "/examen" });
+    if (!resume) clearExamProgress();
+    void navigate({ to: "/examen", search: resume ? { reanudar: "1" } : {} });
   };
+
 
   return (
     <>
