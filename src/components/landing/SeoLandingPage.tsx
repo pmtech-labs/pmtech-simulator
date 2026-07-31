@@ -8,7 +8,18 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { MarketingShell } from "@/components/landing/MarketingShell";
+import {
+  ComparisonMatrix,
+  type ComparisonRow,
+} from "@/components/landing/ComparisonMatrix";
 import { Reveal } from "@/components/landing/Reveal";
+
+export interface SeoComparison {
+  title: string;
+  ourName: string;
+  competitorName: string;
+  rows: ComparisonRow[];
+}
 
 export interface SeoSection {
   h2: string;
