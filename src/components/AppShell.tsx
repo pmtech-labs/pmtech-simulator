@@ -142,93 +142,95 @@ export function AppShell({
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
-      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-sidebar-border lg:block">
-        <SidebarInner onExamClick={() => setShowExamConfirm(true)} />
-      </aside>
+    <>
+      <div className="flex min-h-screen w-full bg-background">
+        <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-sidebar-border lg:block">
+          <SidebarInner onExamClick={() => setShowExamConfirm(true)} />
+        </aside>
 
-      {open && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <button
-            aria-label="Cerrar menú"
-            className="absolute inset-0 bg-foreground/40"
-            onClick={() => setOpen(false)}
-          />
-          <div className="absolute left-0 top-0 h-full w-64 shadow-panel">
-            <SidebarInner
-              onNavigate={() => setOpen(false)}
-              onExamClick={() => setShowExamConfirm(true)}
-            />
-          </div>
-        </div>
-      )}
-
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 border-b border-border bg-card/85 backdrop-blur">
-          <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6">
+        {open && (
+          <div className="fixed inset-0 z-50 lg:hidden">
             <button
-              className="grid h-9 w-9 place-items-center rounded-lg border border-border text-muted-foreground lg:hidden"
-              onClick={() => setOpen(true)}
-              aria-label="Abrir menú"
-            >
-              {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-            </button>
-            <div className="min-w-0">
-              <h1 className="truncate text-base font-semibold sm:text-lg">{title}</h1>
-              {subtitle && (
-                <p className="truncate text-xs text-muted-foreground sm:text-sm">{subtitle}</p>
-              )}
-            </div>
-            <div className="flex shrink-0 items-center gap-3">
-              {actions}
-              <div className="hidden items-center gap-2 rounded-full border border-border bg-warning-soft px-3 py-1 md:flex">
-                <ShieldCheck className="h-3.5 w-3.5 text-accent-foreground" />
-                <span className="text-[11px] font-semibold text-accent-foreground">
-                  {user?.planName ?? "Cargando…"}
-                  {user?.expiresAt ? ` · ${user.monthsRemaining} meses restantes` : ""}
-                </span>
-              </div>
-              <button
-                onClick={() => void signOutCandidate()}
-                className="hidden rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground sm:inline-flex"
-              >
-                Cerrar sesión
-              </button>
-              <Link
-                to="/perfil"
-                className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground"
-              >
-                {user?.initials ?? "··"}
-              </Link>
+              aria-label="Cerrar menú"
+              className="absolute inset-0 bg-foreground/40"
+              onClick={() => setOpen(false)}
+            />
+            <div className="absolute left-0 top-0 h-full w-64 shadow-panel">
+              <SidebarInner
+                onNavigate={() => setOpen(false)}
+                onExamClick={() => setShowExamConfirm(true)}
+              />
             </div>
           </div>
-        </header>
+        )}
 
-        <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">{children}</main>
+        <div className="flex min-w-0 flex-1 flex-col">
+          <header className="sticky top-0 z-30 border-b border-border bg-card/85 backdrop-blur">
+            <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6">
+              <button
+                className="grid h-9 w-9 place-items-center rounded-lg border border-border text-muted-foreground lg:hidden"
+                onClick={() => setOpen(true)}
+                aria-label="Abrir menú"
+              >
+                {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              </button>
+              <div className="min-w-0">
+                <h1 className="truncate text-base font-semibold sm:text-lg">{title}</h1>
+                {subtitle && (
+                  <p className="truncate text-xs text-muted-foreground sm:text-sm">{subtitle}</p>
+                )}
+              </div>
+              <div className="flex shrink-0 items-center gap-3">
+                {actions}
+                <div className="hidden items-center gap-2 rounded-full border border-border bg-warning-soft px-3 py-1 md:flex">
+                  <ShieldCheck className="h-3.5 w-3.5 text-accent-foreground" />
+                  <span className="text-[11px] font-semibold text-accent-foreground">
+                    {user?.planName ?? "Cargando…"}
+                    {user?.expiresAt ? ` · ${user.monthsRemaining} meses restantes` : ""}
+                  </span>
+                </div>
+                <button
+                  onClick={() => void signOutCandidate()}
+                  className="hidden rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground sm:inline-flex"
+                >
+                  Cerrar sesión
+                </button>
+                <Link
+                  to="/perfil"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground"
+                >
+                  {user?.initials ?? "··"}
+                </Link>
+              </div>
+            </div>
+          </header>
 
-        <footer className="border-t border-border px-4 py-4 text-[11px] leading-relaxed text-muted-foreground sm:px-6 lg:px-8">
-          PMTech Simulator es un producto independiente. No está afiliado, avalado ni patrocinado
-          por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas registradas del PMI.
-        </footer>
+          <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">{children}</main>
+
+          <footer className="border-t border-border px-4 py-4 text-[11px] leading-relaxed text-muted-foreground sm:px-6 lg:px-8">
+            PMTech Simulator es un producto independiente. No está afiliado, avalado ni patrocinado
+            por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas registradas del PMI.
+          </footer>
+        </div>
       </div>
-    </div>
 
-    <Dialog open={showExamConfirm} onOpenChange={setShowExamConfirm}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>¿Iniciar simulación de examen?</DialogTitle>
-          <DialogDescription>
-            Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener
-            disponibilidad antes de empezar.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter className="gap-2 sm:gap-0">
-          <Button variant="outline" onClick={() => setShowExamConfirm(false)}>
-            Cancelar
-          </Button>
-          <Button onClick={startExam}>Comenzar simulación</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      <Dialog open={showExamConfirm} onOpenChange={setShowExamConfirm}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>¿Iniciar simulación de examen?</DialogTitle>
+            <DialogDescription>
+              Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener
+              disponibilidad antes de empezar.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={() => setShowExamConfirm(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={startExam}>Comenzar simulación</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
