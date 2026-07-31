@@ -39,17 +39,31 @@ const NAV = [
 ] as const;
 
 
-function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
+function NavLinks({
+  onNavigate,
+  onExamClick,
+}: {
+  onNavigate?: () => void;
+  onExamClick?: () => void;
+}) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
     <nav className="flex flex-col gap-1">
       {NAV.map((item) => {
         const active = pathname === item.to;
+        const isExam = item.to === "/examen";
         return (
           <Link
             key={item.to}
             to={item.to}
-            onClick={onNavigate}
+            onClick={(e) => {
+              if (isExam) {
+                e.preventDefault();
+                onExamClick?.();
+                return;
+              }
+              onNavigate?.();
+            }}
             className={cn(
               "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
               active
