@@ -68,7 +68,14 @@ export function MarketingShell({ children }: { children: ReactNode }) {
             <Link to="/pmbok-8" className="hover:text-foreground">
               PMBOK 7 vs 8
             </Link>
+            <Link to="/pmtech-vs-pmi-study-hall" className="hover:text-foreground">
+              vs PMI Study Hall
+            </Link>
+            <Link to="/pmtech-vs-prepcast" className="hover:text-foreground">
+              vs PrepCast
+            </Link>
           </nav>
+
           <p className="mt-8 text-center text-[11px] leading-relaxed text-muted-foreground">
             PMTech Simulator es un producto independiente. No está afiliado, avalado ni
             patrocinado por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas
