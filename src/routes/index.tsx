@@ -259,6 +259,9 @@ function Header() {
           <a href="#sobre-nosotros" className="transition-colors hover:text-foreground">
             Sobre nosotros
           </a>
+          <a href="#garantias" className="transition-colors hover:text-foreground">
+            Garantías
+          </a>
           <a href="#precios" className="transition-colors hover:text-foreground">
             Precios
           </a>
