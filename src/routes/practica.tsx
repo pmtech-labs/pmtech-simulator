@@ -283,6 +283,8 @@ function PracticePage() {
           <MatchingQuestion
             payload={q.matching!}
             value={(answer as Record<string, string>) ?? {}}
+            reveal={isChecked}
+            disabled={isChecked}
             onChange={(next) => setAnswers((prev) => ({ ...prev, [index]: next }))}
           />
         ) : (
@@ -290,6 +292,8 @@ function PracticePage() {
             options={q.options!}
             selected={(answer as string[]) ?? []}
             multi={q.format === "mc_multi"}
+            disabled={isChecked}
+            correctAnswer={isChecked ? q.correctAnswer : undefined}
             onToggle={(id) =>
               setAnswers((prev) => {
                 const current = (prev[index] as string[]) ?? [];
@@ -305,17 +309,57 @@ function PracticePage() {
           />
         )}
 
+        {isChecked && (
+          <div className="space-y-4">
+            <div
+              className={cn(
+                "flex items-start gap-2 rounded-xl border p-3",
+                currentOk ? "border-success/40 bg-success/10" : "border-destructive/40 bg-destructive/10",
+              )}
+            >
+              {currentOk ? (
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+              ) : (
+                <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+              )}
+              <div className="min-w-0">
+                <p className="text-sm font-semibold">
+                  {currentOk ? "Respuesta correcta" : "Respuesta incorrecta"}
+                </p>
+                {!currentOk && q.errorType && (
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    <span className="font-medium text-foreground">Tipo de error: </span>
+                    {ERROR_TYPE_LABELS[q.errorType]}
+                  </p>
+                )}
+              </div>
+            </div>
+            <ExplanationPanel question={q} answer={answer} />
+          </div>
+        )}
+
         <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
           <button onClick={reset} className="text-sm font-medium text-muted-foreground hover:text-foreground">
             Salir
           </button>
-          <button
-            onClick={next}
-            disabled={!answer}
-            className="inline-flex items-center gap-1 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
-          >
-            {index === DRILL_SIZE - 1 ? "Ver resultados" : "Siguiente"} <ChevronRight className="h-4 w-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            {!isChecked && (
+              <button
+                onClick={() => setChecked((c) => ({ ...c, [index]: true }))}
+                disabled={!answer}
+                className="rounded-lg border border-accent bg-warning-soft px-3 py-2 text-sm font-semibold text-accent-foreground disabled:opacity-40"
+              >
+                Comprobar
+              </button>
+            )}
+            <button
+              onClick={next}
+              disabled={!answer}
+              className="inline-flex items-center gap-1 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
+            >
+              {index === DRILL_SIZE - 1 ? "Ver resultados" : "Siguiente"} <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
     </AppShell>
