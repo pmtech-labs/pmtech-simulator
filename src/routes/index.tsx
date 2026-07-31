@@ -25,27 +25,87 @@ import {
 } from "@/components/ui/accordion";
 import { PLANS } from "@/services/checkoutService";
 
+const SITE_URL = "https://pmtech-simulator.lovable.app";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "Simulador PMP® calibrado al ECO 2026 · PMTech Simulator",
+        title: "Simulador PMP en español · Examen ECO 2026 y PMBOK 8",
       },
       {
         name: "description",
         content:
-          "El único simulador PMP en español calibrado al nuevo examen ECO 2026 (PMBOK 8): clusters de caso reales, diagnóstico por tipo de error y motor adaptativo. Empieza gratis.",
+          "Simulador de examen PMP en español calibrado al ECO 2026 (PMBOK 8): 180 preguntas, casos reales, diagnóstico de errores y formación de 35 horas. Empieza hoy.",
       },
-      { property: "og:title", content: "Simulador PMP® calibrado al ECO 2026" },
+      {
+        property: "og:title",
+        content: "Simulador PMP en español · Examen ECO 2026 y PMBOK 8",
+      },
       {
         property: "og:description",
         content:
-          "Casos reales, diagnóstico por tipo de error y motor adaptativo — no un banco de preguntas genérico.",
+          "Casos reales, diagnóstico por tipo de error y motor adaptativo — más formación PMP de 35 horas y boletín de gestión de proyectos.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:locale", content: "es_ES" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Simulador PMP en español · ECO 2026" },
+      {
+        name: "twitter:description",
+        content:
+          "Prepara el examen PMP con simulacros calibrados al ECO 2026 y diagnóstico real de tus errores.",
+      },
+    ],
+    links: [{ rel: "canonical", href: SITE_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              name: "PMTech Simulator",
+              url: SITE_URL,
+              description:
+                "Simulador de examen PMP y formación en dirección de proyectos en español, calibrado al ECO 2026.",
+            },
+            {
+              "@type": "WebSite",
+              name: "PMTech Simulator",
+              url: SITE_URL,
+              inLanguage: "es",
+            },
+            {
+              "@type": "Course",
+              name: "Preparación PMP® — 35 horas de formación",
+              description:
+                "Formación oficial de 35 horas de contacto para cumplir el requisito de PMI y preparar el examen PMP según el ECO 2026.",
+              provider: {
+                "@type": "Organization",
+                name: "PMTech Simulator",
+                url: SITE_URL,
+              },
+              inLanguage: "es",
+            },
+            {
+              "@type": "FAQPage",
+              mainEntity: FAQS.map((f) => ({
+                "@type": "Question",
+                name: f.q,
+                acceptedAnswer: { "@type": "Answer", text: f.a },
+              })),
+            },
+          ],
+        }),
       },
     ],
   }),
   component: LandingPage,
 });
+
 
 const STATS = [
   { value: "26", label: "tareas del ECO 2026 cubiertas" },
