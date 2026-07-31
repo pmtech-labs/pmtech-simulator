@@ -27,6 +27,13 @@ import { QuestionNavigator } from "@/components/exam/QuestionNavigator";
 import { BREAK_SECONDS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 import {
+  clearExamProgress,
+  loadExamProgress,
+  saveExamProgress,
+  type ExamProgress,
+} from "@/lib/examResume";
+
+import {
   finishExam,
   startExam,
   submitAnswer,
