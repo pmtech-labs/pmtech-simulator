@@ -5,9 +5,12 @@ import {
   ChevronRight,
   CircleCheck,
   Clock,
+  Coffee,
+  Info,
   ListChecks,
   Pause,
   Play,
+  Sparkles,
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -18,7 +21,13 @@ import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { MatchingQuestion } from "@/components/exam/MatchingQuestion";
 import { FlagButton, OptionList } from "@/components/exam/OptionList";
 import { QuestionNavigator } from "@/components/exam/QuestionNavigator";
-import { CLUSTER, MOCK_QUESTIONS } from "@/data/mockData";
+import {
+  BREAK_SECONDS,
+  CLUSTER,
+  EXAM_SECTIONS,
+  MOCK_FINISH_SUMMARY,
+  MOCK_QUESTIONS,
+} from "@/data/mockData";
 import { isAnswerCorrect } from "@/services/examService";
 import type { AnswerValue } from "@/types/exam";
 import { cn } from "@/lib/utils";
@@ -30,12 +39,12 @@ export const Route = createFileRoute("/examen")({
       {
         name: "description",
         content:
-          "Motor de examen PMP con clusters de caso, ítems de emparejamiento y preguntas situacionales, cronómetro y navegador de preguntas.",
+          "Motor de examen PMP en 3 secciones cronometradas con descansos, clusters de caso, ítems de emparejamiento y preguntas situacionales.",
       },
       { property: "og:title", content: "Simulación de examen PMP ECO 2026" },
       {
         property: "og:description",
-        content: "Practica con casos, drag & drop y preguntas situacionales en formato examen real.",
+        content: "Tres secciones cronometradas, descansos de 10 minutos y formato de examen real.",
       },
     ],
   }),
@@ -51,27 +60,57 @@ function fmt(s: number) {
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
 }
 
+function fmtShort(s: number) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+}
+
 function ExamPage() {
   const questions = MOCK_QUESTIONS;
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
-  const [revealed, setRevealed] = useState<Record<string, boolean>>({});
   const [paused, setPaused] = useState(false);
   const [finished, setFinished] = useState(false);
   const [confirming, setConfirming] = useState(false);
-  const [seconds, setSeconds] = useState(240 * 60);
   const [navOpen, setNavOpen] = useState(false);
+
+  // --- Secciones cronometradas independientes (full_sim) ---
+  const [sectionIdx, setSectionIdx] = useState(0);
+  const section = EXAM_SECTIONS[sectionIdx];
+  const [seconds, setSeconds] = useState(EXAM_SECTIONS[0].seconds);
+  const [onBreak, setOnBreak] = useState(false);
+  const [breakSeconds, setBreakSeconds] = useState(BREAK_SECONDS);
+
+  const sectionQuestions = useMemo(
+    () => questions.filter((q) => (q.sectionNumber ?? 1) === section.sectionNumber),
+    [questions, section.sectionNumber],
+  );
+  const firstIndexOfSection = questions.findIndex(
+    (q) => (q.sectionNumber ?? 1) === section.sectionNumber,
+  );
+  const lastIndexOfSection = firstIndexOfSection + sectionQuestions.length - 1;
 
   const q = questions[index];
   const answer = answers[q.id];
-  const isRevealed = Boolean(revealed[q.id]);
 
   useEffect(() => {
-    if (paused || finished) return;
+    if (paused || finished || onBreak) return;
     const t = setInterval(() => setSeconds((s) => Math.max(0, s - 1)), 1000);
     return () => clearInterval(t);
-  }, [paused, finished]);
+  }, [paused, finished, onBreak]);
+
+  useEffect(() => {
+    if (!onBreak) return;
+    const t = setInterval(() => setBreakSeconds((s) => Math.max(0, s - 1)), 1000);
+    return () => clearInterval(t);
+  }, [onBreak]);
+
+  useEffect(() => {
+    if (onBreak && breakSeconds === 0) endBreak();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onBreak, breakSeconds]);
 
   const score = useMemo(() => {
     const correct = questions.filter((question) => isAnswerCorrect(question, answers[question.id])).length;
@@ -79,7 +118,6 @@ function ExamPage() {
   }, [answers, questions]);
 
   const toggleOption = (id: string) => {
-    if (isRevealed) return;
     setAnswers((prev) => {
       const current = (prev[q.id] as string[]) ?? [];
       if (q.format === "mc_multi") {
@@ -90,10 +128,60 @@ function ExamPage() {
     });
   };
 
+  function closeSection() {
+    if (sectionIdx === EXAM_SECTIONS.length - 1) {
+      setFinished(true);
+      return;
+    }
+    setBreakSeconds(BREAK_SECONDS);
+    setOnBreak(true);
+  }
+
+  function endBreak() {
+    const nextIdx = sectionIdx + 1;
+    if (nextIdx >= EXAM_SECTIONS.length) {
+      setOnBreak(false);
+      setFinished(true);
+      return;
+    }
+    setOnBreak(false);
+    setSectionIdx(nextIdx);
+    setSeconds(EXAM_SECTIONS[nextIdx].seconds);
+    const first = questions.findIndex(
+      (item) => (item.sectionNumber ?? 1) === EXAM_SECTIONS[nextIdx].sectionNumber,
+    );
+    setIndex(first === -1 ? 0 : first);
+  }
+
   const answeredCount = Object.keys(answers).length;
 
   if (finished) {
     return <Results questions={questions} answers={answers} score={score} />;
+  }
+
+  if (onBreak) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-background px-4">
+        <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 text-center">
+          <Coffee className="mx-auto h-7 w-7 text-accent" />
+          <h1 className="mt-3 font-display text-xl font-bold">
+            Sección {section.sectionNumber} completada
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Dispones de un descanso opcional de 10 minutos antes de la sección{" "}
+            {section.sectionNumber + 1}. El cronómetro de la siguiente sección no empieza hasta que
+            continúes.
+          </p>
+          <p className="num mt-4 font-display text-4xl font-bold">{fmtShort(breakSeconds)}</p>
+          <button
+            onClick={endBreak}
+            className="mt-5 w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          >
+            Omitir descanso y continuar
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -102,7 +190,8 @@ function ExamPage() {
         <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6">
           <div className="min-w-0">
             <p className="num truncate text-sm font-semibold">
-              Pregunta {index + 1} de {TOTAL_DISPLAY}
+              Sección {section.sectionNumber} de {EXAM_SECTIONS.length} · Pregunta {index + 1} de{" "}
+              {TOTAL_DISPLAY}
               <span className="ml-2 text-xs font-normal text-muted-foreground">
                 (demo de {questions.length})
               </span>
@@ -110,7 +199,9 @@ function ExamPage() {
             <div className="mt-1.5 h-1.5 w-full max-w-md overflow-hidden rounded-full bg-muted">
               <div
                 className="h-full rounded-full bg-accent transition-all"
-                style={{ width: `${((index + 1) / questions.length) * 100}%` }}
+                style={{
+                  width: `${((index - firstIndexOfSection + 1) / sectionQuestions.length) * 100}%`,
+                }}
               />
             </div>
           </div>
@@ -120,6 +211,7 @@ function ExamPage() {
                 "num flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-sm font-semibold",
                 seconds < 600 ? "border-destructive text-destructive" : "border-border",
               )}
+              title={`Tiempo restante de la sección ${section.sectionNumber}`}
             >
               <Clock className="h-4 w-4" />
               <span className="hidden sm:inline">{fmt(seconds)}</span>
@@ -198,6 +290,7 @@ function ExamPage() {
             answers={answers}
             flagged={flagged}
             onSelect={setIndex}
+            activeSection={section.sectionNumber}
           />
           <p className="num mt-4 border-t border-border pt-3 text-xs text-muted-foreground">
             {answeredCount} de {questions.length} respondidas
@@ -220,6 +313,7 @@ function ExamPage() {
               current={index}
               answers={answers}
               flagged={flagged}
+              activeSection={section.sectionNumber}
               onSelect={(i) => {
                 setIndex(i);
                 setNavOpen(false);
@@ -235,8 +329,8 @@ function ExamPage() {
             <Pause className="mx-auto h-6 w-6 text-muted-foreground" />
             <h2 className="mt-3 text-lg font-semibold">Examen en pausa</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              El cronómetro está detenido. En el examen real solo dispones de dos descansos de 10
-              minutos.
+              El cronómetro de la sección está detenido. En el examen real solo dispones de dos
+              descansos de 10 minutos entre secciones.
             </p>
             <button
               onClick={() => setPaused(false)}
@@ -281,6 +375,7 @@ function ExamPage() {
   );
 
   function QuestionBody() {
+    const isLastOfSection = index === lastIndexOfSection;
     return (
       <>
         <p className="text-[15px] font-medium leading-relaxed">{q.stem}</p>
@@ -289,8 +384,6 @@ function ExamPage() {
           <MatchingQuestion
             payload={q.matching!}
             value={(answer as Record<string, string>) ?? {}}
-            reveal={isRevealed}
-            disabled={isRevealed}
             onChange={(next) => setAnswers((prev) => ({ ...prev, [q.id]: next }))}
           />
         ) : (
@@ -298,11 +391,15 @@ function ExamPage() {
             options={q.options!}
             selected={(answer as string[]) ?? []}
             multi={q.format === "mc_multi"}
-            disabled={isRevealed}
-            correctAnswer={isRevealed ? q.correctAnswer : undefined}
             onToggle={toggleOption}
           />
         )}
+
+        <p className="flex items-start gap-2 rounded-lg bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground">
+          <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          En la simulación completa no se muestra si aciertas o fallas: verás la corrección y las
+          explicaciones al terminar el examen, igual que en el examen oficial.
+        </p>
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
           <FlagButton
@@ -311,31 +408,32 @@ function ExamPage() {
           />
           <div className="flex items-center gap-2">
             <button
-              disabled={index === 0}
+              disabled={index <= firstIndexOfSection}
               onClick={() => setIndex((i) => i - 1)}
               className="inline-flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-sm font-medium disabled:opacity-40"
             >
               <ChevronLeft className="h-4 w-4" /> Anterior
             </button>
-            {!isRevealed && answer && (
+            {isLastOfSection ? (
               <button
-                onClick={() => setRevealed((r) => ({ ...r, [q.id]: true }))}
-                className="rounded-lg border border-accent bg-warning-soft px-3 py-1.5 text-sm font-semibold text-accent-foreground"
+                onClick={closeSection}
+                className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground"
               >
-                Comprobar
+                {sectionIdx === EXAM_SECTIONS.length - 1
+                  ? "Finalizar examen"
+                  : `Cerrar sección ${section.sectionNumber}`}
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            ) : (
+              <button
+                onClick={() => setIndex((i) => i + 1)}
+                className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground"
+              >
+                Siguiente <ChevronRight className="h-4 w-4" />
               </button>
             )}
-            <button
-              disabled={index === questions.length - 1}
-              onClick={() => setIndex((i) => i + 1)}
-              className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground disabled:opacity-40"
-            >
-              Siguiente <ChevronRight className="h-4 w-4" />
-            </button>
           </div>
         </div>
-
-        {isRevealed && <ExplanationPanel question={q} answer={answer} />}
       </>
     );
   }
@@ -350,6 +448,9 @@ function Results({
   answers: Record<string, AnswerValue>;
   score: { correct: number; pct: number };
 }) {
+  const { newItemsCount, repeatedItemsCount, interpretationNote } = MOCK_FINISH_SUMMARY;
+  const totalItems = newItemsCount + repeatedItemsCount;
+
   return (
     <div className="min-h-screen bg-background px-4 py-8 sm:px-6">
       <div className="mx-auto max-w-4xl space-y-6">
@@ -360,6 +461,18 @@ function Results({
           <p className="mt-1 text-sm text-muted-foreground">
             {score.correct} de {questions.length} respuestas correctas
           </p>
+          <p className="num mt-2 inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground">
+            <Sparkles className="h-3.5 w-3.5" />
+            {newItemsCount} de {totalItems} preguntas eran nuevas para ti
+          </p>
+
+          {interpretationNote && (
+            <p className="mt-4 flex items-start gap-2 rounded-lg border border-accent bg-warning-soft p-3 text-left text-xs leading-relaxed text-accent-foreground">
+              <Info className="mt-0.5 h-4 w-4 shrink-0" />
+              {interpretationNote}
+            </p>
+          )}
+
           <div className="mt-5 flex flex-wrap justify-center gap-2">
             <Link
               to="/"
