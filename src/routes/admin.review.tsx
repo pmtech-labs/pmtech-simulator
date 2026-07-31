@@ -320,6 +320,11 @@ function QuestionRow({
           <br />
           {q.task_title ?? "—"}
         </td>
+        <td className="px-3 py-2 text-xs">
+          <span className="rounded-md bg-muted px-2 py-0.5 font-medium text-muted-foreground">
+            {q.generation_model_id ?? "Manual"}
+          </span>
+        </td>
         <td className="num px-3 py-2">{q.difficulty ?? "—"}</td>
         <td className="num px-3 py-2">{q.times_used_in_exams ?? 0}</td>
         <td className="num px-3 py-2">{q.success_rate_pct ?? "—"}</td>
