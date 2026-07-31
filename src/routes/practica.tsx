@@ -230,6 +230,12 @@ function PracticePage() {
                   <p className="num text-xs text-muted-foreground">
                     {DOMAIN_LABELS[q.domain]} · {fmtTime(times[i] ?? 0)}
                   </p>
+                  {!ok && q.errorType && (
+                    <p className="rounded-lg bg-destructive/10 p-2.5 text-xs leading-relaxed text-foreground">
+                      <span className="font-semibold">Tipo de error: </span>
+                      {ERROR_TYPE_LABELS[q.errorType]}
+                    </p>
+                  )}
                   <ExplanationPanel question={q} answer={answers[i]} />
                 </div>
               );
