@@ -239,6 +239,35 @@ function StatsTable({
           ))}
         </DataTable>
       )}
+      {pageSize && !query.isPending && !query.error && rows.length > pageSize && (
+        <div className="flex items-center justify-between gap-3 pt-1">
+          <p className="text-xs text-muted-foreground">
+            Mostrando {currentPage * pageSize + 1}–
+            {Math.min((currentPage + 1) * pageSize, rows.length)} de {rows.length}
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              disabled={currentPage === 0}
+              onClick={() => setPage(currentPage - 1)}
+              className="rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-secondary disabled:opacity-50"
+            >
+              Anterior
+            </button>
+            <span className="text-xs text-muted-foreground">
+              Página {currentPage + 1} de {totalPages}
+            </span>
+            <button
+              type="button"
+              disabled={currentPage >= totalPages - 1}
+              onClick={() => setPage(currentPage + 1)}
+              className="rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-secondary disabled:opacity-50"
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+      )}
       <QuestionDetailDialog questionId={openId} onOpenChange={(o) => !o && setOpenId(null)} />
     </section>
   );
