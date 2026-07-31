@@ -8,6 +8,7 @@ import {
   Lock,
   MapPin,
   RotateCcw,
+  Zap,
   Sparkles,
 } from "lucide-react";
 
@@ -67,11 +68,13 @@ function DomainBadges({ domains }: { domains: LearningPathUnit["domains"] }) {
 function UnitRow({
   unit,
   isCurrent,
+  isRecommended,
   isLast,
   canCumulative,
 }: {
   unit: LearningPathUnit;
   isCurrent: boolean;
+  isRecommended: boolean;
   isLast: boolean;
   canCumulative: boolean;
 }) {
@@ -80,7 +83,7 @@ function UnitRow({
   const completed = evaluable && mastery >= 80;
 
   return (
-    <li className="relative grid grid-cols-[2.25rem_minmax(0,1fr)] gap-4 sm:grid-cols-[2.75rem_minmax(0,1fr)]">
+    <li id={`unidad-${unit.sequence}`} className="relative scroll-mt-24 grid grid-cols-[2.25rem_minmax(0,1fr)] gap-4 sm:grid-cols-[2.75rem_minmax(0,1fr)]">
       {!isLast && (
         <span
           aria-hidden
@@ -103,12 +106,21 @@ function UnitRow({
       <div
         className={cn(
           "rounded-2xl border bg-card p-4 transition-colors sm:p-5",
-          isCurrent ? "border-accent shadow-panel" : "border-border",
+          isRecommended
+            ? "border-primary shadow-panel ring-1 ring-primary/30"
+            : isCurrent
+              ? "border-accent shadow-panel"
+              : "border-border",
         )}
       >
         <div className="flex flex-wrap items-center gap-2">
           <DomainBadges domains={unit.domains} />
-          {isCurrent && (
+          {isRecommended && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground">
+              <Zap className="h-3 w-3" /> Siguiente recomendada
+            </span>
+          )}
+          {isCurrent && !isRecommended && (
             <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[11px] font-semibold text-secondary-foreground">
               <MapPin className="h-3 w-3" /> Vas por aquí
             </span>
@@ -201,6 +213,11 @@ function LearningPathPage() {
   const units = data ?? [];
   const evaluable = units.filter((u) => u.taskIds.length > 0);
   const currentUnit = evaluable.find((u) => (u.masteryPct ?? 0) < 80) ?? null;
+  // Recomendada = la lección evaluable más incompleta (menor mastery_pct); a igualdad, la más temprana.
+  const recommended =
+    [...evaluable]
+      .filter((u) => (u.masteryPct ?? 0) < 80)
+      .sort((a, b) => (a.masteryPct ?? 0) - (b.masteryPct ?? 0) || a.sequence - b.sequence)[0] ?? null;
   const globalMastery = evaluable.length
     ? Math.round(evaluable.reduce((a, u) => a + (u.masteryPct ?? 0), 0) / evaluable.length)
     : 0;
@@ -227,6 +244,36 @@ function LearningPathPage() {
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
             <div className="h-full rounded-full bg-primary" style={{ width: `${globalMastery}%` }} />
           </div>
+
+          {recommended && (
+            <div className="mt-4 rounded-xl border border-primary/40 bg-primary/5 p-4">
+              <p className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-primary">
+                <Zap className="h-3.5 w-3.5" /> Siguiente recomendada
+              </p>
+              <p className="mt-1 text-sm font-semibold leading-snug">
+                {recommended.sequence}. {recommended.title}
+              </p>
+              <p className="num mt-0.5 text-xs text-muted-foreground">
+                Es tu lección más incompleta: {recommended.masteryPct ?? 0}% de dominio
+                {recommended.practisedTasks === 0 ? " · sin practicar todavía" : ""}.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Link
+                  to="/practica"
+                  search={{ modo: "unit_quiz", unidad: recommended.id, repaso: undefined }}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground"
+                >
+                  <BookOpen className="h-4 w-4" /> Continuar por aquí
+                </Link>
+                <a
+                  href={`#unidad-${recommended.sequence}`}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-semibold transition-colors hover:bg-secondary"
+                >
+                  Ver en el temario
+                </a>
+              </div>
+            </div>
+          )}
         </section>
 
         {isLoading && (
@@ -256,6 +303,7 @@ function LearningPathPage() {
                 key={u.id}
                 unit={u}
                 isCurrent={currentUnit?.id === u.id}
+                isRecommended={recommended?.id === u.id}
                 isLast={i === units.length - 1}
                 canCumulative={u.sequence >= 2}
               />
