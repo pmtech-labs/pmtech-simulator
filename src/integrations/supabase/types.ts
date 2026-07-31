@@ -591,6 +591,7 @@ export type Database = {
           created_by: string | null
           id: string
           is_active: boolean | null
+          is_default: boolean
           model_id: string
           name: string
           provider: string
@@ -602,6 +603,7 @@ export type Database = {
           created_by?: string | null
           id?: string
           is_active?: boolean | null
+          is_default?: boolean
           model_id: string
           name: string
           provider: string
@@ -613,6 +615,7 @@ export type Database = {
           created_by?: string | null
           id?: string
           is_active?: boolean | null
+          is_default?: boolean
           model_id?: string
           name?: string
           provider?: string

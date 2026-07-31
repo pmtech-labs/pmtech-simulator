@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { setDefaultConnectorFn } from "@/lib/adminConnectors.functions";
 
 /**
  * Capa de servicios exclusiva del panel de administración.
@@ -16,6 +17,7 @@ export interface LlmConnector {
   model_id: string;
   api_base_url: string | null;
   is_active: boolean;
+  is_default?: boolean;
   created_at: string;
 }
 
@@ -178,6 +180,14 @@ export interface CreateConnectorInput {
 
 export async function createConnector(input: CreateConnectorInput) {
   return callFunction<{ id?: string }>("admin_connectors", { method: "POST", body: input });
+}
+
+/**
+ * Marca un conector como predeterminado. El trigger de BD desmarca el anterior.
+ * Va por un server function porque la Edge Function no permite PATCH desde el navegador.
+ */
+export async function setDefaultConnector(id: string) {
+  return setDefaultConnectorFn({ data: { id } });
 }
 
 export async function deactivateConnector(id: string) {

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, Star } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -10,6 +10,7 @@ import {
   createConnector,
   deactivateConnector,
   listConnectors,
+  setDefaultConnector,
   type ConnectorProvider,
 } from "@/services/adminService";
 
@@ -41,6 +42,15 @@ function ConnectorsPage() {
     mutationFn: deactivateConnector,
     onSuccess: () => {
       toast.success("Conector desactivado");
+      qc.invalidateQueries({ queryKey: ["admin-connectors"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const makeDefault = useMutation({
+    mutationFn: setDefaultConnector,
+    onSuccess: () => {
+      toast.success("Conector marcado como predeterminado");
       qc.invalidateQueries({ queryKey: ["admin-connectors"] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -79,6 +89,7 @@ function ConnectorsPage() {
                 <th className="px-3 py-2">Modelo</th>
                 <th className="px-3 py-2">URL base</th>
                 <th className="px-3 py-2">Estado</th>
+                <th className="px-3 py-2">Predeterminado</th>
                 <th className="px-3 py-2">Creado</th>
                 <th className="px-3 py-2 text-right">Acciones</th>
               </tr>
@@ -101,10 +112,32 @@ function ConnectorsPage() {
                     {c.is_active ? "Activo" : "Inactivo"}
                   </span>
                 </td>
+                <td className="px-3 py-2">
+                  {c.is_default ? (
+                    <span className="inline-flex items-center gap-1 rounded-md bg-warning-soft px-2 py-0.5 text-xs font-semibold text-accent-foreground">
+                      <Star className="h-3 w-3 fill-current" /> Predeterminado
+                    </span>
+                  ) : (
+                    <span className="text-xs text-muted-foreground">—</span>
+                  )}
+                </td>
                 <td className="num px-3 py-2 text-muted-foreground">
                   {new Date(c.created_at).toLocaleDateString("es-ES")}
                 </td>
                 <td className="px-3 py-2 text-right">
+                  <div className="flex items-center justify-end gap-2">
+                  {!c.is_default && (
+                    <button
+                      type="button"
+                      disabled={makeDefault.isPending}
+                      onClick={() => makeDefault.mutate(c.id)}
+                      title="Marcar como predeterminado"
+                      aria-label={`Marcar ${c.name} como conector predeterminado`}
+                      className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-secondary disabled:opacity-50"
+                    >
+                      <Star className="h-3.5 w-3.5" /> Predeterminado
+                    </button>
+                  )}
                   {c.is_active && (
                     <button
                       disabled={deactivate.isPending}
@@ -114,6 +147,7 @@ function ConnectorsPage() {
                       Desactivar
                     </button>
                   )}
+                  </div>
                 </td>
               </tr>
             ))}
