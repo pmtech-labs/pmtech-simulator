@@ -50,18 +50,22 @@ function CurriculumPage() {
   const qc = useQueryClient();
   const [form, setForm] = useState<FormState | null>(null);
   const [previewId, setPreviewId] = useState<string | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
 
   const fetchUnits = useServerFn(listAdminCourseUnits);
   const save = useServerFn(saveCourseUnit);
   const setStatus = useServerFn(setCourseUnitStatus);
   const remove = useServerFn(deleteCourseUnit);
   const move = useServerFn(moveCourseUnit);
+  const reorder = useServerFn(reorderCourseUnits);
 
   const units = useQuery({ queryKey: ["admin-course-units"], queryFn: () => fetchUnits() });
   const domains = useQuery({ queryKey: ["eco-domains"], queryFn: listEcoDomains });
   const tasks = useQuery({ queryKey: ["eco-tasks"], queryFn: listEcoTasks });
 
   const invalidate = () => qc.invalidateQueries({ queryKey: ["admin-course-units"] });
+
 
   const saveMutation = useMutation({
     mutationFn: (input: FormState) => save({ data: input }),
