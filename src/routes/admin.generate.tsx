@@ -62,6 +62,13 @@ function GeneratePage() {
   const [page, setPage] = useState(1);
 
   const activeConnectors = (connectors.data?.rows ?? []).filter((c) => c.is_active);
+
+  // Preselecciona el conector marcado como predeterminado al cargar la lista.
+  useEffect(() => {
+    if (connectorId) return;
+    const preferred = activeConnectors.find((c) => c.is_default);
+    if (preferred) setConnectorId(preferred.id);
+  }, [activeConnectors, connectorId]);
   const domainTasks = useMemo(
     () => (tasks.data ?? []).filter((t) => !domainId || t.domain_id === domainId),
     [tasks.data, domainId],
@@ -118,6 +125,7 @@ function GeneratePage() {
               {activeConnectors.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name} · {c.model_id}
+                  {c.is_default ? " · predeterminado" : ""}
                 </option>
               ))}
             </select>
