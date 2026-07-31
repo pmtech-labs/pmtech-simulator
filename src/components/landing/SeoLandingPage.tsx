@@ -108,6 +108,16 @@ export function SeoLandingPage({
       </section>
 
       <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+        {comparison && (
+          <Reveal>
+            <ComparisonMatrix
+              title={comparison.title}
+              ourName={comparison.ourName}
+              competitorName={comparison.competitorName}
+              rows={comparison.rows}
+            />
+          </Reveal>
+        )}
         {sections.map((section) => (
           <Reveal key={section.h2}>
             <section className="mb-12">
