@@ -118,42 +118,43 @@ const STATS = [
 
 const FEATURES = [
   {
-    icon: BookOpenCheck,
-    title: "Calibrado al ECO 2026, no al examen anterior",
-    description:
-      "Banco de preguntas etiquetado tarea por tarea contra el Exam Content Outline vigente (PMBOK 8, julio 2026) — People 33 %, Process 41 %, Business Environment 26 %, con el split real 40 % predictivo / 60 % ágil-híbrido.",
-  },
-  {
-    icon: Puzzle,
-    title: "Clusters de caso reales",
-    description:
-      "El formato nuevo del examen no es solo ABCD: un mismo escenario con varias preguntas encadenadas, exactamente como en la sección de estudio de casos del examen real.",
-  },
-  {
     icon: Target,
-    title: "Diagnóstico por tipo de error, no solo aciertos",
+    title: "Diagnóstico de 8 tipos de error",
     description:
-      "Cuando fallas, no te decimos únicamente cuál era la respuesta correcta: identificamos si fue un error de secuencia, de rol, de enfoque, de análisis o de lectura — para que sepas qué corregir de verdad.",
+      "Secuencia, rol, enfoque, lectura, análisis, interpretación, conocimiento y tiempo. Sabrás si fallaste por no saber el concepto o por actuar antes de analizar — que es lo que realmente suspende el examen.",
   },
   {
     icon: TrendingUp,
-    title: "Motor adaptativo por tarea ECO",
+    title: "Plan de estudio generado por tus errores",
     description:
-      "Seguimiento de tu dominio en cada una de las 26 tareas, no solo por dominio general. La práctica se prioriza sobre lo que de verdad te está fallando.",
-  },
-  {
-    icon: Clock3,
-    title: "Estructura fiel al examen oficial",
-    description:
-      "180 preguntas, 240 minutos, 3 secciones cronometradas independientes con sus descansos — igual que el examen real de PMI, no una aproximación genérica.",
+      "Tu patrón de fallos se convierte en una lista priorizada de qué practicar primero, con el botón «Repasar mis errores» que reconstruye una serie solo con tus puntos débiles reales.",
   },
   {
     icon: ListChecks,
-    title: "Ruta de aprendizaje por lección",
+    title: "Ruta de 14 lecciones con desbloqueo por dominio",
     description:
-      "Practica lección a lección o lanza un simulacro acumulativo con todo lo visto hasta ese punto — tu progreso, no un banco de preguntas suelto.",
+      "No es un banco de preguntas suelto: un temario secuenciado donde el simulacro acumulativo solo se abre cuando superas el 60 % de dominio en las lecciones previas. Se aprueba avanzando, no repitiendo tests.",
+  },
+  {
+    icon: ClipboardList,
+    title: "Mastery por cada una de las 26 tareas ECO",
+    description:
+      "Medimos tu nivel tarea por tarea —no solo por dominio general— y lo cruzamos con tu evolución en el tiempo. Puedes tener un 78 % global y un agujero crítico en una sola tarea: aquí lo ves.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Nota honesta: nuevas vs. repetidas",
+    description:
+      "Cada resultado indica cuántas preguntas ya habías visto y avisa si tu puntuación está inflada por repetición. Es el dato que ningún competidor te muestra porque no le favorece.",
+  },
+  {
+    icon: Puzzle,
+    title: "Escenarios encadenados y explicación de cada distractor",
+    description:
+      "Casos con varias preguntas sobre el mismo contexto, y explicaciones que no solo justifican la correcta: te dicen por qué cada alternativa era prematura, de otro rol o del enfoque equivocado.",
   },
 ];
+
 
 const STEPS = [
   {
