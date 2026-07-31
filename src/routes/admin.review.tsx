@@ -388,6 +388,11 @@ function QuestionRow({
               Tarea: {q.task_title ?? q.task_id} · Enfoque: {q.approach} · Formato: {q.format} · Tipo:{" "}
               {q.item_type} · Dificultad: {q.difficulty ?? "—"}
             </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {q.generation_model_id
+                ? `Generado con ${q.generation_connector_name ?? "conector desconocido"} (${q.generation_provider ?? "—"} · ${q.generation_model_id})`
+                : "Creado manualmente"}
+            </p>
           </td>
         </tr>
       )}
