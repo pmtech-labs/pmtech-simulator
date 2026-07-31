@@ -157,7 +157,7 @@ function AdminDashboard() {
         </section>
 
         <StatsTable title="Preguntas más falladas" query={hardest} metricLabel="% acierto" />
-        <StatsTable title="Preguntas más usadas" query={mostUsed} metricLabel="% acierto" showUsage />
+        <StatsTable title="Preguntas más usadas" query={mostUsed} metricLabel="% acierto" showUsage pageSize={10} />
       </div>
     </AdminShell>
   );
