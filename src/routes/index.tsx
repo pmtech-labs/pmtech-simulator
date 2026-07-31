@@ -302,10 +302,11 @@ function Hero() {
             Calibrado al nuevo ECO de julio 2026 — PMBOK 8
           </span>
           <h1 className="mt-6 text-balance font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-            El examen PMP cambió.
+            Simulador de examen PMP en español
             <br />
-            <span className="text-accent-foreground">Tu simulador, también debería.</span>
+            <span className="text-accent-foreground">calibrado al ECO 2026</span>
           </h1>
+
           <p className="mx-auto mt-6 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
             La mayoría de simuladores siguen anclados al examen anterior. El nuestro está
             construido desde cero sobre el ECO 2026: casos reales, diagnóstico por tipo de
