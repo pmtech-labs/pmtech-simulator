@@ -186,7 +186,7 @@ export function SeoLandingPage({
               {related.map((link) => (
                 <Link
                   key={link.to}
-                  to={link.to}
+                  to={link.to as "/"}
                   className="rounded-xl border border-border p-4 transition-colors hover:border-accent"
                 >
                   <p className="text-sm font-semibold">{link.label}</p>
