@@ -271,9 +271,13 @@ function Header() {
             <a href="#precios" onClick={() => setOpen(false)}>
               Precios
             </a>
+            <a href="#formacion" onClick={() => setOpen(false)}>
+              Formación
+            </a>
             <a href="#faq" onClick={() => setOpen(false)}>
               Preguntas frecuentes
             </a>
+
             <Link to="/dashboard" onClick={() => setOpen(false)}>
               Iniciar sesión
             </Link>
