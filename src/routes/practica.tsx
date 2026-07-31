@@ -9,13 +9,13 @@ import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { MatchingQuestion } from "@/components/exam/MatchingQuestion";
 import { OptionList } from "@/components/exam/OptionList";
-import { MOCK_FINISH_SUMMARY, MOCK_QUESTIONS } from "@/data/mockData";
+import { MOCK_ERROR_TYPE_STATS, MOCK_FINISH_SUMMARY, MOCK_QUESTIONS, MOCK_UNIT_PROGRESS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
 import { DOMAIN_LABELS } from "@/lib/export";
 import { cn } from "@/lib/utils";
 import { isAnswerCorrect } from "@/services/examService";
 import { listPublishedUnits } from "@/services/curriculumService";
-import type { AnswerValue, DomainCode, Question } from "@/types/exam";
+import type { AnswerValue, DomainCode, ErrorType, Question } from "@/types/exam";
 
 export const Route = createFileRoute("/practica")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/practica")({
         ? (search.modo as "unit_quiz" | "cumulative" | "domain_drill")
         : undefined,
     unidad: typeof search.unidad === "string" ? search.unidad : undefined,
+    repaso: search.repaso === "errores" ? ("errores" as const) : undefined,
   }),
   head: () => ({
     meta: [
@@ -56,8 +57,25 @@ const MODE_LABELS: Record<PracticeMode, string> = {
 };
 const DRILL_SIZE = 5;
 
-function buildDrill(domains: DomainCode[]): Question[] {
-  const pool = MOCK_QUESTIONS.filter((q) => domains.includes(q.domain));
+/** Tipos de error recientes del candidato en una lección (fallback: patrón global). */
+export function recentErrorTypes(sequence?: number): ErrorType[] {
+  const unit = sequence ? MOCK_UNIT_PROGRESS.find((u) => u.sequence === sequence) : undefined;
+  const source = unit?.errorTypes?.length
+    ? unit.errorTypes
+    : MOCK_ERROR_TYPE_STATS.slice(0, 3);
+  return [...source]
+    .sort((a, b) => b.occurrences - a.occurrences)
+    .slice(0, 3)
+    .map((e) => e.errorType);
+}
+
+function buildDrill(domains: DomainCode[], errorTypes?: ErrorType[]): Question[] {
+  const base = MOCK_QUESTIONS.filter((q) => domains.includes(q.domain));
+  const pool = errorTypes?.length
+    ? (base.filter((q) => q.errorType && errorTypes.includes(q.errorType)).length
+        ? base.filter((q) => q.errorType && errorTypes.includes(q.errorType))
+        : base)
+    : base;
   if (!pool.length) return [];
   const out: Question[] = [];
   for (let i = 0; i < DRILL_SIZE; i++) out.push(pool[i % pool.length]);
@@ -75,6 +93,7 @@ function PracticePage() {
   const [selected, setSelected] = useState<DomainCode[]>(["process"]);
   const [mode, setMode] = useState<PracticeMode>(search.modo ?? "domain_drill");
   const [unitId, setUnitId] = useState<string>(search.unidad ?? "");
+  const [errorReview, setErrorReview] = useState<boolean>(search.repaso === "errores");
   const [drill, setDrill] = useState<Question[] | null>(null);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, AnswerValue>>({});
@@ -101,7 +120,11 @@ function PracticePage() {
     setSelected((prev) => (prev.includes(d) ? prev.filter((v) => v !== d) : [...prev, d]));
 
   const start = () => {
-    const built = buildDrill(mode === "domain_drill" ? selected : ALL_DOMAINS);
+    const sequence = unitsQuery.data?.find((u) => u.id === unitId)?.sequence;
+    const built = buildDrill(
+      mode === "domain_drill" ? selected : ALL_DOMAINS,
+      errorReview && mode === "unit_quiz" ? recentErrorTypes(sequence) : undefined,
+    );
     if (!built.length) return;
     setDrill(built);
     setIndex(0);
@@ -242,9 +265,31 @@ function PracticePage() {
                     ))}
                   </select>
                 </label>
+                {mode === "unit_quiz" && (
+                  <label className="mt-3 flex items-start gap-2 rounded-xl border border-border p-3 text-xs">
+                    <input
+                      type="checkbox"
+                      checked={errorReview}
+                      onChange={(e) => setErrorReview(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 accent-[var(--primary)]"
+                    />
+                    <span>
+                      <span className="block text-sm font-semibold">Repasar solo mis errores</span>
+                      <span className="text-muted-foreground">
+                        Prioriza preguntas asociadas a tus fallos recientes
+                        {currentUnit
+                          ? `: ${recentErrorTypes(currentUnit.sequence).map((t) => ERROR_TYPE_LABELS[t]).join(", ")}`
+                          : ""}
+                        .
+                      </span>
+                    </span>
+                  </label>
+                )}
                 <p className="mt-2 text-xs text-muted-foreground">
                   {mode === "unit_quiz"
-                    ? "Solo entrarán preguntas de las tareas ECO asociadas a esa lección."
+                    ? errorReview
+                      ? "Serie centrada en las tareas ECO de esa lección donde has fallado recientemente."
+                      : "Solo entrarán preguntas de las tareas ECO asociadas a esa lección."
                     : currentUnit
                       ? `Incluirá el contenido de las lecciones 1 a ${currentUnit.sequence}, no solo la última.`
                       : "Incluirá el contenido de todas las lecciones publicadas hasta la que elijas."}
