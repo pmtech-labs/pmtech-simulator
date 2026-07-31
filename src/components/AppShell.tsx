@@ -15,7 +15,8 @@ import {
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
-import { MOCK_USER } from "@/data/mockData";
+import { useCurrentUser } from "@/hooks/useCandidateData";
+import { signOutCandidate } from "@/services/authService";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -57,6 +58,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 function SidebarInner({ onNavigate }: { onNavigate?: () => void }) {
+  const { data: user } = useCurrentUser();
   return (
     <div className="flex h-full flex-col gap-6 bg-sidebar p-4">
       <div className="flex items-center gap-2.5 px-1">
@@ -76,10 +78,12 @@ function SidebarInner({ onNavigate }: { onNavigate?: () => void }) {
       <div className="mt-auto rounded-xl border border-sidebar-border bg-sidebar-accent/50 p-3">
         <div className="flex items-center gap-2 text-sidebar-accent-foreground">
           <ShieldCheck className="h-4 w-4 text-sidebar-primary" />
-          <span className="text-xs font-semibold">{MOCK_USER.planName}</span>
+          <span className="text-xs font-semibold">{user?.planName ?? "Cargando…"}</span>
         </div>
         <p className="mt-1 text-[11px] leading-relaxed text-sidebar-foreground/60">
-          {MOCK_USER.monthsRemaining} meses restantes · vence el {MOCK_USER.expiresAt}
+          {user?.expiresAt
+            ? `${user.monthsRemaining} meses restantes · vence el ${user.expiresAt}`
+            : "Sin licencia activa"}
         </p>
       </div>
     </div>
@@ -98,6 +102,7 @@ export function AppShell({
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const { data: user } = useCurrentUser();
 
   return (
     <div className="flex min-h-screen w-full bg-background">
@@ -139,14 +144,21 @@ export function AppShell({
               <div className="hidden items-center gap-2 rounded-full border border-border bg-warning-soft px-3 py-1 md:flex">
                 <ShieldCheck className="h-3.5 w-3.5 text-accent-foreground" />
                 <span className="text-[11px] font-semibold text-accent-foreground">
-                  {MOCK_USER.planName} · {MOCK_USER.monthsRemaining} meses restantes
+                  {user?.planName ?? "Cargando…"}
+                  {user?.expiresAt ? ` · ${user.monthsRemaining} meses restantes` : ""}
                 </span>
               </div>
+              <button
+                onClick={() => void signOutCandidate()}
+                className="hidden rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground sm:inline-flex"
+              >
+                Cerrar sesión
+              </button>
               <Link
                 to="/perfil"
                 className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground"
               >
-                {MOCK_USER.initials}
+                {user?.initials ?? "··"}
               </Link>
             </div>
           </div>
