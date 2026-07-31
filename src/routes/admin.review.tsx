@@ -251,7 +251,12 @@ function ReviewPage() {
                 />
               ))}
             </DataTable>
-            <Pager page={page} pageSize={PAGE_SIZE} total={questions.data?.total ?? rows.length} onPage={setPage} />
+            <Pager
+              page={page}
+              pageSize={PAGE_SIZE}
+              total={model ? rows.length : (questions.data?.total ?? rows.length)}
+              onPage={setPage}
+            />
           </>
         )}
       </div>
