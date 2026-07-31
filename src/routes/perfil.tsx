@@ -3,6 +3,10 @@ import { Check, CreditCard, Loader2, Mail, ShieldCheck, User } from "lucide-reac
 import { useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
+import {
+  DomainLevelBadge,
+  DomainMasteryLegend,
+} from "@/components/progress/DomainMasteryLegend";
 import { DOMAINS, MOCK_USER } from "@/data/mockData";
 import { PLANS, createCheckoutSession } from "@/services/checkoutService";
 import { cn } from "@/lib/utils";
