@@ -60,6 +60,32 @@ export function DistractorAnalytics({ items }: { items: AnalyticsItem[] }) {
         })}
       </div>
 
+      {errorCounts.length > 0 && (
+        <div>
+          <h3 className="text-sm font-semibold">Patrón de errores de esta sesión</h3>
+          <div className="mt-3 space-y-2">
+            {errorCounts.map((e) => (
+              <div key={e.errorType} className="flex items-center gap-3">
+                <span className="w-28 shrink-0 text-xs font-medium">{ERROR_TYPE_SHORT[e.errorType]}</span>
+                <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="h-full rounded-full bg-destructive"
+                    style={{
+                      width: `${Math.round(
+                        (e.occurrences / Math.max(1, ...errorCounts.map((x) => x.occurrences))) * 100,
+                      )}%`,
+                    }}
+                  />
+                </div>
+                <span className="num w-6 shrink-0 text-right text-xs font-semibold">{e.occurrences}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+
+
       <div>
         <div className="flex items-center gap-2">
           <TriangleAlert className="h-4 w-4 text-destructive" />
