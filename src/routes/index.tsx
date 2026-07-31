@@ -312,19 +312,21 @@ function Hero() {
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-accent-foreground">
             <Sparkles className="h-3.5 w-3.5 text-accent" />
-            Calibrado al nuevo ECO de julio 2026 — PMBOK 8
+            Diagnóstico de 8 tipos de error · 26 tareas del ECO 2026
           </span>
           <h1 className="mt-6 text-balance font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-            Simulador de examen PMP en español
+            El único simulador PMP en español que te dice
             <br />
-            <span className="text-accent-foreground">calibrado al ECO 2026</span>
+            <span className="text-accent-foreground">por qué fallas, no solo cuánto</span>
           </h1>
 
           <p className="mx-auto mt-6 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
-            La mayoría de simuladores siguen anclados al examen anterior. El nuestro está
-            construido desde cero sobre el ECO 2026: casos reales, diagnóstico por tipo de
-            error y un motor que se adapta a lo que de verdad te falla.
+            Otros te dan un porcentaje y la respuesta correcta. Nosotros clasificamos cada fallo
+            en uno de los 8 tipos de error del razonamiento PMP —secuencia, rol, enfoque,
+            lectura…—, lo cruzamos con tu dominio en las 26 tareas del ECO y te devolvemos un
+            plan de estudio con qué practicar mañana.
           </p>
+
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a
               href="#precios"
