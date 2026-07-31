@@ -141,9 +141,31 @@ function CurriculumPage() {
               </tr>
             }
           >
-            {rows.map((u) => (
+            {rows.map((u, i) => (
               <tr key={u.id} className="align-top">
-                <td className="num px-3 py-2 text-muted-foreground">{u.sequence}</td>
+                <td className="px-3 py-2 text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <span className="num w-5">{u.sequence}</span>
+                    <div className="flex flex-col">
+                      <button
+                        aria-label={`Subir ${u.title}`}
+                        disabled={i === 0 || moveMutation.isPending}
+                        onClick={() => moveMutation.mutate({ id: u.id, direction: "up" })}
+                        className="rounded border border-border p-0.5 hover:bg-secondary disabled:opacity-30"
+                      >
+                        <ArrowUp className="h-3 w-3" />
+                      </button>
+                      <button
+                        aria-label={`Bajar ${u.title}`}
+                        disabled={i === rows.length - 1 || moveMutation.isPending}
+                        onClick={() => moveMutation.mutate({ id: u.id, direction: "down" })}
+                        className="mt-0.5 rounded border border-border p-0.5 hover:bg-secondary disabled:opacity-30"
+                      >
+                        <ArrowDown className="h-3 w-3" />
+                      </button>
+                    </div>
+                  </div>
+                </td>
                 <td className="px-3 py-2">
                   <p className="font-medium">{u.title}</p>
                   {u.description && (
