@@ -620,6 +620,36 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          source: string
+          status: string
+          unsubscribed_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id?: string
+          source?: string
+          status?: string
+          unsubscribed_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          source?: string
+          status?: string
+          unsubscribed_at?: string | null
+        }
+        Relationships: []
+      }
       plans: {
         Row: {
           code: Database["public"]["Enums"]["plan_code"]
@@ -790,6 +820,45 @@ export type Database = {
           processed?: boolean | null
           reason?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      training_leads: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          message: string | null
+          phone: string | null
+          source: string
+          status: string
+          training_interest: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          message?: string | null
+          phone?: string | null
+          source?: string
+          status?: string
+          training_interest?: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          message?: string | null
+          phone?: string | null
+          source?: string
+          status?: string
+          training_interest?: string
         }
         Relationships: []
       }
