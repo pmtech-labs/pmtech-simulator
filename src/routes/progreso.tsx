@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { LineChart, Lock, Sparkles } from "lucide-react";
+import { AlertTriangle, LineChart, Lock, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
-import { DOMAINS, MOCK_TASK_MASTERY, MOCK_USER } from "@/data/mockData";
+import { DOMAINS, MOCK_ERROR_TYPE_STATS, MOCK_TASK_MASTERY, MOCK_USER } from "@/data/mockData";
+import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 
 export const Route = createFileRoute("/progreso")({
   head: () => ({
@@ -24,6 +25,8 @@ const TREND = [52, 58, 57, 63, 66, 68];
 
 function ProgressPage() {
   const isPremium = MOCK_USER.plan === "premium_6m";
+  const errorStats = [...MOCK_ERROR_TYPE_STATS].sort((a, b) => b.occurrences - a.occurrences);
+  const maxErrors = Math.max(...errorStats.map((s) => s.occurrences), 1);
 
   return (
     <AppShell title="Mi progreso" subtitle="Analítica de brecha por dominio y tarea ECO">
