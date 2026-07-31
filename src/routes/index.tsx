@@ -770,10 +770,29 @@ function Footer() {
               FAQ
             </a>
 
+            <Link to="/certificacion-pmp" className="hover:text-foreground">
+              Certificación PMP
+            </Link>
+            <Link to="/examen-pmp" className="hover:text-foreground">
+              Examen PMP
+            </Link>
+            <Link to="/simulador-examen-pmp" className="hover:text-foreground">
+              Simulador PMP
+            </Link>
+            <Link to="/requisitos-pmp" className="hover:text-foreground">
+              Requisitos y precio
+            </Link>
+            <Link to="/curso-pmp-online" className="hover:text-foreground">
+              Curso PMP online
+            </Link>
+            <Link to="/pmbok-8" className="hover:text-foreground">
+              PMBOK 7 vs 8
+            </Link>
             <Link to="/login" className="hover:text-foreground">
               Iniciar sesión
             </Link>
           </nav>
+
         </div>
         <p className="mt-8 text-center text-[11px] leading-relaxed text-muted-foreground sm:text-left">
           PMTech Simulator es un producto independiente. No está afiliado, avalado ni

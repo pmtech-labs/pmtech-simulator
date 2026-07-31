@@ -12,17 +12,23 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AprendizajeRouteImport } from './routes/aprendizaje'
+import { Route as CertificacionPmpRouteImport } from './routes/certificacion-pmp'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as CursoPmpOnlineRouteImport } from './routes/curso-pmp-online'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ExamenRouteImport } from './routes/examen'
+import { Route as ExamenPmpRouteImport } from './routes/examen-pmp'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PerfilRouteImport } from './routes/perfil'
+import { Route as Pmbok8RouteImport } from './routes/pmbok-8'
 import { Route as PracticaRouteImport } from './routes/practica'
 import { Route as ProgresoRouteImport } from './routes/progreso'
 import { Route as RegistroRouteImport } from './routes/registro'
+import { Route as RequisitosPmpRouteImport } from './routes/requisitos-pmp'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SimuladorExamenPmpRouteImport } from './routes/simulador-examen-pmp'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
@@ -45,9 +51,19 @@ const AprendizajeRoute = AprendizajeRouteImport.update({
   path: '/aprendizaje',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CertificacionPmpRoute = CertificacionPmpRouteImport.update({
+  id: '/certificacion-pmp',
+  path: '/certificacion-pmp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CursoPmpOnlineRoute = CursoPmpOnlineRouteImport.update({
+  id: '/curso-pmp-online',
+  path: '/curso-pmp-online',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -58,6 +74,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const ExamenRoute = ExamenRouteImport.update({
   id: '/examen',
   path: '/examen',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExamenPmpRoute = ExamenPmpRouteImport.update({
+  id: '/examen-pmp',
+  path: '/examen-pmp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -80,6 +101,11 @@ const PerfilRoute = PerfilRouteImport.update({
   path: '/perfil',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Pmbok8Route = Pmbok8RouteImport.update({
+  id: '/pmbok-8',
+  path: '/pmbok-8',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PracticaRoute = PracticaRouteImport.update({
   id: '/practica',
   path: '/practica',
@@ -95,9 +121,19 @@ const RegistroRoute = RegistroRouteImport.update({
   path: '/registro',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RequisitosPmpRoute = RequisitosPmpRouteImport.update({
+  id: '/requisitos-pmp',
+  path: '/requisitos-pmp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimuladorExamenPmpRoute = SimuladorExamenPmpRouteImport.update({
+  id: '/simulador-examen-pmp',
+  path: '/simulador-examen-pmp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -135,17 +171,23 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/aprendizaje': typeof AprendizajeRoute
+  '/certificacion-pmp': typeof CertificacionPmpRoute
   '/checkout': typeof CheckoutRoute
+  '/curso-pmp-online': typeof CursoPmpOnlineRoute
   '/dashboard': typeof DashboardRoute
   '/examen': typeof ExamenRoute
+  '/examen-pmp': typeof ExamenPmpRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
+  '/pmbok-8': typeof Pmbok8Route
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/registro': typeof RegistroRoute
+  '/requisitos-pmp': typeof RequisitosPmpRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
@@ -156,17 +198,23 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aprendizaje': typeof AprendizajeRoute
+  '/certificacion-pmp': typeof CertificacionPmpRoute
   '/checkout': typeof CheckoutRoute
+  '/curso-pmp-online': typeof CursoPmpOnlineRoute
   '/dashboard': typeof DashboardRoute
   '/examen': typeof ExamenRoute
+  '/examen-pmp': typeof ExamenPmpRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
+  '/pmbok-8': typeof Pmbok8Route
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/registro': typeof RegistroRoute
+  '/requisitos-pmp': typeof RequisitosPmpRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
@@ -179,17 +227,23 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/aprendizaje': typeof AprendizajeRoute
+  '/certificacion-pmp': typeof CertificacionPmpRoute
   '/checkout': typeof CheckoutRoute
+  '/curso-pmp-online': typeof CursoPmpOnlineRoute
   '/dashboard': typeof DashboardRoute
   '/examen': typeof ExamenRoute
+  '/examen-pmp': typeof ExamenPmpRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
+  '/pmbok-8': typeof Pmbok8Route
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/registro': typeof RegistroRoute
+  '/requisitos-pmp': typeof RequisitosPmpRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
@@ -203,17 +257,23 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/aprendizaje'
+    | '/certificacion-pmp'
     | '/checkout'
+    | '/curso-pmp-online'
     | '/dashboard'
     | '/examen'
+    | '/examen-pmp'
     | '/forgot-password'
     | '/historial'
     | '/login'
     | '/perfil'
+    | '/pmbok-8'
     | '/practica'
     | '/progreso'
     | '/registro'
+    | '/requisitos-pmp'
     | '/reset-password'
+    | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/admin/connectors'
     | '/admin/curriculum'
@@ -224,17 +284,23 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/aprendizaje'
+    | '/certificacion-pmp'
     | '/checkout'
+    | '/curso-pmp-online'
     | '/dashboard'
     | '/examen'
+    | '/examen-pmp'
     | '/forgot-password'
     | '/historial'
     | '/login'
     | '/perfil'
+    | '/pmbok-8'
     | '/practica'
     | '/progreso'
     | '/registro'
+    | '/requisitos-pmp'
     | '/reset-password'
+    | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/admin/connectors'
     | '/admin/curriculum'
@@ -246,17 +312,23 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/aprendizaje'
+    | '/certificacion-pmp'
     | '/checkout'
+    | '/curso-pmp-online'
     | '/dashboard'
     | '/examen'
+    | '/examen-pmp'
     | '/forgot-password'
     | '/historial'
     | '/login'
     | '/perfil'
+    | '/pmbok-8'
     | '/practica'
     | '/progreso'
     | '/registro'
+    | '/requisitos-pmp'
     | '/reset-password'
+    | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/admin/connectors'
     | '/admin/curriculum'
@@ -269,17 +341,23 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AprendizajeRoute: typeof AprendizajeRoute
+  CertificacionPmpRoute: typeof CertificacionPmpRoute
   CheckoutRoute: typeof CheckoutRoute
+  CursoPmpOnlineRoute: typeof CursoPmpOnlineRoute
   DashboardRoute: typeof DashboardRoute
   ExamenRoute: typeof ExamenRoute
+  ExamenPmpRoute: typeof ExamenPmpRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistorialRoute: typeof HistorialRoute
   LoginRoute: typeof LoginRoute
   PerfilRoute: typeof PerfilRoute
+  Pmbok8Route: typeof Pmbok8Route
   PracticaRoute: typeof PracticaRoute
   ProgresoRoute: typeof ProgresoRoute
   RegistroRoute: typeof RegistroRoute
+  RequisitosPmpRoute: typeof RequisitosPmpRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SimuladorExamenPmpRoute: typeof SimuladorExamenPmpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -306,11 +384,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AprendizajeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/certificacion-pmp': {
+      id: '/certificacion-pmp'
+      path: '/certificacion-pmp'
+      fullPath: '/certificacion-pmp'
+      preLoaderRoute: typeof CertificacionPmpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout': {
       id: '/checkout'
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/curso-pmp-online': {
+      id: '/curso-pmp-online'
+      path: '/curso-pmp-online'
+      fullPath: '/curso-pmp-online'
+      preLoaderRoute: typeof CursoPmpOnlineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -325,6 +417,13 @@ declare module '@tanstack/react-router' {
       path: '/examen'
       fullPath: '/examen'
       preLoaderRoute: typeof ExamenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/examen-pmp': {
+      id: '/examen-pmp'
+      path: '/examen-pmp'
+      fullPath: '/examen-pmp'
+      preLoaderRoute: typeof ExamenPmpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -355,6 +454,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PerfilRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pmbok-8': {
+      id: '/pmbok-8'
+      path: '/pmbok-8'
+      fullPath: '/pmbok-8'
+      preLoaderRoute: typeof Pmbok8RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/practica': {
       id: '/practica'
       path: '/practica'
@@ -376,11 +482,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegistroRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/requisitos-pmp': {
+      id: '/requisitos-pmp'
+      path: '/requisitos-pmp'
+      fullPath: '/requisitos-pmp'
+      preLoaderRoute: typeof RequisitosPmpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulador-examen-pmp': {
+      id: '/simulador-examen-pmp'
+      path: '/simulador-examen-pmp'
+      fullPath: '/simulador-examen-pmp'
+      preLoaderRoute: typeof SimuladorExamenPmpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -450,17 +570,23 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AprendizajeRoute: AprendizajeRoute,
+  CertificacionPmpRoute: CertificacionPmpRoute,
   CheckoutRoute: CheckoutRoute,
+  CursoPmpOnlineRoute: CursoPmpOnlineRoute,
   DashboardRoute: DashboardRoute,
   ExamenRoute: ExamenRoute,
+  ExamenPmpRoute: ExamenPmpRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HistorialRoute: HistorialRoute,
   LoginRoute: LoginRoute,
   PerfilRoute: PerfilRoute,
+  Pmbok8Route: Pmbok8Route,
   PracticaRoute: PracticaRoute,
   ProgresoRoute: ProgresoRoute,
   RegistroRoute: RegistroRoute,
+  RequisitosPmpRoute: RequisitosPmpRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SimuladorExamenPmpRoute: SimuladorExamenPmpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport

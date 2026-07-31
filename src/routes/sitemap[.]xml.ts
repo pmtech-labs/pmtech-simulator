@@ -15,7 +15,14 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
+          { path: "/certificacion-pmp", changefreq: "monthly", priority: "0.9" },
+          { path: "/examen-pmp", changefreq: "monthly", priority: "0.9" },
+          { path: "/simulador-examen-pmp", changefreq: "monthly", priority: "0.9" },
+          { path: "/requisitos-pmp", changefreq: "monthly", priority: "0.8" },
+          { path: "/curso-pmp-online", changefreq: "monthly", priority: "0.8" },
+          { path: "/pmbok-8", changefreq: "monthly", priority: "0.7" },
         ];
+
 
         const urls = entries.map((e) =>
           [
