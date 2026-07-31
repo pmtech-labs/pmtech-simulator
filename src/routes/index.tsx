@@ -24,6 +24,8 @@ import {
 import { AboutUs } from "@/components/landing/AboutUs";
 import { SocialProof } from "@/components/landing/SocialProof";
 import { NewsletterSignup } from "@/components/landing/NewsletterSignup";
+import { Guarantees } from "@/components/landing/Guarantees";
+import { LeadWizard } from "@/components/landing/LeadWizard";
 import { Reveal } from "@/components/landing/Reveal";
 import heroDashboard from "@/assets/hero-dashboard.jpg";
 import diagnosticAbstract from "@/assets/diagnostic-abstract.jpg";
