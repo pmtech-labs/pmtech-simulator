@@ -749,6 +749,12 @@ function Footer() {
             <a href="#formacion" className="hover:text-foreground">
               Formación PMP
             </a>
+            <a href="#garantias" className="hover:text-foreground">
+              Garantías
+            </a>
+            <a href="#contacto" className="hover:text-foreground">
+              Contacto
+            </a>
             <a href="#boletin" className="hover:text-foreground">
               Boletín
             </a>
