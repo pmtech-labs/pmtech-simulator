@@ -277,7 +277,7 @@ function Header() {
 
         <div className="hidden items-center gap-3 md:flex">
           <Link
-            to="/dashboard"
+            to="/login"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             Iniciar sesión
@@ -331,7 +331,7 @@ function Header() {
               Contacto
             </a>
 
-            <Link to="/dashboard" onClick={() => setOpen(false)}>
+            <Link to="/login" onClick={() => setOpen(false)}>
               Iniciar sesión
             </Link>
             <a
@@ -653,7 +653,8 @@ function Pricing() {
               </ul>
 
               <Link
-                to="/dashboard"
+                to="/registro"
+                search={{ plan: plan.code }}
                 className={
                   isPremium
                     ? "mt-6 flex items-center justify-center gap-1.5 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
@@ -770,7 +771,7 @@ function Footer() {
               FAQ
             </a>
 
-            <Link to="/dashboard" className="hover:text-foreground">
+            <Link to="/login" className="hover:text-foreground">
               Iniciar sesión
             </Link>
           </nav>
