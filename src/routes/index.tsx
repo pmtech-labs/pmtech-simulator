@@ -1,10 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
-  BookOpenCheck,
   CheckCircle2,
   ClipboardList,
-  Clock3,
   GraduationCap,
   ListChecks,
   Menu,
@@ -38,7 +36,8 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Simulador de examen PMP en español calibrado al ECO 2026 (PMBOK 8): 180 preguntas, casos reales, diagnóstico de errores y formación de 35 horas. Empieza hoy.",
+          "Simulador PMP en español que diagnostica por qué fallas: 8 tipos de error, mastery por las 26 tareas del ECO 2026, ruta de 14 lecciones y plan de estudio personalizado.",
+
       },
       {
         property: "og:title",
@@ -118,42 +117,43 @@ const STATS = [
 
 const FEATURES = [
   {
-    icon: BookOpenCheck,
-    title: "Calibrado al ECO 2026, no al examen anterior",
-    description:
-      "Banco de preguntas etiquetado tarea por tarea contra el Exam Content Outline vigente (PMBOK 8, julio 2026) — People 33 %, Process 41 %, Business Environment 26 %, con el split real 40 % predictivo / 60 % ágil-híbrido.",
-  },
-  {
-    icon: Puzzle,
-    title: "Clusters de caso reales",
-    description:
-      "El formato nuevo del examen no es solo ABCD: un mismo escenario con varias preguntas encadenadas, exactamente como en la sección de estudio de casos del examen real.",
-  },
-  {
     icon: Target,
-    title: "Diagnóstico por tipo de error, no solo aciertos",
+    title: "Diagnóstico de 8 tipos de error",
     description:
-      "Cuando fallas, no te decimos únicamente cuál era la respuesta correcta: identificamos si fue un error de secuencia, de rol, de enfoque, de análisis o de lectura — para que sepas qué corregir de verdad.",
+      "Secuencia, rol, enfoque, lectura, análisis, interpretación, conocimiento y tiempo. Sabrás si fallaste por no saber el concepto o por actuar antes de analizar — que es lo que realmente suspende el examen.",
   },
   {
     icon: TrendingUp,
-    title: "Motor adaptativo por tarea ECO",
+    title: "Plan de estudio generado por tus errores",
     description:
-      "Seguimiento de tu dominio en cada una de las 26 tareas, no solo por dominio general. La práctica se prioriza sobre lo que de verdad te está fallando.",
-  },
-  {
-    icon: Clock3,
-    title: "Estructura fiel al examen oficial",
-    description:
-      "180 preguntas, 240 minutos, 3 secciones cronometradas independientes con sus descansos — igual que el examen real de PMI, no una aproximación genérica.",
+      "Tu patrón de fallos se convierte en una lista priorizada de qué practicar primero, con el botón «Repasar mis errores» que reconstruye una serie solo con tus puntos débiles reales.",
   },
   {
     icon: ListChecks,
-    title: "Ruta de aprendizaje por lección",
+    title: "Ruta de 14 lecciones con desbloqueo por dominio",
     description:
-      "Practica lección a lección o lanza un simulacro acumulativo con todo lo visto hasta ese punto — tu progreso, no un banco de preguntas suelto.",
+      "No es un banco de preguntas suelto: un temario secuenciado donde el simulacro acumulativo solo se abre cuando superas el 60 % de dominio en las lecciones previas. Se aprueba avanzando, no repitiendo tests.",
+  },
+  {
+    icon: ClipboardList,
+    title: "Mastery por cada una de las 26 tareas ECO",
+    description:
+      "Medimos tu nivel tarea por tarea —no solo por dominio general— y lo cruzamos con tu evolución en el tiempo. Puedes tener un 78 % global y un agujero crítico en una sola tarea: aquí lo ves.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Nota honesta: nuevas vs. repetidas",
+    description:
+      "Cada resultado indica cuántas preguntas ya habías visto y avisa si tu puntuación está inflada por repetición. Es el dato que ningún competidor te muestra porque no le favorece.",
+  },
+  {
+    icon: Puzzle,
+    title: "Escenarios encadenados y explicación de cada distractor",
+    description:
+      "Casos con varias preguntas sobre el mismo contexto, y explicaciones que no solo justifican la correcta: te dicen por qué cada alternativa era prematura, de otro rol o del enfoque equivocado.",
   },
 ];
+
 
 const STEPS = [
   {
@@ -312,19 +312,21 @@ function Hero() {
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-accent-foreground">
             <Sparkles className="h-3.5 w-3.5 text-accent" />
-            Calibrado al nuevo ECO de julio 2026 — PMBOK 8
+            Diagnóstico de 8 tipos de error · 26 tareas del ECO 2026
           </span>
           <h1 className="mt-6 text-balance font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-            Simulador de examen PMP en español
+            El único simulador PMP en español que te dice
             <br />
-            <span className="text-accent-foreground">calibrado al ECO 2026</span>
+            <span className="text-accent-foreground">por qué fallas, no solo cuánto</span>
           </h1>
 
           <p className="mx-auto mt-6 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
-            La mayoría de simuladores siguen anclados al examen anterior. El nuestro está
-            construido desde cero sobre el ECO 2026: casos reales, diagnóstico por tipo de
-            error y un motor que se adapta a lo que de verdad te falla.
+            Otros te dan un porcentaje y la respuesta correcta. Nosotros clasificamos cada fallo
+            en uno de los 8 tipos de error del razonamiento PMP —secuencia, rol, enfoque,
+            lectura…—, lo cruzamos con tu dominio en las 26 tareas del ECO y te devolvemos un
+            plan de estudio con qué practicar mañana.
           </p>
+
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a
               href="#precios"
@@ -374,12 +376,14 @@ function ProblemSolution() {
               El problema
             </p>
             <h3 className="mt-2 text-lg font-semibold">
-              El examen PMP ya no es solo ABCD — casi ningún simulador se ha puesto al día
+              Hacer 1.000 preguntas no te dice por qué fallas
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Desde julio de 2026 el examen incluye clusters de caso, preguntas gráficas y una
-              nueva ponderación de dominios. La mayoría de bancos de preguntas en español siguen
-              calibrados al ECO anterior — practicas para un examen que ya no existe.
+              Los simuladores te devuelven un porcentaje y la letra correcta. Pero suspender el PMP
+              casi nunca es falta de teoría: es elegir la acción válida en el momento equivocado,
+              decidir por alguien que no te corresponde o aplicar lógica predictiva en un contexto
+              ágil. Un número de aciertos no distingue nada de eso — y repetir preguntas que ya
+              conoces infla tu nota y te da una falsa sensación de estar listo.
             </p>
           </div>
           <div className="rounded-2xl border border-accent/40 bg-card p-6 shadow-panel">
@@ -387,13 +391,16 @@ function ProblemSolution() {
               La solución
             </p>
             <h3 className="mt-2 text-lg font-semibold">
-              Construido desde cero sobre el ECO vigente, con diagnóstico real
+              Un motor de diagnóstico del razonamiento, no un banco de preguntas
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Cada pregunta está etiquetada contra una de las 26 tareas del ECO 2026. Cada fallo
-              se clasifica por tipo de error. No es un banco de preguntas más — es una
-              herramienta que te dice exactamente qué te falta para llegar preparado.
+              Cada fallo se clasifica en uno de los 8 tipos de error (secuencia, rol, enfoque,
+              lectura, análisis, interpretación, conocimiento, tiempo) y se acumula en tu perfil.
+              De ahí sale tu plan de estudio, tu dominio en cada una de las 26 tareas del ECO y
+              tu ruta de 14 lecciones. Además te decimos cuántas preguntas eran nuevas y cuántas
+              repetidas, para que tu nota signifique algo.
             </p>
+
           </div>
         </div>
       </div>
