@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { setDefaultConnectorFn } from "@/lib/adminConnectors.functions";
 
 /**
  * Capa de servicios exclusiva del panel de administración.
@@ -181,12 +182,12 @@ export async function createConnector(input: CreateConnectorInput) {
   return callFunction<{ id?: string }>("admin_connectors", { method: "POST", body: input });
 }
 
-/** Marca un conector como predeterminado. El trigger de BD desmarca el anterior. */
+/**
+ * Marca un conector como predeterminado. El trigger de BD desmarca el anterior.
+ * Va por un server function porque la Edge Function no permite PATCH desde el navegador.
+ */
 export async function setDefaultConnector(id: string) {
-  return callFunction<{ ok?: boolean }>("admin_connectors", {
-    method: "PATCH",
-    body: { id, is_default: true },
-  });
+  return setDefaultConnectorFn({ data: { id } });
 }
 
 export async function deactivateConnector(id: string) {
