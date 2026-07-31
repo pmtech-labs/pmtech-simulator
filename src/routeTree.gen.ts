@@ -20,6 +20,7 @@ import { Route as ProgresoRouteImport } from './routes/progreso'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
+import { Route as AdminCurriculumRouteImport } from './routes/admin.curriculum'
 import { Route as AdminGenerateRouteImport } from './routes/admin.generate'
 import { Route as AdminReviewRouteImport } from './routes/admin.review'
 
@@ -78,6 +79,11 @@ const AdminConnectorsRoute = AdminConnectorsRouteImport.update({
   path: '/connectors',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCurriculumRoute = AdminCurriculumRouteImport.update({
+  id: '/curriculum',
+  path: '/curriculum',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminGenerateRoute = AdminGenerateRouteImport.update({
   id: '/generate',
   path: '/generate',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/progreso': typeof ProgresoRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin/connectors': typeof AdminConnectorsRoute
+  '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
   '/admin/review': typeof AdminReviewRoute
   '/admin/': typeof AdminIndexRoute
@@ -114,6 +121,7 @@ export interface FileRoutesByTo {
   '/progreso': typeof ProgresoRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin/connectors': typeof AdminConnectorsRoute
+  '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
   '/admin/review': typeof AdminReviewRoute
   '/admin': typeof AdminIndexRoute
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   '/progreso': typeof ProgresoRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin/connectors': typeof AdminConnectorsRoute
+  '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
   '/admin/review': typeof AdminReviewRoute
   '/admin/': typeof AdminIndexRoute
@@ -147,6 +156,7 @@ export interface FileRouteTypes {
     | '/progreso'
     | '/reset-password'
     | '/admin/connectors'
+    | '/admin/curriculum'
     | '/admin/generate'
     | '/admin/review'
     | '/admin/'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/progreso'
     | '/reset-password'
     | '/admin/connectors'
+    | '/admin/curriculum'
     | '/admin/generate'
     | '/admin/review'
     | '/admin'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/progreso'
     | '/reset-password'
     | '/admin/connectors'
+    | '/admin/curriculum'
     | '/admin/generate'
     | '/admin/review'
     | '/admin/'
@@ -272,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminConnectorsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/curriculum': {
+      id: '/admin/curriculum'
+      path: '/curriculum'
+      fullPath: '/admin/curriculum'
+      preLoaderRoute: typeof AdminCurriculumRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/generate': {
       id: '/admin/generate'
       path: '/generate'
@@ -291,6 +310,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminConnectorsRoute: typeof AdminConnectorsRoute
+  AdminCurriculumRoute: typeof AdminCurriculumRoute
   AdminGenerateRoute: typeof AdminGenerateRoute
   AdminReviewRoute: typeof AdminReviewRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -298,6 +318,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminConnectorsRoute: AdminConnectorsRoute,
+  AdminCurriculumRoute: AdminCurriculumRoute,
   AdminGenerateRoute: AdminGenerateRoute,
   AdminReviewRoute: AdminReviewRoute,
   AdminIndexRoute: AdminIndexRoute,
