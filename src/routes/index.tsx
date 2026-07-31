@@ -568,27 +568,32 @@ function HowItWorks() {
 function Pricing() {
   return (
     <section id="precios" className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
-      <div className="mx-auto max-w-2xl text-center">
-        <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-          Planes simples, sin letra pequeña
-        </h2>
-        <p className="mt-3 text-muted-foreground">
-          Elige según cuánta profundidad de diagnóstico necesitas. Cambia de plan cuando quieras.
-        </p>
-      </div>
+      <Reveal>
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            Planes simples, sin letra pequeña
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Elige según cuánta profundidad de diagnóstico necesitas. Cambia de plan cuando quieras.
+          </p>
+        </div>
+      </Reveal>
 
       <div className="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
-        {PLANS.map((plan) => {
+        {PLANS.map((plan, i) => {
           const isPremium = plan.code === "premium_6m";
           return (
+            <Reveal key={plan.code} delay={i * 120} className="h-full">
             <div
-              key={plan.code}
               className={
                 isPremium
-                  ? "relative rounded-2xl border-2 border-accent bg-card p-6 shadow-panel"
-                  : "relative rounded-2xl border border-border bg-card p-6"
+                  ? "relative h-full overflow-hidden rounded-2xl border-2 border-accent bg-card p-6 shadow-panel transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_50px_-24px_var(--accent)]"
+                  : "relative h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel"
               }
             >
+              {isPremium && (
+                <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-accent/15 blur-2xl" />
+              )}
               {isPremium && (
                 <span className="absolute -top-3 left-6 rounded-full bg-accent px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-accent-foreground">
                   Recomendado
