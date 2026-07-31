@@ -374,12 +374,14 @@ function ProblemSolution() {
               El problema
             </p>
             <h3 className="mt-2 text-lg font-semibold">
-              El examen PMP ya no es solo ABCD — casi ningún simulador se ha puesto al día
+              Hacer 1.000 preguntas no te dice por qué fallas
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Desde julio de 2026 el examen incluye clusters de caso, preguntas gráficas y una
-              nueva ponderación de dominios. La mayoría de bancos de preguntas en español siguen
-              calibrados al ECO anterior — practicas para un examen que ya no existe.
+              Los simuladores te devuelven un porcentaje y la letra correcta. Pero suspender el PMP
+              casi nunca es falta de teoría: es elegir la acción válida en el momento equivocado,
+              decidir por alguien que no te corresponde o aplicar lógica predictiva en un contexto
+              ágil. Un número de aciertos no distingue nada de eso — y repetir preguntas que ya
+              conoces infla tu nota y te da una falsa sensación de estar listo.
             </p>
           </div>
           <div className="rounded-2xl border border-accent/40 bg-card p-6 shadow-panel">
@@ -387,13 +389,16 @@ function ProblemSolution() {
               La solución
             </p>
             <h3 className="mt-2 text-lg font-semibold">
-              Construido desde cero sobre el ECO vigente, con diagnóstico real
+              Un motor de diagnóstico del razonamiento, no un banco de preguntas
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Cada pregunta está etiquetada contra una de las 26 tareas del ECO 2026. Cada fallo
-              se clasifica por tipo de error. No es un banco de preguntas más — es una
-              herramienta que te dice exactamente qué te falta para llegar preparado.
+              Cada fallo se clasifica en uno de los 8 tipos de error (secuencia, rol, enfoque,
+              lectura, análisis, interpretación, conocimiento, tiempo) y se acumula en tu perfil.
+              De ahí sale tu plan de estudio, tu dominio en cada una de las 26 tareas del ECO y
+              tu ruta de 14 lecciones. Además te decimos cuántas preguntas eran nuevas y cuántas
+              repetidas, para que tu nota signifique algo.
             </p>
+
           </div>
         </div>
       </div>
