@@ -811,12 +811,21 @@ function Results({
             ))}
           </>
         ) : (
-          <p className="flex items-start gap-2 rounded-2xl border border-border bg-card p-5 text-sm leading-relaxed text-muted-foreground">
+          <div className="flex items-start gap-2 rounded-2xl border border-border bg-card p-5 text-sm leading-relaxed text-muted-foreground">
             <Info className="mt-0.5 h-4 w-4 shrink-0" />
-            En la simulación completa la corrección pregunta a pregunta no se muestra en pantalla.
-            Consulta tu desglose por dominio en <strong>Mi progreso</strong> y repasa tus fallos en
-            los modos de práctica formativa.
-          </p>
+            <p>
+              En la simulación completa la corrección pregunta a pregunta no se muestra en pantalla.
+              Consulta tu desglose por dominio en{" "}
+              <Link
+                to="/progreso"
+                className="font-semibold text-primary underline underline-offset-2 hover:opacity-80"
+              >
+                Mi progreso
+              </Link>{" "}
+              y repasa tus fallos en los modos de práctica formativa.
+            </p>
+          </div>
+
         )}
       </div>
     </div>
