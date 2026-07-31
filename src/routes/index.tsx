@@ -240,59 +240,59 @@ function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
-        <div className="flex items-center gap-2.5">
+        <div className="flex shrink-0 items-center gap-2.5">
           <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary">
             <GraduationCap className="h-5 w-5 text-primary-foreground" />
           </div>
-          <div>
-            <p className="font-display text-sm font-semibold leading-tight">PMTech Simulator</p>
-            <p className="text-[11px] leading-tight text-muted-foreground">ECO 2026 · PMBOK 8</p>
+          <div className="shrink-0 min-w-fit w-max">
+            <p className="whitespace-nowrap font-display text-sm font-semibold leading-tight">PMTech Simulator</p>
+            <p className="whitespace-nowrap text-[11px] leading-tight text-muted-foreground">ECO 2026 · PMBOK 8</p>
           </div>
         </div>
 
-        <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex">
-          <a href="#caracteristicas" className="transition-colors hover:text-foreground">
-            Características
-          </a>
-          <a href="#opiniones" className="transition-colors hover:text-foreground">
-            Opiniones
-          </a>
-          <a href="#sobre-nosotros" className="transition-colors hover:text-foreground">
-            Sobre nosotros
-          </a>
-          <a href="#garantias" className="transition-colors hover:text-foreground">
-            Garantías
-          </a>
-          <a href="#precios" className="transition-colors hover:text-foreground">
-            Precios
-          </a>
-          <a href="#formacion" className="transition-colors hover:text-foreground">
-            Formación
-          </a>
-          <a href="#faq" className="transition-colors hover:text-foreground">
-            Preguntas frecuentes
-          </a>
+        <div className="hidden items-center gap-5 xl:flex">
+          <nav className="flex items-center gap-4 text-[13px] font-medium text-muted-foreground xl:gap-5 xl:text-sm">
+            <a href="#caracteristicas" className="whitespace-nowrap transition-colors hover:text-foreground">
+              Características
+            </a>
+            <a href="#opiniones" className="whitespace-nowrap transition-colors hover:text-foreground">
+              Opiniones
+            </a>
+            <a href="#sobre-nosotros" className="whitespace-nowrap transition-colors hover:text-foreground">
+              Sobre nosotros
+            </a>
+            <a href="#garantias" className="whitespace-nowrap transition-colors hover:text-foreground">
+              Garantías
+            </a>
+            <a href="#precios" className="whitespace-nowrap transition-colors hover:text-foreground">
+              Precios
+            </a>
+            <a href="#formacion" className="whitespace-nowrap transition-colors hover:text-foreground">
+              Formación
+            </a>
+            <a href="#faq" className="whitespace-nowrap transition-colors hover:text-foreground">
+              Preguntas frecuentes
+            </a>
+          </nav>
 
-
-        </nav>
-
-        <div className="hidden items-center gap-3 md:flex">
-          <Link
-            to="/login"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Iniciar sesión
-          </Link>
-          <a
-            href="#precios"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
-          >
-            Empezar ahora <ArrowRight className="h-4 w-4" />
-          </a>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/login"
+              className="whitespace-nowrap text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground xl:text-sm"
+            >
+              Iniciar sesión
+            </Link>
+            <a
+              href="#precios"
+              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-accent px-3 py-2 text-[13px] font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5 xl:text-sm"
+            >
+              Empezar ahora <ArrowRight className="h-4 w-4 shrink-0" />
+            </a>
+          </div>
         </div>
 
         <button
-          className="grid h-9 w-9 place-items-center rounded-lg border border-border md:hidden"
+          className="grid h-9 w-9 place-items-center rounded-lg border border-border xl:hidden"
           onClick={() => setOpen((v) => !v)}
           aria-label="Abrir menú"
         >
@@ -301,7 +301,7 @@ function Header() {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-card px-4 py-4 md:hidden">
+        <div className="border-t border-border bg-card px-4 py-4 xl:hidden">
           <nav className="flex flex-col gap-3 text-sm font-medium">
             <a href="#caracteristicas" onClick={() => setOpen(false)}>
               Características
