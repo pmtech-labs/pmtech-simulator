@@ -365,7 +365,7 @@ function Hero() {
       />
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.35fr_0.65fr] lg:gap-14">
           {/* Columna de texto: ancha para pocas líneas */}
           <div className="max-w-2xl lg:max-w-none">
             <Reveal>
@@ -376,8 +376,8 @@ function Hero() {
             </Reveal>
 
             <Reveal delay={80}>
-              <h1 className="mt-5 text-pretty font-display text-4xl font-bold leading-[1.08] tracking-tight text-hero-foreground drop-shadow-sm sm:text-[2.75rem] lg:text-5xl">
-                El simulador PMP en español que te explica{" "}
+              <h1 className="mt-5 text-pretty font-display text-[2.1rem] font-bold leading-[1.08] tracking-tight text-hero-foreground drop-shadow-sm sm:text-[2.65rem] lg:text-[2.9rem]">
+                El simulador PMP que diagnostica{" "}
                 <span className="relative inline-block text-accent">
                   por qué fallas
                   <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-gradient-to-r from-accent via-accent/70 to-transparent" />
@@ -433,7 +433,7 @@ function Hero() {
 
           {/* Columna visual: mockup flotante */}
           <Reveal delay={180} className="relative">
-            <div className="relative mx-auto max-w-lg lg:max-w-none">
+            <div className="relative mx-auto max-w-md lg:max-w-none">
               <div className="absolute -inset-4 rounded-[2rem] bg-accent/20 blur-2xl" />
               <figure className="group relative overflow-hidden rounded-2xl border border-hero-foreground/15 bg-hero-foreground/5 shadow-2xl backdrop-blur-sm transition-transform duration-500 hover:scale-[1.02]">
                 <img
