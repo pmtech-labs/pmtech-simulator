@@ -229,6 +229,7 @@ function ReviewPage() {
                   <th className="px-3 py-2">Enunciado</th>
                   <th className="px-3 py-2">Estado</th>
                   <th className="px-3 py-2">Dominio / Tarea</th>
+                  <th className="px-3 py-2">Generado con</th>
                   <th className="px-3 py-2">Dif.</th>
                   <th className="px-3 py-2">Usos</th>
                   <th className="px-3 py-2">% acierto</th>
