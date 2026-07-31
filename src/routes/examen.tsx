@@ -159,7 +159,17 @@ function ExamPage() {
     );
   }
 
-  return <ExamRunner session={session} />;
+  return (
+    <>
+      {import.meta.env.DEV && (
+        <p className="bg-warning-soft px-4 py-1.5 text-center text-[11px] text-accent-foreground">
+          Entorno de pruebas: el banco de preguntas está en construcción, la variedad de ítems aún
+          es limitada.
+        </p>
+      )}
+      <ExamRunner session={session} />
+    </>
+  );
 }
 
 function ExamRunner({ session }: { session: ExamSession }) {
