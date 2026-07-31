@@ -449,7 +449,7 @@ function Results({
   answers: Record<string, AnswerValue>;
   score: { correct: number; pct: number };
 }) {
-  const { newItemsCount, repeatedItemsCount, interpretationNote } = MOCK_FINISH_SUMMARY;
+  const { newItemsCount, repeatedItemsCount, interpretationNote, disclaimer } = MOCK_FINISH_SUMMARY;
   const totalItems = newItemsCount + repeatedItemsCount;
 
   return (
@@ -465,6 +465,11 @@ function Results({
           <p className="num mt-2 inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground">
             <Sparkles className="h-3.5 w-3.5" />
             {newItemsCount} de {totalItems} preguntas eran nuevas para ti
+          </p>
+
+          <p className="mt-4 flex items-start gap-2 rounded-lg border border-border bg-muted/50 p-3 text-left text-xs leading-relaxed text-muted-foreground">
+            <Info className="mt-0.5 h-4 w-4 shrink-0" />
+            {disclaimer}
           </p>
 
           {interpretationNote && (
