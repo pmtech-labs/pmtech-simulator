@@ -36,7 +36,8 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Simulador de examen PMP en español calibrado al ECO 2026 (PMBOK 8): 180 preguntas, casos reales, diagnóstico de errores y formación de 35 horas. Empieza hoy.",
+          "Simulador PMP en español que diagnostica por qué fallas: 8 tipos de error, mastery por las 26 tareas del ECO 2026, ruta de 14 lecciones y plan de estudio personalizado.",
+
       },
       {
         property: "og:title",
