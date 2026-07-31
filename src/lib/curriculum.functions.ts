@@ -286,3 +286,41 @@ export const moveCourseUnit = createServerFn({ method: "POST" })
 
     return { ok: true };
   });
+
+/**
+ * Reordena todas las unidades según el orden recibido (drag & drop).
+ * Asigna secuencias 1..n de forma estable, sin alterar el estado de publicación.
+ */
+export const reorderCourseUnits = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { orderedIds: string[] }) => input)
+  .handler(async ({ data, context }) => {
+    const admin = await context.supabase.rpc("is_admin", { p_user_id: context.userId });
+    if (admin.error || !admin.data) throw new Error("No autorizado: se requiere rol de administrador.");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: units, error } = await supabaseAdmin.from("course_units").select("id");
+    if (error) throw new Error(error.message);
+
+    const known = new Set((units ?? []).map((u) => u.id));
+    const ordered = data.orderedIds.filter((id) => known.has(id));
+    if (ordered.length !== known.size) throw new Error("El orden recibido no coincide con las unidades existentes.");
+
+    // Primero a secuencias temporales negativas para evitar colisiones.
+    for (let i = 0; i < ordered.length; i++) {
+      const { error: tmpError } = await supabaseAdmin
+        .from("course_units")
+        .update({ sequence: -(i + 1) })
+        .eq("id", ordered[i]);
+      if (tmpError) throw new Error(tmpError.message);
+    }
+    for (let i = 0; i < ordered.length; i++) {
+      const { error: upError } = await supabaseAdmin
+        .from("course_units")
+        .update({ sequence: i + 1 })
+        .eq("id", ordered[i]);
+      if (upError) throw new Error(upError.message);
+    }
+
+    return { ok: true };
+  });

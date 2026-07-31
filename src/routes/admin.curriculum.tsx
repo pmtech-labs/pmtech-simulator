@@ -8,6 +8,7 @@ import {
   Eye,
   EyeOff,
   FileSearch,
+  GripVertical,
   Loader2,
   Pencil,
   Plus,
@@ -24,6 +25,7 @@ import {
   listAdminCourseUnits,
   moveCourseUnit,
   previewUnitCoverage,
+  reorderCourseUnits,
   saveCourseUnit,
   setCourseUnitStatus,
   type AdminCourseUnit,
@@ -50,18 +52,22 @@ function CurriculumPage() {
   const qc = useQueryClient();
   const [form, setForm] = useState<FormState | null>(null);
   const [previewId, setPreviewId] = useState<string | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
 
   const fetchUnits = useServerFn(listAdminCourseUnits);
   const save = useServerFn(saveCourseUnit);
   const setStatus = useServerFn(setCourseUnitStatus);
   const remove = useServerFn(deleteCourseUnit);
   const move = useServerFn(moveCourseUnit);
+  const reorder = useServerFn(reorderCourseUnits);
 
   const units = useQuery({ queryKey: ["admin-course-units"], queryFn: () => fetchUnits() });
   const domains = useQuery({ queryKey: ["eco-domains"], queryFn: listEcoDomains });
   const tasks = useQuery({ queryKey: ["eco-tasks"], queryFn: listEcoTasks });
 
   const invalidate = () => qc.invalidateQueries({ queryKey: ["admin-course-units"] });
+
 
   const saveMutation = useMutation({
     mutationFn: (input: FormState) => save({ data: input }),
@@ -97,8 +103,31 @@ function CurriculumPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const reorderMutation = useMutation({
+    mutationFn: (orderedIds: string[]) => reorder({ data: { orderedIds } }),
+    onSuccess: () => {
+      toast.success("Orden actualizado");
+      invalidate();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const rows: AdminCourseUnit[] = units.data ?? [];
   const nextSequence = rows.length ? Math.max(...rows.map((u) => u.sequence)) + 1 : 1;
+
+  const handleDrop = (targetId: string) => {
+    const sourceId = dragId;
+    setDragId(null);
+    setOverId(null);
+    if (!sourceId || sourceId === targetId) return;
+    const ids = rows.map((u) => u.id);
+    const from = ids.indexOf(sourceId);
+    const to = ids.indexOf(targetId);
+    if (from < 0 || to < 0) return;
+    ids.splice(to, 0, ids.splice(from, 1)[0]);
+    reorderMutation.mutate(ids);
+  };
+
 
   return (
     <AdminShell
@@ -126,7 +155,9 @@ function CurriculumPage() {
             <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             Las unidades en <strong className="mx-1 text-foreground">borrador</strong> no son
             seleccionables por los candidatos en ningún modo de práctica. Una unidad sin tareas ECO
-            mapeadas no puede publicarse.
+            mapeadas no puede publicarse. Arrastra una fila (o usa las flechas) para reordenar: la
+            secuencia se guarda al soltar y se mantiene al publicar.
+
           </p>
 
           <DataTable
@@ -142,9 +173,34 @@ function CurriculumPage() {
             }
           >
             {rows.map((u, i) => (
-              <tr key={u.id} className="align-top">
+              <tr
+                key={u.id}
+                draggable
+                onDragStart={() => setDragId(u.id)}
+                onDragEnd={() => {
+                  setDragId(null);
+                  setOverId(null);
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  if (dragId && dragId !== u.id) setOverId(u.id);
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  handleDrop(u.id);
+                }}
+                className={cn(
+                  "align-top",
+                  dragId === u.id && "opacity-50",
+                  overId === u.id && "bg-secondary",
+                )}
+              >
                 <td className="px-3 py-2 text-muted-foreground">
                   <div className="flex items-center gap-1">
+                    <GripVertical
+                      className="h-3.5 w-3.5 cursor-grab text-muted-foreground/70"
+                      aria-hidden
+                    />
                     <span className="num w-5">{u.sequence}</span>
                     <div className="flex flex-col">
                       <button
@@ -166,6 +222,7 @@ function CurriculumPage() {
                     </div>
                   </div>
                 </td>
+
                 <td className="px-3 py-2">
                   <p className="font-medium">{u.title}</p>
                   {u.description && (

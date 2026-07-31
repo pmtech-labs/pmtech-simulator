@@ -269,42 +269,116 @@ export const MOCK_ERROR_TYPE_STATS: { errorType: ErrorType; occurrences: number 
  * Progreso por unidad del currículo (modos `unit_quiz` y `cumulative`).
  * Se empareja por número de secuencia con las unidades publicadas en Supabase.
  */
+export interface UnitModeStats {
+  attempts: number;
+  answered: number;
+  accuracy: number;
+  avgSeconds: number;
+}
+
 export interface UnitProgress {
   sequence: number;
   title: string;
-  unitQuiz: { attempts: number; answered: number; accuracy: number; avgSeconds: number };
-  cumulative: { attempts: number; answered: number; accuracy: number; avgSeconds: number };
+  /** Dominio ECO predominante de las tareas mapeadas a la unidad. */
+  domain: DomainCode;
+  unitQuiz: UnitModeStats;
+  cumulative: UnitModeStats;
+  /** Score por semana (mismo eje que PROGRESS_TREND_LABELS); `null` = sin actividad. */
+  trend: { unitQuiz: (number | null)[]; cumulative: (number | null)[] };
+  /** Diagnóstico de tipos de error acumulado en esa unidad. */
+  errorTypes: { errorType: ErrorType; occurrences: number }[];
 }
+
+/** Eje temporal común de las gráficas de tendencia de /progreso. */
+export const PROGRESS_TREND_LABELS = [
+  "Sem 1",
+  "Sem 2",
+  "Sem 3",
+  "Sem 4",
+  "Sem 5",
+  "Sem 6",
+];
 
 export const MOCK_UNIT_PROGRESS: UnitProgress[] = [
   {
     sequence: 1,
     title: "Fundamentos y entorno del proyecto",
+    domain: "business",
     unitQuiz: { attempts: 4, answered: 60, accuracy: 84, avgSeconds: 58 },
     cumulative: { attempts: 2, answered: 40, accuracy: 81, avgSeconds: 66 },
+    trend: {
+      unitQuiz: [62, 68, 71, 77, 80, 84],
+      cumulative: [null, null, 66, 72, 78, 81],
+    },
+    errorTypes: [
+      { errorType: "knowledge", occurrences: 6 },
+      { errorType: "reading", occurrences: 4 },
+      { errorType: "interpretation", occurrences: 2 },
+    ],
   },
   {
     sequence: 2,
     title: "Liderazgo y desarrollo del equipo",
+    domain: "people",
     unitQuiz: { attempts: 3, answered: 45, accuracy: 76, avgSeconds: 63 },
     cumulative: { attempts: 2, answered: 50, accuracy: 72, avgSeconds: 70 },
+    trend: {
+      unitQuiz: [55, 61, 64, 70, 73, 76],
+      cumulative: [null, 58, 63, 66, 70, 72],
+    },
+    errorTypes: [
+      { errorType: "role", occurrences: 11 },
+      { errorType: "sequence", occurrences: 7 },
+      { errorType: "approach", occurrences: 3 },
+    ],
   },
   {
     sequence: 3,
     title: "Planificación del alcance y del cronograma",
+    domain: "process",
     unitQuiz: { attempts: 3, answered: 45, accuracy: 67, avgSeconds: 71 },
     cumulative: { attempts: 1, answered: 30, accuracy: 64, avgSeconds: 74 },
+    trend: {
+      unitQuiz: [48, 52, 58, 60, 64, 67],
+      cumulative: [null, null, null, 55, 61, 64],
+    },
+    errorTypes: [
+      { errorType: "sequence", occurrences: 14 },
+      { errorType: "analysis", occurrences: 9 },
+      { errorType: "time", occurrences: 3 },
+    ],
   },
   {
     sequence: 4,
     title: "Riesgos, coste y valor ganado",
+    domain: "process",
     unitQuiz: { attempts: 2, answered: 30, accuracy: 54, avgSeconds: 88 },
     cumulative: { attempts: 1, answered: 35, accuracy: 58, avgSeconds: 83 },
+    trend: {
+      unitQuiz: [null, 41, 45, 47, 51, 54],
+      cumulative: [null, null, null, null, 52, 58],
+    },
+    errorTypes: [
+      { errorType: "analysis", occurrences: 15 },
+      { errorType: "knowledge", occurrences: 8 },
+      { errorType: "time", occurrences: 5 },
+    ],
   },
   {
     sequence: 5,
     title: "Entorno de negocio y cumplimiento",
+    domain: "business",
     unitQuiz: { attempts: 1, answered: 15, accuracy: 47, avgSeconds: 92 },
     cumulative: { attempts: 0, answered: 0, accuracy: 0, avgSeconds: 0 },
+    trend: {
+      unitQuiz: [null, null, null, 38, 43, 47],
+      cumulative: [null, null, null, null, null, null],
+    },
+    errorTypes: [
+      { errorType: "interpretation", occurrences: 7 },
+      { errorType: "knowledge", occurrences: 6 },
+      { errorType: "approach", occurrences: 4 },
+    ],
   },
 ];
+
