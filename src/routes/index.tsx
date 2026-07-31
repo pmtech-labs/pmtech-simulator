@@ -853,12 +853,14 @@ function LandingPage() {
         <SocialProof />
         <Features />
         <HowItWorks />
+        <Guarantees />
         <AboutUs />
         <Pricing />
         <Training />
         <FAQ />
         <Newsletter />
         <FinalCta />
+        <LeadWizard />
       </main>
       <Footer />
     </div>
