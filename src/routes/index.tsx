@@ -232,8 +232,11 @@ function Header() {
           <a href="#caracteristicas" className="transition-colors hover:text-foreground">
             Características
           </a>
-          <a href="#como-funciona" className="transition-colors hover:text-foreground">
-            Cómo funciona
+          <a href="#opiniones" className="transition-colors hover:text-foreground">
+            Opiniones
+          </a>
+          <a href="#sobre-nosotros" className="transition-colors hover:text-foreground">
+            Sobre nosotros
           </a>
           <a href="#precios" className="transition-colors hover:text-foreground">
             Precios
@@ -244,6 +247,7 @@ function Header() {
           <a href="#faq" className="transition-colors hover:text-foreground">
             Preguntas frecuentes
           </a>
+
 
         </nav>
 
