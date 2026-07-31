@@ -23,6 +23,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { NewsletterSignup } from "@/components/landing/NewsletterSignup";
+import { TrainingContactForm } from "@/components/landing/TrainingContactForm";
 import { PLANS } from "@/services/checkoutService";
 
 const SITE_URL = "https://pmtech-simulator.lovable.app";
