@@ -1,7 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { AlertTriangle, Eye, EyeOff, Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowDown,
+  ArrowUp,
+  Eye,
+  EyeOff,
+  FileSearch,
+  Loader2,
+  Pencil,
+  Plus,
+  Trash2,
+  X,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -10,6 +22,8 @@ import { useAdminEmail } from "@/hooks/useAdminEmail";
 import {
   deleteCourseUnit,
   listAdminCourseUnits,
+  moveCourseUnit,
+  previewUnitCoverage,
   saveCourseUnit,
   setCourseUnitStatus,
   type AdminCourseUnit,
