@@ -71,9 +71,10 @@ function fmtTime(seconds: number) {
 }
 
 function PracticePage() {
+  const search = Route.useSearch();
   const [selected, setSelected] = useState<DomainCode[]>(["process"]);
-  const [mode, setMode] = useState<PracticeMode>("domain_drill");
-  const [unitId, setUnitId] = useState<string>("");
+  const [mode, setMode] = useState<PracticeMode>(search.modo ?? "domain_drill");
+  const [unitId, setUnitId] = useState<string>(search.unidad ?? "");
   const [drill, setDrill] = useState<Question[] | null>(null);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, AnswerValue>>({});
