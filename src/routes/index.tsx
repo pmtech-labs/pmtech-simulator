@@ -788,6 +788,13 @@ function Footer() {
             <Link to="/pmbok-8" className="hover:text-foreground">
               PMBOK 7 vs 8
             </Link>
+            <Link to="/pmtech-vs-pmi-study-hall" className="hover:text-foreground">
+              vs PMI Study Hall
+            </Link>
+            <Link to="/pmtech-vs-prepcast" className="hover:text-foreground">
+              vs PrepCast
+            </Link>
+
             <Link to="/login" className="hover:text-foreground">
               Iniciar sesión
             </Link>

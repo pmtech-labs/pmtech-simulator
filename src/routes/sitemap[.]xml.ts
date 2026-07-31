@@ -21,7 +21,10 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/requisitos-pmp", changefreq: "monthly", priority: "0.8" },
           { path: "/curso-pmp-online", changefreq: "monthly", priority: "0.8" },
           { path: "/pmbok-8", changefreq: "monthly", priority: "0.7" },
+          { path: "/pmtech-vs-pmi-study-hall", changefreq: "monthly", priority: "0.8" },
+          { path: "/pmtech-vs-prepcast", changefreq: "monthly", priority: "0.8" },
         ];
+
 
 
         const urls = entries.map((e) =>
