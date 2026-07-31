@@ -10,6 +10,10 @@ import {
 } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
+import {
+  DomainLevelBadge,
+  DomainMasteryLegend,
+} from "@/components/progress/DomainMasteryLegend";
 import { DOMAINS, MOCK_EXAM_HISTORY, MOCK_USER } from "@/data/mockData";
 
 export const Route = createFileRoute("/dashboard")({
