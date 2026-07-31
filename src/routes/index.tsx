@@ -250,8 +250,8 @@ function Header() {
           </div>
         </div>
 
-        <div className="hidden items-center gap-5 xl:flex">
-          <nav className="flex items-center gap-4 text-[13px] font-medium text-muted-foreground xl:gap-5 xl:text-sm">
+        <div className="hidden items-center gap-4 xl:flex">
+          <nav className="flex items-center gap-4 text-[13px] font-medium text-muted-foreground">
             <a href="#caracteristicas" className="whitespace-nowrap transition-colors hover:text-foreground">
               Características
             </a>
@@ -278,13 +278,13 @@ function Header() {
           <div className="flex items-center gap-3">
             <Link
               to="/login"
-              className="whitespace-nowrap text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground xl:text-sm"
+              className="whitespace-nowrap text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               Iniciar sesión
             </Link>
             <a
               href="#precios"
-              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-accent px-3 py-2 text-[13px] font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5 xl:text-sm"
+              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-accent px-3 py-2 text-[13px] font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
             >
               Empezar ahora <ArrowRight className="h-4 w-4 shrink-0" />
             </a>
