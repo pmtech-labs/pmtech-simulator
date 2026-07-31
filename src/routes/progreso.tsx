@@ -130,7 +130,7 @@ function ProgressPage() {
                   <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted">
                     <div
                       className="h-full rounded-full"
-                      style={{ width: `${t.mastery}%`, background: `var(--domain-${t.domain})` }}
+                      style={{ width: `${t.mastery}%`, background: `var(--${t.domain})` }}
                     />
                   </div>
                 </div>
