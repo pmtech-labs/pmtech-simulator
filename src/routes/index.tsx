@@ -364,7 +364,7 @@ function Hero() {
       />
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-10">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
           {/* Columna de texto */}
           <div className="max-w-xl lg:max-w-none">
             <Reveal>
@@ -375,7 +375,7 @@ function Hero() {
             </Reveal>
 
             <Reveal delay={80}>
-              <h1 className="mt-5 text-pretty font-display text-[2.25rem] font-bold leading-[1.08] tracking-tight text-hero-foreground drop-shadow-sm sm:text-5xl lg:text-[2.75rem]">
+              <h1 className="mt-5 text-pretty font-display text-[1.9rem] font-bold leading-[1.1] tracking-tight text-hero-foreground drop-shadow-sm sm:text-[2.25rem] lg:text-[2.65rem]">
                 Diagnostica{" "}
                 <span className="relative inline-block text-accent">
                   por qué fallas
@@ -430,11 +430,11 @@ function Hero() {
             </Reveal>
           </div>
 
-          {/* Columna visual: mockup flotante grande */}
+          {/* Columna visual: mockup flotante nítido */}
           <Reveal delay={180} className="relative">
             <div className="relative mx-auto max-w-xl lg:max-w-none">
               <div className="absolute -inset-6 rounded-[2.5rem] bg-accent/20 blur-3xl" />
-              <figure className="group relative overflow-hidden rounded-2xl border border-hero-foreground/15 bg-hero-foreground/5 shadow-2xl backdrop-blur-sm transition-transform duration-500 hover:scale-[1.02]">
+              <figure className="group relative overflow-hidden rounded-2xl border border-hero-foreground/15 bg-hero-foreground/5 shadow-2xl transition-transform duration-500 hover:scale-[1.02]">
                 <img
                   src={heroDashboard}
                   alt="Panel de analítica del simulador PMP con dominio por tareas ECO y patrón de errores"
