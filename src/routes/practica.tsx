@@ -3,6 +3,7 @@ import { CheckCircle2, ChevronRight, Clock, RotateCcw, Target, XCircle } from "l
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
+import { ResultReportButton } from "@/components/export/ResultReportButton";
 import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { MatchingQuestion } from "@/components/exam/MatchingQuestion";
@@ -185,7 +186,27 @@ function PracticePage() {
             <p className="mt-1 text-sm text-muted-foreground">
               {stats.correct} de {DRILL_SIZE} correctas · tiempo total {fmtTime(stats.seconds)}
             </p>
+            <div className="mt-4 flex justify-center">
+              <ResultReportButton
+                report={{
+                  title: "Informe de práctica por dominios · PMP",
+                  subtitle: `Puntuación ${stats.pct}% · ${stats.correct} de ${DRILL_SIZE} correctas · tiempo total ${fmtTime(stats.seconds)}`,
+                  scorePct: stats.pct,
+                  correct: stats.correct,
+                  total: DRILL_SIZE,
+                  extraRows: [
+                    { label: "Tiempo total", value: fmtTime(stats.seconds) },
+                    ...stats.byDomain.map(([domain, m]) => ({
+                      label: DOMAIN_LABELS[domain],
+                      value: `${m.correct}/${m.total} aciertos · ${fmtTime(m.seconds)}`,
+                    })),
+                  ],
+                  items: drill.map((q, i) => ({ question: q, answer: answers[i] })),
+                }}
+              />
+            </div>
           </section>
+
 
           <section className="rounded-2xl border border-border bg-card p-5">
             <h2 className="text-sm font-semibold">Métricas por dominio</h2>

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
+import { ResultReportButton } from "@/components/export/ResultReportButton";
 import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { EarnedValueChart } from "@/components/exam/EarnedValueChart";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
@@ -483,7 +484,23 @@ function Results({
             <Link to="/historial" className="rounded-lg border border-border px-4 py-2 text-sm font-medium">
               Ver historial
             </Link>
+            <ResultReportButton
+              report={{
+                title: "Informe de resultado · Simulación PMP",
+                subtitle: `Puntuación ${score.pct}% · ${score.correct} de ${questions.length} correctas · ${newItemsCount} de ${totalItems} preguntas nuevas`,
+                scorePct: score.pct,
+                correct: score.correct,
+                total: questions.length,
+                extraRows: [
+                  { label: "Preguntas nuevas", value: `${newItemsCount} de ${totalItems}` },
+                  { label: "Preguntas repetidas", value: String(repeatedItemsCount) },
+                  ...(interpretationNote ? [{ label: "Nota de interpretación", value: interpretationNote }] : []),
+                ],
+                items: questions.map((q) => ({ question: q, answer: answers[q.id] })),
+              }}
+            />
           </div>
+
         </div>
 
         <DistractorAnalytics

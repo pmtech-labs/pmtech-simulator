@@ -2,8 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, LineChart, Lock, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
+import { StudyPlanCard } from "@/components/progress/StudyPlanCard";
 import { DOMAINS, MOCK_ERROR_TYPE_STATS, MOCK_TASK_MASTERY, MOCK_USER } from "@/data/mockData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
+import { buildStudyPlan } from "@/lib/studyPlan";
+
 
 export const Route = createFileRoute("/progreso")({
   head: () => ({
@@ -27,6 +30,8 @@ function ProgressPage() {
   const isPremium = MOCK_USER.plan === "premium_6m";
   const errorStats = [...MOCK_ERROR_TYPE_STATS].sort((a, b) => b.occurrences - a.occurrences);
   const maxErrors = Math.max(...errorStats.map((s) => s.occurrences), 1);
+  const studyPlan = buildStudyPlan(MOCK_ERROR_TYPE_STATS);
+
 
   return (
     <AppShell title="Mi progreso" subtitle="Analítica de brecha por dominio y tarea ECO">
@@ -141,6 +146,10 @@ function ProgressPage() {
             </div>
           )}
         </section>
+
+        <StudyPlanCard steps={studyPlan} />
+
+
 
         <section className="rounded-2xl border border-accent bg-warning-soft p-5">
 

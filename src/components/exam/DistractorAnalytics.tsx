@@ -1,115 +1,17 @@
 import { BarChart3, Lightbulb, TriangleAlert } from "lucide-react";
 import { useMemo } from "react";
 
-import { isAnswerCorrect } from "@/services/examService";
-import type { AnswerValue, Question } from "@/types/exam";
+import { computeDistractorStats, type AnalyticsItem } from "@/lib/distractorStats";
+import { ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 
-export interface AnalyticsItem {
-  question: Question;
-  answer: AnswerValue | undefined;
-}
-
-interface LetterStat {
-  letter: string;
-  chosen: number;
-  chosenCorrect: number;
-  chosenWrong: number;
-  missedCorrect: number;
-}
-
-interface FailureRow {
-  questionId: string;
-  index: number;
-  taskCode: string;
-  taskTitle: string;
-  stem: string;
-  optionId: string;
-  optionLabel: string;
-  reason: string;
-  reference: string;
-}
-
-function selectedIds(question: Question, answer: AnswerValue | undefined): string[] {
-  if (!answer) return [];
-  if (question.format === "matching") return [];
-  return answer as string[];
-}
+export type { AnalyticsItem };
 
 export function DistractorAnalytics({ items }: { items: AnalyticsItem[] }) {
-  const { letters, failures, totalWithOptions } = useMemo(() => {
-    const map = new Map<string, LetterStat>();
-    const rows: FailureRow[] = [];
-    let counted = 0;
+  const { letters, failures, totalWithOptions, errorCounts } = useMemo(
+    () => computeDistractorStats(items),
+    [items],
+  );
 
-    items.forEach(({ question, answer }, index) => {
-      if (question.format === "matching" || !question.options) return;
-      counted += 1;
-      const chosen = selectedIds(question, answer);
-      const correct = question.correctAnswer;
-
-      question.options.forEach((opt) => {
-        const stat = map.get(opt.id) ?? {
-          letter: opt.id,
-          chosen: 0,
-          chosenCorrect: 0,
-          chosenWrong: 0,
-          missedCorrect: 0,
-        };
-        const isCorrectOption = correct.includes(opt.id);
-        const isChosen = chosen.includes(opt.id);
-        if (isChosen) {
-          stat.chosen += 1;
-          if (isCorrectOption) stat.chosenCorrect += 1;
-          else stat.chosenWrong += 1;
-        } else if (isCorrectOption) {
-          stat.missedCorrect += 1;
-        }
-        map.set(opt.id, stat);
-      });
-
-      if (isAnswerCorrect(question, answer)) return;
-
-      chosen
-        .filter((id) => !correct.includes(id))
-        .forEach((id) => {
-          const opt = question.options!.find((o) => o.id === id);
-          const distractor = question.explanation.distractors.find((d) => d.optionId === id);
-          rows.push({
-            questionId: question.id,
-            index: index + 1,
-            taskCode: question.taskCode,
-            taskTitle: question.taskTitle,
-            stem: question.stem,
-            optionId: id,
-            optionLabel: opt?.label ?? id,
-            reason:
-              distractor?.text ??
-              "Esta opción no responde al enfoque que el PMBOK considera prioritario en esta situación.",
-            reference: question.explanation.reference,
-          });
-        });
-
-      if (!chosen.length) {
-        rows.push({
-          questionId: question.id,
-          index: index + 1,
-          taskCode: question.taskCode,
-          taskTitle: question.taskTitle,
-          stem: question.stem,
-          optionId: "—",
-          optionLabel: "Sin respuesta",
-          reason: `No marcaste ninguna opción. La respuesta correcta era ${correct.join(", ")}: ${question.explanation.correct}`,
-          reference: question.explanation.reference,
-        });
-      }
-    });
-
-    return {
-      letters: [...map.values()].sort((a, b) => a.letter.localeCompare(b.letter)),
-      failures: rows,
-      totalWithOptions: counted,
-    };
-  }, [items]);
 
   if (!totalWithOptions) return null;
 
@@ -157,6 +59,32 @@ export function DistractorAnalytics({ items }: { items: AnalyticsItem[] }) {
           );
         })}
       </div>
+
+      {errorCounts.length > 0 && (
+        <div>
+          <h3 className="text-sm font-semibold">Patrón de errores de esta sesión</h3>
+          <div className="mt-3 space-y-2">
+            {errorCounts.map((e) => (
+              <div key={e.errorType} className="flex items-center gap-3">
+                <span className="w-28 shrink-0 text-xs font-medium">{ERROR_TYPE_SHORT[e.errorType]}</span>
+                <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="h-full rounded-full bg-destructive"
+                    style={{
+                      width: `${Math.round(
+                        (e.occurrences / Math.max(1, ...errorCounts.map((x) => x.occurrences))) * 100,
+                      )}%`,
+                    }}
+                  />
+                </div>
+                <span className="num w-6 shrink-0 text-right text-xs font-semibold">{e.occurrences}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+
 
       <div>
         <div className="flex items-center gap-2">
