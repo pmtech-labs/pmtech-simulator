@@ -1,7 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { AlertTriangle, Eye, EyeOff, Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowDown,
+  ArrowUp,
+  Eye,
+  EyeOff,
+  FileSearch,
+  Loader2,
+  Pencil,
+  Plus,
+  Trash2,
+  X,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -10,6 +22,8 @@ import { useAdminEmail } from "@/hooks/useAdminEmail";
 import {
   deleteCourseUnit,
   listAdminCourseUnits,
+  moveCourseUnit,
+  previewUnitCoverage,
   saveCourseUnit,
   setCourseUnitStatus,
   type AdminCourseUnit,
@@ -35,11 +49,13 @@ function CurriculumPage() {
   const email = useAdminEmail();
   const qc = useQueryClient();
   const [form, setForm] = useState<FormState | null>(null);
+  const [previewId, setPreviewId] = useState<string | null>(null);
 
   const fetchUnits = useServerFn(listAdminCourseUnits);
   const save = useServerFn(saveCourseUnit);
   const setStatus = useServerFn(setCourseUnitStatus);
   const remove = useServerFn(deleteCourseUnit);
+  const move = useServerFn(moveCourseUnit);
 
   const units = useQuery({ queryKey: ["admin-course-units"], queryFn: () => fetchUnits() });
   const domains = useQuery({ queryKey: ["eco-domains"], queryFn: listEcoDomains });
@@ -72,6 +88,12 @@ function CurriculumPage() {
       toast.success("Unidad eliminada");
       invalidate();
     },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const moveMutation = useMutation({
+    mutationFn: (input: { id: string; direction: "up" | "down" }) => move({ data: input }),
+    onSuccess: invalidate,
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -119,9 +141,31 @@ function CurriculumPage() {
               </tr>
             }
           >
-            {rows.map((u) => (
+            {rows.map((u, i) => (
               <tr key={u.id} className="align-top">
-                <td className="num px-3 py-2 text-muted-foreground">{u.sequence}</td>
+                <td className="px-3 py-2 text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <span className="num w-5">{u.sequence}</span>
+                    <div className="flex flex-col">
+                      <button
+                        aria-label={`Subir ${u.title}`}
+                        disabled={i === 0 || moveMutation.isPending}
+                        onClick={() => moveMutation.mutate({ id: u.id, direction: "up" })}
+                        className="rounded border border-border p-0.5 hover:bg-secondary disabled:opacity-30"
+                      >
+                        <ArrowUp className="h-3 w-3" />
+                      </button>
+                      <button
+                        aria-label={`Bajar ${u.title}`}
+                        disabled={i === rows.length - 1 || moveMutation.isPending}
+                        onClick={() => moveMutation.mutate({ id: u.id, direction: "down" })}
+                        className="mt-0.5 rounded border border-border p-0.5 hover:bg-secondary disabled:opacity-30"
+                      >
+                        <ArrowDown className="h-3 w-3" />
+                      </button>
+                    </div>
+                  </div>
+                </td>
                 <td className="px-3 py-2">
                   <p className="font-medium">{u.title}</p>
                   {u.description && (
@@ -160,6 +204,12 @@ function CurriculumPage() {
                       className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs font-medium hover:bg-secondary"
                     >
                       <Pencil className="h-3 w-3" /> Editar
+                    </button>
+                    <button
+                      onClick={() => setPreviewId(u.id)}
+                      className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs font-medium hover:bg-secondary"
+                    >
+                      <FileSearch className="h-3 w-3" /> Vista previa
                     </button>
                     <button
                       onClick={() =>
@@ -207,7 +257,108 @@ function CurriculumPage() {
           onClose={() => setForm(null)}
         />
       )}
+
+      {previewId && <UnitPreviewDialog id={previewId} onClose={() => setPreviewId(null)} />}
     </AdminShell>
+  );
+}
+
+function UnitPreviewDialog({ id, onClose }: { id: string; onClose: () => void }) {
+  const preview = useServerFn(previewUnitCoverage);
+  const query = useQuery({
+    queryKey: ["unit-preview", id],
+    queryFn: () => preview({ data: { id } }),
+    retry: false,
+  });
+
+  const data = query.data;
+
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-foreground/50 p-4">
+      <div className="w-full max-w-lg rounded-xl border border-border bg-card p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-semibold">Vista previa de cobertura</h2>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Preguntas publicadas que alimentarían cada modo de práctica.
+            </p>
+          </div>
+          <button onClick={onClose} className="rounded-md border border-border p-1 hover:bg-secondary">
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
+        {query.isPending ? (
+          <Loader2 className="mt-4 h-4 w-4 animate-spin text-muted-foreground" />
+        ) : query.error ? (
+          <p className="mt-4 text-sm text-destructive">{(query.error as Error).message}</p>
+        ) : data ? (
+          <>
+            <p className="mt-4 text-sm font-medium">
+              <span className="num mr-2 text-muted-foreground">Lección {data.sequence}</span>
+              {data.unitTitle}
+            </p>
+
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-lg border border-border p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  Practicar esta lección
+                </p>
+                <p className="num mt-1 font-display text-2xl font-bold">
+                  {data.unitQuiz.questionCount}
+                </p>
+                <p className="num mt-1 text-[11px] text-muted-foreground">
+                  preguntas · {data.unitQuiz.taskCount} tareas ECO
+                </p>
+              </div>
+              <div className="rounded-lg border border-border p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  Simulacro acumulativo
+                </p>
+                <p className="num mt-1 font-display text-2xl font-bold">
+                  {data.cumulative.questionCount}
+                </p>
+                <p className="num mt-1 text-[11px] text-muted-foreground">
+                  preguntas · {data.cumulative.unitCount} unidades · {data.cumulative.taskCount} tareas
+                </p>
+              </div>
+            </div>
+
+            {data.unitQuiz.questionCount === 0 && (
+              <p className="mt-3 flex items-start gap-2 rounded-md border border-destructive/40 bg-destructive/10 p-3 text-xs text-destructive">
+                <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                Sin preguntas publicadas: el modo «Practicar esta lección» fallaría para los candidatos.
+              </p>
+            )}
+
+            {data.unitQuiz.tasksWithoutQuestions.length > 0 && (
+              <div className="mt-3 rounded-md border border-border p-3">
+                <p className="text-xs font-medium">
+                  Tareas mapeadas sin preguntas publicadas{" "}
+                  <span className="num text-muted-foreground">
+                    ({data.unitQuiz.tasksWithoutQuestions.length})
+                  </span>
+                </p>
+                <ul className="mt-1.5 space-y-1 text-[11px] text-muted-foreground">
+                  {data.unitQuiz.tasksWithoutQuestions.map((t) => (
+                    <li key={t}>· {t}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
+        ) : null}
+
+        <div className="mt-5 flex justify-end">
+          <button
+            onClick={onClose}
+            className="rounded-md border border-border px-3 py-1.5 text-xs font-medium hover:bg-secondary"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 

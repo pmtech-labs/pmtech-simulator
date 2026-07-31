@@ -264,3 +264,47 @@ export const MOCK_ERROR_TYPE_STATS: { errorType: ErrorType; occurrences: number 
   { errorType: "interpretation", occurrences: 9 },
   { errorType: "time", occurrences: 6 },
 ];
+
+/**
+ * Progreso por unidad del currículo (modos `unit_quiz` y `cumulative`).
+ * Se empareja por número de secuencia con las unidades publicadas en Supabase.
+ */
+export interface UnitProgress {
+  sequence: number;
+  title: string;
+  unitQuiz: { attempts: number; answered: number; accuracy: number; avgSeconds: number };
+  cumulative: { attempts: number; answered: number; accuracy: number; avgSeconds: number };
+}
+
+export const MOCK_UNIT_PROGRESS: UnitProgress[] = [
+  {
+    sequence: 1,
+    title: "Fundamentos y entorno del proyecto",
+    unitQuiz: { attempts: 4, answered: 60, accuracy: 84, avgSeconds: 58 },
+    cumulative: { attempts: 2, answered: 40, accuracy: 81, avgSeconds: 66 },
+  },
+  {
+    sequence: 2,
+    title: "Liderazgo y desarrollo del equipo",
+    unitQuiz: { attempts: 3, answered: 45, accuracy: 76, avgSeconds: 63 },
+    cumulative: { attempts: 2, answered: 50, accuracy: 72, avgSeconds: 70 },
+  },
+  {
+    sequence: 3,
+    title: "Planificación del alcance y del cronograma",
+    unitQuiz: { attempts: 3, answered: 45, accuracy: 67, avgSeconds: 71 },
+    cumulative: { attempts: 1, answered: 30, accuracy: 64, avgSeconds: 74 },
+  },
+  {
+    sequence: 4,
+    title: "Riesgos, coste y valor ganado",
+    unitQuiz: { attempts: 2, answered: 30, accuracy: 54, avgSeconds: 88 },
+    cumulative: { attempts: 1, answered: 35, accuracy: 58, avgSeconds: 83 },
+  },
+  {
+    sequence: 5,
+    title: "Entorno de negocio y cumplimiento",
+    unitQuiz: { attempts: 1, answered: 15, accuracy: 47, avgSeconds: 92 },
+    cumulative: { attempts: 0, answered: 0, accuracy: 0, avgSeconds: 0 },
+  },
+];

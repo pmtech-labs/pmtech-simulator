@@ -3,6 +3,7 @@ import { AlertTriangle, LineChart, Lock, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
 import { StudyPlanCard } from "@/components/progress/StudyPlanCard";
+import { UnitProgressCard } from "@/components/progress/UnitProgressCard";
 import { DOMAINS, MOCK_ERROR_TYPE_STATS, MOCK_TASK_MASTERY, MOCK_USER } from "@/data/mockData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 import { buildStudyPlan } from "@/lib/studyPlan";
@@ -146,6 +147,8 @@ function ProgressPage() {
             </div>
           )}
         </section>
+
+        <UnitProgressCard />
 
         <StudyPlanCard steps={studyPlan} />
 
