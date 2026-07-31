@@ -23,29 +23,91 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { NewsletterSignup } from "@/components/landing/NewsletterSignup";
+import { TrainingContactForm } from "@/components/landing/TrainingContactForm";
 import { PLANS } from "@/services/checkoutService";
+
+const SITE_URL = "https://pmtech-simulator.lovable.app";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "Simulador PMP® calibrado al ECO 2026 · PMTech Simulator",
+        title: "Simulador PMP en español · Examen ECO 2026 y PMBOK 8",
       },
       {
         name: "description",
         content:
-          "El único simulador PMP en español calibrado al nuevo examen ECO 2026 (PMBOK 8): clusters de caso reales, diagnóstico por tipo de error y motor adaptativo. Empieza gratis.",
+          "Simulador de examen PMP en español calibrado al ECO 2026 (PMBOK 8): 180 preguntas, casos reales, diagnóstico de errores y formación de 35 horas. Empieza hoy.",
       },
-      { property: "og:title", content: "Simulador PMP® calibrado al ECO 2026" },
+      {
+        property: "og:title",
+        content: "Simulador PMP en español · Examen ECO 2026 y PMBOK 8",
+      },
       {
         property: "og:description",
         content:
-          "Casos reales, diagnóstico por tipo de error y motor adaptativo — no un banco de preguntas genérico.",
+          "Casos reales, diagnóstico por tipo de error y motor adaptativo — más formación PMP de 35 horas y boletín de gestión de proyectos.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:locale", content: "es_ES" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Simulador PMP en español · ECO 2026" },
+      {
+        name: "twitter:description",
+        content:
+          "Prepara el examen PMP con simulacros calibrados al ECO 2026 y diagnóstico real de tus errores.",
+      },
+    ],
+    links: [{ rel: "canonical", href: SITE_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              name: "PMTech Simulator",
+              url: SITE_URL,
+              description:
+                "Simulador de examen PMP y formación en dirección de proyectos en español, calibrado al ECO 2026.",
+            },
+            {
+              "@type": "WebSite",
+              name: "PMTech Simulator",
+              url: SITE_URL,
+              inLanguage: "es",
+            },
+            {
+              "@type": "Course",
+              name: "Preparación PMP® — 35 horas de formación",
+              description:
+                "Formación oficial de 35 horas de contacto para cumplir el requisito de PMI y preparar el examen PMP según el ECO 2026.",
+              provider: {
+                "@type": "Organization",
+                name: "PMTech Simulator",
+                url: SITE_URL,
+              },
+              inLanguage: "es",
+            },
+            {
+              "@type": "FAQPage",
+              mainEntity: FAQS.map((f) => ({
+                "@type": "Question",
+                name: f.q,
+                acceptedAnswer: { "@type": "Answer", text: f.a },
+              })),
+            },
+          ],
+        }),
       },
     ],
   }),
   component: LandingPage,
 });
+
 
 const STATS = [
   { value: "26", label: "tareas del ECO 2026 cubiertas" },
@@ -137,7 +199,16 @@ const FAQS = [
     q: "¿Sirve si estoy usando otro material de estudio (Rita Mulcahy, PMBOK, etc.)?",
     a: "Sí, es el complemento natural. El simulador no sustituye la formación estructurada — está pensado para practicar y diagnosticar errores sobre lo que ya estás estudiando.",
   },
+  {
+    q: "¿Necesito las 35 horas de formación para presentarme al examen PMP?",
+    a: "Sí. PMI exige 35 horas de formación en dirección de proyectos (además de la experiencia gestionando proyectos) para admitir tu solicitud. Impartimos esa formación en español y puedes pedir programa y fechas desde el formulario de la sección Formación.",
+  },
+  {
+    q: "¿Puedo contratar la formación para todo mi equipo?",
+    a: "Sí, tenemos modalidad in-company con calendario adaptado y licencias del simulador para cada participante. Indícalo en el formulario de contacto y te preparamos una propuesta.",
+  },
 ];
+
 
 function Header() {
   const [open, setOpen] = useState(false);
@@ -164,9 +235,13 @@ function Header() {
           <a href="#precios" className="transition-colors hover:text-foreground">
             Precios
           </a>
+          <a href="#formacion" className="transition-colors hover:text-foreground">
+            Formación
+          </a>
           <a href="#faq" className="transition-colors hover:text-foreground">
             Preguntas frecuentes
           </a>
+
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
@@ -205,9 +280,13 @@ function Header() {
             <a href="#precios" onClick={() => setOpen(false)}>
               Precios
             </a>
+            <a href="#formacion" onClick={() => setOpen(false)}>
+              Formación
+            </a>
             <a href="#faq" onClick={() => setOpen(false)}>
               Preguntas frecuentes
             </a>
+
             <Link to="/dashboard" onClick={() => setOpen(false)}>
               Iniciar sesión
             </Link>
@@ -236,10 +315,11 @@ function Hero() {
             Calibrado al nuevo ECO de julio 2026 — PMBOK 8
           </span>
           <h1 className="mt-6 text-balance font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-            El examen PMP cambió.
+            Simulador de examen PMP en español
             <br />
-            <span className="text-accent-foreground">Tu simulador, también debería.</span>
+            <span className="text-accent-foreground">calibrado al ECO 2026</span>
           </h1>
+
           <p className="mx-auto mt-6 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
             La mayoría de simuladores siguen anclados al examen anterior. El nuestro está
             construido desde cero sobre el ECO 2026: casos reales, diagnóstico por tipo de
@@ -559,9 +639,16 @@ function Footer() {
             <a href="#precios" className="hover:text-foreground">
               Precios
             </a>
+            <a href="#formacion" className="hover:text-foreground">
+              Formación PMP
+            </a>
+            <a href="#boletin" className="hover:text-foreground">
+              Boletín
+            </a>
             <a href="#faq" className="hover:text-foreground">
               FAQ
             </a>
+
             <Link to="/dashboard" className="hover:text-foreground">
               Iniciar sesión
             </Link>
@@ -577,6 +664,74 @@ function Footer() {
   );
 }
 
+function Training() {
+  return (
+    <section id="formacion" className="border-y border-border bg-secondary/40">
+      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
+          <div>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-accent-foreground">
+              <GraduationCap className="h-3.5 w-3.5 text-accent" />
+              Formación PMP® · 35 horas
+            </span>
+            <h2 className="mt-5 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+              ¿Pensabas prepararte por tu cuenta?
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+              PMI exige 35 horas de formación en dirección de proyectos para poder
+              presentarte al examen PMP. Estudiar solo con un libro es posible, pero la
+              mayoría de suspensos vienen de no saber interpretar el enfoque del examen, no
+              de falta de experiencia.
+            </p>
+            <ul className="mt-6 space-y-3 text-sm">
+              {[
+                "35 horas de contacto acreditables para tu solicitud a PMI",
+                "Sesiones en directo en español, orientadas al ECO 2026 y PMBOK 8",
+                "Simulador incluido durante toda la formación",
+                "Revisión de tu solicitud y de tu experiencia antes de aplicar",
+                "Modalidad individual o in-company para equipos",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
+              Déjanos tus datos y te enviamos programa, fechas y precio sin compromiso. Nada
+              de llamadas comerciales insistentes.
+            </p>
+          </div>
+          <TrainingContactForm />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Newsletter() {
+  return (
+    <section id="boletin" className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
+      <div className="grid gap-8 md:grid-cols-2 md:items-center">
+        <div>
+          <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            Aunque todavía no te certifiques, sigue aprendiendo
+          </h2>
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            Un boletín para quien dirige proyectos de verdad: cambios del PMBOK y del ECO,
+            metodologías predictivas, ágiles e híbridas, casos reales, plantillas y errores
+            que se repiten en cualquier organización.
+          </p>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Sin spam. Baja en un clic. Tus datos no se ceden a terceros.
+          </p>
+        </div>
+        <NewsletterSignup />
+      </div>
+    </section>
+  );
+}
+
 function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
@@ -587,11 +742,14 @@ function LandingPage() {
         <Features />
         <HowItWorks />
         <Pricing />
+        <Training />
         <EarlyAccess />
         <FAQ />
+        <Newsletter />
         <FinalCta />
       </main>
       <Footer />
     </div>
   );
 }
+
