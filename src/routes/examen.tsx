@@ -481,7 +481,7 @@ function Results({
 
           <div className="mt-5 flex flex-wrap justify-center gap-2">
             <Link
-              to="/"
+              to="/dashboard"
               className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
             >
               Volver al panel

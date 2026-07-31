@@ -19,7 +19,7 @@ import { MOCK_USER } from "@/data/mockData";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { to: "/", label: "Panel", icon: LayoutDashboard },
+  { to: "/dashboard", label: "Panel", icon: LayoutDashboard },
   { to: "/aprendizaje", label: "Ruta de aprendizaje", icon: RouteIcon },
   { to: "/examen", label: "Simulación", icon: Target },
   { to: "/practica", label: "Práctica por dominios", icon: Dumbbell },

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AprendizajeRouteImport } from './routes/aprendizaje'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ExamenRouteImport } from './routes/examen'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HistorialRouteImport } from './routes/historial'
@@ -38,6 +39,11 @@ const AdminRoute = AdminRouteImport.update({
 const AprendizajeRoute = AprendizajeRouteImport.update({
   id: '/aprendizaje',
   path: '/aprendizaje',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExamenRoute = ExamenRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/aprendizaje': typeof AprendizajeRoute
+  '/dashboard': typeof DashboardRoute
   '/examen': typeof ExamenRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aprendizaje': typeof AprendizajeRoute
+  '/dashboard': typeof DashboardRoute
   '/examen': typeof ExamenRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/aprendizaje': typeof AprendizajeRoute
+  '/dashboard': typeof DashboardRoute
   '/examen': typeof ExamenRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/aprendizaje'
+    | '/dashboard'
     | '/examen'
     | '/forgot-password'
     | '/historial'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/aprendizaje'
+    | '/dashboard'
     | '/examen'
     | '/forgot-password'
     | '/historial'
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/aprendizaje'
+    | '/dashboard'
     | '/examen'
     | '/forgot-password'
     | '/historial'
@@ -209,6 +221,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AprendizajeRoute: typeof AprendizajeRoute
+  DashboardRoute: typeof DashboardRoute
   ExamenRoute: typeof ExamenRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistorialRoute: typeof HistorialRoute
@@ -239,6 +252,13 @@ declare module '@tanstack/react-router' {
       path: '/aprendizaje'
       fullPath: '/aprendizaje'
       preLoaderRoute: typeof AprendizajeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/examen': {
@@ -350,6 +370,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AprendizajeRoute: AprendizajeRoute,
+  DashboardRoute: DashboardRoute,
   ExamenRoute: ExamenRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HistorialRoute: HistorialRoute,
@@ -361,3 +382,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
