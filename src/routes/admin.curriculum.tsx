@@ -49,11 +49,13 @@ function CurriculumPage() {
   const email = useAdminEmail();
   const qc = useQueryClient();
   const [form, setForm] = useState<FormState | null>(null);
+  const [previewId, setPreviewId] = useState<string | null>(null);
 
   const fetchUnits = useServerFn(listAdminCourseUnits);
   const save = useServerFn(saveCourseUnit);
   const setStatus = useServerFn(setCourseUnitStatus);
   const remove = useServerFn(deleteCourseUnit);
+  const move = useServerFn(moveCourseUnit);
 
   const units = useQuery({ queryKey: ["admin-course-units"], queryFn: () => fetchUnits() });
   const domains = useQuery({ queryKey: ["eco-domains"], queryFn: listEcoDomains });
