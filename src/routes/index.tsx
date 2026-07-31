@@ -21,7 +21,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AboutUs } from "@/components/landing/AboutUs";
+import { SocialProof } from "@/components/landing/SocialProof";
 import { NewsletterSignup } from "@/components/landing/NewsletterSignup";
+
 import { TrainingContactForm } from "@/components/landing/TrainingContactForm";
 import { PLANS } from "@/services/checkoutService";
 
