@@ -375,8 +375,26 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seconds, onBreak, summary, paused]);
 
+  // Guardado local del progreso para poder reanudar la simulación más tarde.
+  useEffect(() => {
+    if (summary) {
+      clearExamProgress();
+      return;
+    }
+    saveExamProgress({
+      mode: session.mode,
+      session,
+      index,
+      answers,
+      feedback,
+      flagged,
+      sectionIdx,
+      secondsLeft: seconds,
+    });
+  }, [session, index, answers, feedback, flagged, sectionIdx, seconds, summary]);
 
   const answeredCount = Object.keys(answers).length;
+
 
   if (summary) {
     return (
