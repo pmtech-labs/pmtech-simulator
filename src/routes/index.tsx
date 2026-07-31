@@ -746,8 +746,10 @@ function LandingPage() {
       <main>
         <Hero />
         <ProblemSolution />
+        <SocialProof />
         <Features />
         <HowItWorks />
+        <AboutUs />
         <Pricing />
         <Training />
         <EarlyAccess />
@@ -759,4 +761,5 @@ function LandingPage() {
     </div>
   );
 }
+
 
