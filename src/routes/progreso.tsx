@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { LineChart, Lock, Sparkles } from "lucide-react";
+import { AlertTriangle, LineChart, Lock, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
-import { DOMAINS, MOCK_TASK_MASTERY, MOCK_USER } from "@/data/mockData";
+import { DOMAINS, MOCK_ERROR_TYPE_STATS, MOCK_TASK_MASTERY, MOCK_USER } from "@/data/mockData";
+import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 
 export const Route = createFileRoute("/progreso")({
   head: () => ({
@@ -24,6 +25,8 @@ const TREND = [52, 58, 57, 63, 66, 68];
 
 function ProgressPage() {
   const isPremium = MOCK_USER.plan === "premium_6m";
+  const errorStats = [...MOCK_ERROR_TYPE_STATS].sort((a, b) => b.occurrences - a.occurrences);
+  const maxErrors = Math.max(...errorStats.map((s) => s.occurrences), 1);
 
   return (
     <AppShell title="Mi progreso" subtitle="Analítica de brecha por dominio y tarea ECO">
@@ -98,7 +101,49 @@ function ProgressPage() {
           )}
         </section>
 
+        <section className="relative rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+            <h2 className="text-base font-semibold">Patrón de errores por tipo</h2>
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Cuántas veces has fallado por cada causa. Te dice si tu problema es de conocimiento, de
+            secuencia de acciones o de atribución de rol.
+          </p>
+          <div className="mt-4 space-y-3">
+            {errorStats.map((s) => (
+              <div key={s.errorType} className="space-y-1.5">
+                <div className="flex items-start justify-between gap-3">
+                  <p className="min-w-0 text-sm">
+                    <span className="font-medium">{ERROR_TYPE_SHORT[s.errorType]}</span>
+                    <span className="block text-[11px] leading-snug text-muted-foreground">
+                      {ERROR_TYPE_LABELS[s.errorType]}
+                    </span>
+                  </p>
+                  <span className="num shrink-0 text-sm font-semibold">{s.occurrences}</span>
+                </div>
+                <div className="h-2 overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="h-full rounded-full bg-accent"
+                    style={{ width: `${Math.round((s.occurrences / maxErrors) * 100)}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {!isPremium && (
+            <div className="absolute inset-0 grid place-items-center rounded-2xl bg-card/90 backdrop-blur-sm">
+              <div className="max-w-xs text-center">
+                <Lock className="mx-auto h-5 w-5 text-muted-foreground" />
+                <p className="mt-2 text-sm font-semibold">Patrón de errores (Premium)</p>
+              </div>
+            </div>
+          )}
+        </section>
+
         <section className="rounded-2xl border border-accent bg-warning-soft p-5">
+
           <div className="flex items-start gap-3">
             <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-accent-foreground" />
             <div>

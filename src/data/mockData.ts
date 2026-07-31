@@ -1,4 +1,4 @@
-import type { CaseCluster, DomainCode, Question } from "@/types/exam";
+import type { CaseCluster, DomainCode, ErrorType, ExamSection, Question } from "@/types/exam";
 
 /**
  * DATOS SIMULADOS
@@ -47,6 +47,8 @@ export const MOCK_QUESTIONS: Question[] = [
     domain: "process",
     approach: "hybrid",
     difficulty: 3,
+    sectionNumber: 1,
+    errorType: "analysis",
     explanation: {
       correct:
         "SPI = EV/PV = 498.000/600.000 = 0,83 y CPI = EV/AC = 498.000/615.000 = 0,81. Ambos índices por debajo de 1 indican simultáneamente retraso y sobrecoste. El comportamiento esperado del director de proyecto es diagnosticar la causa raíz con el equipo antes de comprometer acciones, y después presentar al patrocinador alternativas cuantificadas (intensificación o ejecución rápida) con su impacto en coste y riesgo, ya que la fecha es una restricción dura.",
@@ -76,6 +78,8 @@ export const MOCK_QUESTIONS: Question[] = [
     domain: "process",
     approach: "hybrid",
     difficulty: 2,
+    sectionNumber: 1,
+    errorType: "sequence",
     explanation: {
       correct:
         "Con fecha fija y alcance flexible en la parte ágil, la palanca correcta es repriorizar el backlog para asegurar el alcance regulatorio (A). En paralelo, la dependencia externa es un riesgo materializado que exige una respuesta registrada y accionada (C). Ambas son acciones dentro de la autoridad del director de proyecto y coherentes con un enfoque híbrido.",
@@ -117,6 +121,8 @@ export const MOCK_QUESTIONS: Question[] = [
     domain: "process",
     approach: "hybrid",
     difficulty: 2,
+    sectionNumber: 2,
+    errorType: "knowledge",
     explanation: {
       correct:
         "Las estrategias para amenazas son evitar, transferir, mitigar, escalar y aceptar; para oportunidades, explotar, compartir, mejorar, escalar y aceptar. Un impacto económico por encima de la tolerancia se traslada a un tercero (transferir); la incertidumbre técnica se reduce con un spike (mitigar); una oportunidad que se quiere asegurar al 100 % se explota; un riesgo trivial se acepta pasivamente.",
@@ -144,6 +150,8 @@ export const MOCK_QUESTIONS: Question[] = [
     domain: "people",
     approach: "agile",
     difficulty: 2,
+    sectionNumber: 2,
+    errorType: "role",
     explanation: {
       correct:
         "La técnica preferida de resolución de conflictos es colaborar / resolver el problema: se abordan los intereses subyacentes y se busca una solución ganar-ganar centrada en el problema. El director de proyecto actúa como facilitador y servidor del equipo, empezando por comprender antes de decidir.",
@@ -172,6 +180,8 @@ export const MOCK_QUESTIONS: Question[] = [
     domain: "business",
     approach: "predictive",
     difficulty: 2,
+    sectionNumber: 3,
+    errorType: "approach",
     explanation: {
       correct:
         "Todo cambio en requisitos de cumplimiento se analiza en términos de impacto integrado (alcance, tiempo, coste, calidad, riesgo) y se canaliza por el control integrado de cambios. El cumplimiento no es opcional, pero el camino formal preserva la trazabilidad de la línea base.",
@@ -217,4 +227,33 @@ export const MOCK_TASK_MASTERY = [
   { code: "PR-5", title: "Presupuesto y recursos", domain: "process" as const, mastery: 55 },
   { code: "BE-2", title: "Cambios de cumplimiento", domain: "business" as const, mastery: 48 },
   { code: "BE-6", title: "Valor de negocio entregado", domain: "business" as const, mastery: 52 },
+];
+
+/** Secciones cronometradas del examen completo (respuesta de start_exam en full_sim). */
+export const EXAM_SECTIONS: ExamSection[] = [
+  { sectionNumber: 1, count: 2, seconds: 80 * 60 },
+  { sectionNumber: 2, count: 2, seconds: 80 * 60 },
+  { sectionNumber: 3, count: 1, seconds: 80 * 60 },
+];
+
+export const BREAK_SECONDS = 10 * 60;
+
+/** Resumen devuelto por finish_exam (mock). */
+export const MOCK_FINISH_SUMMARY = {
+  newItemsCount: 3,
+  repeatedItemsCount: 2,
+  interpretationNote:
+    "Un 40 % de las preguntas de esta simulación ya las habías respondido antes. Tu puntuación real en el examen oficial podría ser inferior: repite con un banco de preguntas nuevo para obtener una medida fiable de tu preparación.",
+};
+
+/** Patrón de errores acumulado del usuario (tabla user_error_type_stats). */
+export const MOCK_ERROR_TYPE_STATS: { errorType: ErrorType; occurrences: number }[] = [
+  { errorType: "sequence", occurrences: 34 },
+  { errorType: "analysis", occurrences: 27 },
+  { errorType: "role", occurrences: 21 },
+  { errorType: "knowledge", occurrences: 18 },
+  { errorType: "approach", occurrences: 15 },
+  { errorType: "reading", occurrences: 11 },
+  { errorType: "interpretation", occurrences: 9 },
+  { errorType: "time", occurrences: 6 },
 ];

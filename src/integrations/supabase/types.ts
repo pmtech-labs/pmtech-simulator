@@ -223,6 +223,9 @@ export type Database = {
         Row: {
           answered_at: string | null
           cluster_id: string | null
+          error_type_chosen:
+            | Database["public"]["Enums"]["error_type_enum"]
+            | null
           exam_id: string | null
           id: string
           is_correct: boolean | null
@@ -230,12 +233,16 @@ export type Database = {
           marked_for_review: boolean | null
           order_index: number
           question_id: string | null
+          section_number: number | null
           time_spent_seconds: number | null
           user_answer: Json | null
         }
         Insert: {
           answered_at?: string | null
           cluster_id?: string | null
+          error_type_chosen?:
+            | Database["public"]["Enums"]["error_type_enum"]
+            | null
           exam_id?: string | null
           id?: string
           is_correct?: boolean | null
@@ -243,12 +250,16 @@ export type Database = {
           marked_for_review?: boolean | null
           order_index: number
           question_id?: string | null
+          section_number?: number | null
           time_spent_seconds?: number | null
           user_answer?: Json | null
         }
         Update: {
           answered_at?: string | null
           cluster_id?: string | null
+          error_type_chosen?:
+            | Database["public"]["Enums"]["error_type_enum"]
+            | null
           exam_id?: string | null
           id?: string
           is_correct?: boolean | null
@@ -256,6 +267,7 @@ export type Database = {
           marked_for_review?: boolean | null
           order_index?: number
           question_id?: string | null
+          section_number?: number | null
           time_spent_seconds?: number | null
           user_answer?: Json | null
         }
@@ -290,6 +302,47 @@ export type Database = {
           },
         ]
       }
+      exam_sections: {
+        Row: {
+          exam_id: string | null
+          finished_at: string | null
+          id: string
+          section_number: number
+          started_at: string | null
+          status: string
+          time_limit_seconds: number
+          total_questions: number
+        }
+        Insert: {
+          exam_id?: string | null
+          finished_at?: string | null
+          id?: string
+          section_number: number
+          started_at?: string | null
+          status?: string
+          time_limit_seconds: number
+          total_questions: number
+        }
+        Update: {
+          exam_id?: string | null
+          finished_at?: string | null
+          id?: string
+          section_number?: number
+          started_at?: string | null
+          status?: string
+          time_limit_seconds?: number
+          total_questions?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_sections_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exams: {
         Row: {
           config: Json | null
@@ -297,6 +350,8 @@ export type Database = {
           id: string
           license_id: string | null
           mode: Database["public"]["Enums"]["exam_mode"]
+          new_items_count: number | null
+          repeated_items_count: number | null
           score_by_approach: Json | null
           score_by_domain: Json | null
           score_pct: number | null
@@ -312,6 +367,8 @@ export type Database = {
           id?: string
           license_id?: string | null
           mode?: Database["public"]["Enums"]["exam_mode"]
+          new_items_count?: number | null
+          repeated_items_count?: number | null
           score_by_approach?: Json | null
           score_by_domain?: Json | null
           score_pct?: number | null
@@ -327,6 +384,8 @@ export type Database = {
           id?: string
           license_id?: string | null
           mode?: Database["public"]["Enums"]["exam_mode"]
+          new_items_count?: number | null
+          repeated_items_count?: number | null
           score_by_approach?: Json | null
           score_by_domain?: Json | null
           score_pct?: number | null
@@ -667,6 +726,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_error_type_stats: {
+        Row: {
+          error_type: Database["public"]["Enums"]["error_type_enum"]
+          last_seen_at: string | null
+          occurrences: number | null
+          user_id: string
+        }
+        Insert: {
+          error_type: Database["public"]["Enums"]["error_type_enum"]
+          last_seen_at?: string | null
+          occurrences?: number | null
+          user_id: string
+        }
+        Update: {
+          error_type?: Database["public"]["Enums"]["error_type_enum"]
+          last_seen_at?: string | null
+          occurrences?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_task_mastery: {
         Row: {
           attempts: number | null
@@ -773,6 +853,13 @@ export type Database = {
     }
     Functions: {
       is_admin: { Args: { p_user_id: string }; Returns: boolean }
+      record_error_type: {
+        Args: {
+          p_error_type: Database["public"]["Enums"]["error_type_enum"]
+          p_user_id: string
+        }
+        Returns: undefined
+      }
       upsert_task_mastery: {
         Args: { p_is_correct: boolean; p_task_id: string; p_user_id: string }
         Returns: undefined
@@ -796,6 +883,15 @@ export type Database = {
     }
     Enums: {
       approach_type: "predictive" | "agile" | "hybrid"
+      error_type_enum:
+        | "knowledge"
+        | "interpretation"
+        | "sequence"
+        | "role"
+        | "approach"
+        | "reading"
+        | "analysis"
+        | "time"
       exam_mode: "full_sim" | "domain_drill" | "case_only" | "custom"
       item_format:
         | "mc_single"
@@ -936,6 +1032,16 @@ export const Constants = {
   public: {
     Enums: {
       approach_type: ["predictive", "agile", "hybrid"],
+      error_type_enum: [
+        "knowledge",
+        "interpretation",
+        "sequence",
+        "role",
+        "approach",
+        "reading",
+        "analysis",
+        "time",
+      ],
       exam_mode: ["full_sim", "domain_drill", "case_only", "custom"],
       item_format: [
         "mc_single",
