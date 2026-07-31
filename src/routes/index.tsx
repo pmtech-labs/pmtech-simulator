@@ -351,8 +351,8 @@ function Header() {
 function Hero() {
   return (
     <section className="relative overflow-hidden">
-      {/* Fondo limpio con degradado y decoración sutil */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary via-primary to-background" />
+      {/* Fondo limpio con degradado vertical suave */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-primary via-primary to-background" />
       <div className="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-accent/20 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 top-20 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
       <div
@@ -365,8 +365,8 @@ function Hero() {
       />
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-          {/* Columna de texto: más ancho, menos líneas */}
+        <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
+          {/* Columna de texto: ancha para pocas líneas */}
           <div className="max-w-2xl lg:max-w-none">
             <Reveal>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-3 py-1 text-xs font-semibold text-hero-foreground shadow-lift backdrop-blur">
@@ -376,8 +376,8 @@ function Hero() {
             </Reveal>
 
             <Reveal delay={80}>
-              <h1 className="mt-5 text-pretty font-display text-4xl font-bold leading-[1.1] tracking-tight text-hero-foreground drop-shadow-sm sm:text-5xl lg:text-[3.25rem]">
-                El simulador PMP que te dice{" "}
+              <h1 className="mt-5 text-pretty font-display text-4xl font-bold leading-[1.08] tracking-tight text-hero-foreground drop-shadow-sm sm:text-[2.75rem] lg:text-5xl">
+                El simulador PMP en español que te explica{" "}
                 <span className="relative inline-block text-accent">
                   por qué fallas
                   <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-gradient-to-r from-accent via-accent/70 to-transparent" />
@@ -387,7 +387,7 @@ function Hero() {
             </Reveal>
 
             <Reveal delay={150}>
-              <p className="mt-5 max-w-lg text-pretty text-base leading-relaxed text-hero-muted sm:text-lg">
+              <p className="mt-5 max-w-xl text-pretty text-base leading-relaxed text-hero-muted sm:text-lg">
                 8 tipos de error, 26 tareas del ECO 2026 y un plan de estudio personalizado para
                 reforzar lo que realmente te suspende.
               </p>
@@ -416,13 +416,13 @@ function Hero() {
 
             {/* Stats en fila horizontal, más compactos */}
             <Reveal delay={300}>
-              <div className="mt-8 flex flex-wrap gap-4 sm:gap-6">
+              <div className="mt-8 flex flex-wrap gap-5 sm:gap-7">
                 {STATS.map((s) => (
                   <div key={s.label} className="flex items-center gap-2">
                     <span className="num font-display text-2xl font-bold text-hero-foreground sm:text-3xl">
                       {s.value}
                     </span>
-                    <span className="max-w-[90px] text-[11px] leading-tight text-hero-muted/90">
+                    <span className="max-w-[100px] text-[11px] leading-tight text-hero-muted/90">
                       {s.label}
                     </span>
                   </div>
