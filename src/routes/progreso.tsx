@@ -2,8 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, LineChart, Lock, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
+import { StudyPlanCard } from "@/components/progress/StudyPlanCard";
 import { DOMAINS, MOCK_ERROR_TYPE_STATS, MOCK_TASK_MASTERY, MOCK_USER } from "@/data/mockData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
+import { buildStudyPlan } from "@/lib/studyPlan";
+
 
 export const Route = createFileRoute("/progreso")({
   head: () => ({
