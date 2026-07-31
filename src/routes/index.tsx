@@ -589,26 +589,6 @@ function Pricing() {
   );
 }
 
-function EarlyAccess() {
-  return (
-    <section className="border-y border-border bg-secondary/40">
-      <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 px-4 py-14 text-center sm:px-6">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-accent-foreground">
-          <ShieldCheck className="h-3.5 w-3.5 text-accent" />
-          Recién lanzado
-        </span>
-        <h2 className="font-display text-2xl font-bold sm:text-3xl">
-          Estamos construyendo esto en abierto
-        </h2>
-        <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
-          Somos de los primeros en construir un simulador calibrado desde cero al ECO 2026. Eso
-          significa que quien empieza ahora está entre los primeros en probarlo — y su feedback
-          da forma directamente al banco de preguntas y a las funciones que vienen.
-        </p>
-      </div>
-    </section>
-  );
-}
 
 function FAQ() {
   return (
@@ -788,7 +768,6 @@ function LandingPage() {
         <AboutUs />
         <Pricing />
         <Training />
-        <EarlyAccess />
         <FAQ />
         <Newsletter />
         <FinalCta />
