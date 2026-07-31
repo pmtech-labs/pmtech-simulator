@@ -8,12 +8,15 @@ import {
 } from "@/components/progress/DomainMasteryLegend";
 import { StudyPlanCard } from "@/components/progress/StudyPlanCard";
 import { UnitAnalytics } from "@/components/progress/UnitAnalytics";
-import { DOMAINS, MOCK_ERROR_TYPE_STATS, MOCK_TASK_MASTERY, MOCK_USER } from "@/data/mockData";
+import { RequireAuth } from "@/components/auth/RequireAuth";
+import { DOMAINS } from "@/data/mockData";
+import { useCurrentUser, useErrorTypeStats, useTaskMastery } from "@/hooks/useCandidateData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 import { buildStudyPlan } from "@/lib/studyPlan";
 
 
 export const Route = createFileRoute("/progreso")({
+  ssr: false,
   head: () => ({
     meta: [
       { title: "Mi progreso · Analítica por tarea ECO 2026" },
@@ -26,16 +29,36 @@ export const Route = createFileRoute("/progreso")({
       { property: "og:description", content: "Dominio por tarea ECO 2026 y recomendaciones de estudio." },
     ],
   }),
-  component: ProgressPage,
+  component: () => (
+    <RequireAuth>
+      <ProgressPage />
+    </RequireAuth>
+  ),
 });
 
 const TREND = [52, 58, 57, 63, 66, 68];
 
 function ProgressPage() {
-  const isPremium = MOCK_USER.plan === "premium_6m";
-  const errorStats = [...MOCK_ERROR_TYPE_STATS].sort((a, b) => b.occurrences - a.occurrences);
+  const { data: user, isLoading } = useCurrentUser();
+  const { data: taskMastery = [] } = useTaskMastery();
+  const { data: stats = [] } = useErrorTypeStats();
+
+  const isPremium = user?.plan === "premium_6m";
+  const errorStats = [...stats].sort((a, b) => b.occurrences - a.occurrences);
   const maxErrors = Math.max(...errorStats.map((s) => s.occurrences), 1);
-  const studyPlan = buildStudyPlan(MOCK_ERROR_TYPE_STATS);
+  const studyPlan = buildStudyPlan(stats);
+
+  if (isLoading || !user) {
+    return (
+      <AppShell title="Mi progreso" subtitle="Cargando tu analítica…">
+        <div className="mx-auto max-w-5xl space-y-4">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="h-40 animate-pulse rounded-2xl border border-border bg-card" />
+          ))}
+        </div>
+      </AppShell>
+    );
+  }
 
 
   return (
@@ -51,15 +74,15 @@ function ProgressPage() {
               <div key={d.code} className="rounded-2xl border border-border bg-card p-4">
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-sm font-medium">{d.name}</p>
-                  <DomainLevelBadge pct={MOCK_USER.masteryByDomain[d.code]} />
+                  <DomainLevelBadge pct={user.masteryByDomain[d.code]} />
                 </div>
                 <p className="num mt-2 font-display text-3xl font-bold">
-                  {MOCK_USER.masteryByDomain[d.code]}%
+                  {user.masteryByDomain[d.code]}%
                 </p>
                 <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
                   <div
                     className="h-full rounded-full"
-                    style={{ width: `${MOCK_USER.masteryByDomain[d.code]}%`, background: `var(--${d.token})` }}
+                    style={{ width: `${user.masteryByDomain[d.code]}%`, background: `var(--${d.token})` }}
                   />
                 </div>
                 <p className="mt-2 text-[11px] text-muted-foreground">Peso en el examen: {d.weight}%</p>
@@ -91,7 +114,13 @@ function ProgressPage() {
         <section className="relative rounded-2xl border border-border bg-card p-5">
           <h2 className="text-base font-semibold">Dominio por tarea ECO</h2>
           <div className="mt-4 space-y-3">
-            {MOCK_TASK_MASTERY.map((t) => (
+            {taskMastery.length === 0 && (
+              <p className="text-sm text-muted-foreground">
+                Todavía no hay datos por tarea. Completa una práctica para empezar a medir tu
+                dominio.
+              </p>
+            )}
+            {taskMastery.map((t) => (
               <div key={t.code} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium">
@@ -101,7 +130,7 @@ function ProgressPage() {
                   <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted">
                     <div
                       className="h-full rounded-full"
-                      style={{ width: `${t.mastery}%`, background: `var(--${t.domain})` }}
+                      style={{ width: `${t.mastery}%`, background: `var(--domain-${t.domain})` }}
                     />
                   </div>
                 </div>
@@ -130,6 +159,12 @@ function ProgressPage() {
             secuencia de acciones o de atribución de rol.
           </p>
           <div className="mt-4 space-y-3">
+            {errorStats.length === 0 && (
+              <p className="text-sm text-muted-foreground">
+                Aún no hemos registrado patrones de error. Practica en modo formativo para
+                diagnosticarlos.
+              </p>
+            )}
             {errorStats.map((s) => (
               <div key={s.errorType} className="space-y-1.5">
                 <div className="flex items-start justify-between gap-3">
