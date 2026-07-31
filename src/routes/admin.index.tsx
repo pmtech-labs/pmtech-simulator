@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, CheckCircle2, Loader2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Eye, Loader2 } from "lucide-react";
+import { useState } from "react";
 
 import { AdminShell, DataTable } from "@/components/admin/AdminShell";
+import { QuestionDetailDialog } from "@/components/admin/QuestionDetailDialog";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import { getStats, type ExamStatRow, type QuestionStatRow, type TaskCoverageRow } from "@/services/adminService";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
@@ -172,6 +175,8 @@ function StatsTable({
   showUsage?: boolean;
 }) {
   const rows = query.data ?? [];
+  const [openId, setOpenId] = useState<string | null>(null);
+
   return (
     <section className="space-y-2">
       <h2 className="text-sm font-semibold">{title}</h2>
@@ -190,23 +195,41 @@ function StatsTable({
               <th className="px-3 py-2">{metricLabel}</th>
               <th className="px-3 py-2">Respondida</th>
               {showUsage && <th className="px-3 py-2">Usos en exámenes</th>}
+              <th className="px-3 py-2" />
             </tr>
           }
         >
           {rows.map((r) => (
             <tr key={r.question_id} className="align-top">
               <td className="max-w-md px-3 py-2">
-                <span className="line-clamp-2">{r.stem ?? r.question_id}</span>
+                <button
+                  type="button"
+                  onClick={() => setOpenId(r.question_id)}
+                  className="text-left hover:underline"
+                >
+                  <span className="line-clamp-2">{r.stem ?? r.question_id}</span>
+                </button>
               </td>
               <td className="px-3 py-2 text-muted-foreground">{r.domain_name ?? "—"}</td>
               <td className="px-3 py-2 text-muted-foreground">{r.task_title ?? "—"}</td>
               <td className="num px-3 py-2">{r.success_rate_pct ?? "—"}</td>
               <td className="num px-3 py-2">{r.times_answered ?? 0}</td>
               {showUsage && <td className="num px-3 py-2">{r.times_used_in_exams ?? 0}</td>}
+              <td className="px-3 py-2 text-right">
+                <button
+                  type="button"
+                  onClick={() => setOpenId(r.question_id)}
+                  className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md border border-border bg-card px-2.5 py-1 text-xs font-medium hover:bg-secondary"
+                >
+                  <Eye className="h-3.5 w-3.5" /> Ver pregunta
+                </button>
+              </td>
             </tr>
           ))}
         </DataTable>
       )}
+      <QuestionDetailDialog questionId={openId} onOpenChange={(o) => !o && setOpenId(null)} />
     </section>
   );
 }
+
