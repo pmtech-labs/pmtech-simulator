@@ -637,6 +637,74 @@ function Footer() {
   );
 }
 
+function Training() {
+  return (
+    <section id="formacion" className="border-y border-border bg-secondary/40">
+      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
+          <div>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-accent-foreground">
+              <GraduationCap className="h-3.5 w-3.5 text-accent" />
+              Formación PMP® · 35 horas
+            </span>
+            <h2 className="mt-5 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+              ¿Pensabas prepararte por tu cuenta?
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+              PMI exige 35 horas de formación en dirección de proyectos para poder
+              presentarte al examen PMP. Estudiar solo con un libro es posible, pero la
+              mayoría de suspensos vienen de no saber interpretar el enfoque del examen, no
+              de falta de experiencia.
+            </p>
+            <ul className="mt-6 space-y-3 text-sm">
+              {[
+                "35 horas de contacto acreditables para tu solicitud a PMI",
+                "Sesiones en directo en español, orientadas al ECO 2026 y PMBOK 8",
+                "Simulador incluido durante toda la formación",
+                "Revisión de tu solicitud y de tu experiencia antes de aplicar",
+                "Modalidad individual o in-company para equipos",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
+              Déjanos tus datos y te enviamos programa, fechas y precio sin compromiso. Nada
+              de llamadas comerciales insistentes.
+            </p>
+          </div>
+          <TrainingContactForm />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Newsletter() {
+  return (
+    <section id="boletin" className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
+      <div className="grid gap-8 md:grid-cols-2 md:items-center">
+        <div>
+          <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            Aunque todavía no te certifiques, sigue aprendiendo
+          </h2>
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            Un boletín para quien dirige proyectos de verdad: cambios del PMBOK y del ECO,
+            metodologías predictivas, ágiles e híbridas, casos reales, plantillas y errores
+            que se repiten en cualquier organización.
+          </p>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Sin spam. Baja en un clic. Tus datos no se ceden a terceros.
+          </p>
+        </div>
+        <NewsletterSignup />
+      </div>
+    </section>
+  );
+}
+
 function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
@@ -647,11 +715,14 @@ function LandingPage() {
         <Features />
         <HowItWorks />
         <Pricing />
+        <Training />
         <EarlyAccess />
         <FAQ />
+        <Newsletter />
         <FinalCta />
       </main>
       <Footer />
     </div>
   );
 }
+
