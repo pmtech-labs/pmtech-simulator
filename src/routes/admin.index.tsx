@@ -168,14 +168,25 @@ function StatsTable({
   query,
   metricLabel,
   showUsage,
+  pageSize,
 }: {
   title: string;
   query: { data?: QuestionStatRow[]; isPending: boolean; error: unknown };
   metricLabel: string;
   showUsage?: boolean;
+  pageSize?: number;
 }) {
   const rows = query.data ?? [];
   const [openId, setOpenId] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+
+  const totalPages = pageSize ? Math.max(1, Math.ceil(rows.length / pageSize)) : 1;
+  const currentPage = Math.min(page, totalPages - 1);
+  const visibleRows = pageSize
+    ? rows.slice(currentPage * pageSize, currentPage * pageSize + pageSize)
+    : rows;
+
+
 
   return (
     <section className="space-y-2">
