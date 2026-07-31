@@ -8,6 +8,7 @@ import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { MatchingQuestion } from "@/components/exam/MatchingQuestion";
 import { OptionList } from "@/components/exam/OptionList";
 import { MOCK_QUESTIONS } from "@/data/mockData";
+import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
 import { DOMAIN_LABELS } from "@/lib/export";
 import { cn } from "@/lib/utils";
 import { isAnswerCorrect } from "@/services/examService";
@@ -57,6 +58,7 @@ function PracticePage() {
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, AnswerValue>>({});
   const [times, setTimes] = useState<Record<number, number>>({});
+  const [checked, setChecked] = useState<Record<number, boolean>>({});
   const [finished, setFinished] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const startRef = useRef(Date.now());
@@ -77,6 +79,7 @@ function PracticePage() {
     setIndex(0);
     setAnswers({});
     setTimes({});
+    setChecked({});
     setFinished(false);
     setElapsed(0);
     startRef.current = Date.now();
@@ -251,6 +254,8 @@ function PracticePage() {
 
   const q = drill[index];
   const answer = answers[index];
+  const isChecked = Boolean(checked[index]);
+  const currentOk = isAnswerCorrect(q, answer);
 
   return (
     <AppShell
