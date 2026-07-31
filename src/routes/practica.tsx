@@ -76,6 +76,13 @@ function PracticePage() {
   const [elapsed, setElapsed] = useState(0);
   const startRef = useRef(Date.now());
 
+  const unitsQuery = useQuery({
+    queryKey: ["published-units"],
+    queryFn: listPublishedUnits,
+    retry: false,
+    staleTime: 5 * 60 * 1000,
+  });
+
   useEffect(() => {
     if (!drill || finished) return;
     const t = setInterval(() => setElapsed(Math.floor((Date.now() - startRef.current) / 1000)), 1000);
@@ -134,8 +141,14 @@ function PracticePage() {
   }, [drill, answers, times]);
 
   if (!drill) {
+    const units = unitsQuery.data ?? [];
+    const hasUnits = units.length > 0;
+    const currentUnit = units.find((u) => u.id === unitId);
+    const canStart =
+      mode === "domain_drill" ? selected.length > 0 : Boolean(unitId);
+
     return (
-      <AppShell title="Práctica por dominios" subtitle="Mini-simulación de 5 preguntas enfocada">
+      <AppShell title="Práctica" subtitle="Mini-simulación de 5 preguntas enfocada">
         <div className="mx-auto max-w-3xl space-y-5">
           <section className="rounded-2xl border border-border bg-card p-5">
             <div className="flex items-start gap-3">
@@ -143,7 +156,7 @@ function PracticePage() {
                 <Target className="h-4 w-4 text-secondary-foreground" />
               </div>
               <div>
-                <h2 className="text-sm font-semibold">Selecciona uno o varios dominios</h2>
+                <h2 className="text-sm font-semibold">Elige el modo de práctica</h2>
                 <p className="text-xs text-muted-foreground">
                   Generaremos una serie de {DRILL_SIZE} preguntas con métricas de aciertos y tiempo por dominio.
                 </p>
@@ -151,38 +164,93 @@ function PracticePage() {
             </div>
 
             <div className="mt-5 grid gap-2 sm:grid-cols-3">
-              {ALL_DOMAINS.map((d) => {
-                const active = selected.includes(d);
-                const available = MOCK_QUESTIONS.filter((q) => q.domain === d).length;
-                return (
-                  <button
-                    key={d}
-                    onClick={() => toggleDomain(d)}
-                    aria-pressed={active}
-                    className={cn(
-                      "rounded-xl border p-4 text-left transition-colors",
-                      active
-                        ? "border-primary bg-primary/5"
-                        : "border-border bg-card hover:bg-secondary",
-                    )}
-                  >
-                    <p className="text-sm font-semibold">{DOMAIN_LABELS[d]}</p>
-                    <p className="num mt-1 text-xs text-muted-foreground">{available} preguntas disponibles</p>
-                  </button>
-                );
-              })}
+              {(["domain_drill", "unit_quiz", "cumulative"] as PracticeMode[])
+                .filter((m) => m === "domain_drill" || hasUnits)
+                .map((m) => {
+                  const active = mode === m;
+                  const Icon = m === "domain_drill" ? Target : m === "unit_quiz" ? BookOpen : Layers;
+                  return (
+                    <button
+                      key={m}
+                      onClick={() => setMode(m)}
+                      aria-pressed={active}
+                      className={cn(
+                        "rounded-xl border p-4 text-left transition-colors",
+                        active ? "border-primary bg-primary/5" : "border-border bg-card hover:bg-secondary",
+                      )}
+                    >
+                      <Icon className="h-4 w-4 text-muted-foreground" />
+                      <p className="mt-2 text-sm font-semibold leading-snug">{MODE_LABELS[m]}</p>
+                    </button>
+                  );
+                })}
             </div>
+
+            {mode === "domain_drill" ? (
+              <>
+                <p className="mt-5 text-xs font-medium">Selecciona uno o varios dominios</p>
+                <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                  {ALL_DOMAINS.map((d) => {
+                    const active = selected.includes(d);
+                    const available = MOCK_QUESTIONS.filter((q) => q.domain === d).length;
+                    return (
+                      <button
+                        key={d}
+                        onClick={() => toggleDomain(d)}
+                        aria-pressed={active}
+                        className={cn(
+                          "rounded-xl border p-4 text-left transition-colors",
+                          active
+                            ? "border-primary bg-primary/5"
+                            : "border-border bg-card hover:bg-secondary",
+                        )}
+                      >
+                        <p className="text-sm font-semibold">{DOMAIN_LABELS[d]}</p>
+                        <p className="num mt-1 text-xs text-muted-foreground">
+                          {available} preguntas disponibles
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
+                {!selected.length && (
+                  <p className="mt-2 text-xs text-destructive">Selecciona al menos un dominio.</p>
+                )}
+              </>
+            ) : (
+              <>
+                <label className="mt-5 block text-xs font-medium">
+                  {mode === "unit_quiz" ? "Lección a practicar" : "Acumular hasta la lección"}
+                  <select
+                    value={unitId}
+                    onChange={(e) => setUnitId(e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="">Selecciona una lección…</option>
+                    {units.map((u) => (
+                      <option key={u.id} value={u.id}>
+                        {u.sequence}. {u.title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  {mode === "unit_quiz"
+                    ? "Solo entrarán preguntas de las tareas ECO asociadas a esa lección."
+                    : currentUnit
+                      ? `Incluirá el contenido de las lecciones 1 a ${currentUnit.sequence}, no solo la última.`
+                      : "Incluirá el contenido de todas las lecciones publicadas hasta la que elijas."}
+                </p>
+              </>
+            )}
 
             <button
               onClick={start}
-              disabled={!selected.length}
+              disabled={!canStart}
               className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
             >
               Empezar práctica <ChevronRight className="h-4 w-4" />
             </button>
-            {!selected.length && (
-              <p className="mt-2 text-xs text-destructive">Selecciona al menos un dominio.</p>
-            )}
           </section>
         </div>
       </AppShell>
@@ -198,6 +266,11 @@ function PracticePage() {
             <p className="mt-1 text-sm text-muted-foreground">
               {stats.correct} de {DRILL_SIZE} correctas · tiempo total {fmtTime(stats.seconds)}
             </p>
+            <p className="mx-auto mt-4 flex max-w-xl items-start gap-2 rounded-lg border border-border bg-muted/50 p-3 text-left text-xs leading-relaxed text-muted-foreground">
+              <Info className="mt-0.5 h-4 w-4 shrink-0" />
+              {MOCK_FINISH_SUMMARY.disclaimer}
+            </p>
+
             <div className="mt-4 flex justify-center">
               <ResultReportButton
                 report={{
