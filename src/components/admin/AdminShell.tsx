@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Boxes, Database, LayoutDashboard, LogOut, Sparkles } from "lucide-react";
+import { Boxes, Database, GraduationCap, LayoutDashboard, LogOut, Sparkles } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
@@ -7,10 +7,12 @@ import { supabase } from "@/integrations/supabase/client";
 
 const ADMIN_NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/admin/curriculum", label: "Currículo", icon: GraduationCap },
   { to: "/admin/connectors", label: "Conectores LLM", icon: Boxes },
   { to: "/admin/generate", label: "Generar preguntas", icon: Sparkles },
   { to: "/admin/review", label: "Revisión del banco", icon: Database },
 ] as const;
+
 
 export function AdminShell({
   title,

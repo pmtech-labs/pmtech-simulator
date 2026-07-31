@@ -92,6 +92,73 @@ export type Database = {
           },
         ]
       }
+      course_unit_tasks: {
+        Row: {
+          course_unit_id: string
+          task_id: string
+        }
+        Insert: {
+          course_unit_id: string
+          task_id: string
+        }
+        Update: {
+          course_unit_id?: string
+          task_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_unit_tasks_course_unit_id_fkey"
+            columns: ["course_unit_id"]
+            isOneToOne: false
+            referencedRelation: "course_units"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_unit_tasks_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "eco_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_unit_tasks_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "v_task_coverage"
+            referencedColumns: ["task_id"]
+          },
+        ]
+      }
+      course_units: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          sequence: number
+          status: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          sequence: number
+          status?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          sequence?: number
+          status?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       eco_domains: {
         Row: {
           code: string
@@ -892,7 +959,13 @@ export type Database = {
         | "reading"
         | "analysis"
         | "time"
-      exam_mode: "full_sim" | "domain_drill" | "case_only" | "custom"
+      exam_mode:
+        | "full_sim"
+        | "domain_drill"
+        | "case_only"
+        | "custom"
+        | "unit_quiz"
+        | "cumulative"
       item_format:
         | "mc_single"
         | "mc_multi"
@@ -1042,7 +1115,14 @@ export const Constants = {
         "analysis",
         "time",
       ],
-      exam_mode: ["full_sim", "domain_drill", "case_only", "custom"],
+      exam_mode: [
+        "full_sim",
+        "domain_drill",
+        "case_only",
+        "custom",
+        "unit_quiz",
+        "cumulative",
+      ],
       item_format: [
         "mc_single",
         "mc_multi",

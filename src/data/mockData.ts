@@ -242,9 +242,16 @@ export const BREAK_SECONDS = 10 * 60;
 export const MOCK_FINISH_SUMMARY = {
   newItemsCount: 3,
   repeatedItemsCount: 2,
+  /**
+   * Texto fijo que devuelve el backend en `finish_exam` (campo `disclaimer`).
+   * Debe mostrarse literalmente, sin parafrasear.
+   */
+  disclaimer:
+    "Este resultado es una estimación basada en un simulador y no predice ni garantiza el resultado del examen oficial PMP®. PMI no avala ni revisa este contenido.",
   interpretationNote:
     "Un 40 % de las preguntas de esta simulación ya las habías respondido antes. Tu puntuación real en el examen oficial podría ser inferior: repite con un banco de preguntas nuevo para obtener una medida fiable de tu preparación.",
 };
+
 
 /** Patrón de errores acumulado del usuario (tabla user_error_type_stats). */
 export const MOCK_ERROR_TYPE_STATS: { errorType: ErrorType; occurrences: number }[] = [
