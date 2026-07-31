@@ -75,7 +75,22 @@ export const Route = createFileRoute("/")({
               url: SITE_URL,
               description:
                 "Simulador de examen PMP y formación en dirección de proyectos en español, calibrado al ECO 2026.",
+              areaServed: ["ES", "MX", "CO", "AR", "CL", "PE"],
+              sameAs: [
+                "https://www.linkedin.com/in/isaaclopezpena/",
+                "https://isaaclopezpena.com/",
+              ],
+              founder: {
+                "@type": "Person",
+                name: "Isaac López Pena",
+                jobTitle: "Consultor y formador en dirección de proyectos, agilidad y PMO",
+                url: "https://www.linkedin.com/in/isaaclopezpena/",
+                sameAs: ["https://www.linkedin.com/in/isaaclopezpena/"],
+                alumniOf: "The George Washington University",
+                hasCredential: ["PMP®", "PMO-CP®", "PSM®", "CSM®", "KMP®", "ITIL®"],
+              },
             },
+
             {
               "@type": "WebSite",
               name: "PMTech Simulator",
