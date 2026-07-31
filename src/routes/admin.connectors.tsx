@@ -162,34 +162,126 @@ function ConnectorsPage() {
       )}
 
       {open && <ConnectorForm onClose={() => setOpen(false)} />}
+      {editing && <ConnectorForm connector={editing} onClose={() => setEditing(null)} />}
     </AdminShell>
   );
 }
 
-function ConnectorForm({ onClose }: { onClose: () => void }) {
+function ConnectorForm({
+  connector,
+  onClose,
+}: {
+  connector?: LlmConnector;
+  onClose: () => void;
+}) {
   const qc = useQueryClient();
-  const [name, setName] = useState("");
-  const [provider, setProvider] = useState<ConnectorProvider>("anthropic");
-  const [modelId, setModelId] = useState("");
-  const [baseUrl, setBaseUrl] = useState("");
+  const isEdit = Boolean(connector);
+  const [name, setName] = useState(connector?.name ?? "");
+  const [provider, setProvider] = useState<ConnectorProvider>(
+    (connector?.provider as ConnectorProvider) ?? "anthropic",
+  );
+  const [modelId, setModelId] = useState(connector?.model_id ?? "");
+  const [baseUrl, setBaseUrl] = useState(connector?.api_base_url ?? "");
   const [apiKey, setApiKey] = useState("");
   const [saving, setSaving] = useState(false);
 
+  const [models, setModels] = useState<ProviderModel[]>([]);
+  const [checking, setChecking] = useState(false);
+  const [checkError, setCheckError] = useState<string | null>(null);
+
+  /** Firma de los datos con los que se cargó la lista: si cambian, hay que revalidar. */
+  const signature = `${provider}|${apiKey}|${baseUrl}`;
+  const [loadedSignature, setLoadedSignature] = useState<string | null>(null);
+  const modelsReady = models.length > 0 && loadedSignature === signature;
+
+  const checkModels = useCallback(
+    async (sig: string, useStoredKey: boolean) => {
+      setChecking(true);
+      setCheckError(null);
+      try {
+        const list = await listProviderModels(
+          useStoredKey && connector
+            ? { connector_id: connector.id }
+            : { provider, api_key: apiKey, api_base_url: baseUrl || undefined },
+        );
+        if (list.length === 0) {
+          setModels([]);
+          setLoadedSignature(null);
+          setCheckError("El proveedor no ha devuelto ningún modelo disponible.");
+          return;
+        }
+        setModels(list);
+        setLoadedSignature(sig);
+        setModelId((current) => (list.some((m) => m.id === current) ? current : list[0].id));
+      } catch (err) {
+        setModels([]);
+        setLoadedSignature(null);
+        setCheckError((err as Error).message);
+      } finally {
+        setChecking(false);
+      }
+    },
+    [apiKey, baseUrl, connector, provider],
+  );
+
+  // Al abrir la edición, carga los modelos con la clave ya guardada en Vault.
+  useEffect(() => {
+    if (connector) void checkModels(`${connector.provider}||${connector.api_base_url ?? ""}`, true);
+    // Solo en el montaje del formulario de edición.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Comprobación automática (debounce) en cuanto hay proveedor + API key escrita.
+  useEffect(() => {
+    if (!apiKey) return;
+    if (loadedSignature === signature) return;
+    const t = setTimeout(() => void checkModels(signature, false), 500);
+    return () => clearTimeout(t);
+  }, [apiKey, signature, loadedSignature, checkModels]);
+
+  // Si cambian proveedor / clave / URL base, la lista deja de ser válida.
+  useEffect(() => {
+    if (loadedSignature && loadedSignature !== signature) {
+      setModels([]);
+      setModelId("");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signature]);
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (!modelsReady || !modelId) {
+      toast.error("Comprueba primero los modelos disponibles y elige uno de la lista.");
+      return;
+    }
     setSaving(true);
     const key = apiKey;
     // La key sale del estado del cliente inmediatamente tras componer la petición.
     setApiKey("");
     try {
-      await createConnector({
-        name,
-        provider,
-        model_id: modelId,
-        api_base_url: baseUrl || undefined,
-        api_key: key,
-      });
-      toast.success("Conector creado. La API key queda guardada en Vault.");
+      if (connector) {
+        await updateConnector({
+          id: connector.id,
+          ...(name !== connector.name ? { name } : {}),
+          ...(modelId !== connector.model_id ? { model_id: modelId } : {}),
+          ...(baseUrl !== (connector.api_base_url ?? "") ? { api_base_url: baseUrl } : {}),
+          ...(key ? { api_key: key } : {}),
+        });
+        toast.success(
+          key
+            ? "Conector actualizado y clave rotada. La clave anterior deja de estar disponible; los jobs ya completados no se ven afectados (siguen trazados al mismo conector, solo cambia la clave que se usará a partir de ahora)."
+            : "Conector actualizado. La API key guardada se mantiene sin cambios.",
+        );
+      } else {
+        await createConnector({
+          name,
+          provider,
+          model_id: modelId,
+          api_base_url: baseUrl || undefined,
+          api_key: key,
+        });
+        toast.success("Conector creado. La API key queda guardada en Vault.");
+      }
       qc.invalidateQueries({ queryKey: ["admin-connectors"] });
       onClose();
     } catch (err) {
@@ -199,10 +291,12 @@ function ConnectorForm({ onClose }: { onClose: () => void }) {
     }
   }
 
+  const canCheck = isEdit ? Boolean(apiKey) || Boolean(connector) : Boolean(apiKey);
+
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/50 px-4">
+    <div className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-foreground/50 px-4 py-6">
       <form onSubmit={submit} className="w-full max-w-md space-y-3 rounded-xl border border-border bg-card p-5">
-        <h2 className="text-sm font-semibold">Nuevo conector LLM</h2>
+        <h2 className="text-sm font-semibold">{isEdit ? "Editar conector LLM" : "Nuevo conector LLM"}</h2>
 
         <Field label="Nombre">
           <input required value={name} onChange={(e) => setName(e.target.value)} className={inputCls} />
@@ -210,8 +304,9 @@ function ConnectorForm({ onClose }: { onClose: () => void }) {
         <Field label="Proveedor">
           <select
             value={provider}
+            disabled={isEdit}
             onChange={(e) => setProvider(e.target.value as ConnectorProvider)}
-            className={inputCls}
+            className={inputCls + (isEdit ? " opacity-60" : "")}
           >
             {PROVIDERS.map((p) => (
               <option key={p.value} value={p.value}>
@@ -220,17 +315,20 @@ function ConnectorForm({ onClose }: { onClose: () => void }) {
             ))}
           </select>
         </Field>
-        <Field label="Modelo (ej. claude-sonnet-4-6, gpt-4.1)">
-          <input required value={modelId} onChange={(e) => setModelId(e.target.value)} className={inputCls} />
-        </Field>
         {(provider === "openai_compatible" || provider === "google") && (
           <Field label="URL base (opcional)">
             <input value={baseUrl} onChange={(e) => setBaseUrl(e.target.value)} className={inputCls} />
           </Field>
         )}
-        <Field label="API key (se envía una sola vez y no vuelve a mostrarse)">
+        <Field
+          label={
+            isEdit
+              ? "API key (déjalo en blanco para mantener la clave actual, o escribe una nueva para rotarla)"
+              : "API key (se envía una sola vez y no vuelve a mostrarse)"
+          }
+        >
           <input
-            required
+            required={!isEdit}
             type="password"
             autoComplete="new-password"
             value={apiKey}
@@ -238,6 +336,46 @@ function ConnectorForm({ onClose }: { onClose: () => void }) {
             className={inputCls}
           />
         </Field>
+
+        <Field label="Modelo">
+          <select
+            required
+            value={modelId}
+            disabled={!modelsReady}
+            onChange={(e) => setModelId(e.target.value)}
+            className={inputCls + (modelsReady ? "" : " opacity-60")}
+          >
+            {!modelsReady && <option value="">Comprueba primero los modelos disponibles</option>}
+            {modelsReady &&
+              models.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.label ?? m.id}
+                </option>
+              ))}
+          </select>
+        </Field>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            disabled={checking || !canCheck}
+            onClick={() => void checkModels(signature, isEdit && !apiKey)}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-secondary disabled:opacity-50"
+          >
+            {checking ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+            Comprobar modelos disponibles
+          </button>
+          {checking && <span className="text-xs text-muted-foreground">Consultando al proveedor…</span>}
+          {!checking && modelsReady && (
+            <span className="text-xs text-success">{models.length} modelos disponibles</span>
+          )}
+        </div>
+
+        {checkError && (
+          <p className="rounded-md border border-destructive/50 bg-destructive/5 p-2 text-xs text-destructive">
+            {checkError}
+          </p>
+        )}
 
         <div className="flex justify-end gap-2 pt-2">
           <button
@@ -249,16 +387,17 @@ function ConnectorForm({ onClose }: { onClose: () => void }) {
           </button>
           <button
             type="submit"
-            disabled={saving}
+            disabled={saving || !modelsReady}
             className="rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-50"
           >
-            {saving ? "Guardando…" : "Crear conector"}
+            {saving ? "Guardando…" : isEdit ? "Guardar cambios" : "Crear conector"}
           </button>
         </div>
       </form>
     </div>
   );
 }
+
 
 const inputCls = "w-full rounded-md border border-border bg-background px-3 py-2 text-sm";
 
