@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import {
   BookOpen,
   Check,
   Compass,
   Layers,
   Lock,
+  BarChart3,
   MapPin,
   RotateCcw,
   Zap,
@@ -13,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
+import { UnitMasteryDialog } from "@/components/learning/UnitMasteryDialog";
 import { cn } from "@/lib/utils";
 import {
   ECO_DOMAIN_LABELS,
@@ -71,12 +74,14 @@ function UnitRow({
   isRecommended,
   isLast,
   canCumulative,
+  onOpenDetail,
 }: {
   unit: LearningPathUnit;
   isCurrent: boolean;
   isRecommended: boolean;
   isLast: boolean;
   canCumulative: boolean;
+  onOpenDetail: () => void;
 }) {
   const evaluable = unit.taskIds.length > 0;
   const mastery = unit.masteryPct ?? 0;
@@ -104,8 +109,18 @@ function UnitRow({
       </div>
 
       <div
+        role="button"
+        tabIndex={0}
+        aria-label={`Ver desglose por tarea ECO de ${unit.title}`}
+        onClick={onOpenDetail}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onOpenDetail();
+          }
+        }}
         className={cn(
-          "rounded-2xl border bg-card p-4 transition-colors sm:p-5",
+          "cursor-pointer rounded-2xl border bg-card p-4 text-left transition-colors hover:bg-secondary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5",
           isRecommended
             ? "border-primary shadow-panel ring-1 ring-primary/30"
             : isCurrent
@@ -127,7 +142,12 @@ function UnitRow({
           )}
         </div>
 
-        <h3 className="mt-2 text-base font-semibold leading-snug">{unit.title}</h3>
+        <h3 className="mt-2 flex items-start justify-between gap-3 text-base font-semibold leading-snug">
+          <span>{unit.title}</span>
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-border px-2 py-1 text-[11px] font-medium text-muted-foreground">
+            <BarChart3 className="h-3.5 w-3.5" /> Detalle
+          </span>
+        </h3>
         {unit.description && (
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{unit.description}</p>
         )}
@@ -157,7 +177,7 @@ function UnitRow({
               )}
             </div>
 
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap gap-2" onClick={(e) => e.stopPropagation()}>
               <Link
                 to="/practica"
                 search={{ modo: "unit_quiz", unidad: unit.id, repaso: undefined }}
@@ -210,6 +230,7 @@ function LearningPathPage() {
     staleTime: 5 * 60 * 1000,
   });
 
+  const [detailUnit, setDetailUnit] = useState<LearningPathUnit | null>(null);
   const units = data ?? [];
   const evaluable = units.filter((u) => u.taskIds.length > 0);
   const currentUnit = evaluable.find((u) => (u.masteryPct ?? 0) < 80) ?? null;
@@ -304,6 +325,7 @@ function LearningPathPage() {
                 unit={u}
                 isCurrent={currentUnit?.id === u.id}
                 isRecommended={recommended?.id === u.id}
+                onOpenDetail={() => setDetailUnit(u)}
                 isLast={i === units.length - 1}
                 canCumulative={u.sequence >= 2}
               />
@@ -311,6 +333,8 @@ function LearningPathPage() {
           </ol>
         )}
       </div>
+
+      <UnitMasteryDialog unit={detailUnit} onClose={() => setDetailUnit(null)} />
     </AppShell>
   );
 }
