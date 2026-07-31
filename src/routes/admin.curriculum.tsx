@@ -257,7 +257,108 @@ function CurriculumPage() {
           onClose={() => setForm(null)}
         />
       )}
+
+      {previewId && <UnitPreviewDialog id={previewId} onClose={() => setPreviewId(null)} />}
     </AdminShell>
+  );
+}
+
+function UnitPreviewDialog({ id, onClose }: { id: string; onClose: () => void }) {
+  const preview = useServerFn(previewUnitCoverage);
+  const query = useQuery({
+    queryKey: ["unit-preview", id],
+    queryFn: () => preview({ data: { id } }),
+    retry: false,
+  });
+
+  const data = query.data;
+
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-foreground/50 p-4">
+      <div className="w-full max-w-lg rounded-xl border border-border bg-card p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-semibold">Vista previa de cobertura</h2>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Preguntas publicadas que alimentarían cada modo de práctica.
+            </p>
+          </div>
+          <button onClick={onClose} className="rounded-md border border-border p-1 hover:bg-secondary">
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
+        {query.isPending ? (
+          <Loader2 className="mt-4 h-4 w-4 animate-spin text-muted-foreground" />
+        ) : query.error ? (
+          <p className="mt-4 text-sm text-destructive">{(query.error as Error).message}</p>
+        ) : data ? (
+          <>
+            <p className="mt-4 text-sm font-medium">
+              <span className="num mr-2 text-muted-foreground">Lección {data.sequence}</span>
+              {data.unitTitle}
+            </p>
+
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-lg border border-border p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  Practicar esta lección
+                </p>
+                <p className="num mt-1 font-display text-2xl font-bold">
+                  {data.unitQuiz.questionCount}
+                </p>
+                <p className="num mt-1 text-[11px] text-muted-foreground">
+                  preguntas · {data.unitQuiz.taskCount} tareas ECO
+                </p>
+              </div>
+              <div className="rounded-lg border border-border p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  Simulacro acumulativo
+                </p>
+                <p className="num mt-1 font-display text-2xl font-bold">
+                  {data.cumulative.questionCount}
+                </p>
+                <p className="num mt-1 text-[11px] text-muted-foreground">
+                  preguntas · {data.cumulative.unitCount} unidades · {data.cumulative.taskCount} tareas
+                </p>
+              </div>
+            </div>
+
+            {data.unitQuiz.questionCount === 0 && (
+              <p className="mt-3 flex items-start gap-2 rounded-md border border-destructive/40 bg-destructive/10 p-3 text-xs text-destructive">
+                <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                Sin preguntas publicadas: el modo «Practicar esta lección» fallaría para los candidatos.
+              </p>
+            )}
+
+            {data.unitQuiz.tasksWithoutQuestions.length > 0 && (
+              <div className="mt-3 rounded-md border border-border p-3">
+                <p className="text-xs font-medium">
+                  Tareas mapeadas sin preguntas publicadas{" "}
+                  <span className="num text-muted-foreground">
+                    ({data.unitQuiz.tasksWithoutQuestions.length})
+                  </span>
+                </p>
+                <ul className="mt-1.5 space-y-1 text-[11px] text-muted-foreground">
+                  {data.unitQuiz.tasksWithoutQuestions.map((t) => (
+                    <li key={t}>· {t}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
+        ) : null}
+
+        <div className="mt-5 flex justify-end">
+          <button
+            onClick={onClose}
+            className="rounded-md border border-border px-3 py-1.5 text-xs font-medium hover:bg-secondary"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
