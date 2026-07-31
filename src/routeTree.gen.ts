@@ -16,6 +16,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ExamenRouteImport } from './routes/examen'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HistorialRouteImport } from './routes/historial'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PracticaRouteImport } from './routes/practica'
 import { Route as ProgresoRouteImport } from './routes/progreso'
@@ -60,6 +61,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
 const HistorialRoute = HistorialRouteImport.update({
   id: '/historial',
   path: '/historial',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerfilRoute = PerfilRouteImport.update({
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/examen': typeof ExamenRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
+  '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/examen': typeof ExamenRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
+  '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/examen': typeof ExamenRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
+  '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/examen'
     | '/forgot-password'
     | '/historial'
+    | '/login'
     | '/perfil'
     | '/practica'
     | '/progreso'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/examen'
     | '/forgot-password'
     | '/historial'
+    | '/login'
     | '/perfil'
     | '/practica'
     | '/progreso'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/examen'
     | '/forgot-password'
     | '/historial'
+    | '/login'
     | '/perfil'
     | '/practica'
     | '/progreso'
@@ -237,6 +249,7 @@ export interface RootRouteChildren {
   ExamenRoute: typeof ExamenRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistorialRoute: typeof HistorialRoute
+  LoginRoute: typeof LoginRoute
   PerfilRoute: typeof PerfilRoute
   PracticaRoute: typeof PracticaRoute
   ProgresoRoute: typeof ProgresoRoute
@@ -293,6 +306,13 @@ declare module '@tanstack/react-router' {
       path: '/historial'
       fullPath: '/historial'
       preLoaderRoute: typeof HistorialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/perfil': {
@@ -394,6 +414,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExamenRoute: ExamenRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HistorialRoute: HistorialRoute,
+  LoginRoute: LoginRoute,
   PerfilRoute: PerfilRoute,
   PracticaRoute: PracticaRoute,
   ProgresoRoute: ProgresoRoute,
