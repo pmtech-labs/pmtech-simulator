@@ -37,6 +37,8 @@ function ConnectorsPage() {
   const qc = useQueryClient();
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState<LlmConnector | null>(null);
+
 
   const connectors = useQuery({
     queryKey: ["admin-connectors", page],
