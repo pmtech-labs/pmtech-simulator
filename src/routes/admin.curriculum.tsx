@@ -91,6 +91,12 @@ function CurriculumPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const moveMutation = useMutation({
+    mutationFn: (input: { id: string; direction: "up" | "down" }) => move({ data: input }),
+    onSuccess: invalidate,
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const rows: AdminCourseUnit[] = units.data ?? [];
   const nextSequence = rows.length ? Math.max(...rows.map((u) => u.sequence)) + 1 : 1;
 
