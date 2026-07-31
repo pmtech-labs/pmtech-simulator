@@ -228,20 +228,31 @@ export function AppShell({
       <Dialog open={showExamConfirm} onOpenChange={setShowExamConfirm}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>¿Iniciar simulación de examen?</DialogTitle>
+            <DialogTitle>
+              {inProgress ? "Tienes una simulación en curso" : "¿Iniciar simulación de examen?"}
+            </DialogTitle>
             <DialogDescription>
-              Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener
-              disponibilidad antes de empezar.
+              {inProgress
+                ? `Dejaste sin terminar “${inProgress.label}” con ${inProgress.answered} de ${inProgress.total} preguntas respondidas. Puedes retomarla donde la dejaste o empezar una nueva desde cero.`
+                : "Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener disponibilidad antes de empezar."}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2 sm:gap-0">
             <Button variant="outline" onClick={() => setShowExamConfirm(false)}>
               Cancelar
             </Button>
-            <Button onClick={startExam}>Comenzar simulación</Button>
+            {inProgress && (
+              <Button variant="outline" onClick={() => startExam(false)}>
+                Empezar de cero
+              </Button>
+            )}
+            <Button onClick={() => startExam(Boolean(inProgress))}>
+              {inProgress ? "Reanudar simulación" : "Comenzar simulación"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
     </>
   );
 }
