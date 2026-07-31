@@ -131,12 +131,20 @@ export function AppShell({
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const [showExamConfirm, setShowExamConfirm] = useState(false);
   const { data: user } = useCurrentUser();
+  const navigate = useNavigate();
+
+  const startExam = () => {
+    setShowExamConfirm(false);
+    setOpen(false);
+    void navigate({ to: "/examen" });
+  };
 
   return (
     <div className="flex min-h-screen w-full bg-background">
       <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-sidebar-border lg:block">
-        <SidebarInner />
+        <SidebarInner onExamClick={() => setShowExamConfirm(true)} />
       </aside>
 
       {open && (
@@ -147,7 +155,10 @@ export function AppShell({
             onClick={() => setOpen(false)}
           />
           <div className="absolute left-0 top-0 h-full w-64 shadow-panel">
-            <SidebarInner onNavigate={() => setOpen(false)} />
+            <SidebarInner
+              onNavigate={() => setOpen(false)}
+              onExamClick={() => setShowExamConfirm(true)}
+            />
           </div>
         </div>
       )}
@@ -201,5 +212,23 @@ export function AppShell({
         </footer>
       </div>
     </div>
+
+    <Dialog open={showExamConfirm} onOpenChange={setShowExamConfirm}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>¿Iniciar simulación de examen?</DialogTitle>
+          <DialogDescription>
+            Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener
+            disponibilidad antes de empezar.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter className="gap-2 sm:gap-0">
+          <Button variant="outline" onClick={() => setShowExamConfirm(false)}>
+            Cancelar
+          </Button>
+          <Button onClick={startExam}>Comenzar simulación</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
