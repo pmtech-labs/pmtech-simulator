@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CheckCircle2, ChevronRight, Clock, RotateCcw, Target, XCircle } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { BookOpen, CheckCircle2, ChevronRight, Clock, Info, Layers, RotateCcw, Target, XCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
@@ -8,11 +9,12 @@ import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { MatchingQuestion } from "@/components/exam/MatchingQuestion";
 import { OptionList } from "@/components/exam/OptionList";
-import { MOCK_QUESTIONS } from "@/data/mockData";
+import { MOCK_FINISH_SUMMARY, MOCK_QUESTIONS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
 import { DOMAIN_LABELS } from "@/lib/export";
 import { cn } from "@/lib/utils";
 import { isAnswerCorrect } from "@/services/examService";
+import { listPublishedUnits } from "@/services/curriculumService";
 import type { AnswerValue, DomainCode, Question } from "@/types/exam";
 
 export const Route = createFileRoute("/practica")({
@@ -37,6 +39,14 @@ export const Route = createFileRoute("/practica")({
 });
 
 const ALL_DOMAINS: DomainCode[] = ["people", "process", "business"];
+
+type PracticeMode = "domain_drill" | "unit_quiz" | "cumulative";
+
+const MODE_LABELS: Record<PracticeMode, string> = {
+  domain_drill: "Práctica por dominios",
+  unit_quiz: "Practicar esta lección",
+  cumulative: "Simulacro acumulativo (todo lo visto hasta aquí)",
+};
 const DRILL_SIZE = 5;
 
 function buildDrill(domains: DomainCode[]): Question[] {
@@ -55,6 +65,8 @@ function fmtTime(seconds: number) {
 
 function PracticePage() {
   const [selected, setSelected] = useState<DomainCode[]>(["process"]);
+  const [mode, setMode] = useState<PracticeMode>("domain_drill");
+  const [unitId, setUnitId] = useState<string>("");
   const [drill, setDrill] = useState<Question[] | null>(null);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, AnswerValue>>({});
@@ -74,7 +86,7 @@ function PracticePage() {
     setSelected((prev) => (prev.includes(d) ? prev.filter((v) => v !== d) : [...prev, d]));
 
   const start = () => {
-    const built = buildDrill(selected);
+    const built = buildDrill(mode === "domain_drill" ? selected : ALL_DOMAINS);
     if (!built.length) return;
     setDrill(built);
     setIndex(0);
