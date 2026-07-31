@@ -41,22 +41,31 @@ function ProgressPage() {
   return (
     <AppShell title="Mi progreso" subtitle="Analítica de brecha por dominio y tarea ECO">
       <div className="mx-auto max-w-5xl space-y-6">
-        <section className="grid gap-4 sm:grid-cols-3">
-          {DOMAINS.map((d) => (
-            <div key={d.code} className="rounded-2xl border border-border bg-card p-4">
-              <p className="text-sm font-medium">{d.name}</p>
-              <p className="num mt-2 font-display text-3xl font-bold">
-                {MOCK_USER.masteryByDomain[d.code]}%
-              </p>
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
-                <div
-                  className="h-full rounded-full"
-                  style={{ width: `${MOCK_USER.masteryByDomain[d.code]}%`, background: `var(--${d.token})` }}
-                />
+        <section>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-base font-semibold">Dominio por área ECO</h2>
+            <DomainMasteryLegend />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {DOMAINS.map((d) => (
+              <div key={d.code} className="rounded-2xl border border-border bg-card p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-sm font-medium">{d.name}</p>
+                  <DomainLevelBadge pct={MOCK_USER.masteryByDomain[d.code]} />
+                </div>
+                <p className="num mt-2 font-display text-3xl font-bold">
+                  {MOCK_USER.masteryByDomain[d.code]}%
+                </p>
+                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="h-full rounded-full"
+                    style={{ width: `${MOCK_USER.masteryByDomain[d.code]}%`, background: `var(--${d.token})` }}
+                  />
+                </div>
+                <p className="mt-2 text-[11px] text-muted-foreground">Peso en el examen: {d.weight}%</p>
               </div>
-              <p className="mt-2 text-[11px] text-muted-foreground">Peso en el examen: {d.weight}%</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </section>
 
         <section className="rounded-2xl border border-border bg-card p-5">
