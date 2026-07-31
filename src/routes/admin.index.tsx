@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, CheckCircle2, Loader2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Eye, Loader2 } from "lucide-react";
+import { useState } from "react";
 
 import { AdminShell, DataTable } from "@/components/admin/AdminShell";
+import { QuestionDetailDialog } from "@/components/admin/QuestionDetailDialog";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import { getStats, type ExamStatRow, type QuestionStatRow, type TaskCoverageRow } from "@/services/adminService";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
