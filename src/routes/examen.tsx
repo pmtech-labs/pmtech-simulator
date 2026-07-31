@@ -43,6 +43,8 @@ interface ExamSearch {
   dominio?: DomainCode;
   unidad?: string;
   preguntas?: number;
+  /** "1" para reanudar la simulación guardada en curso. */
+  reanudar?: string;
 }
 
 export const Route = createFileRoute("/examen")({
@@ -52,7 +54,9 @@ export const Route = createFileRoute("/examen")({
     dominio: typeof search.dominio === "string" ? (search.dominio as DomainCode) : undefined,
     unidad: typeof search.unidad === "string" ? search.unidad : undefined,
     preguntas: typeof search.preguntas === "number" ? search.preguntas : undefined,
+    reanudar: typeof search.reanudar === "string" ? search.reanudar : undefined,
   }),
+
   head: () => ({
     meta: [
       { title: "Simulación de examen · Simulador PMP ECO 2026" },
