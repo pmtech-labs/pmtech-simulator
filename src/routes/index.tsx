@@ -315,6 +315,9 @@ function Header() {
               Sobre nosotros
             </a>
 
+            <a href="#garantias" onClick={() => setOpen(false)}>
+              Garantías
+            </a>
             <a href="#precios" onClick={() => setOpen(false)}>
               Precios
             </a>
@@ -323,6 +326,9 @@ function Header() {
             </a>
             <a href="#faq" onClick={() => setOpen(false)}>
               Preguntas frecuentes
+            </a>
+            <a href="#contacto" onClick={() => setOpen(false)}>
+              Contacto
             </a>
 
             <Link to="/dashboard" onClick={() => setOpen(false)}>
