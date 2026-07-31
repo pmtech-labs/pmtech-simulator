@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 
-type ResultFilter = "todos" | "at3" | "people" | "process" | "business";
+type ResultFilter = "todos" | "people" | "process" | "business";
 
 type Testimonial = {
   quote: string;
@@ -12,7 +12,6 @@ type Testimonial = {
 
 const FILTERS: { value: ResultFilter; label: string }[] = [
   { value: "todos", label: "Todas" },
-  { value: "at3", label: "AT / AT / AT" },
   { value: "people", label: "Personas" },
   { value: "process", label: "Proceso" },
   { value: "business", label: "Entorno de negocio" },
@@ -21,10 +20,10 @@ const FILTERS: { value: ResultFilter; label: string }[] = [
 const TESTIMONIALS: Testimonial[] = [
   {
     quote:
-      "He aprobado con AT/AT/AT. Quería darte las gracias otra vez, tus consejos me ayudaron mucho a entrar en la mentalidad PMP.",
+      "He aprobado con la máxima calificación en los tres dominios del examen. Quería darte las gracias otra vez, tus consejos me ayudaron mucho a entrar en la mentalidad PMP.",
     author: "C. S.",
-    result: "Above Target en los 3 dominios",
-    tags: ["at3", "people", "process", "business"],
+    result: "Certificado PMP® · máxima calificación en los 3 dominios",
+    tags: ["people", "process", "business"],
   },
   {
     quote:
@@ -35,10 +34,10 @@ const TESTIMONIALS: Testimonial[] = [
   },
   {
     quote:
-      "Acabo de recibir mi resultado del PMP y lo he aprobado con Above Target en las tres áreas. Las clases fueron fundamentales para la preparación, así como el apoyo en la revisión de mi aplicación.",
+      "Acabo de recibir mi resultado del PMP y lo he aprobado con la calificación más alta en las tres áreas. Las clases fueron fundamentales para la preparación, así como el apoyo en la revisión de mi aplicación.",
     author: "G. B.",
-    result: "Above Target en los 3 dominios",
-    tags: ["at3", "people", "process", "business"],
+    result: "Certificado PMP® · máxima calificación en los 3 dominios",
+    tags: ["people", "process", "business"],
   },
   {
     quote:
