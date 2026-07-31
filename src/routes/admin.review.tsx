@@ -39,6 +39,7 @@ function ReviewPage() {
   const [approach, setApproach] = useState("");
   const [minUsed, setMinUsed] = useState("");
   const [maxSuccess, setMaxSuccess] = useState("");
+  const [model, setModel] = useState("");
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -65,7 +66,20 @@ function ReviewPage() {
     queryFn: () => listQuestions(filters, page, PAGE_SIZE),
   });
 
-  const rows = questions.data?.rows ?? [];
+  const allRows = questions.data?.rows ?? [];
+  const modelOptions = useMemo(() => {
+    const set = new Set<string>();
+    for (const r of allRows) set.add(r.generation_model_id ?? "__manual__");
+    return Array.from(set).sort();
+  }, [allRows]);
+  const rows = useMemo(
+    () =>
+      model
+        ? allRows.filter((r) => (r.generation_model_id ?? "__manual__") === model)
+        : allRows,
+    [allRows, model],
+  );
+
 
   const changeStatus = useMutation({
     mutationFn: ({ ids, status }: { ids: string[]; status: string }) => updateQuestionsStatus(ids, status),
