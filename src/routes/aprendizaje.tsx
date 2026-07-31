@@ -125,7 +125,7 @@ function UnitRow({
               <div className="flex items-center justify-between text-xs">
                 <span className="font-medium">Tu dominio en esta lección</span>
                 <span className="num text-muted-foreground">
-                  {unit.masteryPct ?? 0}% · {unit.taskIds.length} tareas ECO
+                  {unit.masteryPct ?? 0}% · {unit.taskIds.length} tarea{unit.taskIds.length === 1 ? "" : "s"} ECO
                 </span>
               </div>
               <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-muted">
