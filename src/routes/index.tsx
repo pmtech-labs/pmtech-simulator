@@ -226,9 +226,13 @@ function Header() {
           <a href="#precios" className="transition-colors hover:text-foreground">
             Precios
           </a>
+          <a href="#formacion" className="transition-colors hover:text-foreground">
+            Formación
+          </a>
           <a href="#faq" className="transition-colors hover:text-foreground">
             Preguntas frecuentes
           </a>
+
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
