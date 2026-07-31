@@ -101,8 +101,31 @@ function CurriculumPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const reorderMutation = useMutation({
+    mutationFn: (orderedIds: string[]) => reorder({ data: { orderedIds } }),
+    onSuccess: () => {
+      toast.success("Orden actualizado");
+      invalidate();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const rows: AdminCourseUnit[] = units.data ?? [];
   const nextSequence = rows.length ? Math.max(...rows.map((u) => u.sequence)) + 1 : 1;
+
+  const handleDrop = (targetId: string) => {
+    const sourceId = dragId;
+    setDragId(null);
+    setOverId(null);
+    if (!sourceId || sourceId === targetId) return;
+    const ids = rows.map((u) => u.id);
+    const from = ids.indexOf(sourceId);
+    const to = ids.indexOf(targetId);
+    if (from < 0 || to < 0) return;
+    ids.splice(to, 0, ids.splice(from, 1)[0]);
+    reorderMutation.mutate(ids);
+  };
+
 
   return (
     <AdminShell
