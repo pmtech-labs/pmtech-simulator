@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AprendizajeRouteImport } from './routes/aprendizaje'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ExamenRouteImport } from './routes/examen'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
@@ -42,6 +43,11 @@ const AdminRoute = AdminRouteImport.update({
 const AprendizajeRoute = AprendizajeRouteImport.update({
   id: '/aprendizaje',
   path: '/aprendizaje',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/aprendizaje': typeof AprendizajeRoute
+  '/checkout': typeof CheckoutRoute
   '/dashboard': typeof DashboardRoute
   '/examen': typeof ExamenRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aprendizaje': typeof AprendizajeRoute
+  '/checkout': typeof CheckoutRoute
   '/dashboard': typeof DashboardRoute
   '/examen': typeof ExamenRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/aprendizaje': typeof AprendizajeRoute
+  '/checkout': typeof CheckoutRoute
   '/dashboard': typeof DashboardRoute
   '/examen': typeof ExamenRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -194,6 +203,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/aprendizaje'
+    | '/checkout'
     | '/dashboard'
     | '/examen'
     | '/forgot-password'
@@ -214,6 +224,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/aprendizaje'
+    | '/checkout'
     | '/dashboard'
     | '/examen'
     | '/forgot-password'
@@ -235,6 +246,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/aprendizaje'
+    | '/checkout'
     | '/dashboard'
     | '/examen'
     | '/forgot-password'
@@ -257,6 +269,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AprendizajeRoute: typeof AprendizajeRoute
+  CheckoutRoute: typeof CheckoutRoute
   DashboardRoute: typeof DashboardRoute
   ExamenRoute: typeof ExamenRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
@@ -291,6 +304,13 @@ declare module '@tanstack/react-router' {
       path: '/aprendizaje'
       fullPath: '/aprendizaje'
       preLoaderRoute: typeof AprendizajeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -430,6 +450,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AprendizajeRoute: AprendizajeRoute,
+  CheckoutRoute: CheckoutRoute,
   DashboardRoute: DashboardRoute,
   ExamenRoute: ExamenRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
