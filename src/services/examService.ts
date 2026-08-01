@@ -151,19 +151,29 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
       };
     }
     const m = meta.get(item.id);
-    const payload = item.practicum_payload as Question["matching"] | null;
+    const raw = item.practicum_payload as Record<string, unknown> | null;
+    const format = ([
+      "mc_multi",
+      "matching",
+      "pulldown",
+      "graphic_based",
+      "hotspot",
+    ].includes(item.format)
+      ? item.format
+      : "mc_single") as Question["format"];
     return {
       id: item.id,
       itemType: item.item_type,
-      format: (item.format === "mc_multi"
-        ? "mc_multi"
-        : item.format === "matching"
-          ? "matching"
-          : "mc_single") as Question["format"],
+      format,
       clusterId: item.cluster_id ?? undefined,
       stem: item.stem,
       options: (item.options ?? []).map((o) => ({ id: o.id, label: o.text })),
-      matching: item.format === "matching" && payload ? payload : undefined,
+      matching: format === "matching" && raw ? (raw as unknown as Question["matching"]) : undefined,
+      graphic: format === "graphic_based" && raw ? (raw as unknown as Question["graphic"]) : undefined,
+      hotspot:
+        format === "hotspot" && raw && Array.isArray(raw.hotspots)
+          ? (raw as unknown as Question["hotspot"])
+          : undefined,
       // El backend no revela la clave hasta corregir: se rellena con el feedback.
       correctAnswer: [],
       taskCode: m?.taskCode ?? "ECO",
@@ -217,6 +227,15 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
   };
 }
 
+/**
+ * `submit_answer` compara conjuntos de ids. En matching enviamos los pares
+ * serializados como "idIzquierda:idDerecha" para que la comparación funcione.
+ */
+function serializeAnswer(answer: AnswerValue): string[] {
+  if (Array.isArray(answer)) return answer;
+  return Object.entries(answer).map(([l, r]) => `${l}:${r}`);
+}
+
 export async function submitAnswer(
   examId: string,
   questionId: string,
@@ -227,7 +246,7 @@ export async function submitAnswer(
     body: {
       exam_id: examId,
       question_id: questionId,
-      user_answer: answer,
+      user_answer: serializeAnswer(answer),
       time_spent_seconds: timeSpentSeconds,
     },
   });

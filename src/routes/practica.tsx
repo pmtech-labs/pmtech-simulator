@@ -9,8 +9,7 @@ import { AppShell } from "@/components/AppShell";
 import { ResultReportButton } from "@/components/export/ResultReportButton";
 import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
-import { MatchingQuestion } from "@/components/exam/MatchingQuestion";
-import { OptionList } from "@/components/exam/OptionList";
+import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
 import { MOCK_ERROR_TYPE_STATS, MOCK_FINISH_SUMMARY, MOCK_QUESTIONS, MOCK_UNIT_PROGRESS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
 import { DOMAIN_LABELS } from "@/lib/export";
@@ -454,37 +453,17 @@ function PracticePage() {
           <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">{q.taskCode}</span>
         </div>
 
+        <QuestionGraphic question={q} />
         <p className="text-[15px] font-medium leading-relaxed">{q.stem}</p>
 
-        {q.format === "matching" ? (
-          <MatchingQuestion
-            payload={q.matching!}
-            value={(answer as Record<string, string>) ?? {}}
-            reveal={isChecked}
-            disabled={isChecked}
-            onChange={(next) => setAnswers((prev) => ({ ...prev, [index]: next }))}
-          />
-        ) : (
-          <OptionList
-            options={q.options!}
-            selected={(answer as string[]) ?? []}
-            multi={q.format === "mc_multi"}
-            disabled={isChecked}
-            correctAnswer={isChecked ? q.correctAnswer : undefined}
-            onToggle={(id) =>
-              setAnswers((prev) => {
-                const current = (prev[index] as string[]) ?? [];
-                if (q.format === "mc_multi") {
-                  return {
-                    ...prev,
-                    [index]: current.includes(id) ? current.filter((v) => v !== id) : [...current, id],
-                  };
-                }
-                return { ...prev, [index]: [id] };
-              })
-            }
-          />
-        )}
+        <QuestionInput
+          question={q}
+          answer={answer}
+          disabled={isChecked}
+          reveal={isChecked}
+          correctAnswer={isChecked ? q.correctAnswer : undefined}
+          onChange={(next) => setAnswers((prev) => ({ ...prev, [index]: next }))}
+        />
 
         {isChecked && (
           <div className="space-y-4">

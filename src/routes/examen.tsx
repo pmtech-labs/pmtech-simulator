@@ -21,8 +21,8 @@ import { ResultReportButton } from "@/components/export/ResultReportButton";
 import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { EarnedValueChart } from "@/components/exam/EarnedValueChart";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
-import { MatchingQuestion } from "@/components/exam/MatchingQuestion";
-import { FlagButton, OptionList } from "@/components/exam/OptionList";
+import { FlagButton } from "@/components/exam/OptionList";
+import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
 import { QuestionNavigator } from "@/components/exam/QuestionNavigator";
 import { BREAK_SECONDS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
@@ -573,6 +573,12 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
                 ? "Respuesta múltiple"
                 : q.format === "matching"
                   ? "Emparejamiento (practicum)"
+                  : q.format === "hotspot"
+                    ? "Diagrama interactivo"
+                  : q.format === "pulldown"
+                    ? "Desplegable"
+                  : q.format === "graphic_based"
+                    ? "Basada en gráfico"
                   : q.itemType === "case_child"
                     ? "Caso de estudio"
                     : "Situacional"}
@@ -700,25 +706,17 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     const isLastOfSection = index === lastIndexOfSection;
     return (
       <>
+        <QuestionGraphic question={q} />
         <p className="text-[15px] font-medium leading-relaxed">{q.stem}</p>
 
-        {q.format === "matching" && q.matching ? (
-          <MatchingQuestion
-            payload={q.matching}
-            value={(answer as Record<string, string>) ?? {}}
-            disabled={Boolean(qFeedback)}
-            onChange={(next) => setAnswers((prev) => ({ ...prev, [q.id]: next }))}
-          />
-        ) : (
-          <OptionList
-            options={q.options ?? []}
-            selected={(answer as string[]) ?? []}
-            multi={q.format === "mc_multi"}
-            disabled={Boolean(qFeedback)}
-            correctAnswer={qFeedback?.correctAnswer}
-            onToggle={toggleOption}
-          />
-        )}
+        <QuestionInput
+          question={q}
+          answer={answer}
+          disabled={Boolean(qFeedback)}
+          correctAnswer={qFeedback?.correctAnswer}
+          onChange={(next) => setAnswers((prev) => ({ ...prev, [q.id]: next }))}
+        />
+
 
         {formative ? (
           qFeedback ? (
@@ -883,24 +881,15 @@ function Results({
                   <span className="num mr-2 text-muted-foreground">{i + 1}.</span>
                   {q.stem}
                 </p>
-                {q.format === "matching" && q.matching ? (
-                  <MatchingQuestion
-                    payload={q.matching}
-                    value={(answers[q.id] as Record<string, string>) ?? {}}
-                    reveal
-                    disabled
-                    onChange={() => {}}
-                  />
-                ) : (
-                  <OptionList
-                    options={q.options ?? []}
-                    selected={(answers[q.id] as string[]) ?? []}
-                    multi={q.format === "mc_multi"}
-                    disabled
-                    correctAnswer={q.correctAnswer}
-                    onToggle={() => {}}
-                  />
-                )}
+                <QuestionGraphic question={q} />
+                <QuestionInput
+                  question={q}
+                  answer={answers[q.id]}
+                  reveal
+                  disabled
+                  correctAnswer={q.correctAnswer}
+                  onChange={() => {}}
+                />
                 <ExplanationPanel question={q} answer={answers[q.id]} />
               </div>
             ))}
