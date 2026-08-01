@@ -292,15 +292,18 @@ function BulkBtn({
   children,
   onClick,
   disabled,
+  title,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   disabled?: boolean;
+  title?: string;
 }) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
+      title={title}
       className="rounded-md border border-border bg-card px-2.5 py-1 font-medium hover:bg-secondary disabled:opacity-50"
     >
       {children}
