@@ -84,6 +84,10 @@ export interface Question {
   stem: string;
   options?: Option[];
   matching?: MatchingPayload;
+  /** Payload de gráfico para formato graphic_based */
+  graphic?: GraphicPayload;
+  /** Payload de diagrama con zonas clicables para formato hotspot */
+  hotspot?: HotspotPayload;
   /** ids de opción correctos, o pares correctos para matching */
   correctAnswer: string[];
   taskCode: string;
