@@ -102,18 +102,15 @@ async function fetchQuestionMeta(ids: string[]) {
   if (!ids.length) return meta;
 
   const { data } = await supabase
-    .from("questions")
-    .select("id, approach, difficulty, eco_tasks(task_number, title, eco_domains(code))")
+    .from("v_questions_public")
+    .select("id, approach, difficulty, task_number, task_title, domain_code")
     .in("id", ids);
 
   (data ?? []).forEach((row) => {
-    const task = row.eco_tasks as
-      | { task_number: number; title: string; eco_domains: { code: string } | null }
-      | null;
-    const domain = toUiDomain(task?.eco_domains?.code);
+    const domain = toUiDomain(row.domain_code);
     meta.set(row.id, {
-      taskCode: `${domain === "people" ? "P" : domain === "process" ? "PR" : "BE"}-${task?.task_number ?? "?"}`,
-      taskTitle: task?.title ?? "Tarea ECO",
+      taskCode: `${domain === "people" ? "P" : domain === "process" ? "PR" : "BE"}-${row.task_number ?? "?"}`,
+      taskTitle: row.task_title ?? "Tarea ECO",
       domain,
       approach: (row.approach as Question["approach"]) ?? "predictive",
       difficulty: (Math.min(3, Math.max(1, row.difficulty ?? 3)) as 1 | 2 | 3),
