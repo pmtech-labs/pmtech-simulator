@@ -85,9 +85,13 @@ function NavLinks({
 function SidebarInner({
   onNavigate,
   onExamClick,
+  resume,
+  onResume,
 }: {
   onNavigate?: () => void;
   onExamClick?: () => void;
+  resume?: ReturnType<typeof describeProgress> | null;
+  onResume?: () => void;
 }) {
   const { data: user } = useCurrentUser();
   return (
@@ -106,6 +110,21 @@ function SidebarInner({
 
       <NavLinks onNavigate={onNavigate} onExamClick={onExamClick} />
 
+      {resume && (
+        <button
+          onClick={onResume}
+          className="flex w-full items-center gap-2 rounded-lg border border-sidebar-border bg-sidebar-primary/10 px-3 py-2 text-left text-xs font-semibold text-sidebar-accent-foreground transition-colors hover:bg-sidebar-primary/20"
+        >
+          <PlayCircle className="h-4 w-4 shrink-0 text-sidebar-primary" />
+          <span className="min-w-0">
+            <span className="block truncate">Reanudar simulación</span>
+            <span className="block truncate text-[11px] font-normal text-sidebar-foreground/60">
+              {resume.answered} de {resume.total} respondidas
+            </span>
+          </span>
+        </button>
+      )}
+
       <div className="mt-auto rounded-xl border border-sidebar-border bg-sidebar-accent/50 p-3">
         <div className="flex items-center gap-2 text-sidebar-accent-foreground">
           <ShieldCheck className="h-4 w-4 text-sidebar-primary" />
@@ -120,6 +139,7 @@ function SidebarInner({
     </div>
   );
 }
+
 
 export function AppShell({
   title,
