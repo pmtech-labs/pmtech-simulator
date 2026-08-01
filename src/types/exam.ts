@@ -1,6 +1,38 @@
 export type DomainCode = "people" | "process" | "business";
 
-export type QuestionFormat = "mc_single" | "mc_multi" | "matching";
+export type QuestionFormat =
+  | "mc_single"
+  | "mc_multi"
+  | "matching"
+  | "pulldown"
+  | "graphic_based"
+  | "hotspot";
+
+/** Payload de preguntas con gráfico/artefacto (formato graphic_based). */
+export interface GraphicPayload {
+  /** Campo abierto: hoy solo se renderiza "earned_value". */
+  chart_type: string;
+  evChart?: {
+    labels: string[];
+    pv: number[];
+    ev: number[];
+    ac: number[];
+  };
+}
+
+/** Payload de preguntas hotspot: SVG inline + zonas clicables en % */
+export interface HotspotPayload {
+  diagram_svg: string;
+  hotspots: {
+    id: string;
+    label: string;
+    x_pct: number;
+    y_pct: number;
+    w_pct: number;
+    h_pct: number;
+    correct?: boolean;
+  }[];
+}
 
 /** Diagnóstico de tipo de error devuelto por `submit_answer` en modos formativos. */
 export type ErrorType =
