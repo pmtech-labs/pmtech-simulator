@@ -156,12 +156,29 @@ export function AppShell({
   const [open, setOpen] = useState(false);
   const [showExamConfirm, setShowExamConfirm] = useState(false);
   const [inProgress, setInProgress] = useState<ReturnType<typeof describeProgress> | null>(null);
+  const [saved, setSaved] = useState<ReturnType<typeof describeProgress> | null>(null);
   const { data: user } = useCurrentUser();
   const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  // Detecta si hay una simulación en curso para mostrar el acceso rápido.
+  useEffect(() => {
+    const refresh = () => {
+      const progress = loadExamProgress();
+      setSaved(progress ? describeProgress(progress) : null);
+    };
+    refresh();
+    window.addEventListener("focus", refresh);
+    const t = setInterval(refresh, 15000);
+    return () => {
+      window.removeEventListener("focus", refresh);
+      clearInterval(t);
+    };
+  }, [pathname]);
 
   const openExamConfirm = () => {
-    const saved = loadExamProgress();
-    setInProgress(saved ? describeProgress(saved) : null);
+    const progress = loadExamProgress();
+    setInProgress(progress ? describeProgress(progress) : null);
     setShowExamConfirm(true);
   };
 
@@ -172,12 +189,22 @@ export function AppShell({
     void navigate({ to: "/examen", search: resume ? { reanudar: "1" } : {} });
   };
 
+  const resumeNow = () => {
+    setOpen(false);
+    void navigate({ to: "/examen", search: { reanudar: "1" } });
+  };
+
+  const showResume = Boolean(saved) && pathname !== "/examen";
 
   return (
     <>
       <div className="flex min-h-screen w-full bg-background">
         <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-sidebar-border lg:block">
-          <SidebarInner onExamClick={openExamConfirm} />
+          <SidebarInner
+            onExamClick={openExamConfirm}
+            resume={showResume ? saved : null}
+            onResume={resumeNow}
+          />
         </aside>
 
         {open && (
@@ -191,6 +218,8 @@ export function AppShell({
               <SidebarInner
                 onNavigate={() => setOpen(false)}
                 onExamClick={openExamConfirm}
+                resume={showResume ? saved : null}
+                onResume={resumeNow}
               />
             </div>
           </div>
@@ -213,7 +242,15 @@ export function AppShell({
                 )}
               </div>
               <div className="flex shrink-0 items-center gap-3">
+                {showResume && (
+                  <Button size="sm" onClick={resumeNow} className="gap-1.5 whitespace-nowrap">
+                    <PlayCircle className="h-4 w-4" />
+                    <span className="hidden sm:inline">Reanudar simulación</span>
+                    <span className="sm:hidden">Reanudar</span>
+                  </Button>
+                )}
                 {actions}
+
                 <div className="hidden items-center gap-2 rounded-full border border-border bg-warning-soft px-3 py-1 md:flex">
                   <ShieldCheck className="h-3.5 w-3.5 text-accent-foreground" />
                   <span className="text-[11px] font-semibold text-accent-foreground">
