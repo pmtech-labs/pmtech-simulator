@@ -45,6 +45,10 @@ import {
 import type { AnswerValue, DomainCode, Question } from "@/types/exam";
 import { cn } from "@/lib/utils";
 
+/** Intervalo de auto-guardado del progreso de la simulación. */
+const AUTOSAVE_INTERVAL_MS = 10_000;
+
+
 interface ExamSearch {
   modo?: ExamMode;
   dominio?: DomainCode;
