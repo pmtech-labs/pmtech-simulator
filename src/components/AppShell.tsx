@@ -7,13 +7,14 @@ import {
   History,
   LayoutDashboard,
   Menu,
+  PlayCircle,
   Route as RouteIcon,
   ShieldCheck,
   Target,
   UserCog,
   X,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { useCurrentUser } from "@/hooks/useCandidateData";
 import { signOutCandidate } from "@/services/authService";
@@ -85,9 +86,13 @@ function NavLinks({
 function SidebarInner({
   onNavigate,
   onExamClick,
+  resume,
+  onResume,
 }: {
   onNavigate?: () => void;
   onExamClick?: () => void;
+  resume?: ReturnType<typeof describeProgress> | null;
+  onResume?: () => void;
 }) {
   const { data: user } = useCurrentUser();
   return (
@@ -106,6 +111,21 @@ function SidebarInner({
 
       <NavLinks onNavigate={onNavigate} onExamClick={onExamClick} />
 
+      {resume && (
+        <button
+          onClick={onResume}
+          className="flex w-full items-center gap-2 rounded-lg border border-sidebar-border bg-sidebar-primary/10 px-3 py-2 text-left text-xs font-semibold text-sidebar-accent-foreground transition-colors hover:bg-sidebar-primary/20"
+        >
+          <PlayCircle className="h-4 w-4 shrink-0 text-sidebar-primary" />
+          <span className="min-w-0">
+            <span className="block truncate">Reanudar simulación</span>
+            <span className="block truncate text-[11px] font-normal text-sidebar-foreground/60">
+              {resume.answered} de {resume.total} respondidas
+            </span>
+          </span>
+        </button>
+      )}
+
       <div className="mt-auto rounded-xl border border-sidebar-border bg-sidebar-accent/50 p-3">
         <div className="flex items-center gap-2 text-sidebar-accent-foreground">
           <ShieldCheck className="h-4 w-4 text-sidebar-primary" />
@@ -121,6 +141,7 @@ function SidebarInner({
   );
 }
 
+
 export function AppShell({
   title,
   subtitle,
@@ -135,12 +156,29 @@ export function AppShell({
   const [open, setOpen] = useState(false);
   const [showExamConfirm, setShowExamConfirm] = useState(false);
   const [inProgress, setInProgress] = useState<ReturnType<typeof describeProgress> | null>(null);
+  const [saved, setSaved] = useState<ReturnType<typeof describeProgress> | null>(null);
   const { data: user } = useCurrentUser();
   const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  // Detecta si hay una simulación en curso para mostrar el acceso rápido.
+  useEffect(() => {
+    const refresh = () => {
+      const progress = loadExamProgress();
+      setSaved(progress ? describeProgress(progress) : null);
+    };
+    refresh();
+    window.addEventListener("focus", refresh);
+    const t = setInterval(refresh, 15000);
+    return () => {
+      window.removeEventListener("focus", refresh);
+      clearInterval(t);
+    };
+  }, [pathname]);
 
   const openExamConfirm = () => {
-    const saved = loadExamProgress();
-    setInProgress(saved ? describeProgress(saved) : null);
+    const progress = loadExamProgress();
+    setInProgress(progress ? describeProgress(progress) : null);
     setShowExamConfirm(true);
   };
 
@@ -151,12 +189,22 @@ export function AppShell({
     void navigate({ to: "/examen", search: resume ? { reanudar: "1" } : {} });
   };
 
+  const resumeNow = () => {
+    setOpen(false);
+    void navigate({ to: "/examen", search: { reanudar: "1" } });
+  };
+
+  const showResume = Boolean(saved) && pathname !== "/examen";
 
   return (
     <>
       <div className="flex min-h-screen w-full bg-background">
         <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-sidebar-border lg:block">
-          <SidebarInner onExamClick={openExamConfirm} />
+          <SidebarInner
+            onExamClick={openExamConfirm}
+            resume={showResume ? saved : null}
+            onResume={resumeNow}
+          />
         </aside>
 
         {open && (
@@ -170,6 +218,8 @@ export function AppShell({
               <SidebarInner
                 onNavigate={() => setOpen(false)}
                 onExamClick={openExamConfirm}
+                resume={showResume ? saved : null}
+                onResume={resumeNow}
               />
             </div>
           </div>
@@ -192,7 +242,15 @@ export function AppShell({
                 )}
               </div>
               <div className="flex shrink-0 items-center gap-3">
+                {showResume && (
+                  <Button size="sm" onClick={resumeNow} className="gap-1.5 whitespace-nowrap">
+                    <PlayCircle className="h-4 w-4" />
+                    <span className="hidden sm:inline">Reanudar simulación</span>
+                    <span className="sm:hidden">Reanudar</span>
+                  </Button>
+                )}
                 {actions}
+
                 <div className="hidden items-center gap-2 rounded-full border border-border bg-warning-soft px-3 py-1 md:flex">
                   <ShieldCheck className="h-3.5 w-3.5 text-accent-foreground" />
                   <span className="text-[11px] font-semibold text-accent-foreground">
