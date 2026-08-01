@@ -14,7 +14,7 @@ import {
   UserCog,
   X,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { useCurrentUser } from "@/hooks/useCandidateData";
 import { signOutCandidate } from "@/services/authService";
