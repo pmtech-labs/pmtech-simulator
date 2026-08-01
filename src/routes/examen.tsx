@@ -205,9 +205,23 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   const questions = session.questions;
   const sections = session.sections;
 
-  const initialSection = Math.min(Math.max(resume?.sectionIdx ?? 0, 0), sections.length - 1);
+  /**
+   * Restauración exacta: volvemos a la pregunta en la que se salió y sincronizamos
+   * la sección con esa pregunta para que el temporizador y el navegador coincidan.
+   */
+  const restored = useMemo(() => {
+    const idx = Math.min(Math.max(resume?.index ?? 0, 0), questions.length - 1);
+    const savedSection = Math.min(Math.max(resume?.sectionIdx ?? 0, 0), sections.length - 1);
+    if (!resume) return { index: idx, sectionIdx: savedSection };
+    const sectionNumber = questions[idx]?.sectionNumber ?? sections[savedSection].sectionNumber;
+    const bySection = sections.findIndex((s) => s.sectionNumber === sectionNumber);
+    return { index: idx, sectionIdx: bySection >= 0 ? bySection : savedSection };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const [index, setIndex] = useState(resume?.index ?? 0);
+  const initialSection = restored.sectionIdx;
+
+  const [index, setIndex] = useState(restored.index);
   const [answers, setAnswers] = useState<Record<string, AnswerValue>>(resume?.answers ?? {});
   const [feedback, setFeedback] = useState<Record<string, AnswerFeedback>>(resume?.feedback ?? {});
   const [checking, setChecking] = useState(false);
