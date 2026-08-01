@@ -700,25 +700,17 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     const isLastOfSection = index === lastIndexOfSection;
     return (
       <>
+        <QuestionGraphic question={q} />
         <p className="text-[15px] font-medium leading-relaxed">{q.stem}</p>
 
-        {q.format === "matching" && q.matching ? (
-          <MatchingQuestion
-            payload={q.matching}
-            value={(answer as Record<string, string>) ?? {}}
-            disabled={Boolean(qFeedback)}
-            onChange={(next) => setAnswers((prev) => ({ ...prev, [q.id]: next }))}
-          />
-        ) : (
-          <OptionList
-            options={q.options ?? []}
-            selected={(answer as string[]) ?? []}
-            multi={q.format === "mc_multi"}
-            disabled={Boolean(qFeedback)}
-            correctAnswer={qFeedback?.correctAnswer}
-            onToggle={toggleOption}
-          />
-        )}
+        <QuestionInput
+          question={q}
+          answer={answer}
+          disabled={Boolean(qFeedback)}
+          correctAnswer={qFeedback?.correctAnswer}
+          onChange={(next) => setAnswers((prev) => ({ ...prev, [q.id]: next }))}
+        />
+
 
         {formative ? (
           qFeedback ? (
