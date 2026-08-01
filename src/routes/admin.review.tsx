@@ -362,13 +362,25 @@ function QuestionRow({
         <td className="num px-3 py-2">{q.success_rate_pct ?? "—"}</td>
         <td className="px-3 py-2">
           <div className="flex flex-wrap justify-end gap-1.5">
-            <BulkBtn disabled={busy} onClick={() => onStatus("published")}>
+            <BulkBtn
+              disabled={busy || q.status === "published"}
+              title={q.status === "published" ? "Ya está publicada" : "Publicar pregunta"}
+              onClick={() => onStatus("published")}
+            >
               Publicar
             </BulkBtn>
-            <BulkBtn disabled={busy} onClick={() => onStatus("draft")}>
+            <BulkBtn
+              disabled={busy || q.status === "draft"}
+              title={q.status === "draft" ? "Ya está en borrador" : "Rechazar y devolver a borrador"}
+              onClick={() => onStatus("draft")}
+            >
               Rechazar
             </BulkBtn>
-            <BulkBtn disabled={busy} onClick={() => onStatus("retired")}>
+            <BulkBtn
+              disabled={busy || q.status === "retired"}
+              title={q.status === "retired" ? "Ya está retirada" : "Retirar pregunta"}
+              onClick={() => onStatus("retired")}
+            >
               Retirar
             </BulkBtn>
             <button
