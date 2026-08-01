@@ -151,14 +151,15 @@ function CurriculumPage() {
         <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
       ) : (
         <>
-          <p className="mb-3 flex items-start gap-2 rounded-md border border-border bg-card p-3 text-xs text-muted-foreground">
+          <div className="mb-3 flex items-start gap-2 rounded-md border border-border bg-card p-3 text-xs text-muted-foreground">
             <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-            Las unidades en <strong className="mx-1 text-foreground">borrador</strong> no son
-            seleccionables por los candidatos en ningún modo de práctica. Una unidad sin tareas ECO
-            mapeadas no puede publicarse. Arrastra una fila (o usa las flechas) para reordenar: la
-            secuencia se guarda al soltar y se mantiene al publicar.
-
-          </p>
+            <p>
+              Las unidades en <strong className="text-foreground">borrador</strong> no son
+              seleccionables por los candidatos en ningún modo de práctica. Una unidad sin tareas ECO
+              mapeadas no puede publicarse. Arrastra una fila (o usa las flechas) para reordenar: la
+              secuencia se guarda al soltar y se mantiene al publicar.
+            </p>
+          </div>
 
           <DataTable
             empty={!rows.length}
