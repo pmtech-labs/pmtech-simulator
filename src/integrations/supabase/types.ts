@@ -367,6 +367,13 @@ export type Database = {
             referencedRelation: "v_question_stats"
             referencedColumns: ["question_id"]
           },
+          {
+            foreignKeyName: "exam_items_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "v_questions_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       exam_sections: {
@@ -1000,6 +1007,45 @@ export type Database = {
             columns: ["generation_job_id"]
             isOneToOne: false
             referencedRelation: "generation_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "questions_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "eco_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "questions_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "v_task_coverage"
+            referencedColumns: ["task_id"]
+          },
+        ]
+      }
+      v_questions_public: {
+        Row: {
+          approach: Database["public"]["Enums"]["approach_type"] | null
+          cluster_id: string | null
+          created_at: string | null
+          difficulty: number | null
+          domain_code: string | null
+          format: Database["public"]["Enums"]["item_format"] | null
+          id: string | null
+          item_type: Database["public"]["Enums"]["item_type"] | null
+          status: Database["public"]["Enums"]["item_status"] | null
+          task_id: string | null
+          task_number: number | null
+          task_title: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_cluster_id_fkey"
+            columns: ["cluster_id"]
+            isOneToOne: false
+            referencedRelation: "case_clusters"
             referencedColumns: ["id"]
           },
           {
