@@ -7,6 +7,7 @@ import {
   History,
   LayoutDashboard,
   Menu,
+  PlayCircle,
   Route as RouteIcon,
   ShieldCheck,
   Target,
