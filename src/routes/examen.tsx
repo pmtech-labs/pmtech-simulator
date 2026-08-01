@@ -45,6 +45,10 @@ import {
 import type { AnswerValue, DomainCode, Question } from "@/types/exam";
 import { cn } from "@/lib/utils";
 
+/** Intervalo de auto-guardado del progreso de la simulación. */
+const AUTOSAVE_INTERVAL_MS = 10_000;
+
+
 interface ExamSearch {
   modo?: ExamMode;
   dominio?: DomainCode;
@@ -375,23 +379,51 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seconds, onBreak, summary, paused]);
 
-  // Guardado local del progreso para poder reanudar la simulación más tarde.
+  // Auto-guardado local del progreso (respuestas, marcadas y tiempo restante).
+  const snapshot = useRef({ session, index, answers, feedback, flagged, sectionIdx, seconds });
+  snapshot.current = { session, index, answers, feedback, flagged, sectionIdx, seconds };
+
+  const persist = useCallback(() => {
+    const s = snapshot.current;
+    saveExamProgress({
+      mode: s.session.mode,
+      session: s.session,
+      index: s.index,
+      answers: s.answers,
+      feedback: s.feedback,
+      flagged: s.flagged,
+      sectionIdx: s.sectionIdx,
+      secondsLeft: s.seconds,
+    });
+  }, []);
+
+  // Intervalo de auto-guardado cada 10 s mientras la simulación está activa.
   useEffect(() => {
     if (summary) {
       clearExamProgress();
       return;
     }
-    saveExamProgress({
-      mode: session.mode,
-      session,
-      index,
-      answers,
-      feedback,
-      flagged,
-      sectionIdx,
-      secondsLeft: seconds,
-    });
-  }, [session, index, answers, feedback, flagged, sectionIdx, seconds, summary]);
+    persist();
+    const t = setInterval(persist, AUTOSAVE_INTERVAL_MS);
+    const onHide = () => {
+      if (document.visibilityState === "hidden") persist();
+    };
+    document.addEventListener("visibilitychange", onHide);
+    window.addEventListener("beforeunload", persist);
+    return () => {
+      clearInterval(t);
+      document.removeEventListener("visibilitychange", onHide);
+      window.removeEventListener("beforeunload", persist);
+      if (!summary) persist();
+    };
+  }, [summary, persist]);
+
+  // Guardado inmediato ante cambios relevantes (sin esperar al intervalo).
+  useEffect(() => {
+    if (summary) return;
+    persist();
+  }, [answers, feedback, flagged, index, sectionIdx, onBreak, summary, persist]);
+
 
   const answeredCount = Object.keys(answers).length;
 
