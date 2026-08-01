@@ -151,19 +151,29 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
       };
     }
     const m = meta.get(item.id);
-    const payload = item.practicum_payload as Question["matching"] | null;
+    const raw = item.practicum_payload as Record<string, unknown> | null;
+    const format = ([
+      "mc_multi",
+      "matching",
+      "pulldown",
+      "graphic_based",
+      "hotspot",
+    ].includes(item.format)
+      ? item.format
+      : "mc_single") as Question["format"];
     return {
       id: item.id,
       itemType: item.item_type,
-      format: (item.format === "mc_multi"
-        ? "mc_multi"
-        : item.format === "matching"
-          ? "matching"
-          : "mc_single") as Question["format"],
+      format,
       clusterId: item.cluster_id ?? undefined,
       stem: item.stem,
       options: (item.options ?? []).map((o) => ({ id: o.id, label: o.text })),
-      matching: item.format === "matching" && payload ? payload : undefined,
+      matching: format === "matching" && raw ? (raw as unknown as Question["matching"]) : undefined,
+      graphic: format === "graphic_based" && raw ? (raw as unknown as Question["graphic"]) : undefined,
+      hotspot:
+        format === "hotspot" && raw && Array.isArray(raw.hotspots)
+          ? (raw as unknown as Question["hotspot"])
+          : undefined,
       // El backend no revela la clave hasta corregir: se rellena con el feedback.
       correctAnswer: [],
       taskCode: m?.taskCode ?? "ECO",
