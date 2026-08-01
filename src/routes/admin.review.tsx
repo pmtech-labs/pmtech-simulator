@@ -197,13 +197,37 @@ function ReviewPage() {
         {selected.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 p-3 text-xs">
             <span className="font-semibold">{selected.length} seleccionadas</span>
-            <BulkBtn disabled={busy} onClick={() => changeStatus.mutate({ ids: selected, status: "published" })}>
+            <BulkBtn
+              disabled={busy || selected.every((id) => allRows.find((r) => r.id === id)?.status === "published")}
+              onClick={() => changeStatus.mutate({ ids: selected, status: "published" })}
+              title={
+                selected.every((id) => allRows.find((r) => r.id === id)?.status === "published")
+                  ? "Todas las seleccionadas ya están publicadas"
+                  : "Aprobar y publicar las seleccionadas"
+              }
+            >
               Aprobar y publicar
             </BulkBtn>
-            <BulkBtn disabled={busy} onClick={() => changeStatus.mutate({ ids: selected, status: "draft" })}>
+            <BulkBtn
+              disabled={busy || selected.every((id) => allRows.find((r) => r.id === id)?.status === "draft")}
+              onClick={() => changeStatus.mutate({ ids: selected, status: "draft" })}
+              title={
+                selected.every((id) => allRows.find((r) => r.id === id)?.status === "draft")
+                  ? "Todas las seleccionadas ya están en borrador"
+                  : "Rechazar y devolver a borrador las seleccionadas"
+              }
+            >
               Rechazar (a borrador)
             </BulkBtn>
-            <BulkBtn disabled={busy} onClick={() => changeStatus.mutate({ ids: selected, status: "retired" })}>
+            <BulkBtn
+              disabled={busy || selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")}
+              onClick={() => changeStatus.mutate({ ids: selected, status: "retired" })}
+              title={
+                selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")
+                  ? "Todas las seleccionadas ya están retiradas"
+                  : "Retirar las seleccionadas"
+              }
+            >
               Retirar
             </BulkBtn>
           </div>
