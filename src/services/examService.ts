@@ -227,6 +227,15 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
   };
 }
 
+/**
+ * `submit_answer` compara conjuntos de ids. En matching enviamos los pares
+ * serializados como "idIzquierda:idDerecha" para que la comparación funcione.
+ */
+function serializeAnswer(answer: AnswerValue): string[] {
+  if (Array.isArray(answer)) return answer;
+  return Object.entries(answer).map(([l, r]) => `${l}:${r}`);
+}
+
 export async function submitAnswer(
   examId: string,
   questionId: string,
@@ -237,7 +246,7 @@ export async function submitAnswer(
     body: {
       exam_id: examId,
       question_id: questionId,
-      user_answer: answer,
+      user_answer: serializeAnswer(answer),
       time_spent_seconds: timeSpentSeconds,
     },
   });
