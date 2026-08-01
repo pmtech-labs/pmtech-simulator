@@ -9,7 +9,6 @@ import { AppShell } from "@/components/AppShell";
 import { ResultReportButton } from "@/components/export/ResultReportButton";
 import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
-import { MatchingQuestion } from "@/components/exam/MatchingQuestion";
 import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
 import { MOCK_ERROR_TYPE_STATS, MOCK_FINISH_SUMMARY, MOCK_QUESTIONS, MOCK_UNIT_PROGRESS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
