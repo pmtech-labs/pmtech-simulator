@@ -84,6 +84,7 @@ interface RawItem {
   case_clusters: { id: string; title: string; scenario_text: string } | null;
   section_number: number | null;
   previously_seen?: boolean;
+  difficulty?: number | null;
 }
 
 const DB_DOMAIN_CODE: Record<DomainCode, string> = {
@@ -118,12 +119,11 @@ async function fetchQuestionMeta(ids: string[]) {
     if (!row.id) return;
     const domain = toUiDomain(row.domain_code);
     meta.set(row.id, {
-
       taskCode: `${domain === "people" ? "P" : domain === "process" ? "PR" : "BE"}-${row.task_number ?? "?"}`,
       taskTitle: row.task_title ?? "Tarea ECO",
       domain,
       approach: (row.approach as Question["approach"]) ?? "predictive",
-      difficulty: (Math.min(3, Math.max(1, row.difficulty ?? 3)) as 1 | 2 | 3),
+      difficulty: (Math.min(5, Math.max(1, row.difficulty ?? 3)) as Question["difficulty"]),
     });
   });
 
@@ -159,6 +159,10 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
     }
     const m = meta.get(item.id);
     const raw = item.practicum_payload as Record<string, unknown> | null;
+    const difficulty = (Math.min(
+      5,
+      Math.max(1, item.difficulty ?? m?.difficulty ?? 3),
+    ) as Question["difficulty"]);
     const format = ([
       "mc_multi",
       "matching",
