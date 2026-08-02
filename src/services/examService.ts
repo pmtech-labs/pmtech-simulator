@@ -107,8 +107,10 @@ async function fetchQuestionMeta(ids: string[]) {
     .in("id", ids);
 
   (data ?? []).forEach((row) => {
+    if (!row.id) return;
     const domain = toUiDomain(row.domain_code);
     meta.set(row.id, {
+
       taskCode: `${domain === "people" ? "P" : domain === "process" ? "PR" : "BE"}-${row.task_number ?? "?"}`,
       taskTitle: row.task_title ?? "Tarea ECO",
       domain,
