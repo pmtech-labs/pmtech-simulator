@@ -244,9 +244,9 @@ function Header() {
             <a href="#formacion" className="whitespace-nowrap transition-colors hover:text-foreground">
               Formación
             </a>
-            <a href="#faq" className="whitespace-nowrap transition-colors hover:text-foreground">
+            <Link to="/faq" className="whitespace-nowrap transition-colors hover:text-foreground">
               Preguntas frecuentes
-            </a>
+            </Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -299,9 +299,9 @@ function Header() {
             <a href="#formacion" onClick={() => setOpen(false)}>
               Formación
             </a>
-            <a href="#faq" onClick={() => setOpen(false)}>
+            <Link to="/faq" onClick={() => setOpen(false)}>
               Preguntas frecuentes
-            </a>
+            </Link>
             <a href="#contacto" onClick={() => setOpen(false)}>
               Contacto
             </a>
@@ -799,9 +799,9 @@ function Footer() {
             <a href="#boletin" className="hover:text-foreground">
               Boletín
             </a>
-            <a href="#faq" className="hover:text-foreground">
+            <Link to="/faq" className="hover:text-foreground">
               FAQ
-            </a>
+            </Link>
 
             <Link to="/certificacion-pmp" className="hover:text-foreground">
               Certificación PMP
