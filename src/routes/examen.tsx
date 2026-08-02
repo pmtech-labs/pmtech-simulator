@@ -840,6 +840,33 @@ function Results({
             </p>
           )}
 
+          {summary.diploma && (
+            <div className="mt-4 rounded-xl border border-accent bg-accent/10 p-4 text-left">
+              <p className="font-display text-base font-semibold">🎓 ¡Diploma desbloqueado!</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Emitido el{" "}
+                {new Date(summary.diploma.issuedAt).toLocaleDateString("es-ES", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })}{" "}
+                · umbral de referencia {Math.round(summary.diploma.thresholdPct)}%
+              </p>
+              <p className="mt-3 rounded-lg border border-border bg-card p-3 text-xs leading-relaxed text-muted-foreground">
+                {summary.diploma.disclaimer ||
+                  "PMI no publica una nota de corte oficial para el examen PMP. Este diploma reconoce tu desempeño según un criterio de referencia propio de PMTech Simulator, no una nota de aprobado oficial de PMI."}
+              </p>
+              <Link
+                to="/perfil"
+                className="mt-3 inline-flex text-xs font-semibold underline-offset-4 hover:underline"
+              >
+                Ver mis diplomas
+              </Link>
+            </div>
+          )}
+
+
+
           <div className="mt-5 flex flex-wrap justify-center gap-2">
             <Link
               to="/dashboard"
