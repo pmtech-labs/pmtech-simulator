@@ -44,6 +44,7 @@ export interface AdminQuestion {
   stem: string;
   options: unknown;
   correct_answer: unknown;
+  practicum_payload?: unknown;
   explanation: string;
   status: string;
   item_type: string;
