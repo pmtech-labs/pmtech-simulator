@@ -159,6 +159,44 @@ export type Database = {
         }
         Relationships: []
       }
+      diplomas: {
+        Row: {
+          exam_id: string
+          id: string
+          issued_at: string
+          score_by_domain: Json | null
+          score_pct: number
+          threshold_pct: number
+          user_id: string
+        }
+        Insert: {
+          exam_id: string
+          id?: string
+          issued_at?: string
+          score_by_domain?: Json | null
+          score_pct: number
+          threshold_pct: number
+          user_id: string
+        }
+        Update: {
+          exam_id?: string
+          id?: string
+          issued_at?: string
+          score_by_domain?: Json | null
+          score_pct?: number
+          threshold_pct?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diplomas_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: true
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       eco_domains: {
         Row: {
           code: string
