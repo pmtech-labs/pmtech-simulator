@@ -47,6 +47,25 @@ export async function provisionFreeLicense(): Promise<{ created: boolean }> {
   return { created: Boolean((data as { created?: boolean } | null)?.created) };
 }
 
+/**
+ * Alta en el boletín tras el registro (consentimiento expreso opcional).
+ * Nunca lanza: es una acción secundaria y no debe romper el alta de cuenta.
+ */
+export async function subscribeNewsletterOptIn(params: {
+  email: string;
+  fullName?: string;
+}): Promise<void> {
+  try {
+    await supabase.functions.invoke("subscribe_newsletter", {
+      method: "POST",
+      body: { email: params.email, full_name: params.fullName || null },
+    });
+  } catch {
+    // Silencioso a propósito: el consentimiento se reconcilia después si falla.
+  }
+}
+
+
 export async function signInCandidate({ email, password }: CredentialsInput) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw new Error(authErrorMessage(error.message));

@@ -4,6 +4,7 @@ import { AlertTriangle, CheckCircle2, Eye, Loader2 } from "lucide-react";
 import { useState } from "react";
 
 import { AdminShell, DataTable } from "@/components/admin/AdminShell";
+import { NewsletterExportCard } from "@/components/admin/NewsletterExportCard";
 import { QuestionDetailDialog } from "@/components/admin/QuestionDetailDialog";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import { getStats, type ExamStatRow, type QuestionStatRow, type TaskCoverageRow } from "@/services/adminService";
@@ -99,6 +100,9 @@ function AdminDashboard() {
             tone={tasksEmpty > 0 ? "danger" : "ok"}
           />
         </section>
+
+        <NewsletterExportCard />
+
 
         {tasksEmpty > 0 && (
           <div className="flex items-start gap-2 rounded-lg border border-destructive/60 bg-destructive/5 p-3 text-sm">
