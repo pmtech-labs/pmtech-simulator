@@ -804,8 +804,22 @@ function Footer() {
               <Link to="/pmtech-vs-pmi-study-hall" className="hover:text-foreground">
                 vs PMI Study Hall
               </Link>
-              <Link to="/pmtech-vs-prepcast" className="hover:text-foreground">
+            <Link to="/pmtech-vs-prepcast" className="hover:text-foreground">
                 vs PrepCast
+              </Link>
+            </nav>
+            <nav className="mt-4 flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-[11px] text-muted-foreground sm:justify-end">
+              <Link to="/aviso-legal" className="hover:text-foreground">
+                Aviso legal
+              </Link>
+              <Link to="/politica-de-privacidad" className="hover:text-foreground">
+                Privacidad
+              </Link>
+              <Link to="/terminos-y-condiciones" className="hover:text-foreground">
+                Términos y condiciones
+              </Link>
+              <Link to="/politica-de-cookies" className="hover:text-foreground">
+                Cookies
               </Link>
             </nav>
           </div>

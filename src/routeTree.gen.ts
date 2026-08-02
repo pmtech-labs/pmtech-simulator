@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AprendizajeRouteImport } from './routes/aprendizaje'
+import { Route as AvisoLegalRouteImport } from './routes/aviso-legal'
 import { Route as CertificacionPmpRouteImport } from './routes/certificacion-pmp'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CursoPmpOnlineRouteImport } from './routes/curso-pmp-online'
@@ -26,6 +27,8 @@ import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as Pmbok8RouteImport } from './routes/pmbok-8'
 import { Route as PmtechVsPmiStudyHallRouteImport } from './routes/pmtech-vs-pmi-study-hall'
 import { Route as PmtechVsPrepcastRouteImport } from './routes/pmtech-vs-prepcast'
+import { Route as PoliticaDeCookiesRouteImport } from './routes/politica-de-cookies'
+import { Route as PoliticaDePrivacidadRouteImport } from './routes/politica-de-privacidad'
 import { Route as PracticaRouteImport } from './routes/practica'
 import { Route as ProgresoRouteImport } from './routes/progreso'
 import { Route as RegistroRouteImport } from './routes/registro'
@@ -33,6 +36,7 @@ import { Route as RequisitosPmpRouteImport } from './routes/requisitos-pmp'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SimuladorExamenPmpRouteImport } from './routes/simulador-examen-pmp'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TerminosYCondicionesRouteImport } from './routes/terminos-y-condiciones'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
 import { Route as AdminCurriculumRouteImport } from './routes/admin.curriculum'
@@ -52,6 +56,11 @@ const AdminRoute = AdminRouteImport.update({
 const AprendizajeRoute = AprendizajeRouteImport.update({
   id: '/aprendizaje',
   path: '/aprendizaje',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AvisoLegalRoute = AvisoLegalRouteImport.update({
+  id: '/aviso-legal',
+  path: '/aviso-legal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CertificacionPmpRoute = CertificacionPmpRouteImport.update({
@@ -124,6 +133,16 @@ const PmtechVsPrepcastRoute = PmtechVsPrepcastRouteImport.update({
   path: '/pmtech-vs-prepcast',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PoliticaDeCookiesRoute = PoliticaDeCookiesRouteImport.update({
+  id: '/politica-de-cookies',
+  path: '/politica-de-cookies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliticaDePrivacidadRoute = PoliticaDePrivacidadRouteImport.update({
+  id: '/politica-de-privacidad',
+  path: '/politica-de-privacidad',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PracticaRoute = PracticaRouteImport.update({
   id: '/practica',
   path: '/practica',
@@ -159,6 +178,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TerminosYCondicionesRoute = TerminosYCondicionesRouteImport.update({
+  id: '/terminos-y-condiciones',
+  path: '/terminos-y-condiciones',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -189,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/aprendizaje': typeof AprendizajeRoute
+  '/aviso-legal': typeof AvisoLegalRoute
   '/certificacion-pmp': typeof CertificacionPmpRoute
   '/checkout': typeof CheckoutRoute
   '/curso-pmp-online': typeof CursoPmpOnlineRoute
@@ -203,6 +228,8 @@ export interface FileRoutesByFullPath {
   '/pmbok-8': typeof Pmbok8Route
   '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
   '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
+  '/politica-de-cookies': typeof PoliticaDeCookiesRoute
+  '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/registro': typeof RegistroRoute
@@ -210,6 +237,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
@@ -219,6 +247,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aprendizaje': typeof AprendizajeRoute
+  '/aviso-legal': typeof AvisoLegalRoute
   '/certificacion-pmp': typeof CertificacionPmpRoute
   '/checkout': typeof CheckoutRoute
   '/curso-pmp-online': typeof CursoPmpOnlineRoute
@@ -233,6 +262,8 @@ export interface FileRoutesByTo {
   '/pmbok-8': typeof Pmbok8Route
   '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
   '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
+  '/politica-de-cookies': typeof PoliticaDeCookiesRoute
+  '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/registro': typeof RegistroRoute
@@ -240,6 +271,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
@@ -251,6 +283,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/aprendizaje': typeof AprendizajeRoute
+  '/aviso-legal': typeof AvisoLegalRoute
   '/certificacion-pmp': typeof CertificacionPmpRoute
   '/checkout': typeof CheckoutRoute
   '/curso-pmp-online': typeof CursoPmpOnlineRoute
@@ -265,6 +298,8 @@ export interface FileRoutesById {
   '/pmbok-8': typeof Pmbok8Route
   '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
   '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
+  '/politica-de-cookies': typeof PoliticaDeCookiesRoute
+  '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/practica': typeof PracticaRoute
   '/progreso': typeof ProgresoRoute
   '/registro': typeof RegistroRoute
@@ -272,6 +307,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
@@ -284,6 +320,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/aprendizaje'
+    | '/aviso-legal'
     | '/certificacion-pmp'
     | '/checkout'
     | '/curso-pmp-online'
@@ -298,6 +335,8 @@ export interface FileRouteTypes {
     | '/pmbok-8'
     | '/pmtech-vs-pmi-study-hall'
     | '/pmtech-vs-prepcast'
+    | '/politica-de-cookies'
+    | '/politica-de-privacidad'
     | '/practica'
     | '/progreso'
     | '/registro'
@@ -305,6 +344,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
+    | '/terminos-y-condiciones'
     | '/admin/connectors'
     | '/admin/curriculum'
     | '/admin/generate'
@@ -314,6 +354,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/aprendizaje'
+    | '/aviso-legal'
     | '/certificacion-pmp'
     | '/checkout'
     | '/curso-pmp-online'
@@ -328,6 +369,8 @@ export interface FileRouteTypes {
     | '/pmbok-8'
     | '/pmtech-vs-pmi-study-hall'
     | '/pmtech-vs-prepcast'
+    | '/politica-de-cookies'
+    | '/politica-de-privacidad'
     | '/practica'
     | '/progreso'
     | '/registro'
@@ -335,6 +378,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
+    | '/terminos-y-condiciones'
     | '/admin/connectors'
     | '/admin/curriculum'
     | '/admin/generate'
@@ -345,6 +389,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/aprendizaje'
+    | '/aviso-legal'
     | '/certificacion-pmp'
     | '/checkout'
     | '/curso-pmp-online'
@@ -359,6 +404,8 @@ export interface FileRouteTypes {
     | '/pmbok-8'
     | '/pmtech-vs-pmi-study-hall'
     | '/pmtech-vs-prepcast'
+    | '/politica-de-cookies'
+    | '/politica-de-privacidad'
     | '/practica'
     | '/progreso'
     | '/registro'
@@ -366,6 +413,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
+    | '/terminos-y-condiciones'
     | '/admin/connectors'
     | '/admin/curriculum'
     | '/admin/generate'
@@ -377,6 +425,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AprendizajeRoute: typeof AprendizajeRoute
+  AvisoLegalRoute: typeof AvisoLegalRoute
   CertificacionPmpRoute: typeof CertificacionPmpRoute
   CheckoutRoute: typeof CheckoutRoute
   CursoPmpOnlineRoute: typeof CursoPmpOnlineRoute
@@ -391,6 +440,8 @@ export interface RootRouteChildren {
   Pmbok8Route: typeof Pmbok8Route
   PmtechVsPmiStudyHallRoute: typeof PmtechVsPmiStudyHallRoute
   PmtechVsPrepcastRoute: typeof PmtechVsPrepcastRoute
+  PoliticaDeCookiesRoute: typeof PoliticaDeCookiesRoute
+  PoliticaDePrivacidadRoute: typeof PoliticaDePrivacidadRoute
   PracticaRoute: typeof PracticaRoute
   ProgresoRoute: typeof ProgresoRoute
   RegistroRoute: typeof RegistroRoute
@@ -398,6 +449,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SimuladorExamenPmpRoute: typeof SimuladorExamenPmpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TerminosYCondicionesRoute: typeof TerminosYCondicionesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -421,6 +473,13 @@ declare module '@tanstack/react-router' {
       path: '/aprendizaje'
       fullPath: '/aprendizaje'
       preLoaderRoute: typeof AprendizajeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aviso-legal': {
+      id: '/aviso-legal'
+      path: '/aviso-legal'
+      fullPath: '/aviso-legal'
+      preLoaderRoute: typeof AvisoLegalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/certificacion-pmp': {
@@ -521,6 +580,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PmtechVsPrepcastRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/politica-de-cookies': {
+      id: '/politica-de-cookies'
+      path: '/politica-de-cookies'
+      fullPath: '/politica-de-cookies'
+      preLoaderRoute: typeof PoliticaDeCookiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/politica-de-privacidad': {
+      id: '/politica-de-privacidad'
+      path: '/politica-de-privacidad'
+      fullPath: '/politica-de-privacidad'
+      preLoaderRoute: typeof PoliticaDePrivacidadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/practica': {
       id: '/practica'
       path: '/practica'
@@ -568,6 +641,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terminos-y-condiciones': {
+      id: '/terminos-y-condiciones'
+      path: '/terminos-y-condiciones'
+      fullPath: '/terminos-y-condiciones'
+      preLoaderRoute: typeof TerminosYCondicionesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -630,6 +710,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AprendizajeRoute: AprendizajeRoute,
+  AvisoLegalRoute: AvisoLegalRoute,
   CertificacionPmpRoute: CertificacionPmpRoute,
   CheckoutRoute: CheckoutRoute,
   CursoPmpOnlineRoute: CursoPmpOnlineRoute,
@@ -644,6 +725,8 @@ const rootRouteChildren: RootRouteChildren = {
   Pmbok8Route: Pmbok8Route,
   PmtechVsPmiStudyHallRoute: PmtechVsPmiStudyHallRoute,
   PmtechVsPrepcastRoute: PmtechVsPrepcastRoute,
+  PoliticaDeCookiesRoute: PoliticaDeCookiesRoute,
+  PoliticaDePrivacidadRoute: PoliticaDePrivacidadRoute,
   PracticaRoute: PracticaRoute,
   ProgresoRoute: ProgresoRoute,
   RegistroRoute: RegistroRoute,
@@ -651,6 +734,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SimuladorExamenPmpRoute: SimuladorExamenPmpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TerminosYCondicionesRoute: TerminosYCondicionesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
