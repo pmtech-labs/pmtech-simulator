@@ -17,9 +17,9 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
     });
     if (rpcError || !isAdmin) throw new Error("No autorizado");
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const db = context.supabase;
 
-    const { data: q, error } = await supabaseAdmin
+    const { data: q, error } = await db
       .from("questions")
       .select(
         "id, stem, options, correct_answer, practicum_payload, explanation, status, item_type, format, approach, difficulty, task_id, cluster_id, times_answered, times_correct, created_at",
@@ -31,13 +31,13 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
     if (!q) throw new Error("Pregunta no encontrada");
 
     const [{ data: task }, cluster] = await Promise.all([
-      supabaseAdmin
+      db
         .from("eco_tasks")
         .select("title, task_number, domain_id")
         .eq("id", q.task_id)
         .maybeSingle(),
       q.cluster_id
-        ? supabaseAdmin
+        ? db
             .from("case_clusters")
             .select("title, scenario_text")
             .eq("id", q.cluster_id)
@@ -47,7 +47,7 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
 
     let domainName: string | null = null;
     if (task?.domain_id) {
-      const { data: domain } = await supabaseAdmin
+      const { data: domain } = await db
         .from("eco_domains")
         .select("name")
         .eq("id", task.domain_id)
