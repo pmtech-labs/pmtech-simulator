@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Check, CreditCard, Loader2, Mail, ShieldCheck, User } from "lucide-react";
+import { Check, CreditCard, Loader2, Mail, Pencil, ShieldCheck, User, X } from "lucide-react";
 import { useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
@@ -11,8 +11,10 @@ import { DiplomasSection } from "@/components/profile/DiplomasSection";
 import { RequireAuth } from "@/components/auth/RequireAuth";
 import { DOMAINS } from "@/data/mockData";
 import { useCurrentUser } from "@/hooks/useCandidateData";
+import { supabase } from "@/integrations/supabase/client";
 import { PLANS } from "@/services/checkoutService";
 import { cn } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/perfil")({
   ssr: false,
