@@ -94,7 +94,7 @@ export interface Question {
   taskTitle: string;
   domain: DomainCode;
   approach: "predictive" | "agile" | "hybrid";
-  difficulty: 1 | 2 | 3;
+  difficulty: 1 | 2 | 3 | 4 | 5;
   /** Sección del examen completo a la que pertenece el ítem (1-3). */
   sectionNumber?: number;
   /** Diagnóstico de error asociado a fallar este ítem (modos formativos). */
