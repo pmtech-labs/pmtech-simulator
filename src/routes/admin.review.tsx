@@ -35,7 +35,7 @@ function ReviewPage() {
   const qc = useQueryClient();
   const { job } = Route.useSearch();
 
-  const [statuses, setStatuses] = useState<string[]>(["draft", "in_review"]);
+  const [statuses, setStatuses] = useState<string[]>(["draft"]);
   const [domainId, setDomainId] = useState("");
   const [taskId, setTaskId] = useState("");
   const [approach, setApproach] = useState("");
