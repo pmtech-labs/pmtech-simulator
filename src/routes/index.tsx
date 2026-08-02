@@ -810,7 +810,7 @@ function Footer() {
             </nav>
           </div>
         </div>
-        <p className="mt-8 text-center text-[11px] leading-relaxed text-muted-foreground sm:text-left">
+        <p className="mt-8 text-center text-[11px] leading-relaxed text-muted-foreground">
           PMTech Simulator es un producto independiente. No está afiliado, avalado ni
           patrocinado por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas
           registradas del PMI.
