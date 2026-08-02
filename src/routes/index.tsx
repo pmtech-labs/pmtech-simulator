@@ -298,8 +298,10 @@ function Header() {
               Contacto
             </a>
 
-            <LoginButton onClick={() => setOpen(false)} />
-            <TryFreeButton onClick={() => setOpen(false)} />
+            <div className="flex w-fit items-center gap-3 pt-2">
+              <LoginButton onClick={() => setOpen(false)} />
+              <TryFreeButton onClick={() => setOpen(false)} />
+            </div>
           </nav>
         </div>
       )}
@@ -746,64 +748,67 @@ function Footer() {
             </div>
             <p className="font-display text-sm font-semibold">PMTech Simulator</p>
           </div>
-          <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-medium text-muted-foreground">
-            <a href="#caracteristicas" className="hover:text-foreground">
-              Características
-            </a>
-            <a href="#opiniones" className="hover:text-foreground">
-              Opiniones
-            </a>
-            <a href="#sobre-nosotros" className="hover:text-foreground">
-              Sobre nosotros
-            </a>
-            <a href="#precios" className="hover:text-foreground">
-              Precios
-            </a>
+          <div className="flex flex-col items-center gap-4 sm:items-end">
+            <div className="flex items-center gap-3">
+              <LoginButton size="sm" />
+              <TryFreeButton size="sm" />
+            </div>
+            <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-medium text-muted-foreground sm:justify-end">
+              <a href="#caracteristicas" className="hover:text-foreground">
+                Características
+              </a>
+              <a href="#opiniones" className="hover:text-foreground">
+                Opiniones
+              </a>
+              <a href="#sobre-nosotros" className="hover:text-foreground">
+                Sobre nosotros
+              </a>
+              <a href="#precios" className="hover:text-foreground">
+                Precios
+              </a>
 
-            <a href="#formacion" className="hover:text-foreground">
-              Formación PMP
-            </a>
-            <a href="#garantias" className="hover:text-foreground">
-              Garantías
-            </a>
-            <a href="#contacto" className="hover:text-foreground">
-              Contacto
-            </a>
-            <a href="#boletin" className="hover:text-foreground">
-              Boletín
-            </a>
-            <Link to="/faq" className="hover:text-foreground">
-              FAQ
-            </Link>
+              <a href="#formacion" className="hover:text-foreground">
+                Formación PMP
+              </a>
+              <a href="#garantias" className="hover:text-foreground">
+                Garantías
+              </a>
+              <a href="#contacto" className="hover:text-foreground">
+                Contacto
+              </a>
+              <a href="#boletin" className="hover:text-foreground">
+                Boletín
+              </a>
+              <Link to="/faq" className="hover:text-foreground">
+                FAQ
+              </Link>
 
-            <Link to="/certificacion-pmp" className="hover:text-foreground">
-              Certificación PMP
-            </Link>
-            <Link to="/examen-pmp" className="hover:text-foreground">
-              Examen PMP
-            </Link>
-            <Link to="/simulador-examen-pmp" className="hover:text-foreground">
-              Simulador PMP
-            </Link>
-            <Link to="/requisitos-pmp" className="hover:text-foreground">
-              Requisitos y precio
-            </Link>
-            <Link to="/curso-pmp-online" className="hover:text-foreground">
-              Curso PMP online
-            </Link>
-            <Link to="/pmbok-8" className="hover:text-foreground">
-              PMBOK 7 vs 8
-            </Link>
-            <Link to="/pmtech-vs-pmi-study-hall" className="hover:text-foreground">
-              vs PMI Study Hall
-            </Link>
-            <Link to="/pmtech-vs-prepcast" className="hover:text-foreground">
-              vs PrepCast
-            </Link>
-
-            <LoginButton variant="ghost" size="sm" />
-          </nav>
-
+              <Link to="/certificacion-pmp" className="hover:text-foreground">
+                Certificación PMP
+              </Link>
+              <Link to="/examen-pmp" className="hover:text-foreground">
+                Examen PMP
+              </Link>
+              <Link to="/simulador-examen-pmp" className="hover:text-foreground">
+                Simulador PMP
+              </Link>
+              <Link to="/requisitos-pmp" className="hover:text-foreground">
+                Requisitos y precio
+              </Link>
+              <Link to="/curso-pmp-online" className="hover:text-foreground">
+                Curso PMP online
+              </Link>
+              <Link to="/pmbok-8" className="hover:text-foreground">
+                PMBOK 7 vs 8
+              </Link>
+              <Link to="/pmtech-vs-pmi-study-hall" className="hover:text-foreground">
+                vs PMI Study Hall
+              </Link>
+              <Link to="/pmtech-vs-prepcast" className="hover:text-foreground">
+                vs PrepCast
+              </Link>
+            </nav>
+          </div>
         </div>
         <p className="mt-8 text-center text-[11px] leading-relaxed text-muted-foreground sm:text-left">
           PMTech Simulator es un producto independiente. No está afiliado, avalado ni
