@@ -28,7 +28,7 @@ export function MarketingShell({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-3">
             <Link
               to="/login"
-              className="hidden whitespace-nowrap text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline"
+              className="hidden whitespace-nowrap rounded-lg bg-primary px-3 py-2 text-[13px] font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5 sm:inline-flex sm:items-center sm:gap-1.5"
             >
               Iniciar sesión
             </Link>
