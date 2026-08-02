@@ -415,7 +415,7 @@ function QuestionRow({
               </div>
             )}
             <p className="whitespace-pre-line font-medium">{q.stem}</p>
-            {needsMedia && detail.isPending && !payload ? (
+            {needsMedia && detail.isFetching && !payload ? (
               <Loader2 className="my-3 h-4 w-4 animate-spin text-muted-foreground" />
             ) : (
               <div className="mt-3">
