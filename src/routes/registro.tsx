@@ -192,7 +192,7 @@ function RegistroPage() {
                 </div>
 
                 <div className="space-y-2.5 pt-1">
-                  <label className="flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
+                  <label className="flex cursor-pointer items-start gap-2.5 text-justify text-xs leading-relaxed text-muted-foreground">
                     <input
                       type="checkbox"
                       checked={acceptTerms}
@@ -205,7 +205,7 @@ function RegistroPage() {
                       <span className="text-muted-foreground">(obligatorio)</span>
                     </span>
                   </label>
-                  <label className="flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
+                  <label className="flex cursor-pointer items-start gap-2.5 text-justify text-xs leading-relaxed text-muted-foreground">
                     <input
                       type="checkbox"
                       checked={wantsNewsletter}
