@@ -22,7 +22,7 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
     const { data: q, error } = await supabaseAdmin
       .from("questions")
       .select(
-        "id, stem, options, correct_answer, explanation, status, item_type, format, approach, difficulty, task_id, cluster_id, times_answered, times_correct, created_at",
+        "id, stem, options, correct_answer, practicum_payload, explanation, status, item_type, format, approach, difficulty, task_id, cluster_id, times_answered, times_correct, created_at",
       )
       .eq("id", data.id)
       .maybeSingle();
