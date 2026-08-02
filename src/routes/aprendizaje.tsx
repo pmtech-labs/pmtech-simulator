@@ -14,6 +14,7 @@ import {
   RotateCcw,
   Zap,
   Sparkles,
+  Info,
 } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
