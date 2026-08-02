@@ -2,7 +2,11 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { CheckCircle2, GraduationCap, Loader2, UserPlus } from "lucide-react";
 import { useState } from "react";
 
-import { provisionFreeLicense, signUpCandidate } from "@/services/authService";
+import {
+  provisionFreeLicense,
+  signUpCandidate,
+  subscribeNewsletterOptIn,
+} from "@/services/authService";
 
 interface RegistroSearch {
   plan?: string;
