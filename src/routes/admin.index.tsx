@@ -101,6 +101,9 @@ function AdminDashboard() {
           />
         </section>
 
+        <NewsletterExportCard />
+
+
         {tasksEmpty > 0 && (
           <div className="flex items-start gap-2 rounded-lg border border-destructive/60 bg-destructive/5 p-3 text-sm">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
