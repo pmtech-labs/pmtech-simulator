@@ -10,7 +10,7 @@ export type QuestionFormat =
 
 /** Payload de preguntas con gráfico/artefacto (formato graphic_based). */
 export interface GraphicPayload {
-  /** Campo abierto: hoy solo se renderiza "earned_value". */
+  /** Campo abierto: hoy se renderiza "earned_value" y "network_diagram". */
   chart_type: string;
   evChart?: {
     labels: string[];
@@ -18,6 +18,8 @@ export interface GraphicPayload {
     ev: number[];
     ac: number[];
   };
+  /** SVG inline completo para diagramas de red PDM/CPM (ilustrativo, no interactivo). */
+  diagram_svg?: string;
 }
 
 /** Payload de preguntas hotspot: SVG inline + zonas clicables en % */
