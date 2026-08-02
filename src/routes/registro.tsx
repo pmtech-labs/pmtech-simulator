@@ -101,7 +101,7 @@ function RegistroPage() {
 
   return (
     <div className="grid min-h-screen place-items-center bg-background px-4 py-10">
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-md">
         <Link to="/" className="mb-6 flex items-center justify-center gap-2">
           <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary">
             <GraduationCap className="h-5 w-5 text-primary-foreground" />
