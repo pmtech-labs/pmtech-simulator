@@ -1185,7 +1185,7 @@ export type Database = {
         | "graphic_based"
         | "hotspot"
         | "pulldown"
-      item_status: "draft" | "in_review" | "approved" | "published" | "retired"
+      item_status: "draft" | "published" | "retired"
       item_type: "standalone" | "case_child" | "practicum"
       plan_code: "basica_3m" | "premium_6m" | "free"
     }
@@ -1343,7 +1343,7 @@ export const Constants = {
         "hotspot",
         "pulldown",
       ],
-      item_status: ["draft", "in_review", "approved", "published", "retired"],
+      item_status: ["draft", "published", "retired"],
       item_type: ["standalone", "case_child", "practicum"],
       plan_code: ["basica_3m", "premium_6m", "free"],
     },
