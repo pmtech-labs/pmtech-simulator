@@ -88,9 +88,9 @@ function AdminDashboard() {
   return (
     <AdminShell title="Dashboard" description="Estado del banco de preguntas y del uso de la plataforma" email={email}>
       <div className="space-y-6">
-        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Kpi label="Borradores" value={totals.draft} />
-          <Kpi label="En revisión" value={totals.in_review} />
+
           <Kpi label="Publicadas" value={totals.published} />
           <Kpi label="Exámenes realizados" value={totalExams} />
           <Kpi
