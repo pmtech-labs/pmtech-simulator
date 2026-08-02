@@ -252,7 +252,7 @@ function Header() {
           <div className="flex items-center gap-3">
             <Link
               to="/login"
-              className="whitespace-nowrap text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-primary px-3 py-2 text-[13px] font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
             >
               Iniciar sesión
             </Link>
@@ -306,7 +306,11 @@ function Header() {
               Contacto
             </a>
 
-            <Link to="/login" onClick={() => setOpen(false)}>
+            <Link
+              to="/login"
+              onClick={() => setOpen(false)}
+              className="inline-flex w-fit items-center gap-1.5 rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground"
+            >
               Iniciar sesión
             </Link>
             <Link
