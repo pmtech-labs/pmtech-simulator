@@ -195,6 +195,8 @@ export function AppShell({
   };
 
   const showResume = Boolean(saved) && pathname !== "/examen";
+  // Plan gratuito: el simulacro completo de regalo es de un solo uso.
+  const freeSimBlocked = user?.plan === "free" && user.freeFullSimUsed && !inProgress;
 
   return (
     <>
@@ -287,26 +289,42 @@ export function AppShell({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>
-              {inProgress ? "Tienes una simulación en curso" : "¿Iniciar simulación de examen?"}
+              {freeSimBlocked
+                ? "Ya usaste tu simulacro completo de regalo"
+                : inProgress
+                  ? "Tienes una simulación en curso"
+                  : "¿Iniciar simulación de examen?"}
             </DialogTitle>
             <DialogDescription>
-              {inProgress
-                ? `Dejaste sin terminar “${inProgress.label}” con ${inProgress.answered} de ${inProgress.total} preguntas respondidas. Puedes retomarla donde la dejaste o empezar una nueva desde cero.`
-                : "Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener disponibilidad antes de empezar."}
+              {freeSimBlocked
+                ? "El plan gratuito incluye un único simulacro completo. La práctica por dominio, por lección y los simulacros acumulativos siguen disponibles sin límite. Mejora tu plan para repetir simulacros de 180 preguntas."
+                : inProgress
+                  ? `Dejaste sin terminar “${inProgress.label}” con ${inProgress.answered} de ${inProgress.total} preguntas respondidas. Puedes retomarla donde la dejaste o empezar una nueva desde cero.`
+                  : "Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener disponibilidad antes de empezar."}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2 sm:gap-0">
             <Button variant="outline" onClick={() => setShowExamConfirm(false)}>
               Cancelar
             </Button>
-            {inProgress && (
-              <Button variant="outline" onClick={() => startExam(false)}>
-                Empezar de cero
+            {freeSimBlocked ? (
+              <Button asChild>
+                <Link to="/checkout" search={{ plan: "premium_6m" }} onClick={() => setShowExamConfirm(false)}>
+                  Mejorar mi plan
+                </Link>
               </Button>
+            ) : (
+              <>
+                {inProgress && (
+                  <Button variant="outline" onClick={() => startExam(false)}>
+                    Empezar de cero
+                  </Button>
+                )}
+                <Button onClick={() => startExam(Boolean(inProgress))}>
+                  {inProgress ? "Reanudar simulación" : "Comenzar simulación"}
+                </Button>
+              </>
             )}
-            <Button onClick={() => startExam(Boolean(inProgress))}>
-              {inProgress ? "Reanudar simulación" : "Comenzar simulación"}
-            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
