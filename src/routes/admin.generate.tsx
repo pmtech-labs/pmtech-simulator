@@ -53,6 +53,16 @@ function taskCode(task: EcoTask, domainOrder: Map<string, number>) {
   return d ? `${d}.${task.task_number}` : `${task.task_number}`;
 }
 
+/** Ordena por número de dominio y, dentro de él, por número de tarea (1.1, 1.2, 2.1…). */
+function sortTasks(list: EcoTask[], domainOrder: Map<string, number>) {
+  return [...list].sort((a, b) => {
+    const da = domainOrder.get(a.domain_id) ?? 99;
+    const db = domainOrder.get(b.domain_id) ?? 99;
+    if (da !== db) return da - db;
+    return (a.task_number ?? 0) - (b.task_number ?? 0);
+  });
+}
+
 function GeneratePage() {
   const email = useAdminEmail();
   const qc = useQueryClient();
@@ -87,8 +97,12 @@ function GeneratePage() {
     if (preferred) setConnectorId(preferred.id);
   }, [activeConnectors, connectorId]);
   const domainTasks = useMemo(
-    () => (tasks.data ?? []).filter((t) => !domainId || t.domain_id === domainId),
-    [tasks.data, domainId],
+    () =>
+      sortTasks(
+        (tasks.data ?? []).filter((t) => !domainId || t.domain_id === domainId),
+        domainOrder,
+      ),
+    [tasks.data, domainId, domainOrder],
   );
 
   const jobs = useQuery({
@@ -371,11 +385,11 @@ function NetworkDiagramGenerator({
   const [count, setCount] = useState(5);
   const [result, setResult] = useState<{ generated: number; requested: number } | null>(null);
 
-  const domainTasks = useMemo(
-    () => tasks.filter((t) => !domainId || t.domain_id === domainId),
-    [tasks, domainId],
-  );
   const domainOrder = useMemo(() => new Map(domains.map((d) => [d.id, d.sort_order])), [domains]);
+  const domainTasks = useMemo(
+    () => sortTasks(tasks.filter((t) => !domainId || t.domain_id === domainId), domainOrder),
+    [tasks, domainId, domainOrder],
+  );
 
   const run = useMutation({
     mutationFn: async () => {
