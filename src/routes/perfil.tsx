@@ -39,12 +39,51 @@ export const Route = createFileRoute("/perfil")({
 
 function ProfilePage() {
   const { data: user, isLoading } = useCurrentUser();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<string | null>(null);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editedName, setEditedName] = useState("");
+  const [isSavingName, setIsSavingName] = useState(false);
+  const [nameError, setNameError] = useState<string | null>(null);
 
   const handleCheckout = (code: "basica_3m" | "premium_6m") => {
     setLoading(code);
     navigate({ to: "/checkout", search: { plan: code } });
+  };
+
+  const startNameEdit = () => {
+    setEditedName(user?.name ?? "");
+    setNameError(null);
+    setIsEditingName(true);
+  };
+
+  const cancelNameEdit = () => {
+    setIsEditingName(false);
+    setEditedName("");
+    setNameError(null);
+  };
+
+  const saveName = async () => {
+    const trimmed = editedName.trim();
+    if (!trimmed || trimmed.length < 2) {
+      setNameError("El nombre debe tener al menos 2 caracteres.");
+      return;
+    }
+    if (trimmed.length > 100) {
+      setNameError("El nombre no puede superar los 100 caracteres.");
+      return;
+    }
+    setIsSavingName(true);
+    setNameError(null);
+    const { error } = await supabase.auth.updateUser({ data: { full_name: trimmed } });
+    setIsSavingName(false);
+    if (error) {
+      setNameError("No se ha podido guardar el nombre. Inténtalo de nuevo.");
+      return;
+    }
+    setIsEditingName(false);
+    await queryClient.invalidateQueries({ queryKey: ["current-user"] });
   };
 
   if (isLoading || !user) {
