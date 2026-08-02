@@ -598,7 +598,50 @@ function Pricing() {
         </div>
       </Reveal>
 
-      <div className="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
+      <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <Reveal className="h-full">
+          <div className="relative h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
+            <h3 className="text-base font-semibold">Gratis</h3>
+            <p className="mt-1 text-xs text-muted-foreground">Sin tarjeta y sin cronómetro</p>
+            <p className="mt-4 flex items-baseline gap-1">
+              <span className="num font-display text-4xl font-bold">0 €</span>
+              <span className="text-sm text-muted-foreground">/ siempre</span>
+            </p>
+            <ul className="mt-6 space-y-2.5">
+              {[
+                { label: "Práctica ilimitada por dominio y lección", included: true },
+                { label: "Simulacros acumulativos por unidad", included: true },
+                { label: "1 simulacro completo de regalo", included: true },
+                { label: "Practicum completo (hotspot, gráficos)", included: false },
+                { label: "Analítica por tarea ECO", included: false },
+              ].map((f) => (
+                <li
+                  key={f.label}
+                  className={
+                    f.included
+                      ? "flex items-start gap-2 text-sm"
+                      : "flex items-start gap-2 text-sm text-muted-foreground/50"
+                  }
+                >
+                  <CheckCircle2
+                    className={
+                      f.included
+                        ? "mt-0.5 h-4 w-4 shrink-0 text-success"
+                        : "mt-0.5 h-4 w-4 shrink-0"
+                    }
+                  />
+                  <span>{f.label}</span>
+                </li>
+              ))}
+            </ul>
+            <Link
+              to="/registro"
+              className="mt-6 flex items-center justify-center gap-1.5 rounded-lg border border-border bg-secondary px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary/70"
+            >
+              Probar gratis <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </Reveal>
         {PLANS.map((plan, i) => {
           const isPremium = plan.code === "premium_6m";
           return (
