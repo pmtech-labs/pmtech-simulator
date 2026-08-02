@@ -244,7 +244,7 @@ function RegistroPage() {
                   Crear cuenta
                 </button>
 
-                <div className="space-y-2 pt-1 text-[11px] leading-relaxed text-muted-foreground">
+                <div className="space-y-2 pt-1 text-justify text-[11px] leading-relaxed text-muted-foreground">
                   <p>
                     Al crear una cuenta, tratamos tus datos (nombre y correo electrónico) para
                     gestionar tu registro y darte acceso al simulador, en base a la ejecución del
