@@ -203,36 +203,8 @@ const STEPS = [
   },
 ];
 
-const FAQS = [
-  {
-    q: "¿Está afiliado o avalado por PMI?",
-    a: "No. PMTech Simulator es un producto independiente, no afiliado ni respaldado por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas registradas de PMI.",
-  },
-  {
-    q: "¿El simulador garantiza que apruebe el examen?",
-    a: "No, y desconfía de quien lo prometa. Es una herramienta de entrenamiento y diagnóstico que te da una estimación razonada de tu preparación real — complementa el estudio estructurado, la revisión de tus errores y tu experiencia profesional, no los sustituye.",
-  },
-  {
-    q: "¿Puedo cambiar de plan Básica a Premium más adelante?",
-    a: "Sí, puedes hacer upgrade en cualquier momento dentro de tu periodo de licencia; solo pagas la diferencia.",
-  },
-  {
-    q: "¿Qué pasa si mi licencia caduca antes del examen?",
-    a: "Puedes renovar cuando quieras. Si detectamos que tu dominio en Business Environment (el área que más pesa en el ECO 2026) sigue bajo al vencer, te avisamos — no dejamos que llegues al examen sin saberlo.",
-  },
-  {
-    q: "¿Sirve si estoy usando otro material de estudio (Rita Mulcahy, PMBOK, etc.)?",
-    a: "Sí, es el complemento natural. El simulador no sustituye la formación estructurada — está pensado para practicar y diagnosticar errores sobre lo que ya estás estudiando.",
-  },
-  {
-    q: "¿Necesito las 35 horas de formación para presentarme al examen PMP?",
-    a: "Sí. PMI exige 35 horas de formación en dirección de proyectos (además de la experiencia gestionando proyectos) para admitir tu solicitud. Impartimos esa formación en español y puedes pedir programa y fechas desde el formulario de la sección Formación.",
-  },
-  {
-    q: "¿Puedo contratar la formación para todo mi equipo?",
-    a: "Sí, tenemos modalidad in-company con calendario adaptado y licencias del simulador para cada participante. Indícalo en el formulario de contacto y te preparamos una propuesta.",
-  },
-];
+const FAQS = HOME_FAQS.map((f) => ({ id: f.id, q: f.q, a: f.a }));
+
 
 
 function Header() {
