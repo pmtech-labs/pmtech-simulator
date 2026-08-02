@@ -82,6 +82,10 @@ function Dashboard() {
     (a, b) => u.masteryByDomain[a.code] - u.masteryByDomain[b.code],
   )[0];
 
+  // Plan gratuito: un único simulacro completo de regalo.
+  const freeSimBlocked = u.plan === "free" && u.freeFullSimUsed;
+
+
   return (
     <AppShell title={`Hola, ${u.name.split(" ")[0]}`} subtitle="Tu preparación para el examen PMP (ECO 2026)">
       <div className="mx-auto max-w-6xl space-y-6">
