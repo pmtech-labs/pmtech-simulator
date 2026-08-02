@@ -5,6 +5,8 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { AdminShell, DataTable, Pager } from "@/components/admin/AdminShell";
+import { QuestionMediaPreview } from "@/components/admin/QuestionMediaPreview";
+import { getAdminQuestionFn } from "@/lib/adminQuestions.functions";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import {
   deleteQuestion,
@@ -413,6 +415,17 @@ function QuestionRow({
               </div>
             )}
             <p className="whitespace-pre-line font-medium">{q.stem}</p>
+            {needsMedia && detail.isPending && !payload ? (
+              <Loader2 className="my-3 h-4 w-4 animate-spin text-muted-foreground" />
+            ) : (
+              <div className="mt-3">
+                <QuestionMediaPreview
+                  format={q.format}
+                  payload={payload}
+                  correctAnswer={q.correct_answer}
+                />
+              </div>
+            )}
             <ul className="mt-2 space-y-1">
               {options.map((opt, i) => {
                 const id = String(opt.id ?? opt.key ?? String.fromCharCode(65 + i));
