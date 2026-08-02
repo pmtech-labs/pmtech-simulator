@@ -34,6 +34,8 @@ import trainingSession from "@/assets/training-session.jpg";
 import { TrainingContactForm } from "@/components/landing/TrainingContactForm";
 import { PlanCta } from "@/components/landing/PlanCta";
 import { PLANS } from "@/services/checkoutService";
+import { HOME_FAQS } from "@/data/faq";
+
 
 const SITE_URL = "https://pmtech-simulator.lovable.app";
 
