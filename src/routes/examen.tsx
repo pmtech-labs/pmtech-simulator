@@ -105,6 +105,12 @@ function fmtShort(s: number) {
   return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
 }
 
+function difficultyLabel(d: Question["difficulty"]) {
+  if (d <= 2) return "Fácil";
+  if (d === 3) return "Media";
+  return "Difícil";
+}
+
 function ExamPage() {
   const search = Route.useSearch();
   const mode: ExamMode = search.modo ?? "full_sim";
@@ -569,6 +575,9 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
             </span>
             <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
               {q.approach === "agile" ? "Ágil" : q.approach === "hybrid" ? "Híbrido" : "Predictivo"}
+            </span>
+            <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
+              {difficultyLabel(q.difficulty)}
             </span>
             <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
               {q.format === "mc_multi"
