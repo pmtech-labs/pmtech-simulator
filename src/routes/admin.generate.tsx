@@ -97,8 +97,12 @@ function GeneratePage() {
     if (preferred) setConnectorId(preferred.id);
   }, [activeConnectors, connectorId]);
   const domainTasks = useMemo(
-    () => (tasks.data ?? []).filter((t) => !domainId || t.domain_id === domainId),
-    [tasks.data, domainId],
+    () =>
+      sortTasks(
+        (tasks.data ?? []).filter((t) => !domainId || t.domain_id === domainId),
+        domainOrder,
+      ),
+    [tasks.data, domainId, domainOrder],
   );
 
   const jobs = useQuery({
