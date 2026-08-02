@@ -191,6 +191,34 @@ function RegistroPage() {
                   />
                 </div>
 
+                <div className="space-y-2.5 pt-1">
+                  <label className="flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
+                    <input
+                      type="checkbox"
+                      checked={acceptTerms}
+                      onChange={(e) => setAcceptTerms(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-primary"
+                    />
+                    <span>
+                      Acepto los <strong className="font-semibold text-foreground">Términos y Condiciones</strong> y la{" "}
+                      <strong className="font-semibold text-foreground">Política de Privacidad</strong>{" "}
+                      <span className="text-muted-foreground">(obligatorio)</span>
+                    </span>
+                  </label>
+                  <label className="flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
+                    <input
+                      type="checkbox"
+                      checked={wantsNewsletter}
+                      onChange={(e) => setWantsNewsletter(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-primary"
+                    />
+                    <span>
+                      Quiero recibir el boletín semanal PMP y novedades del producto{" "}
+                      <span className="text-muted-foreground">(opcional)</span>
+                    </span>
+                  </label>
+                </div>
+
                 {warning && (
                   <p className="rounded-lg border border-accent/40 bg-warning-soft p-2.5 text-xs text-accent-foreground">
                     {warning}
@@ -215,7 +243,40 @@ function RegistroPage() {
                   )}
                   Crear cuenta
                 </button>
+
+                <div className="space-y-2 pt-1 text-[11px] leading-relaxed text-muted-foreground">
+                  <p>
+                    Al crear una cuenta, tratamos tus datos (nombre y correo electrónico) para
+                    gestionar tu registro y darte acceso al simulador, en base a la ejecución del
+                    contrato de servicio que aceptas. Si marcas la casilla del boletín, además
+                    trataremos tu correo para enviarte el boletín semanal y novedades, en base a tu
+                    consentimiento expreso — puedes retirarlo cuando quieras desde el enlace de baja
+                    en cualquier email o desde tu perfil, sin que afecte a tu cuenta del simulador.
+                  </p>
+                  <p>
+                    <strong className="font-semibold text-foreground">
+                      Responsable del tratamiento:
+                    </strong>{" "}
+                    [Razón social completa], con NIF [NIF/CIF] y domicilio en [dirección completa].
+                  </p>
+                  <p>
+                    <strong className="font-semibold text-foreground">
+                      Encargados de tratamiento:
+                    </strong>{" "}
+                    usamos Supabase (alojamiento y autenticación), Resend (envío de correos y del
+                    boletín) y, si te suscribes al boletín, Substack (plataforma de envío del
+                    boletín semanal) — todos actúan como encargados de tratamiento bajo nuestras
+                    instrucciones, nunca ceden tus datos a terceros con fines propios.
+                  </p>
+                  <p>
+                    <strong className="font-semibold text-foreground">Tus derechos:</strong> puedes
+                    ejercer tus derechos de acceso, rectificación, supresión, limitación,
+                    portabilidad y oposición escribiendo a [email de contacto]. Más detalles en
+                    nuestra Política de Privacidad completa.
+                  </p>
+                </div>
               </form>
+
 
               <p className="mt-4 border-t border-border pt-4 text-center text-sm text-muted-foreground">
                 ¿Ya tienes cuenta?{" "}
