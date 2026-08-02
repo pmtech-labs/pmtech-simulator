@@ -343,7 +343,139 @@ function GeneratePage() {
   );
 }
 
+/** Generación determinista (sin IA) de preguntas con diagrama de red CPM/PDM. */
+function NetworkDiagramGenerator({
+  domains,
+  tasks,
+}: {
+  domains: { id: string; name: string }[];
+  tasks: EcoTask[];
+}) {
+  const qc = useQueryClient();
+  const [domainId, setDomainId] = useState("");
+  const [taskId, setTaskId] = useState("");
+  const [count, setCount] = useState(5);
+  const [result, setResult] = useState<{ generated: number; requested: number } | null>(null);
+
+  const domainTasks = useMemo(
+    () => tasks.filter((t) => !domainId || t.domain_id === domainId),
+    [tasks, domainId],
+  );
+
+  const run = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.functions.invoke("generate_network_diagram_question", {
+        method: "POST",
+        body: { task_id: taskId, count },
+      });
+      if (error) throw new Error("No hemos podido generar las preguntas. Inténtalo de nuevo.");
+      return data as { generated: number; requested: number; question_ids: string[] };
+    },
+    onSuccess: (data) => {
+      setResult({ generated: data.generated ?? 0, requested: data.requested ?? count });
+      toast.success(`${data.generated ?? 0} de ${data.requested ?? count} generadas`);
+      qc.invalidateQueries({ queryKey: ["admin-jobs"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  return (
+    <section className="space-y-3 rounded-lg border border-border bg-card p-4">
+      <div className="space-y-1">
+        <h2 className="flex items-center gap-2 text-sm font-semibold">
+          <Network className="h-4 w-4" /> Diagramas de red (CPM/PDM)
+        </h2>
+        <p className="text-xs text-muted-foreground">
+          Generación determinista por código, sin modelos de IA: topología, ruta crítica y distractores se
+          calculan con aritmética exacta. Aparecerán como «Manual» en la cola de revisión.
+        </p>
+      </div>
+
+      <div className="grid gap-3 lg:grid-cols-3">
+        <label className="space-y-1.5">
+          <span className="text-xs font-medium text-muted-foreground">Dominio ECO</span>
+          <select
+            value={domainId}
+            onChange={(e) => {
+              setDomainId(e.target.value);
+              setTaskId("");
+            }}
+            className={inputCls}
+          >
+            <option value="">Todos los dominios</option>
+            {domains.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="space-y-1.5">
+          <span className="text-xs font-medium text-muted-foreground">Tarea ECO</span>
+          <select value={taskId} onChange={(e) => setTaskId(e.target.value)} className={inputCls}>
+            <option value="">Selecciona…</option>
+            {domainTasks.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.task_number}. {t.title}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="space-y-1.5">
+          <span className="text-xs font-medium text-muted-foreground">Nº de preguntas (1–50)</span>
+          <input
+            type="number"
+            min={1}
+            max={50}
+            value={count}
+            onChange={(e) => setCount(Number(e.target.value))}
+            className={inputCls}
+          />
+        </label>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          disabled={run.isPending}
+          onClick={() => {
+            if (!taskId) return toast.error("Selecciona una tarea ECO.");
+            if (count < 1 || count > 50) return toast.error("El número debe estar entre 1 y 50.");
+            setResult(null);
+            run.mutate();
+          }}
+          className="inline-flex items-center gap-2 rounded-md border border-primary px-4 py-2 text-sm font-semibold text-primary disabled:opacity-60"
+        >
+          {run.isPending ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" /> Generando…
+            </>
+          ) : (
+            <>
+              <Network className="h-4 w-4" /> Generar preguntas de diagrama de red (CPM/PDM)
+            </>
+          )}
+        </button>
+        {result && (
+          <p className="text-sm">
+            <span className="num font-semibold">
+              {result.generated} de {result.requested}
+            </span>{" "}
+            generadas ·{" "}
+            <Link to="/admin/review" className="underline">
+              Ir a la cola de revisión
+            </Link>
+          </p>
+        )}
+      </div>
+    </section>
+  );
+}
+
 function JobRow({ job }: { job: import("@/services/adminService").GenerationJob }) {
+
   const [open, setOpen] = useState(false);
   const failed = job.status === "failed";
   return (
