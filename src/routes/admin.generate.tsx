@@ -385,11 +385,11 @@ function NetworkDiagramGenerator({
   const [count, setCount] = useState(5);
   const [result, setResult] = useState<{ generated: number; requested: number } | null>(null);
 
-  const domainTasks = useMemo(
-    () => tasks.filter((t) => !domainId || t.domain_id === domainId),
-    [tasks, domainId],
-  );
   const domainOrder = useMemo(() => new Map(domains.map((d) => [d.id, d.sort_order])), [domains]);
+  const domainTasks = useMemo(
+    () => sortTasks(tasks.filter((t) => !domainId || t.domain_id === domainId), domainOrder),
+    [tasks, domainId, domainOrder],
+  );
 
   const run = useMutation({
     mutationFn: async () => {
