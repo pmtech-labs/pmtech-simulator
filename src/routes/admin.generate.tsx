@@ -1,20 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChevronDown, Info, Loader2, Sparkles } from "lucide-react";
+import { ChevronDown, Info, Loader2, Network, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { AdminShell, DataTable, Pager } from "@/components/admin/AdminShell";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
+import { supabase } from "@/integrations/supabase/client";
 import {
   createGenerationJob,
   listConnectors,
   listEcoDomains,
   listEcoTasks,
   listGenerationJobs,
+  type EcoTask,
   type JobResult,
 } from "@/services/adminService";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/admin/generate")({
   component: GeneratePage,
