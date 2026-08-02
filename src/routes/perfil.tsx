@@ -105,12 +105,68 @@ function ProfilePage() {
           <div className="rounded-2xl border border-border bg-card p-5">
             <h2 className="text-base font-semibold">Datos de la cuenta</h2>
             <div className="mt-4 space-y-3">
-              <div className="flex items-center gap-3 rounded-xl border border-border px-3 py-2.5">
-                <User className="h-4 w-4 shrink-0 text-muted-foreground" />
-                <div className="min-w-0">
-                  <p className="text-[11px] text-muted-foreground">Nombre</p>
-                  <p className="truncate text-sm font-medium">{user.name}</p>
+              <div className="rounded-xl border border-border px-3 py-2.5">
+                <div className="flex items-center gap-3">
+                  <User className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[11px] text-muted-foreground">Nombre</p>
+                    {isEditingName ? (
+                      <input
+                        type="text"
+                        value={editedName}
+                        onChange={(e) => setEditedName(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") void saveName();
+                          if (e.key === "Escape") cancelNameEdit();
+                        }}
+                        disabled={isSavingName}
+                        className="mt-0.5 w-full rounded-md border border-border bg-background px-2 py-1 text-sm font-medium outline-none focus:ring-2 focus:ring-ring"
+                        aria-label="Editar nombre"
+                      />
+                    ) : (
+                      <p className="truncate text-sm font-medium">{user.name}</p>
+                    )}
+                  </div>
+                  {isEditingName ? (
+                    <div className="flex shrink-0 items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => void saveName()}
+                        disabled={isSavingName}
+                        className="rounded-md p-1.5 text-success hover:bg-muted disabled:opacity-50"
+                        aria-label="Guardar nombre"
+                        title="Guardar"
+                      >
+                        {isSavingName ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Check className="h-4 w-4" />
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={cancelNameEdit}
+                        disabled={isSavingName}
+                        className="rounded-md p-1.5 text-muted-foreground hover:bg-muted disabled:opacity-50"
+                        aria-label="Cancelar edición"
+                        title="Cancelar"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={startNameEdit}
+                      className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:bg-muted"
+                      aria-label="Editar nombre"
+                      title="Editar nombre"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </button>
+                  )}
                 </div>
+                {nameError && <p className="mt-2 text-xs text-destructive">{nameError}</p>}
               </div>
               <div className="flex items-center gap-3 rounded-xl border border-border px-3 py-2.5">
                 <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
