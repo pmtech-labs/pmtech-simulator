@@ -1,0 +1,2 @@
+CREATE POLICY "admins leen todas las preguntas" ON public.questions FOR SELECT TO authenticated USING (public.is_admin(auth.uid()));
+CREATE POLICY "admins leen todos los clusters" ON public.case_clusters FOR SELECT TO authenticated USING (public.is_admin(auth.uid()));
