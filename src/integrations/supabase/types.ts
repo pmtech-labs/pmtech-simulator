@@ -558,6 +558,7 @@ export type Database = {
         Row: {
           created_at: string | null
           expires_at: string
+          free_full_sim_used: boolean
           id: string
           plan_id: string | null
           starts_at: string | null
@@ -569,6 +570,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           expires_at: string
+          free_full_sim_used?: boolean
           id?: string
           plan_id?: string | null
           starts_at?: string | null
@@ -580,6 +582,7 @@ export type Database = {
         Update: {
           created_at?: string | null
           expires_at?: string
+          free_full_sim_used?: boolean
           id?: string
           plan_id?: string | null
           starts_at?: string | null
@@ -1140,7 +1143,7 @@ export type Database = {
         | "pulldown"
       item_status: "draft" | "in_review" | "approved" | "published" | "retired"
       item_type: "standalone" | "case_child" | "practicum"
-      plan_code: "basica_3m" | "premium_6m"
+      plan_code: "basica_3m" | "premium_6m" | "free"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1298,7 +1301,7 @@ export const Constants = {
       ],
       item_status: ["draft", "in_review", "approved", "published", "retired"],
       item_type: ["standalone", "case_child", "practicum"],
-      plan_code: ["basica_3m", "premium_6m"],
+      plan_code: ["basica_3m", "premium_6m", "free"],
     },
   },
 } as const

@@ -77,7 +77,30 @@ function ProfilePage() {
                   <p className="truncate text-sm font-medium">{user.email}</p>
                 </div>
               </div>
-              {user.expiresAt ? (
+              {user.plan === "free" ? (
+                <div className="rounded-xl border border-accent bg-warning-soft/50 px-3 py-2.5">
+                  <div className="flex items-center gap-3">
+                    <ShieldCheck className="h-4 w-4 shrink-0 text-accent-foreground" />
+                    <div className="min-w-0">
+                      <p className="text-[11px] text-accent-foreground">Plan activo</p>
+                      <p className="truncate text-sm font-medium">Plan gratuito</p>
+                    </div>
+                  </div>
+                  {user.freeFullSimUsed && (
+                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                      Ya has usado tu simulacro completo de regalo. La práctica por dominio,
+                      lección y acumulativa sigue disponible sin límite.{" "}
+                      <Link
+                        to="/checkout"
+                        search={{ plan: "premium_6m" }}
+                        className="font-semibold text-foreground hover:underline"
+                      >
+                        Mejorar mi plan
+                      </Link>
+                    </p>
+                  )}
+                </div>
+              ) : user.expiresAt ? (
                 <div className="flex items-center gap-3 rounded-xl border border-success bg-success-soft px-3 py-2.5">
                   <ShieldCheck className="h-4 w-4 shrink-0 text-success" />
                   <div className="min-w-0">

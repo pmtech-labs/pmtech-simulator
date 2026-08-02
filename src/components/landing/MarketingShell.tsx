@@ -36,7 +36,7 @@ export function MarketingShell({ children }: { children: ReactNode }) {
               to="/registro"
               className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-accent px-3 py-2 text-[13px] font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
             >
-              Empezar ahora <ArrowRight className="h-4 w-4 shrink-0" />
+              Probar gratis <ArrowRight className="h-4 w-4 shrink-0" />
             </Link>
           </div>
         </div>
