@@ -271,6 +271,10 @@ function PracticePage() {
                     ))}
                   </select>
                 </label>
+                <p className="mt-2 flex items-start gap-2 text-xs text-muted-foreground">
+                  <Info className="h-4 w-4 shrink-0" />
+                  <span>Nuestro temario propio — mapeado a las tareas ECO 2026, no un concepto oficial de PMI.</span>
+                </p>
                 {mode === "unit_quiz" && (
                   <label className="mt-3 flex items-start gap-2 rounded-xl border border-border p-3 text-xs">
                     <input

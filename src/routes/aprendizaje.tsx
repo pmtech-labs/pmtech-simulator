@@ -14,6 +14,7 @@ import {
   RotateCcw,
   Zap,
   Sparkles,
+  Info,
 } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
@@ -29,16 +30,16 @@ import {
 export const Route = createFileRoute("/aprendizaje")({
   head: () => ({
     meta: [
-      { title: "Ruta de aprendizaje PMP · Temario por lecciones" },
+      { title: "Ruta de aprendizaje PMTech · Temario propio mapeado al ECO 2026" },
       {
         name: "description",
         content:
-          "Recorre el temario del programa PMP lección a lección, con tu dominio por unidad y práctica dirigida por lección o simulacro acumulativo.",
+          "Nuestro temario propio, organizado en 14 lecciones mapeadas a las 26 tareas del ECO 2026, con tu dominio por unidad y práctica dirigida por lección o simulacro acumulativo.",
       },
-      { property: "og:title", content: "Ruta de aprendizaje PMP" },
+      { property: "og:title", content: "Ruta de aprendizaje PMTech" },
       {
         property: "og:description",
-        content: "Temario secuencial con progreso por lección y práctica dirigida.",
+        content: "Temario propio mapeado a las 26 tareas del ECO 2026, con progreso por lección.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -285,10 +286,16 @@ function LearningPathPage() {
 
   return (
     <AppShell
-      title="Ruta de aprendizaje"
-      subtitle="El temario completo, lección a lección, con tu progreso real"
+      title="Ruta de aprendizaje PMTech"
+      subtitle="Nuestro temario propio, organizado para que practiques con progresión — cada lección está mapeada a tareas reales del ECO 2026"
     >
       <div className="mx-auto max-w-3xl space-y-6">
+        <div className="flex gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed text-foreground">
+          <Info className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+          <p>
+            Las <strong>lecciones</strong> son nuestro propio temario de estudio, pensado para que practiques con progresión — no son un concepto oficial de PMI. Lo que sí es oficial son las <strong>26 tareas del ECO 2026</strong> (agrupadas en 3 dominios: Personas, Proceso, Entorno de Negocio), y cada lección está mapeada a una o varias de ellas. Si estudiaste con material antiguo organizado por “áreas de conocimiento” (Alcance, Cronograma, Coste…), ese modelo ya no se usa desde PMBOK 7 — aquí no lo vas a encontrar porque no es la estructura vigente del examen.
+          </p>
+        </div>
         <section className="rounded-2xl border border-border bg-card p-5">
           <div className="flex items-start gap-3">
             <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-secondary">
