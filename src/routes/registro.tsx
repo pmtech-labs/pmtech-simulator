@@ -278,7 +278,7 @@ function RegistroPage() {
               </form>
 
 
-              <p className="mt-4 border-t border-border pt-4 text-center text-sm text-muted-foreground">
+              <p className="mt-4 border-t border-border pt-4 text-justify text-center text-sm text-muted-foreground">
                 ¿Ya tienes cuenta?{" "}
                 <Link
                   to="/login"
