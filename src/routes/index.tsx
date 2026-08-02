@@ -252,18 +252,8 @@ function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link
-              to="/login"
-              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-primary px-3 py-2 text-[13px] font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
-            >
-              Iniciar sesión
-            </Link>
-            <Link
-              to="/registro"
-              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-accent px-3 py-2 text-[13px] font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
-            >
-              Probar gratis <ArrowRight className="h-4 w-4 shrink-0" />
-            </Link>
+            <LoginButton />
+            <TryFreeButton />
           </div>
         </div>
 
@@ -308,20 +298,8 @@ function Header() {
               Contacto
             </a>
 
-            <Link
-              to="/login"
-              onClick={() => setOpen(false)}
-              className="inline-flex w-fit items-center gap-1.5 rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground"
-            >
-              Iniciar sesión
-            </Link>
-            <Link
-              to="/registro"
-              onClick={() => setOpen(false)}
-              className="inline-flex w-fit items-center gap-1.5 rounded-lg bg-accent px-4 py-2 font-semibold text-accent-foreground"
-            >
-              Probar gratis <ArrowRight className="h-4 w-4" />
-            </Link>
+            <LoginButton onClick={() => setOpen(false)} />
+            <TryFreeButton onClick={() => setOpen(false)} />
           </nav>
         </div>
       )}
