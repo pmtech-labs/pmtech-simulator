@@ -1,7 +1,8 @@
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 
+import { LoginButton } from "@/components/LoginButton";
 import { useAuth } from "@/hooks/useAuth";
 
 /**
@@ -38,12 +39,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
           <p className="mt-1 text-sm text-muted-foreground">
             Accede con tu cuenta para continuar con tu preparación.
           </p>
-          <Link
-            to="/login"
-            className="mt-4 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-          >
-            Iniciar sesión
-          </Link>
+          <LoginButton size="lg" className="mt-4" />
         </div>
       </div>
     );
