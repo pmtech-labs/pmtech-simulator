@@ -289,7 +289,10 @@ function GeneratePage() {
           </div>
         </form>
 
+        <NetworkDiagramGenerator domains={domains.data ?? []} tasks={tasks.data ?? []} />
+
         {result && (
+
           <div className="rounded-lg border border-border bg-card p-4 text-sm">
             <p className="font-semibold">Resumen del job</p>
             <p className="mt-1 text-muted-foreground">
