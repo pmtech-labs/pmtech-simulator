@@ -7,6 +7,7 @@ import {
   DomainLevelBadge,
   DomainMasteryLegend,
 } from "@/components/progress/DomainMasteryLegend";
+import { DiplomasSection } from "@/components/profile/DiplomasSection";
 import { RequireAuth } from "@/components/auth/RequireAuth";
 import { DOMAINS } from "@/data/mockData";
 import { useCurrentUser } from "@/hooks/useCandidateData";
@@ -229,6 +230,8 @@ function ProfilePage() {
             activar tu licencia con nuestro equipo.
           </p>
         </section>
+
+        <DiplomasSection userName={user.name} />
       </div>
     </AppShell>
   );

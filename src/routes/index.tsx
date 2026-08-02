@@ -34,6 +34,8 @@ import trainingSession from "@/assets/training-session.jpg";
 import { TrainingContactForm } from "@/components/landing/TrainingContactForm";
 import { PlanCta } from "@/components/landing/PlanCta";
 import { PLANS } from "@/services/checkoutService";
+import { HOME_FAQS } from "@/data/faq";
+
 
 const SITE_URL = "https://pmtech-simulator.lovable.app";
 
@@ -203,36 +205,8 @@ const STEPS = [
   },
 ];
 
-const FAQS = [
-  {
-    q: "¿Está afiliado o avalado por PMI?",
-    a: "No. PMTech Simulator es un producto independiente, no afiliado ni respaldado por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas registradas de PMI.",
-  },
-  {
-    q: "¿El simulador garantiza que apruebe el examen?",
-    a: "No, y desconfía de quien lo prometa. Es una herramienta de entrenamiento y diagnóstico que te da una estimación razonada de tu preparación real — complementa el estudio estructurado, la revisión de tus errores y tu experiencia profesional, no los sustituye.",
-  },
-  {
-    q: "¿Puedo cambiar de plan Básica a Premium más adelante?",
-    a: "Sí, puedes hacer upgrade en cualquier momento dentro de tu periodo de licencia; solo pagas la diferencia.",
-  },
-  {
-    q: "¿Qué pasa si mi licencia caduca antes del examen?",
-    a: "Puedes renovar cuando quieras. Si detectamos que tu dominio en Business Environment (el área que más pesa en el ECO 2026) sigue bajo al vencer, te avisamos — no dejamos que llegues al examen sin saberlo.",
-  },
-  {
-    q: "¿Sirve si estoy usando otro material de estudio (Rita Mulcahy, PMBOK, etc.)?",
-    a: "Sí, es el complemento natural. El simulador no sustituye la formación estructurada — está pensado para practicar y diagnosticar errores sobre lo que ya estás estudiando.",
-  },
-  {
-    q: "¿Necesito las 35 horas de formación para presentarme al examen PMP?",
-    a: "Sí. PMI exige 35 horas de formación en dirección de proyectos (además de la experiencia gestionando proyectos) para admitir tu solicitud. Impartimos esa formación en español y puedes pedir programa y fechas desde el formulario de la sección Formación.",
-  },
-  {
-    q: "¿Puedo contratar la formación para todo mi equipo?",
-    a: "Sí, tenemos modalidad in-company con calendario adaptado y licencias del simulador para cada participante. Indícalo en el formulario de contacto y te preparamos una propuesta.",
-  },
-];
+const FAQS = HOME_FAQS.map((f) => ({ id: f.id, q: f.q, a: f.a }));
+
 
 
 function Header() {
@@ -270,9 +244,9 @@ function Header() {
             <a href="#formacion" className="whitespace-nowrap transition-colors hover:text-foreground">
               Formación
             </a>
-            <a href="#faq" className="whitespace-nowrap transition-colors hover:text-foreground">
+            <Link to="/faq" className="whitespace-nowrap transition-colors hover:text-foreground">
               Preguntas frecuentes
-            </a>
+            </Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -325,9 +299,9 @@ function Header() {
             <a href="#formacion" onClick={() => setOpen(false)}>
               Formación
             </a>
-            <a href="#faq" onClick={() => setOpen(false)}>
+            <Link to="/faq" onClick={() => setOpen(false)}>
               Preguntas frecuentes
-            </a>
+            </Link>
             <a href="#contacto" onClick={() => setOpen(false)}>
               Contacto
             </a>
@@ -734,13 +708,29 @@ function FAQ() {
             <AccordionTrigger className="text-left text-sm font-semibold">
               {item.q}
             </AccordionTrigger>
-            <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
-              {item.a}
+            <AccordionContent className="space-y-3 text-sm leading-relaxed text-muted-foreground">
+              <p>{item.a}</p>
+              <Link
+                to="/faq"
+                hash={item.id}
+                className="inline-flex items-center gap-1 text-xs font-semibold text-accent-foreground underline-offset-4 hover:underline"
+              >
+                Ver todas <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
+      <div className="mt-8 text-center">
+        <Link
+          to="/faq"
+          className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary"
+        >
+          Ver todas las preguntas frecuentes <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
     </section>
+
   );
 }
 
@@ -809,9 +799,9 @@ function Footer() {
             <a href="#boletin" className="hover:text-foreground">
               Boletín
             </a>
-            <a href="#faq" className="hover:text-foreground">
+            <Link to="/faq" className="hover:text-foreground">
               FAQ
-            </a>
+            </Link>
 
             <Link to="/certificacion-pmp" className="hover:text-foreground">
               Certificación PMP
