@@ -298,8 +298,10 @@ function Header() {
               Contacto
             </a>
 
-            <LoginButton onClick={() => setOpen(false)} />
-            <TryFreeButton onClick={() => setOpen(false)} />
+            <div className="flex w-fit items-center gap-3 pt-2">
+              <LoginButton onClick={() => setOpen(false)} />
+              <TryFreeButton onClick={() => setOpen(false)} />
+            </div>
           </nav>
         </div>
       )}
