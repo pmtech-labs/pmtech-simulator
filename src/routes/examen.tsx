@@ -343,6 +343,8 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
         repeatedItemsCount: 0,
         disclaimer: e instanceof Error ? e.message : "",
         interpretationNote: null,
+        diploma: null,
+
       });
     } finally {
       setFinishing(false);
