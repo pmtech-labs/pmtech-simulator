@@ -45,10 +45,16 @@ function RegistroPage() {
   const [error, setError] = useState<string | null>(null);
   const [pendingEmail, setPendingEmail] = useState(false);
   const [warning, setWarning] = useState<string | null>(null);
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [wantsNewsletter, setWantsNewsletter] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    if (!acceptTerms) {
+      setError("Debes aceptar los Términos y Condiciones y la Política de Privacidad.");
+      return;
+    }
     if (password.length < 8) {
       setError("La contraseña debe tener al menos 8 caracteres.");
       return;
@@ -64,10 +70,18 @@ function RegistroPage() {
         password,
         fullName: fullName.trim() || undefined,
       });
+      // Consentimiento expreso del boletín: nunca bloquea el alta de cuenta.
+      if (wantsNewsletter) {
+        await subscribeNewsletterOptIn({
+          email: email.trim(),
+          fullName: fullName.trim() || undefined,
+        });
+      }
       if (needsEmailConfirmation) {
         setPendingEmail(true);
         return;
       }
+
       // Plan gratuito real: se aprovisiona al instante (idempotente en el backend).
       try {
         await provisionFreeLicense();
