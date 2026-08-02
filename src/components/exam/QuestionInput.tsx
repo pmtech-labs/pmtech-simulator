@@ -9,8 +9,23 @@ import type { AnswerValue, Question } from "@/types/exam";
 export function QuestionGraphic({ question }: { question: Question }) {
   if (question.format !== "graphic_based") return null;
   const g = question.graphic;
-  if (!g || g.chart_type !== "earned_value" || !g.evChart) return null;
-  return <EarnedValueChart chart={g.evChart} />;
+  if (!g) return null;
+
+  if (g.chart_type === "earned_value" && g.evChart) {
+    return <EarnedValueChart chart={g.evChart} />;
+  }
+
+  if (g.chart_type === "network_diagram" && g.diagram_svg) {
+    return (
+      <div
+        className="w-full overflow-x-auto rounded-lg border border-border bg-card p-3 [&_svg]:h-auto [&_svg]:max-w-none"
+        // El SVG procede del banco de preguntas gestionado por el equipo editorial.
+        dangerouslySetInnerHTML={{ __html: g.diagram_svg }}
+      />
+    );
+  }
+
+  return null;
 }
 
 /**
