@@ -21,6 +21,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { LoginButton } from "@/components/LoginButton";
+import { TryFreeButton } from "@/components/TryFreeButton";
 import { AboutUs } from "@/components/landing/AboutUs";
 import { SocialProof } from "@/components/landing/SocialProof";
 import { NewsletterSignup } from "@/components/landing/NewsletterSignup";
