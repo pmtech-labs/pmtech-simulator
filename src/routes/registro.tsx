@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { CheckCircle2, GraduationCap, Loader2, UserPlus } from "lucide-react";
 import { useState } from "react";
 
-import { signUpCandidate } from "@/services/authService";
+import { provisionFreeLicense, signUpCandidate } from "@/services/authService";
 
 interface RegistroSearch {
   plan?: string;
@@ -40,6 +40,7 @@ function RegistroPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pendingEmail, setPendingEmail] = useState(false);
+  const [warning, setWarning] = useState<string | null>(null);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,7 +64,16 @@ function RegistroPage() {
         setPendingEmail(true);
         return;
       }
-      navigate({ to: plan ? `/checkout?plan=${plan}` : "/dashboard", replace: true });
+      // Plan gratuito real: se aprovisiona al instante (idempotente en el backend).
+      try {
+        await provisionFreeLicense();
+      } catch {
+        setWarning(
+          "Tu cuenta se ha creado, pero no hemos podido activar el plan gratuito automáticamente. Puedes seguir e intentarlo más tarde o escribirnos.",
+        );
+      }
+      const paidPlan = plan === "basica_3m" || plan === "premium_6m";
+      navigate({ to: paidPlan ? `/checkout?plan=${plan}` : "/dashboard", replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "No hemos podido crear tu cuenta.");
     } finally {
@@ -102,9 +112,9 @@ function RegistroPage() {
             <>
               <h1 className="text-lg font-semibold">Crear cuenta</h1>
               <p className="mt-1 text-sm text-muted-foreground">
-                {plan
+                {plan === "basica_3m" || plan === "premium_6m"
                   ? "Regístrate para continuar con la contratación de tu licencia."
-                  : "Empieza a practicar y a diagnosticar tus errores."}
+                  : "Plan gratuito real: práctica ilimitada sin cronómetro y un simulacro completo de regalo."}
               </p>
 
               <form onSubmit={onSubmit} className="mt-5 space-y-3">
@@ -162,6 +172,12 @@ function RegistroPage() {
                     className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent"
                   />
                 </div>
+
+                {warning && (
+                  <p className="rounded-lg border border-accent/40 bg-warning-soft p-2.5 text-xs text-accent-foreground">
+                    {warning}
+                  </p>
+                )}
 
                 {error && (
                   <p className="rounded-lg border border-destructive/40 bg-danger-soft p-2.5 text-xs text-destructive">

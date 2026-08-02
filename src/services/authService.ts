@@ -35,6 +35,18 @@ export async function signUpCandidate({ email, password, fullName }: Credentials
   return { session: data.session, needsEmailConfirmation: !data.session };
 }
 
+/**
+ * Aprovisiona la licencia gratuita del candidato recién registrado.
+ * Es idempotente: si ya existe una licencia activa devuelve created=false.
+ */
+export async function provisionFreeLicense(): Promise<{ created: boolean }> {
+  const { data, error } = await supabase.functions.invoke("provision_free_license", {
+    method: "POST",
+  });
+  if (error) throw new Error("No hemos podido activar tu plan gratuito.");
+  return { created: Boolean((data as { created?: boolean } | null)?.created) };
+}
+
 export async function signInCandidate({ email, password }: CredentialsInput) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw new Error(authErrorMessage(error.message));
