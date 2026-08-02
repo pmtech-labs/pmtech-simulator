@@ -114,7 +114,7 @@ function RegistroPage() {
             <div className="text-center">
               <CheckCircle2 className="mx-auto h-7 w-7 text-success" />
               <h1 className="mt-3 text-lg font-semibold">Confirma tu correo</h1>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-1 text-justify text-sm leading-relaxed text-muted-foreground">
                 Te hemos enviado un enlace de confirmación a <strong>{email}</strong>. Cuando lo
                 abras podrás iniciar sesión y continuar con tu preparación.
               </p>
