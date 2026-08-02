@@ -114,7 +114,7 @@ function RegistroPage() {
             <div className="text-center">
               <CheckCircle2 className="mx-auto h-7 w-7 text-success" />
               <h1 className="mt-3 text-lg font-semibold">Confirma tu correo</h1>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-1 text-justify text-sm leading-relaxed text-muted-foreground">
                 Te hemos enviado un enlace de confirmación a <strong>{email}</strong>. Cuando lo
                 abras podrás iniciar sesión y continuar con tu preparación.
               </p>
@@ -129,7 +129,7 @@ function RegistroPage() {
           ) : (
             <>
               <h1 className="text-lg font-semibold">Crear cuenta</h1>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-1 text-justify text-sm text-muted-foreground">
                 {plan === "basica_3m" || plan === "premium_6m"
                   ? "Regístrate para continuar con la contratación de tu licencia."
                   : "Plan gratuito real: práctica ilimitada sin cronómetro y un simulacro completo de regalo."}
@@ -192,7 +192,7 @@ function RegistroPage() {
                 </div>
 
                 <div className="space-y-2.5 pt-1">
-                  <label className="flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
+                  <label className="flex cursor-pointer items-start gap-2.5 text-justify text-xs leading-relaxed text-muted-foreground">
                     <input
                       type="checkbox"
                       checked={acceptTerms}
@@ -205,7 +205,7 @@ function RegistroPage() {
                       <span className="text-muted-foreground">(obligatorio)</span>
                     </span>
                   </label>
-                  <label className="flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
+                  <label className="flex cursor-pointer items-start gap-2.5 text-justify text-xs leading-relaxed text-muted-foreground">
                     <input
                       type="checkbox"
                       checked={wantsNewsletter}
@@ -244,7 +244,7 @@ function RegistroPage() {
                   Crear cuenta
                 </button>
 
-                <div className="space-y-2 pt-1 text-[11px] leading-relaxed text-muted-foreground">
+                <div className="space-y-2 pt-1 text-justify text-[11px] leading-relaxed text-muted-foreground">
                   <p>
                     Al crear una cuenta, tratamos tus datos (nombre y correo electrónico) para
                     gestionar tu registro y darte acceso al simulador, en base a la ejecución del
@@ -278,7 +278,7 @@ function RegistroPage() {
               </form>
 
 
-              <p className="mt-4 border-t border-border pt-4 text-center text-sm text-muted-foreground">
+              <p className="mt-4 border-t border-border pt-4 text-justify text-sm text-muted-foreground">
                 ¿Ya tienes cuenta?{" "}
                 <Link
                   to="/login"
