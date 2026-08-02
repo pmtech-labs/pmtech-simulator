@@ -686,6 +686,8 @@ export type Database = {
           id: string
           source: string
           status: string
+          synced_to_resend_at: string | null
+          synced_to_substack_at: string | null
           unsubscribed_at: string | null
         }
         Insert: {
@@ -695,6 +697,8 @@ export type Database = {
           id?: string
           source?: string
           status?: string
+          synced_to_resend_at?: string | null
+          synced_to_substack_at?: string | null
           unsubscribed_at?: string | null
         }
         Update: {
@@ -704,6 +708,8 @@ export type Database = {
           id?: string
           source?: string
           status?: string
+          synced_to_resend_at?: string | null
+          synced_to_substack_at?: string | null
           unsubscribed_at?: string | null
         }
         Relationships: []
