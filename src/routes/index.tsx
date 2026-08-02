@@ -708,13 +708,29 @@ function FAQ() {
             <AccordionTrigger className="text-left text-sm font-semibold">
               {item.q}
             </AccordionTrigger>
-            <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
-              {item.a}
+            <AccordionContent className="space-y-3 text-sm leading-relaxed text-muted-foreground">
+              <p>{item.a}</p>
+              <Link
+                to="/faq"
+                hash={item.id}
+                className="inline-flex items-center gap-1 text-xs font-semibold text-accent-foreground underline-offset-4 hover:underline"
+              >
+                Ver todas <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
+      <div className="mt-8 text-center">
+        <Link
+          to="/faq"
+          className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary"
+        >
+          Ver todas las preguntas frecuentes <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
     </section>
+
   );
 }
 
