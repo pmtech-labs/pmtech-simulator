@@ -44,6 +44,15 @@ const FOCUS_TAGS = ["ai", "sustainability", "value_delivery"];
 const PAGE_SIZE = 10;
 const inputCls = "w-full rounded-md border border-border bg-background px-3 py-2 text-sm";
 
+/**
+ * Los task_number del ECO se numeran dentro de cada dominio, por lo que se repiten
+ * entre dominios. Mostramos "dominio.tarea" (p. ej. 1.3) para que sean únicos.
+ */
+function taskCode(task: EcoTask, domainOrder: Map<string, number>) {
+  const d = domainOrder.get(task.domain_id);
+  return d ? `${d}.${task.task_number}` : `${task.task_number}`;
+}
+
 function GeneratePage() {
   const email = useAdminEmail();
   const qc = useQueryClient();
@@ -63,6 +72,11 @@ function GeneratePage() {
   const [tags, setTags] = useState<string[]>([]);
   const [result, setResult] = useState<JobResult | null>(null);
   const [page, setPage] = useState(1);
+
+  const domainOrder = useMemo(
+    () => new Map((domains.data ?? []).map((d) => [d.id, d.sort_order])),
+    [domains.data],
+  );
 
   const activeConnectors = (connectors.data?.rows ?? []).filter((c) => c.is_active);
 
@@ -174,7 +188,7 @@ function GeneratePage() {
                       }
                     />
                     <span>
-                      <span className="num text-muted-foreground">{t.task_number}.</span> {t.title}
+                      <span className="num text-muted-foreground">{taskCode(t, domainOrder)}</span> {t.title}
                     </span>
                   </label>
                 ))
@@ -348,7 +362,7 @@ function NetworkDiagramGenerator({
   domains,
   tasks,
 }: {
-  domains: { id: string; name: string }[];
+  domains: { id: string; name: string; sort_order: number }[];
   tasks: EcoTask[];
 }) {
   const qc = useQueryClient();
@@ -361,6 +375,7 @@ function NetworkDiagramGenerator({
     () => tasks.filter((t) => !domainId || t.domain_id === domainId),
     [tasks, domainId],
   );
+  const domainOrder = useMemo(() => new Map(domains.map((d) => [d.id, d.sort_order])), [domains]);
 
   const run = useMutation({
     mutationFn: async () => {
@@ -417,7 +432,7 @@ function NetworkDiagramGenerator({
             <option value="">Selecciona…</option>
             {domainTasks.map((t) => (
               <option key={t.id} value={t.id}>
-                {t.task_number}. {t.title}
+                {taskCode(t, domainOrder)} {t.title}
               </option>
             ))}
           </select>
