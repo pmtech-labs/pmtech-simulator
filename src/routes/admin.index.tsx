@@ -69,10 +69,9 @@ function AdminDashboard() {
     (acc, r) => {
       acc.published += Number(r.published_count ?? 0);
       acc.draft += Number(r.draft_count ?? 0);
-      acc.in_review += Number(r.in_review_count ?? 0);
       return acc;
     },
-    { published: 0, draft: 0, in_review: 0 },
+    { published: 0, draft: 0 },
   );
   const tasksCovered = rows.filter((r) => Number(r.published_count ?? 0) > 0).length;
   const tasksEmpty = rows.length - tasksCovered;
