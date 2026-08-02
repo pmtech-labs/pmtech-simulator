@@ -57,6 +57,14 @@ export interface FinishSummary {
   repeatedItemsCount: number;
   disclaimer: string;
   interpretationNote: string | null;
+  diploma: DiplomaInfo | null;
+}
+
+export interface DiplomaInfo {
+  id: string;
+  issuedAt: string;
+  thresholdPct: number;
+  disclaimer: string;
 }
 
 interface RawOption {
@@ -281,6 +289,14 @@ export async function finishExam(examId: string): Promise<FinishSummary> {
     repeatedItemsCount: data.repeated_items_count ?? 0,
     disclaimer: data.disclaimer ?? "",
     interpretationNote: data.interpretation_note ?? null,
+    diploma: data.diploma
+      ? {
+          id: String(data.diploma.id),
+          issuedAt: String(data.diploma.issued_at),
+          thresholdPct: Number(data.diploma.threshold_pct) || 0,
+          disclaimer: String(data.diploma.disclaimer ?? ""),
+        }
+      : null,
   };
 }
 
