@@ -25,7 +25,7 @@ export const Route = createFileRoute("/admin/review")({
   component: ReviewPage,
 });
 
-const STATUSES = ["draft", "in_review", "approved", "published", "retired"];
+const STATUSES = ["draft", "published", "retired"];
 const APPROACHES = ["predictive", "agile", "hybrid"];
 const PAGE_SIZE = 20;
 const inputCls = "rounded-md border border-border bg-background px-2.5 py-1.5 text-xs";
@@ -35,7 +35,7 @@ function ReviewPage() {
   const qc = useQueryClient();
   const { job } = Route.useSearch();
 
-  const [statuses, setStatuses] = useState<string[]>(["draft", "in_review"]);
+  const [statuses, setStatuses] = useState<string[]>(["draft"]);
   const [domainId, setDomainId] = useState("");
   const [taskId, setTaskId] = useState("");
   const [approach, setApproach] = useState("");
