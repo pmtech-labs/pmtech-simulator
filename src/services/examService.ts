@@ -106,7 +106,7 @@ async function taskIdsForDomains(domains: DomainCode[]): Promise<string[]> {
 async function fetchQuestionMeta(ids: string[]) {
   const meta = new Map<
     string,
-    { taskCode: string; taskTitle: string; domain: DomainCode; approach: Question["approach"]; difficulty: 1 | 2 | 3 }
+    { taskCode: string; taskTitle: string; domain: DomainCode; approach: Question["approach"]; difficulty: Question["difficulty"] }
   >();
   if (!ids.length) return meta;
 
@@ -191,7 +191,7 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
       taskTitle: m?.taskTitle ?? "Tarea ECO",
       domain: m?.domain ?? "process",
       approach: m?.approach ?? "predictive",
-      difficulty: m?.difficulty ?? 3,
+      difficulty,
       sectionNumber: item.section_number ?? 1,
       explanation: { correct: "", distractors: [], reference: "Explicación disponible al corregir." },
     };
