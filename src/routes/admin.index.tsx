@@ -4,6 +4,7 @@ import { AlertTriangle, CheckCircle2, Eye, Loader2 } from "lucide-react";
 import { useState } from "react";
 
 import { AdminShell, DataTable } from "@/components/admin/AdminShell";
+import { NewsletterExportCard } from "@/components/admin/NewsletterExportCard";
 import { QuestionDetailDialog } from "@/components/admin/QuestionDetailDialog";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import { getStats, type ExamStatRow, type QuestionStatRow, type TaskCoverageRow } from "@/services/adminService";
