@@ -282,12 +282,12 @@ function Header() {
             >
               Iniciar sesión
             </Link>
-            <a
-              href="#precios"
+            <Link
+              to="/registro"
               className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-accent px-3 py-2 text-[13px] font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
             >
-              Empezar ahora <ArrowRight className="h-4 w-4 shrink-0" />
-            </a>
+              Probar gratis <ArrowRight className="h-4 w-4 shrink-0" />
+            </Link>
           </div>
         </div>
 
@@ -335,13 +335,13 @@ function Header() {
             <Link to="/login" onClick={() => setOpen(false)}>
               Iniciar sesión
             </Link>
-            <a
-              href="#precios"
+            <Link
+              to="/registro"
               onClick={() => setOpen(false)}
               className="inline-flex w-fit items-center gap-1.5 rounded-lg bg-accent px-4 py-2 font-semibold text-accent-foreground"
             >
-              Empezar ahora <ArrowRight className="h-4 w-4" />
-            </a>
+              Probar gratis <ArrowRight className="h-4 w-4" />
+            </Link>
           </nav>
         </div>
       )}
@@ -395,13 +395,13 @@ function Hero() {
 
             <Reveal delay={220}>
               <div className="mt-7 flex flex-col items-start gap-3 sm:flex-row">
-                <a
-                  href="#precios"
+                <Link
+                  to="/registro"
                   className="group inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-panel transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-16px_var(--accent)]"
                 >
-                  Ver planes
+                  Probar gratis
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
+                </Link>
                 <a
                   href="#como-funciona"
                   className="inline-flex items-center gap-2 rounded-lg border border-hero-foreground/25 bg-hero-foreground/10 px-5 py-2.5 text-sm font-semibold text-hero-foreground backdrop-blur transition-colors hover:bg-hero-foreground/20"
@@ -716,13 +716,13 @@ function FinalCta() {
             Empieza hoy con el único simulador en español calibrado al ECO 2026 desde el primer
             día.
           </p>
-          <a
-            href="#precios"
+          <Link
+            to="/registro"
             className="group mt-6 inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-16px_var(--accent)]"
           >
-            Ver planes
+            Probar gratis
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </a>
+          </Link>
         </div>
       </Reveal>
     </section>
