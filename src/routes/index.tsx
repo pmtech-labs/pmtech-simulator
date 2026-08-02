@@ -21,6 +21,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { LoginButton } from "@/components/LoginButton";
+import { TryFreeButton } from "@/components/TryFreeButton";
 import { AboutUs } from "@/components/landing/AboutUs";
 import { SocialProof } from "@/components/landing/SocialProof";
 import { NewsletterSignup } from "@/components/landing/NewsletterSignup";
@@ -250,18 +252,8 @@ function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link
-              to="/login"
-              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-primary px-3 py-2 text-[13px] font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
-            >
-              Iniciar sesión
-            </Link>
-            <Link
-              to="/registro"
-              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-accent px-3 py-2 text-[13px] font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
-            >
-              Probar gratis <ArrowRight className="h-4 w-4 shrink-0" />
-            </Link>
+            <LoginButton />
+            <TryFreeButton />
           </div>
         </div>
 
@@ -306,20 +298,8 @@ function Header() {
               Contacto
             </a>
 
-            <Link
-              to="/login"
-              onClick={() => setOpen(false)}
-              className="inline-flex w-fit items-center gap-1.5 rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground"
-            >
-              Iniciar sesión
-            </Link>
-            <Link
-              to="/registro"
-              onClick={() => setOpen(false)}
-              className="inline-flex w-fit items-center gap-1.5 rounded-lg bg-accent px-4 py-2 font-semibold text-accent-foreground"
-            >
-              Probar gratis <ArrowRight className="h-4 w-4" />
-            </Link>
+            <LoginButton onClick={() => setOpen(false)} />
+            <TryFreeButton onClick={() => setOpen(false)} />
           </nav>
         </div>
       )}
@@ -373,13 +353,7 @@ function Hero() {
 
             <Reveal delay={220}>
               <div className="mt-7 flex flex-col items-start gap-3 sm:flex-row">
-                <Link
-                  to="/registro"
-                  className="group inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-panel transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-16px_var(--accent)]"
-                >
-                  Probar gratis
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
+                <TryFreeButton size="lg" className="shadow-panel transition-all duration-300 hover:shadow-[0_18px_40px_-16px_var(--accent)]" />
                 <a
                   href="#como-funciona"
                   className="inline-flex items-center gap-2 rounded-lg border border-hero-foreground/25 bg-hero-foreground/10 px-5 py-2.5 text-sm font-semibold text-hero-foreground backdrop-blur transition-colors hover:bg-hero-foreground/20"
@@ -612,12 +586,10 @@ function Pricing() {
                 </li>
               ))}
             </ul>
-            <Link
-              to="/registro"
-              className="mt-6 flex items-center justify-center gap-1.5 rounded-lg border border-border bg-secondary px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary/70"
-            >
-              Probar gratis <ArrowRight className="h-4 w-4" />
-            </Link>
+            <TryFreeButton
+              size="lg"
+              className="mt-6 w-full rounded-lg border border-border bg-secondary text-accent-foreground transition-colors hover:bg-secondary/70"
+            />
           </div>
         </Reveal>
         {PLANS.map((plan, i) => {
@@ -753,13 +725,10 @@ function FinalCta() {
             Empieza hoy con el único simulador en español calibrado al ECO 2026 desde el primer
             día.
           </p>
-          <Link
-            to="/registro"
-            className="group mt-6 inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-16px_var(--accent)]"
-          >
-            Probar gratis
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
+          <TryFreeButton
+            size="lg"
+            className="mt-6 px-6 py-3 transition-all duration-300 hover:shadow-[0_18px_40px_-16px_var(--accent)]"
+          />
         </div>
       </Reveal>
     </section>
@@ -832,9 +801,7 @@ function Footer() {
               vs PrepCast
             </Link>
 
-            <Link to="/login" className="hover:text-foreground">
-              Iniciar sesión
-            </Link>
+            <LoginButton variant="ghost" size="sm" />
           </nav>
 
         </div>

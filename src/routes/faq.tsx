@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, HelpCircle } from "lucide-react";
 
+import { TryFreeButton } from "@/components/TryFreeButton";
 import { MarketingShell } from "@/components/landing/MarketingShell";
 import { FAQ_ALL, FAQ_BLOCKS } from "@/data/faq";
 
@@ -109,12 +110,7 @@ function FaqPage() {
           <p className="mt-2 text-sm text-muted-foreground">
             Empieza con el plan gratuito y compruébalo tú mismo — sin cronómetro de prueba.
           </p>
-          <Link
-            to="/registro"
-            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
-          >
-            Probar gratis <ArrowRight className="h-4 w-4" />
-          </Link>
+          <TryFreeButton size="lg" className="mt-5" />
         </div>
       </section>
     </MarketingShell>

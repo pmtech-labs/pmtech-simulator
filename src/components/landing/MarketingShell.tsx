@@ -1,6 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, GraduationCap } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 import type { ReactNode } from "react";
+
+import { LoginButton } from "@/components/LoginButton";
+import { TryFreeButton } from "@/components/TryFreeButton";
 
 /**
  * Cabecera y pie compactos para las landings de SEO.
@@ -26,18 +29,8 @@ export function MarketingShell({ children }: { children: ReactNode }) {
           </Link>
 
           <div className="flex items-center gap-3">
-            <Link
-              to="/login"
-              className="hidden whitespace-nowrap rounded-lg bg-primary px-3 py-2 text-[13px] font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5 sm:inline-flex sm:items-center sm:gap-1.5"
-            >
-              Iniciar sesión
-            </Link>
-            <Link
-              to="/registro"
-              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-accent px-3 py-2 text-[13px] font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
-            >
-              Probar gratis <ArrowRight className="h-4 w-4 shrink-0" />
-            </Link>
+            <LoginButton className="hidden sm:inline-flex" />
+            <TryFreeButton />
           </div>
         </div>
       </header>
