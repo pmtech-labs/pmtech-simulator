@@ -53,6 +53,16 @@ function taskCode(task: EcoTask, domainOrder: Map<string, number>) {
   return d ? `${d}.${task.task_number}` : `${task.task_number}`;
 }
 
+/** Ordena por número de dominio y, dentro de él, por número de tarea (1.1, 1.2, 2.1…). */
+function sortTasks(list: EcoTask[], domainOrder: Map<string, number>) {
+  return [...list].sort((a, b) => {
+    const da = domainOrder.get(a.domain_id) ?? 99;
+    const db = domainOrder.get(b.domain_id) ?? 99;
+    if (da !== db) return da - db;
+    return (a.task_number ?? 0) - (b.task_number ?? 0);
+  });
+}
+
 function GeneratePage() {
   const email = useAdminEmail();
   const qc = useQueryClient();
