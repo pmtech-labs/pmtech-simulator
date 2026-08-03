@@ -21,6 +21,7 @@ import { useCurrentUser } from "@/hooks/useCandidateData";
 import { signOutCandidate } from "@/services/authService";
 import { clearExamProgress, describeProgress, loadExamProgress } from "@/lib/examResume";
 import { FULL_SIM_SECTIONS_NOTE } from "@/lib/examCopy";
+import { HelpLinks } from "@/components/support/HelpLinks";
 import { cn } from "@/lib/utils";
 
 import { ChatbotWidget } from "@/components/support/ChatbotWidget";
