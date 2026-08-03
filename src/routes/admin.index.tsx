@@ -8,6 +8,11 @@ import { NewsletterExportCard } from "@/components/admin/NewsletterExportCard";
 import { QuestionDetailDialog } from "@/components/admin/QuestionDetailDialog";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import { getStats, type ExamStatRow, type QuestionStatRow, type TaskCoverageRow } from "@/services/adminService";
+import {
+  FOCUS_TAG_LABELS,
+  PERFORMANCE_DOMAIN_LABELS,
+  PROCESS_GROUP_LABELS,
+} from "@/lib/questionTags";
 import { cn } from "@/lib/utils";
 
 
@@ -206,6 +211,7 @@ function StatsTable({
               <th className="px-3 py-2">Enunciado</th>
               <th className="px-3 py-2">Dominio</th>
               <th className="px-3 py-2">Tarea</th>
+              <th className="px-3 py-2">Etiquetas</th>
               <th className="px-3 py-2">{metricLabel}</th>
               <th className="px-3 py-2">Respondida</th>
               {showUsage && <th className="px-3 py-2">Usos en exámenes</th>}
@@ -226,6 +232,28 @@ function StatsTable({
               </td>
               <td className="px-3 py-2 text-muted-foreground">{r.domain_name ?? "—"}</td>
               <td className="px-3 py-2 text-muted-foreground">{r.task_title ?? "—"}</td>
+              <td className="px-3 py-2">
+                <div className="flex flex-wrap gap-1">
+                  {r.process_group && (
+                    <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      {PROCESS_GROUP_LABELS[r.process_group] ?? r.process_group}
+                    </span>
+                  )}
+                  {r.performance_domain && (
+                    <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      {PERFORMANCE_DOMAIN_LABELS[r.performance_domain] ?? r.performance_domain}
+                    </span>
+                  )}
+                  {(r.focus_tags ?? []).map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-md border border-primary/40 px-1.5 py-0.5 text-[10px] font-medium text-primary"
+                    >
+                      {FOCUS_TAG_LABELS[t] ?? t}
+                    </span>
+                  ))}
+                </div>
+              </td>
               <td className="num px-3 py-2">{r.success_rate_pct ?? "—"}</td>
               <td className="num px-3 py-2">{r.times_answered ?? 0}</td>
               {showUsage && <td className="num px-3 py-2">{r.times_used_in_exams ?? 0}</td>}
