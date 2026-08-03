@@ -38,6 +38,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SimuladorExamenPmpRouteImport } from './routes/simulador-examen-pmp'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TerminosYCondicionesRouteImport } from './routes/terminos-y-condiciones'
+import { Route as TutorialExamenRouteImport } from './routes/tutorial-examen'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
 import { Route as AdminCurriculumRouteImport } from './routes/admin.curriculum'
@@ -189,6 +190,11 @@ const TerminosYCondicionesRoute = TerminosYCondicionesRouteImport.update({
   path: '/terminos-y-condiciones',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TutorialExamenRoute = TutorialExamenRouteImport.update({
+  id: '/tutorial-examen',
+  path: '/tutorial-examen',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -245,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
+  '/tutorial-examen': typeof TutorialExamenRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
@@ -280,6 +287,7 @@ export interface FileRoutesByTo {
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
+  '/tutorial-examen': typeof TutorialExamenRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
@@ -317,6 +325,7 @@ export interface FileRoutesById {
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
+  '/tutorial-examen': typeof TutorialExamenRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
@@ -355,6 +364,7 @@ export interface FileRouteTypes {
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/terminos-y-condiciones'
+    | '/tutorial-examen'
     | '/admin/connectors'
     | '/admin/curriculum'
     | '/admin/generate'
@@ -390,6 +400,7 @@ export interface FileRouteTypes {
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/terminos-y-condiciones'
+    | '/tutorial-examen'
     | '/admin/connectors'
     | '/admin/curriculum'
     | '/admin/generate'
@@ -426,6 +437,7 @@ export interface FileRouteTypes {
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/terminos-y-condiciones'
+    | '/tutorial-examen'
     | '/admin/connectors'
     | '/admin/curriculum'
     | '/admin/generate'
@@ -463,6 +475,7 @@ export interface RootRouteChildren {
   SimuladorExamenPmpRoute: typeof SimuladorExamenPmpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TerminosYCondicionesRoute: typeof TerminosYCondicionesRoute
+  TutorialExamenRoute: typeof TutorialExamenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -670,6 +683,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TerminosYCondicionesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tutorial-examen': {
+      id: '/tutorial-examen'
+      path: '/tutorial-examen'
+      fullPath: '/tutorial-examen'
+      preLoaderRoute: typeof TutorialExamenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -756,6 +776,7 @@ const rootRouteChildren: RootRouteChildren = {
   SimuladorExamenPmpRoute: SimuladorExamenPmpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TerminosYCondicionesRoute: TerminosYCondicionesRoute,
+  TutorialExamenRoute: TutorialExamenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
