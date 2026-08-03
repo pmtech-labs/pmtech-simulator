@@ -101,7 +101,11 @@ interface RawItem {
   section_number: number | null;
   previously_seen?: boolean;
   difficulty?: number | null;
+  process_group?: string | null;
+  performance_domain?: string | null;
+  focus_tags?: string[] | null;
 }
+
 
 const DB_DOMAIN_CODE: Record<DomainCode, string> = {
   people: "people",
