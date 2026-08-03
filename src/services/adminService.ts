@@ -306,6 +306,9 @@ export async function listQuestions(
       task_id: filters.task_id,
       approach: filters.approach,
       job_id: filters.job_id,
+      process_group: filters.process_group,
+      performance_domain: filters.performance_domain,
+
       min_times_used: filters.min_times_used,
       max_success_rate: filters.max_success_rate,
       page,
