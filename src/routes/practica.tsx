@@ -308,6 +308,33 @@ function PracticePage() {
               </>
             )}
 
+            <label className="mt-5 block text-xs font-medium">
+              Enfoque
+              <select
+                value={approachFilter}
+                onChange={(e) => {
+                  setApproachFilter(e.target.value as ApproachOption);
+                  setStartError(null);
+                }}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              >
+                {(Object.keys(APPROACH_LABELS) as ApproachOption[]).map((opt) => (
+                  <option key={opt} value={opt}>
+                    {APPROACH_LABELS[opt]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <p className="mt-1 text-xs text-muted-foreground">
+              El enfoque solo se aplica a los modos de práctica; el simulacro completo mantiene su reparto real.
+            </p>
+
+            {startError && (
+              <p className="mt-3 rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-xs text-destructive">
+                {startError}
+              </p>
+            )}
+
             <div className="mt-5 flex flex-wrap items-center gap-3">
               <button
                 onClick={start}
@@ -318,6 +345,7 @@ function PracticePage() {
               </button>
               <HelpLinks />
             </div>
+
 
           </section>
         </div>
