@@ -69,6 +69,14 @@ function InstructionsPage() {
             No memorices las respuestas — el objetivo es entrenar tu razonamiento, no reconocer
             preguntas repetidas.
           </p>
+
+          <p className="mt-3 text-sm leading-relaxed">
+            ¿Dudas con la terminología?{" "}
+            <Link to="/glosario" className="font-medium text-primary hover:underline">
+              Consulta el Glosario PMP
+            </Link>{" "}
+            con definiciones breves de los términos predictivos, ágiles y generales.
+          </p>
         </section>
 
         <section className="rounded-2xl border border-border bg-card p-6">

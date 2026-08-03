@@ -21,6 +21,7 @@ import { Route as ExamenRouteImport } from './routes/examen'
 import { Route as ExamenPmpRouteImport } from './routes/examen-pmp'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as GlosarioRouteImport } from './routes/glosario'
 import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as InstruccionesRouteImport } from './routes/instrucciones'
 import { Route as LoginRouteImport } from './routes/login'
@@ -103,6 +104,11 @@ const FaqRoute = FaqRouteImport.update({
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GlosarioRoute = GlosarioRouteImport.update({
+  id: '/glosario',
+  path: '/glosario',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HistorialRoute = HistorialRouteImport.update({
@@ -234,6 +240,7 @@ export interface FileRoutesByFullPath {
   '/examen-pmp': typeof ExamenPmpRoute
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/glosario': typeof GlosarioRoute
   '/historial': typeof HistorialRoute
   '/instrucciones': typeof InstruccionesRoute
   '/login': typeof LoginRoute
@@ -270,6 +277,7 @@ export interface FileRoutesByTo {
   '/examen-pmp': typeof ExamenPmpRoute
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/glosario': typeof GlosarioRoute
   '/historial': typeof HistorialRoute
   '/instrucciones': typeof InstruccionesRoute
   '/login': typeof LoginRoute
@@ -308,6 +316,7 @@ export interface FileRoutesById {
   '/examen-pmp': typeof ExamenPmpRoute
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/glosario': typeof GlosarioRoute
   '/historial': typeof HistorialRoute
   '/instrucciones': typeof InstruccionesRoute
   '/login': typeof LoginRoute
@@ -347,6 +356,7 @@ export interface FileRouteTypes {
     | '/examen-pmp'
     | '/faq'
     | '/forgot-password'
+    | '/glosario'
     | '/historial'
     | '/instrucciones'
     | '/login'
@@ -383,6 +393,7 @@ export interface FileRouteTypes {
     | '/examen-pmp'
     | '/faq'
     | '/forgot-password'
+    | '/glosario'
     | '/historial'
     | '/instrucciones'
     | '/login'
@@ -420,6 +431,7 @@ export interface FileRouteTypes {
     | '/examen-pmp'
     | '/faq'
     | '/forgot-password'
+    | '/glosario'
     | '/historial'
     | '/instrucciones'
     | '/login'
@@ -458,6 +470,7 @@ export interface RootRouteChildren {
   ExamenPmpRoute: typeof ExamenPmpRoute
   FaqRoute: typeof FaqRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  GlosarioRoute: typeof GlosarioRoute
   HistorialRoute: typeof HistorialRoute
   InstruccionesRoute: typeof InstruccionesRoute
   LoginRoute: typeof LoginRoute
@@ -562,6 +575,13 @@ declare module '@tanstack/react-router' {
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/glosario': {
+      id: '/glosario'
+      path: '/glosario'
+      fullPath: '/glosario'
+      preLoaderRoute: typeof GlosarioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/historial': {
@@ -759,6 +779,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExamenPmpRoute: ExamenPmpRoute,
   FaqRoute: FaqRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  GlosarioRoute: GlosarioRoute,
   HistorialRoute: HistorialRoute,
   InstruccionesRoute: InstruccionesRoute,
   LoginRoute: LoginRoute,

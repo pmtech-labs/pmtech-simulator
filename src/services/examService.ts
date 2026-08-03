@@ -22,6 +22,9 @@ export type ExamMode =
   | "unit_quiz"
   | "cumulative";
 
+/** Filtro de enfoque (solo modos de práctica; `full_sim` mantiene su reparto real). */
+export type ApproachFilter = "predictive" | "agile" | "hybrid" | "agile_hybrid";
+
 export interface StartExamParams {
   mode: ExamMode;
   domains?: DomainCode[];
@@ -29,6 +32,7 @@ export interface StartExamParams {
   /** Obligatorio en `unit_quiz` (esa lección) y en `cumulative` (hasta esa lección). */
   unitId?: string;
   taskIds?: string[];
+  approachFilter?: ApproachFilter;
 }
 
 export interface ExamSession {
@@ -130,20 +134,43 @@ async function fetchQuestionMeta(ids: string[]) {
   return meta;
 }
 
+/** Traduce el error de la Edge Function a un mensaje claro para el candidato. */
+async function readStartExamError(error: unknown): Promise<string> {
+  const generic = "No hemos podido iniciar el examen. Inténtalo de nuevo.";
+  const ctx = (error as { context?: Response })?.context;
+  if (!ctx || typeof ctx.json !== "function") return generic;
+  try {
+    const body = (await ctx.clone().json()) as { error?: string };
+    if (ctx.status === 404 || /no hay preguntas/i.test(body?.error ?? "")) {
+      return (
+        body?.error ??
+        "No hay preguntas disponibles para estos filtros. Prueba con otro enfoque o añade más dominios."
+      );
+    }
+    return body?.error ?? generic;
+  } catch {
+    return generic;
+  }
+}
+
 export async function startExam(params: StartExamParams): Promise<ExamSession> {
   const taskIds =
     params.taskIds ??
     (params.domains?.length ? await taskIdsForDomains(params.domains) : undefined);
 
   const { data, error } = await supabase.functions.invoke("start_exam", {
+    method: "POST",
     body: {
       mode: params.mode,
       task_ids: taskIds,
       question_count: params.totalQuestions,
       unit_id: params.unitId,
+      ...(params.approachFilter && params.mode !== "full_sim"
+        ? { approach_filter: params.approachFilter }
+        : {}),
     },
   });
-  if (error) throw new Error("No hemos podido iniciar el examen. Inténtalo de nuevo.");
+  if (error) throw new Error(await readStartExamError(error));
 
   const items = (data.items ?? []) as RawItem[];
   const meta = await fetchQuestionMeta(items.map((i) => i.id));

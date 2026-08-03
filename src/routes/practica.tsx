@@ -64,6 +64,26 @@ const MODE_LABELS: Record<PracticeMode, string> = {
 };
 const DRILL_SIZE = 5;
 
+/** Opciones del filtro de enfoque (se envían a `start_exam` como `approach_filter`). */
+export type ApproachOption = "all" | "predictive" | "agile_hybrid" | "agile" | "hybrid";
+
+const APPROACH_LABELS: Record<ApproachOption, string> = {
+  all: "Todos los enfoques",
+  predictive: "Predictivo",
+  agile_hybrid: "Ágil + Híbrido",
+  agile: "Solo Ágil",
+  hybrid: "Solo Híbrido",
+};
+
+const NO_QUESTIONS_MESSAGE =
+  "No hay preguntas disponibles para estos filtros. Prueba con otro enfoque o amplía los dominios seleccionados.";
+
+function matchesApproach(approach: Question["approach"], filter: ApproachOption) {
+  if (filter === "all") return true;
+  if (filter === "agile_hybrid") return approach === "agile" || approach === "hybrid";
+  return approach === filter;
+}
+
 /** Tipos de error recientes del candidato en una lección (fallback: patrón global). */
 export function recentErrorTypes(sequence?: number): ErrorType[] {
   const unit = sequence ? MOCK_UNIT_PROGRESS.find((u) => u.sequence === sequence) : undefined;
@@ -76,8 +96,14 @@ export function recentErrorTypes(sequence?: number): ErrorType[] {
     .map((e) => e.errorType);
 }
 
-function buildDrill(domains: DomainCode[], errorTypes?: ErrorType[]): Question[] {
-  const base = MOCK_QUESTIONS.filter((q) => domains.includes(q.domain));
+function buildDrill(
+  domains: DomainCode[],
+  approach: ApproachOption,
+  errorTypes?: ErrorType[],
+): Question[] {
+  const base = MOCK_QUESTIONS.filter(
+    (q) => domains.includes(q.domain) && matchesApproach(q.approach, approach),
+  );
   const pool = errorTypes?.length
     ? (base.filter((q) => q.errorType && errorTypes.includes(q.errorType)).length
         ? base.filter((q) => q.errorType && errorTypes.includes(q.errorType))
@@ -101,6 +127,8 @@ function PracticePage() {
   const [mode, setMode] = useState<PracticeMode>(search.modo ?? "domain_drill");
   const [unitId, setUnitId] = useState<string>(search.unidad ?? "");
   const [errorReview, setErrorReview] = useState<boolean>(search.repaso === "errores");
+  const [approachFilter, setApproachFilter] = useState<ApproachOption>("all");
+  const [startError, setStartError] = useState<string | null>(null);
   const [drill, setDrill] = useState<Question[] | null>(null);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, AnswerValue>>({});
@@ -130,9 +158,14 @@ function PracticePage() {
     const sequence = unitsQuery.data?.find((u) => u.id === unitId)?.sequence;
     const built = buildDrill(
       mode === "domain_drill" ? selected : ALL_DOMAINS,
+      approachFilter,
       errorReview && mode === "unit_quiz" ? recentErrorTypes(sequence) : undefined,
     );
-    if (!built.length) return;
+    if (!built.length) {
+      setStartError(NO_QUESTIONS_MESSAGE);
+      return;
+    }
+    setStartError(null);
     setDrill(built);
     setIndex(0);
     setAnswers({});
@@ -308,6 +341,33 @@ function PracticePage() {
               </>
             )}
 
+            <label className="mt-5 block text-xs font-medium">
+              Enfoque
+              <select
+                value={approachFilter}
+                onChange={(e) => {
+                  setApproachFilter(e.target.value as ApproachOption);
+                  setStartError(null);
+                }}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              >
+                {(Object.keys(APPROACH_LABELS) as ApproachOption[]).map((opt) => (
+                  <option key={opt} value={opt}>
+                    {APPROACH_LABELS[opt]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <p className="mt-1 text-xs text-muted-foreground">
+              El enfoque solo se aplica a los modos de práctica; el simulacro completo mantiene su reparto real.
+            </p>
+
+            {startError && (
+              <p className="mt-3 rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-xs text-destructive">
+                {startError}
+              </p>
+            )}
+
             <div className="mt-5 flex flex-wrap items-center gap-3">
               <button
                 onClick={start}
@@ -318,6 +378,7 @@ function PracticePage() {
               </button>
               <HelpLinks />
             </div>
+
 
           </section>
         </div>

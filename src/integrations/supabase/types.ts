@@ -1271,7 +1271,7 @@ export type Database = {
         | "pulldown"
       item_status: "draft" | "published" | "retired"
       item_type: "standalone" | "case_child" | "practicum"
-      plan_code: "basica_3m" | "premium_6m" | "free"
+      plan_code: "basica_3m" | "premium_6m" | "free" | "premium_1m"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1429,7 +1429,7 @@ export const Constants = {
       ],
       item_status: ["draft", "published", "retired"],
       item_type: ["standalone", "case_child", "practicum"],
-      plan_code: ["basica_3m", "premium_6m", "free"],
+      plan_code: ["basica_3m", "premium_6m", "free", "premium_1m"],
     },
   },
 } as const

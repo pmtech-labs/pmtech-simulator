@@ -58,6 +58,9 @@ export function MarketingShell({ children }: { children: ReactNode }) {
             <Link to="/curso-pmp-online" className="hover:text-foreground">
               Curso PMP online
             </Link>
+            <Link to="/glosario" className="hover:text-foreground">
+              Glosario PMP
+            </Link>
             <Link to="/faq" className="hover:text-foreground">
               FAQ
             </Link>
