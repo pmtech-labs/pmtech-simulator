@@ -44,9 +44,14 @@ const NAV = [
   { to: "/historial", label: "Historial", icon: History },
   { to: "/progreso", label: "Mi progreso", icon: BarChart3 },
   { to: "/glosario", label: "Glosario PMP", icon: BookMarked },
+] as const;
+
+/** Enlaces de soporte/cuenta: van al pie del sidebar, separados del estudio diario. */
+const SECONDARY_NAV = [
   { to: "/instrucciones", label: "Instrucciones", icon: BookOpen },
   { to: "/perfil", label: "Perfil y licencia", icon: UserCog },
 ] as const;
+
 
 
 
