@@ -24,6 +24,7 @@ export const Route = createFileRoute("/admin/generate")({
 });
 
 const FORMATS = [
+  { value: "mixed", label: "Mezcla automática (mc_single/mc_multi/pulldown)", stable: true },
   { value: "mc_single", label: "Opción única (mc_single)", stable: true },
   { value: "mc_multi", label: "Opción múltiple (mc_multi)", stable: true },
   { value: "matching", label: "Emparejamiento (matching)", stable: false },
@@ -41,7 +42,12 @@ const APPROACHES = [
   { value: "hybrid", label: "Híbrido" },
 ];
 
-const FOCUS_TAGS = ["ai", "sustainability", "value_delivery"];
+const FOCUS_TAGS = ["ia", "sostenibilidad", "entrega_valor"];
+const FOCUS_TAG_UI_LABELS: Record<string, string> = {
+  ia: "IA",
+  sostenibilidad: "Sostenibilidad",
+  entrega_valor: "Entrega de valor",
+};
 const PAGE_SIZE = 10;
 const inputCls = "w-full rounded-md border border-border bg-background px-3 py-2 text-sm";
 
