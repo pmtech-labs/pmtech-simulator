@@ -6,6 +6,7 @@ import { BookOpen, CheckCircle2, ChevronRight, Clock, Info, Layers, RotateCcw, T
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
+import { HelpLinks } from "@/components/support/HelpLinks";
 import { ResultReportButton } from "@/components/export/ResultReportButton";
 import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
