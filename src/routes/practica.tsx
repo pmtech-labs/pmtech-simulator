@@ -6,6 +6,7 @@ import { BookOpen, CheckCircle2, ChevronRight, Clock, Info, Layers, RotateCcw, T
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
+import { HelpLinks } from "@/components/support/HelpLinks";
 import { ResultReportButton } from "@/components/export/ResultReportButton";
 import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
@@ -307,13 +308,17 @@ function PracticePage() {
               </>
             )}
 
-            <button
-              onClick={start}
-              disabled={!canStart}
-              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
-            >
-              Empezar práctica <ChevronRight className="h-4 w-4" />
-            </button>
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <button
+                onClick={start}
+                disabled={!canStart}
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
+              >
+                Empezar práctica <ChevronRight className="h-4 w-4" />
+              </button>
+              <HelpLinks />
+            </div>
+
           </section>
         </div>
       </AppShell>

@@ -21,6 +21,7 @@ import { useCurrentUser } from "@/hooks/useCandidateData";
 import { signOutCandidate } from "@/services/authService";
 import { clearExamProgress, describeProgress, loadExamProgress } from "@/lib/examResume";
 import { FULL_SIM_SECTIONS_NOTE } from "@/lib/examCopy";
+import { HelpLinks } from "@/components/support/HelpLinks";
 import { cn } from "@/lib/utils";
 
 import { ChatbotWidget } from "@/components/support/ChatbotWidget";
@@ -309,17 +310,12 @@ export function AppShell({
             </DialogDescription>
           </DialogHeader>
           {!freeSimBlocked && (
-            <div className="space-y-2 rounded-lg border border-border bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground">
+            <div className="space-y-3 rounded-lg border border-border bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground">
               <p>{FULL_SIM_SECTIONS_NOTE}</p>
-              <Link
-                to="/tutorial-examen"
-                onClick={() => setShowExamConfirm(false)}
-                className="inline-flex font-semibold text-primary underline underline-offset-2"
-              >
-                Ver el tutorial de examen
-              </Link>
+              <HelpLinks onNavigate={() => setShowExamConfirm(false)} />
             </div>
           )}
+
           <DialogFooter className="gap-2 sm:gap-0">
 
             <Button variant="outline" onClick={() => setShowExamConfirm(false)}>

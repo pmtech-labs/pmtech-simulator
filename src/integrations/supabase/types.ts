@@ -592,6 +592,30 @@ export type Database = {
           },
         ]
       }
+      glossary_terms: {
+        Row: {
+          category: string
+          created_at: string
+          definition: string
+          id: string
+          term: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          definition: string
+          id?: string
+          term: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          definition?: string
+          id?: string
+          term?: string
+        }
+        Relationships: []
+      }
       licenses: {
         Row: {
           created_at: string | null
