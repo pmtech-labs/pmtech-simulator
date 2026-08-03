@@ -156,9 +156,14 @@ function PracticePage() {
     const sequence = unitsQuery.data?.find((u) => u.id === unitId)?.sequence;
     const built = buildDrill(
       mode === "domain_drill" ? selected : ALL_DOMAINS,
+      approachFilter,
       errorReview && mode === "unit_quiz" ? recentErrorTypes(sequence) : undefined,
     );
-    if (!built.length) return;
+    if (!built.length) {
+      setStartError(NO_QUESTIONS_MESSAGE);
+      return;
+    }
+    setStartError(null);
     setDrill(built);
     setIndex(0);
     setAnswers({});
