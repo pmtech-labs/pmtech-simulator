@@ -33,7 +33,12 @@ export interface StartExamParams {
   unitId?: string;
   taskIds?: string[];
   approachFilter?: ApproachFilter;
+  /** Filtro por grupo de proceso (solo modos de práctica). */
+  processGroupFilter?: string;
+  /** Filtro por dominio de desempeño (solo modos de práctica). */
+  performanceDomainFilter?: string;
 }
+
 
 export interface ExamSession {
   examId: string;
