@@ -68,6 +68,9 @@ function ReviewPage() {
     task_id: taskId || undefined,
     approach: approach || undefined,
     job_id: job,
+    process_group: processGroup || undefined,
+    performance_domain: performanceDomain || undefined,
+
     min_times_used: minUsed ? Number(minUsed) : undefined,
     max_success_rate: maxSuccess ? Number(maxSuccess) : undefined,
   };
