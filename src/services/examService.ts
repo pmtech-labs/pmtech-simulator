@@ -140,14 +140,18 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
     (params.domains?.length ? await taskIdsForDomains(params.domains) : undefined);
 
   const { data, error } = await supabase.functions.invoke("start_exam", {
+    method: "POST",
     body: {
       mode: params.mode,
       task_ids: taskIds,
       question_count: params.totalQuestions,
       unit_id: params.unitId,
+      ...(params.approachFilter && params.mode !== "full_sim"
+        ? { approach_filter: params.approachFilter }
+        : {}),
     },
   });
-  if (error) throw new Error("No hemos podido iniciar el examen. Inténtalo de nuevo.");
+  if (error) throw new Error(await readStartExamError(error));
 
   const items = (data.items ?? []) as RawItem[];
   const meta = await fetchQuestionMeta(items.map((i) => i.id));
