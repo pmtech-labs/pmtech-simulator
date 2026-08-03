@@ -90,7 +90,7 @@ function RegistroPage() {
           "Tu cuenta se ha creado, pero no hemos podido activar el plan gratuito automáticamente. Puedes seguir e intentarlo más tarde o escribirnos.",
         );
       }
-      const paidPlan = plan === "basica_3m" || plan === "premium_6m";
+      const paidPlan = plan === "basica_3m" || plan === "premium_1m" || plan === "premium_6m";
       navigate({ to: paidPlan ? `/checkout?plan=${plan}` : "/dashboard", replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "No hemos podido crear tu cuenta.");
@@ -130,7 +130,7 @@ function RegistroPage() {
             <>
               <h1 className="text-center text-lg font-semibold">Crear cuenta</h1>
               <p className="mt-1 text-justify text-sm text-muted-foreground">
-                {plan === "basica_3m" || plan === "premium_6m"
+                {plan === "basica_3m" || plan === "premium_1m" || plan === "premium_6m"
                   ? "Regístrate para continuar con la contratación de tu licencia."
                   : "Plan gratuito real: práctica ilimitada sin cronómetro y un simulacro completo de regalo."}
               </p>

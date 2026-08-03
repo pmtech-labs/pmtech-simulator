@@ -540,7 +540,7 @@ function HowItWorks() {
 
 function Pricing() {
   return (
-    <section id="precios" className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
+    <section id="precios" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
       <Reveal>
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
@@ -552,7 +552,7 @@ function Pricing() {
         </div>
       </Reveal>
 
-      <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mx-auto mt-12 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Reveal className="h-full">
           <div className="relative h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
             <h3 className="text-base font-semibold">Gratis</h3>
@@ -615,14 +615,14 @@ function Pricing() {
               )}
               <h3 className="text-base font-semibold">{plan.name}</h3>
               <p className="mt-1 text-xs text-muted-foreground">
-                Licencia de {plan.durationMonths} meses
+                {plan.tagline ?? `Licencia de ${plan.durationMonths} meses`}
               </p>
               <p className="mt-4 flex items-baseline gap-1">
                 <span className="num font-display text-4xl font-bold">
                   {plan.price.toFixed(2).replace(".", ",")} €
                 </span>
                 <span className="text-sm text-muted-foreground">
-                  / {plan.durationMonths} meses
+                  / {plan.durationMonths === 1 ? "1 mes" : `${plan.durationMonths} meses`}
                 </span>
               </p>
 

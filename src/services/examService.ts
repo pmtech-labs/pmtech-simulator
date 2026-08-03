@@ -62,6 +62,13 @@ export interface FinishSummary {
   disclaimer: string;
   interpretationNote: string | null;
   diploma: DiplomaInfo | null;
+  capstoneDiploma: CapstoneDiplomaInfo | null;
+}
+
+export interface CapstoneDiplomaInfo {
+  id: string;
+  issuedAt: string;
+  disclaimer: string;
 }
 
 export interface DiplomaInfo {
@@ -326,6 +333,13 @@ export async function finishExam(examId: string): Promise<FinishSummary> {
           issuedAt: String(data.diploma.issued_at),
           thresholdPct: Number(data.diploma.threshold_pct) || 0,
           disclaimer: String(data.diploma.disclaimer ?? ""),
+        }
+      : null,
+    capstoneDiploma: data.capstone_diploma
+      ? {
+          id: String(data.capstone_diploma.id),
+          issuedAt: String(data.capstone_diploma.issued_at),
+          disclaimer: String(data.capstone_diploma.disclaimer ?? ""),
         }
       : null,
   };

@@ -43,7 +43,7 @@ function ProgressPage() {
   const { data: taskMastery = [] } = useTaskMastery();
   const { data: stats = [] } = useErrorTypeStats();
 
-  const isPremium = user?.plan === "premium_6m";
+  const isPremium = user?.plan === "premium_6m" || user?.plan === "premium_1m";
   const errorStats = [...stats].sort((a, b) => b.occurrences - a.occurrences);
   const maxErrors = Math.max(...errorStats.map((s) => s.occurrences), 1);
   const studyPlan = buildStudyPlan(stats);

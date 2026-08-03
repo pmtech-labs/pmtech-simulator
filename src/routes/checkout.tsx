@@ -78,8 +78,13 @@ function CheckoutPage() {
               <div className="min-w-0">
                 <p className="text-base font-semibold">Licencia {plan.name}</p>
                 <p className="text-xs text-muted-foreground">
-                  {plan.durationMonths} meses de acceso completo
+                  {plan.durationMonths === 1
+                    ? "1 mes de acceso completo"
+                    : `${plan.durationMonths} meses de acceso completo`}
                 </p>
+                {plan.tagline && (
+                  <p className="mt-1 text-xs text-muted-foreground">{plan.tagline}</p>
+                )}
               </div>
               <p className="num shrink-0 font-display text-2xl font-bold">{plan.price} €</p>
             </div>
