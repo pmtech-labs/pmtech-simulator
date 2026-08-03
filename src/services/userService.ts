@@ -13,7 +13,7 @@ export interface CurrentUser {
   name: string;
   email: string;
   initials: string;
-  plan: "free" | "basica_3m" | "premium_6m" | null;
+  plan: "free" | "basica_3m" | "premium_1m" | "premium_6m" | null;
   planName: string;
   freeFullSimUsed: boolean;
   monthsRemaining: number;

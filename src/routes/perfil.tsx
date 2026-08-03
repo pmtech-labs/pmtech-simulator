@@ -47,7 +47,7 @@ function ProfilePage() {
   const [isSavingName, setIsSavingName] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
 
-  const handleCheckout = (code: "basica_3m" | "premium_6m") => {
+  const handleCheckout = (code: PlanCode) => {
     setLoading(code);
     navigate({ to: "/checkout", search: { plan: code } });
   };

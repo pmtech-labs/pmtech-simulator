@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
+import type { PlanCode } from "@/services/checkoutService";
 
 /**
  * CTA de plan: si no hay sesión lleva al registro conservando el plan elegido;
@@ -12,7 +13,7 @@ export function PlanCta({
   label,
   className,
 }: {
-  planCode: "basica_3m" | "premium_6m";
+  planCode: PlanCode;
   label: string;
   className: string;
 }) {
