@@ -29,7 +29,7 @@ export interface FailureRow {
 
 function selectedIds(question: Question, answer: AnswerValue | undefined): string[] {
   if (!answer) return [];
-  if (question.format === "matching") return [];
+  if (question.format === "matching" || question.format === "enhanced_matching") return [];
   return answer as string[];
 }
 
@@ -55,7 +55,7 @@ export function computeDistractorStats(items: AnalyticsItem[]): DistractorStats 
       errors.set(question.errorType, (errors.get(question.errorType) ?? 0) + 1);
     }
 
-    if (question.format === "matching" || !question.options) return;
+    if (question.format === "matching" || question.format === "enhanced_matching" || !question.options) return;
     counted += 1;
     const chosen = selectedIds(question, answer);
 
