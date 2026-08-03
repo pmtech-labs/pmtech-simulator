@@ -31,6 +31,12 @@ import { HelpLinks } from "@/components/support/HelpLinks";
 import { BREAK_SECONDS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 import {
+  FOCUS_TAG_LABELS,
+  PERFORMANCE_DOMAIN_LABELS,
+  PROCESS_GROUP_LABELS,
+} from "@/lib/questionTags";
+
+import {
   clearExamProgress,
   loadExamProgress,
   saveExamProgress,
