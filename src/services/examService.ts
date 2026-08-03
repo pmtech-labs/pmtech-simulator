@@ -134,6 +134,25 @@ async function fetchQuestionMeta(ids: string[]) {
   return meta;
 }
 
+/** Traduce el error de la Edge Function a un mensaje claro para el candidato. */
+async function readStartExamError(error: unknown): Promise<string> {
+  const generic = "No hemos podido iniciar el examen. Inténtalo de nuevo.";
+  const ctx = (error as { context?: Response })?.context;
+  if (!ctx || typeof ctx.json !== "function") return generic;
+  try {
+    const body = (await ctx.clone().json()) as { error?: string };
+    if (ctx.status === 404 || /no hay preguntas/i.test(body?.error ?? "")) {
+      return (
+        body?.error ??
+        "No hay preguntas disponibles para estos filtros. Prueba con otro enfoque o añade más dominios."
+      );
+    }
+    return body?.error ?? generic;
+  } catch {
+    return generic;
+  }
+}
+
 export async function startExam(params: StartExamParams): Promise<ExamSession> {
   const taskIds =
     params.taskIds ??
