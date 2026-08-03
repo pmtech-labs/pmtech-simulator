@@ -92,9 +92,17 @@ export function QuestionDetailDialog({ questionId, onOpenChange }: Props) {
 
             <p className="text-xs text-muted-foreground">
               Estado: {q.status} · Enfoque: {q.approach} · Formato: {q.format} · Tipo: {q.item_type} ·
-              Dificultad: {q.difficulty ?? "—"} · Respondida {q.times_answered ?? 0} veces (
-              {q.times_correct ?? 0} aciertos)
+              Dificultad: {q.difficulty ?? "—"}
+              {q.process_group &&
+                ` · Área de enfoque: ${PROCESS_GROUP_LABELS[q.process_group] ?? q.process_group}`}
+              {q.performance_domain &&
+                ` · Dominio de desempeño: ${PERFORMANCE_DOMAIN_LABELS[q.performance_domain] ?? q.performance_domain}`}
+              {q.focus_tags &&
+                q.focus_tags.length > 0 &&
+                ` · Temáticas: ${q.focus_tags.map((t: string) => FOCUS_TAG_LABELS[t] ?? t).join(", ")}`}
+              {" "}· Respondida {q.times_answered ?? 0} veces ({q.times_correct ?? 0} aciertos)
             </p>
+
           </div>
         )}
       </DialogContent>
