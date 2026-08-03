@@ -22,6 +22,9 @@ export type ExamMode =
   | "unit_quiz"
   | "cumulative";
 
+/** Filtro de enfoque (solo modos de práctica; `full_sim` mantiene su reparto real). */
+export type ApproachFilter = "predictive" | "agile" | "hybrid" | "agile_hybrid";
+
 export interface StartExamParams {
   mode: ExamMode;
   domains?: DomainCode[];
@@ -29,6 +32,7 @@ export interface StartExamParams {
   /** Obligatorio en `unit_quiz` (esa lección) y en `cumulative` (hasta esa lección). */
   unitId?: string;
   taskIds?: string[];
+  approachFilter?: ApproachFilter;
 }
 
 export interface ExamSession {
