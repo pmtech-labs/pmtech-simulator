@@ -77,9 +77,19 @@ export function ChatbotWidget() {
               <p className="truncate text-sm font-semibold">Asistente PMTech</p>
               <p className="truncate text-[11px] opacity-80">Dudas de planes, cuenta y simulacro</p>
             </div>
-            <button onClick={() => setOpen(false)} aria-label="Cerrar chat" className="shrink-0">
-              <X className="h-4 w-4" />
-            </button>
+            <div className="flex shrink-0 items-center gap-3">
+              <button
+                onClick={resetConversation}
+                aria-label="Empezar una conversación nueva"
+                title="Empezar una conversación nueva"
+              >
+                <RotateCcw className="h-4 w-4" />
+              </button>
+              <button onClick={() => setOpen(false)} aria-label="Cerrar chat">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
           </div>
 
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
