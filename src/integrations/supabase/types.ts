@@ -856,7 +856,13 @@ export type Database = {
           id: string
           item_type: Database["public"]["Enums"]["item_type"]
           options: Json
+          performance_domain:
+            | Database["public"]["Enums"]["performance_domain_type"]
+            | null
           practicum_payload: Json | null
+          process_group:
+            | Database["public"]["Enums"]["process_group_type"]
+            | null
           reviewed_at: string | null
           reviewed_by: string | null
           status: Database["public"]["Enums"]["item_status"] | null
@@ -882,7 +888,13 @@ export type Database = {
           id?: string
           item_type?: Database["public"]["Enums"]["item_type"]
           options: Json
+          performance_domain?:
+            | Database["public"]["Enums"]["performance_domain_type"]
+            | null
           practicum_payload?: Json | null
+          process_group?:
+            | Database["public"]["Enums"]["process_group_type"]
+            | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           status?: Database["public"]["Enums"]["item_status"] | null
@@ -908,7 +920,13 @@ export type Database = {
           id?: string
           item_type?: Database["public"]["Enums"]["item_type"]
           options?: Json
+          performance_domain?:
+            | Database["public"]["Enums"]["performance_domain_type"]
+            | null
           practicum_payload?: Json | null
+          process_group?:
+            | Database["public"]["Enums"]["process_group_type"]
+            | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           status?: Database["public"]["Enums"]["item_status"] | null
@@ -1274,7 +1292,21 @@ export type Database = {
         | "pulldown"
       item_status: "draft" | "published" | "retired"
       item_type: "standalone" | "case_child" | "practicum"
+      performance_domain_type:
+        | "gobernanza"
+        | "alcance"
+        | "cronograma"
+        | "finanzas"
+        | "recursos"
+        | "riesgos"
+        | "interesados"
       plan_code: "basica_3m" | "premium_6m" | "free" | "premium_1m"
+      process_group_type:
+        | "initiation"
+        | "planning"
+        | "execution"
+        | "monitoring_control"
+        | "closing"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1432,7 +1464,23 @@ export const Constants = {
       ],
       item_status: ["draft", "published", "retired"],
       item_type: ["standalone", "case_child", "practicum"],
+      performance_domain_type: [
+        "gobernanza",
+        "alcance",
+        "cronograma",
+        "finanzas",
+        "recursos",
+        "riesgos",
+        "interesados",
+      ],
       plan_code: ["basica_3m", "premium_6m", "free", "premium_1m"],
+      process_group_type: [
+        "initiation",
+        "planning",
+        "execution",
+        "monitoring_control",
+        "closing",
+      ],
     },
   },
 } as const
