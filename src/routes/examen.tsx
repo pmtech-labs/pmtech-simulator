@@ -354,6 +354,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
         disclaimer: e instanceof Error ? e.message : "",
         interpretationNote: null,
         diploma: null,
+        capstoneDiploma: null,
 
       });
     } finally {
@@ -872,6 +873,36 @@ function Results({
               <Info className="mt-0.5 h-4 w-4 shrink-0" />
               {summary.interpretationNote}
             </p>
+          )}
+
+          {summary.capstoneDiploma && (
+            <div className="mt-4 rounded-2xl border-2 border-accent bg-gradient-to-br from-accent/20 to-warning-soft p-5 text-left shadow-panel">
+              <p className="font-display text-lg font-bold text-accent-foreground">
+                🏆 ¡Programa completo!
+              </p>
+              <p className="mt-1 text-sm leading-relaxed text-accent-foreground">
+                Has aprobado todas las lecciones del temario y completado un simulacro completo con
+                buen desempeño.
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Emitido el{" "}
+                {new Date(summary.capstoneDiploma.issuedAt).toLocaleDateString("es-ES", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </p>
+              <p className="mt-3 rounded-lg border border-border bg-card p-3 text-xs leading-relaxed text-muted-foreground">
+                {summary.capstoneDiploma.disclaimer ||
+                  "PMI no publica una nota de corte oficial para el examen PMP. Este diploma reconoce tu progreso según un criterio de referencia propio de PMTech Simulator, no una nota de aprobado oficial de PMI."}
+              </p>
+              <Link
+                to="/perfil"
+                className="mt-3 inline-flex text-xs font-semibold underline-offset-4 hover:underline"
+              >
+                Ver mis diplomas
+              </Link>
+            </div>
           )}
 
           {summary.diploma && (

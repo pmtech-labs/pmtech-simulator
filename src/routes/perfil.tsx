@@ -12,7 +12,7 @@ import { RequireAuth } from "@/components/auth/RequireAuth";
 import { DOMAINS } from "@/data/mockData";
 import { useCurrentUser } from "@/hooks/useCandidateData";
 import { supabase } from "@/integrations/supabase/client";
-import { PLANS } from "@/services/checkoutService";
+import { PLANS, type PlanCode } from "@/services/checkoutService";
 import { cn } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 
