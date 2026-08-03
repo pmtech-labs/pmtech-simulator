@@ -753,6 +753,65 @@ export type Database = {
         }
         Relationships: []
       }
+      question_reports: {
+        Row: {
+          comment: string
+          created_at: string
+          exam_id: string | null
+          id: string
+          question_id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          comment: string
+          created_at?: string
+          exam_id?: string | null
+          id?: string
+          question_id: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          exam_id?: string | null
+          id?: string
+          question_id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_reports_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_reports_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_reports_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "v_question_stats"
+            referencedColumns: ["question_id"]
+          },
+          {
+            foreignKeyName: "question_reports_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "v_questions_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       questions: {
         Row: {
           approach: Database["public"]["Enums"]["approach_type"]
@@ -1030,6 +1089,7 @@ export type Database = {
           generation_model_id: string | null
           generation_provider: string | null
           item_type: Database["public"]["Enums"]["item_type"] | null
+          open_reports_count: number | null
           options: Json | null
           question_id: string | null
           status: Database["public"]["Enums"]["item_status"] | null

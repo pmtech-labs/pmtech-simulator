@@ -22,6 +22,7 @@ import { Route as ExamenPmpRouteImport } from './routes/examen-pmp'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HistorialRouteImport } from './routes/historial'
+import { Route as InstruccionesRouteImport } from './routes/instrucciones'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as Pmbok8RouteImport } from './routes/pmbok-8'
@@ -37,6 +38,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SimuladorExamenPmpRouteImport } from './routes/simulador-examen-pmp'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TerminosYCondicionesRouteImport } from './routes/terminos-y-condiciones'
+import { Route as TutorialExamenRouteImport } from './routes/tutorial-examen'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
 import { Route as AdminCurriculumRouteImport } from './routes/admin.curriculum'
@@ -106,6 +108,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
 const HistorialRoute = HistorialRouteImport.update({
   id: '/historial',
   path: '/historial',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstruccionesRoute = InstruccionesRouteImport.update({
+  id: '/instrucciones',
+  path: '/instrucciones',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -183,6 +190,11 @@ const TerminosYCondicionesRoute = TerminosYCondicionesRouteImport.update({
   path: '/terminos-y-condiciones',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TutorialExamenRoute = TutorialExamenRouteImport.update({
+  id: '/tutorial-examen',
+  path: '/tutorial-examen',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -223,6 +235,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
+  '/instrucciones': typeof InstruccionesRoute
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
@@ -238,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
+  '/tutorial-examen': typeof TutorialExamenRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
@@ -257,6 +271,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
+  '/instrucciones': typeof InstruccionesRoute
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
@@ -272,6 +287,7 @@ export interface FileRoutesByTo {
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
+  '/tutorial-examen': typeof TutorialExamenRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
@@ -293,6 +309,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
+  '/instrucciones': typeof InstruccionesRoute
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
@@ -308,6 +325,7 @@ export interface FileRoutesById {
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
+  '/tutorial-examen': typeof TutorialExamenRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
@@ -330,6 +348,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/forgot-password'
     | '/historial'
+    | '/instrucciones'
     | '/login'
     | '/perfil'
     | '/pmbok-8'
@@ -345,6 +364,7 @@ export interface FileRouteTypes {
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/terminos-y-condiciones'
+    | '/tutorial-examen'
     | '/admin/connectors'
     | '/admin/curriculum'
     | '/admin/generate'
@@ -364,6 +384,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/forgot-password'
     | '/historial'
+    | '/instrucciones'
     | '/login'
     | '/perfil'
     | '/pmbok-8'
@@ -379,6 +400,7 @@ export interface FileRouteTypes {
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/terminos-y-condiciones'
+    | '/tutorial-examen'
     | '/admin/connectors'
     | '/admin/curriculum'
     | '/admin/generate'
@@ -399,6 +421,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/forgot-password'
     | '/historial'
+    | '/instrucciones'
     | '/login'
     | '/perfil'
     | '/pmbok-8'
@@ -414,6 +437,7 @@ export interface FileRouteTypes {
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/terminos-y-condiciones'
+    | '/tutorial-examen'
     | '/admin/connectors'
     | '/admin/curriculum'
     | '/admin/generate'
@@ -435,6 +459,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistorialRoute: typeof HistorialRoute
+  InstruccionesRoute: typeof InstruccionesRoute
   LoginRoute: typeof LoginRoute
   PerfilRoute: typeof PerfilRoute
   Pmbok8Route: typeof Pmbok8Route
@@ -450,6 +475,7 @@ export interface RootRouteChildren {
   SimuladorExamenPmpRoute: typeof SimuladorExamenPmpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TerminosYCondicionesRoute: typeof TerminosYCondicionesRoute
+  TutorialExamenRoute: typeof TutorialExamenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -543,6 +569,13 @@ declare module '@tanstack/react-router' {
       path: '/historial'
       fullPath: '/historial'
       preLoaderRoute: typeof HistorialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instrucciones': {
+      id: '/instrucciones'
+      path: '/instrucciones'
+      fullPath: '/instrucciones'
+      preLoaderRoute: typeof InstruccionesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -650,6 +683,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TerminosYCondicionesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tutorial-examen': {
+      id: '/tutorial-examen'
+      path: '/tutorial-examen'
+      fullPath: '/tutorial-examen'
+      preLoaderRoute: typeof TutorialExamenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -720,6 +760,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HistorialRoute: HistorialRoute,
+  InstruccionesRoute: InstruccionesRoute,
   LoginRoute: LoginRoute,
   PerfilRoute: PerfilRoute,
   Pmbok8Route: Pmbok8Route,
@@ -735,6 +776,7 @@ const rootRouteChildren: RootRouteChildren = {
   SimuladorExamenPmpRoute: SimuladorExamenPmpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TerminosYCondicionesRoute: TerminosYCondicionesRoute,
+  TutorialExamenRoute: TutorialExamenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

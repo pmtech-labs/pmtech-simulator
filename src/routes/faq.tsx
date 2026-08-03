@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, HelpCircle } from "lucide-react";
 
 import { TryFreeButton } from "@/components/TryFreeButton";
+import { ChatbotWidget } from "@/components/support/ChatbotWidget";
 import { MarketingShell } from "@/components/landing/MarketingShell";
 import { FAQ_ALL, FAQ_BLOCKS } from "@/data/faq";
 
@@ -113,6 +114,8 @@ function FaqPage() {
           <TryFreeButton size="lg" className="mt-5" />
         </div>
       </section>
+      <ChatbotWidget />
     </MarketingShell>
+
   );
 }
