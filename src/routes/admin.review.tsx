@@ -331,7 +331,7 @@ function QuestionRow({
   const [open, setOpen] = useState(false);
   const options = Array.isArray(q.options) ? (q.options as Array<Record<string, unknown>>) : [];
   const correct = JSON.stringify(q.correct_answer ?? "");
-  const needsMedia = ["graphic_based", "hotspot", "matching"].includes(q.format);
+  const needsMedia = ["graphic_based", "hotspot", "matching", "enhanced_matching"].includes(q.format);
   const detail = useQuery({
     queryKey: ["admin-question-detail", q.id],
     queryFn: () => getAdminQuestionFn({ data: { id: q.id } }),
