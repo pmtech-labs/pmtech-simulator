@@ -256,24 +256,30 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
   });
 
   const rawSections = (data.sections ?? null) as
-    | { section_number: number; total_questions: number; time_limit_seconds: number }[]
+    | Record<string, unknown>[]
     | null;
 
   const fallbackFor = (count: number) => Math.max(300, count * 90);
 
   const sections: ExamSection[] = rawSections?.length
-    ? rawSections.map((s) => {
-        const count =
-          Number(s.total_questions) ||
-          questions.filter((q) => (q.sectionNumber ?? 1) === s.section_number).length ||
-          1;
-        const seconds = Number(s.time_limit_seconds);
-        return {
-          sectionNumber: s.section_number,
-          count,
-          seconds: Number.isFinite(seconds) && seconds > 0 ? seconds : fallbackFor(count),
-        };
-      })
+    ? rawSections
+        .map((s, idx) => {
+          // El backend puede devolver snake_case o camelCase; normalizamos.
+          const number =
+            Number(s.section_number ?? s.sectionNumber ?? s.section ?? s.number) || idx + 1;
+          const count =
+            Number(s.total_questions ?? s.totalQuestions ?? s.count) ||
+            questions.filter((q) => (q.sectionNumber ?? 1) === number).length ||
+            1;
+          const seconds = Number(s.time_limit_seconds ?? s.timeLimitSeconds ?? s.seconds);
+          return {
+            sectionNumber: number,
+            count,
+            seconds: Number.isFinite(seconds) && seconds > 0 ? seconds : fallbackFor(count),
+          };
+        })
+        .sort((a, b) => a.sectionNumber - b.sectionNumber)
+
     : [
         {
           sectionNumber: 1,
