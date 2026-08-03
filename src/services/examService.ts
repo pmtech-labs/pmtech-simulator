@@ -184,6 +184,13 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
       ...(params.approachFilter && params.mode !== "full_sim"
         ? { approach_filter: params.approachFilter }
         : {}),
+      ...(params.processGroupFilter && params.mode !== "full_sim"
+        ? { process_group_filter: params.processGroupFilter }
+        : {}),
+      ...(params.performanceDomainFilter && params.mode !== "full_sim"
+        ? { performance_domain_filter: params.performanceDomainFilter }
+        : {}),
+
     },
   });
   if (error) throw new Error(await readStartExamError(error));
