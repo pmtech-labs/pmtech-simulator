@@ -148,17 +148,19 @@ function SidebarInner({
         </div>
 
         <div className="rounded-xl border border-sidebar-border bg-sidebar-accent/50 p-3">
-        <div className="flex items-center gap-2 text-sidebar-accent-foreground">
-          <ShieldCheck className="h-4 w-4 text-sidebar-primary" />
-          <span className="text-xs font-semibold">{user?.planName ?? "Cargando…"}</span>
+          <div className="flex items-center gap-2 text-sidebar-accent-foreground">
+            <ShieldCheck className="h-4 w-4 text-sidebar-primary" />
+            <span className="text-xs font-semibold">{user?.planName ?? "Cargando…"}</span>
+          </div>
+          <p className="mt-1 text-[11px] leading-relaxed text-sidebar-foreground/60">
+            {user?.expiresAt
+              ? `${user.monthsRemaining} meses restantes · vence el ${user.expiresAt}`
+              : "Sin licencia activa"}
+          </p>
         </div>
-        <p className="mt-1 text-[11px] leading-relaxed text-sidebar-foreground/60">
-          {user?.expiresAt
-            ? `${user.monthsRemaining} meses restantes · vence el ${user.expiresAt}`
-            : "Sin licencia activa"}
-        </p>
       </div>
     </div>
+
   );
 }
 
