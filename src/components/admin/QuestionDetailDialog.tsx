@@ -9,7 +9,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { getAdminQuestionFn } from "@/lib/adminQuestions.functions";
+import {
+  FOCUS_TAG_LABELS,
+  PERFORMANCE_DOMAIN_LABELS,
+  PROCESS_GROUP_LABELS,
+} from "@/lib/questionTags";
 import { cn } from "@/lib/utils";
+
 
 interface Props {
   questionId: string | null;
