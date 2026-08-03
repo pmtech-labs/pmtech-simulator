@@ -142,7 +142,12 @@ function SidebarInner({
         </button>
       )}
 
-      <div className="mt-auto rounded-xl border border-sidebar-border bg-sidebar-accent/50 p-3">
+      <div className="mt-auto space-y-3">
+        <div className="border-t border-sidebar-border pt-3">
+          <NavLinks onNavigate={onNavigate} items={SECONDARY_NAV} />
+        </div>
+
+        <div className="rounded-xl border border-sidebar-border bg-sidebar-accent/50 p-3">
         <div className="flex items-center gap-2 text-sidebar-accent-foreground">
           <ShieldCheck className="h-4 w-4 text-sidebar-primary" />
           <span className="text-xs font-semibold">{user?.planName ?? "Cargando…"}</span>
