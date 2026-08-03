@@ -352,7 +352,7 @@ export async function finishExam(examId: string): Promise<FinishSummary> {
 /** Corrección local para la revisión (usa la clave devuelta por submit_answer). */
 export function isAnswerCorrect(question: Question, answer: AnswerValue | undefined): boolean {
   if (!answer) return false;
-  if (question.format === "matching") {
+  if (question.format === "matching" || question.format === "enhanced_matching") {
     if (!question.matching) return false;
     const pairs = answer as Record<string, string>;
     return question.matching.correctPairs.every(([l, r]) => pairs[l] === r);
