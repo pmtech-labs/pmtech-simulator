@@ -92,6 +92,9 @@ export interface QuestionStatRow {
   success_rate_pct: number | null;
   times_answered: number | null;
   times_used_in_exams: number | null;
+  process_group?: string | null;
+  performance_domain?: string | null;
+  focus_tags?: string[] | null;
 }
 
 export interface ExamStatRow {

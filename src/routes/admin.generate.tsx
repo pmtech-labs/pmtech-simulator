@@ -24,6 +24,7 @@ export const Route = createFileRoute("/admin/generate")({
 });
 
 const FORMATS = [
+  { value: "mixed", label: "Mezcla automática (mc_single/mc_multi/pulldown)", stable: true },
   { value: "mc_single", label: "Opción única (mc_single)", stable: true },
   { value: "mc_multi", label: "Opción múltiple (mc_multi)", stable: true },
   { value: "matching", label: "Emparejamiento (matching)", stable: false },
@@ -41,7 +42,12 @@ const APPROACHES = [
   { value: "hybrid", label: "Híbrido" },
 ];
 
-const FOCUS_TAGS = ["ai", "sustainability", "value_delivery"];
+const FOCUS_TAGS = ["ia", "sostenibilidad", "entrega_valor"];
+const FOCUS_TAG_UI_LABELS: Record<string, string> = {
+  ia: "IA",
+  sostenibilidad: "Sostenibilidad",
+  entrega_valor: "Entrega de valor",
+};
 const PAGE_SIZE = 10;
 const inputCls = "w-full rounded-md border border-border bg-background px-3 py-2 text-sm";
 
@@ -76,7 +82,7 @@ function GeneratePage() {
   const [domainId, setDomainId] = useState("");
   const [taskIds, setTaskIds] = useState<string[]>([]);
   const [approach, setApproach] = useState("mixed");
-  const [format, setFormat] = useState("mc_single");
+  const [format, setFormat] = useState("mixed");
   const [difMin, setDifMin] = useState(2);
   const [difMax, setDifMax] = useState(4);
   const [count, setCount] = useState(10);
@@ -292,7 +298,7 @@ function GeneratePage() {
                       on ? "border-primary bg-primary text-primary-foreground" : "border-border",
                     )}
                   >
-                    {tag}
+                    {FOCUS_TAG_UI_LABELS[tag] ?? tag}
                   </button>
                 );
               })}
