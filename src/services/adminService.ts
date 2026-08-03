@@ -65,7 +65,11 @@ export interface AdminQuestion {
   generation_provider?: string | null;
   generation_model_id?: string | null;
   generation_connector_name?: string | null;
+  process_group?: string | null;
+  performance_domain?: string | null;
+  focus_tags?: string[] | null;
 }
+
 
 export interface TaskCoverageRow {
   domain_code: string;
@@ -282,7 +286,10 @@ export interface QuestionFilters {
   task_id?: string;
   approach?: string;
   job_id?: string;
+  process_group?: string;
+  performance_domain?: string;
   min_times_used?: number;
+
   max_success_rate?: number;
 }
 
@@ -299,6 +306,9 @@ export async function listQuestions(
       task_id: filters.task_id,
       approach: filters.approach,
       job_id: filters.job_id,
+      process_group: filters.process_group,
+      performance_domain: filters.performance_domain,
+
       min_times_used: filters.min_times_used,
       max_success_rate: filters.max_success_rate,
       page,

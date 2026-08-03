@@ -17,6 +17,12 @@ import {
   type AdminQuestion,
 } from "@/services/adminService";
 import { cn } from "@/lib/utils";
+import {
+  FOCUS_TAG_LABELS,
+  PERFORMANCE_DOMAIN_LABELS,
+  PROCESS_GROUP_LABELS,
+} from "@/lib/questionTags";
+
 
 export const Route = createFileRoute("/admin/review")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -39,6 +45,9 @@ function ReviewPage() {
   const [domainId, setDomainId] = useState("");
   const [taskId, setTaskId] = useState("");
   const [approach, setApproach] = useState("");
+  const [processGroup, setProcessGroup] = useState("");
+  const [performanceDomain, setPerformanceDomain] = useState("");
+
   const [minUsed, setMinUsed] = useState("");
   const [maxSuccess, setMaxSuccess] = useState("");
   const [model, setModel] = useState("");
@@ -59,6 +68,9 @@ function ReviewPage() {
     task_id: taskId || undefined,
     approach: approach || undefined,
     job_id: job,
+    process_group: processGroup || undefined,
+    performance_domain: performanceDomain || undefined,
+
     min_times_used: minUsed ? Number(minUsed) : undefined,
     max_success_rate: maxSuccess ? Number(maxSuccess) : undefined,
   };
@@ -171,6 +183,31 @@ function ReviewPage() {
               </option>
             ))}
           </select>
+          <select
+            value={processGroup}
+            onChange={(e) => { setProcessGroup(e.target.value); setPage(1); }}
+            className={inputCls}
+          >
+            <option value="">Todas las áreas de enfoque</option>
+            {Object.entries(PROCESS_GROUP_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={performanceDomain}
+            onChange={(e) => { setPerformanceDomain(e.target.value); setPage(1); }}
+            className={inputCls}
+          >
+            <option value="">Todos los dominios de desempeño</option>
+            {Object.entries(PERFORMANCE_DOMAIN_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+
           <input
             type="number"
             placeholder="Usos mín."
@@ -452,6 +489,14 @@ function QuestionRow({
             <p className="mt-2 text-xs text-muted-foreground">
               Tarea: {q.task_title ?? q.task_id} · Enfoque: {q.approach} · Formato: {q.format} · Tipo:{" "}
               {q.item_type} · Dificultad: {q.difficulty ?? "—"}
+              {q.process_group &&
+                ` · Área de enfoque: ${PROCESS_GROUP_LABELS[q.process_group] ?? q.process_group}`}
+              {q.performance_domain &&
+                ` · Dominio de desempeño: ${PERFORMANCE_DOMAIN_LABELS[q.performance_domain] ?? q.performance_domain}`}
+              {q.focus_tags &&
+                q.focus_tags.length > 0 &&
+                ` · Temáticas: ${q.focus_tags.map((t) => FOCUS_TAG_LABELS[t] ?? t).join(", ")}`}
+
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               {q.generation_model_id

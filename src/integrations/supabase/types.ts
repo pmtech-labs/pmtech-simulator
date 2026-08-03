@@ -1127,6 +1127,7 @@ export type Database = {
           domain_code: string | null
           domain_name: string | null
           explanation: string | null
+          focus_tags: string[] | null
           format: Database["public"]["Enums"]["item_format"] | null
           generation_connector_id: string | null
           generation_connector_name: string | null
@@ -1136,6 +1137,12 @@ export type Database = {
           item_type: Database["public"]["Enums"]["item_type"] | null
           open_reports_count: number | null
           options: Json | null
+          performance_domain:
+            | Database["public"]["Enums"]["performance_domain_type"]
+            | null
+          process_group:
+            | Database["public"]["Enums"]["process_group_type"]
+            | null
           question_id: string | null
           status: Database["public"]["Enums"]["item_status"] | null
           stem: string | null
@@ -1184,9 +1191,16 @@ export type Database = {
           created_at: string | null
           difficulty: number | null
           domain_code: string | null
+          focus_tags: string[] | null
           format: Database["public"]["Enums"]["item_format"] | null
           id: string | null
           item_type: Database["public"]["Enums"]["item_type"] | null
+          performance_domain:
+            | Database["public"]["Enums"]["performance_domain_type"]
+            | null
+          process_group:
+            | Database["public"]["Enums"]["process_group_type"]
+            | null
           status: Database["public"]["Enums"]["item_status"] | null
           task_id: string | null
           task_number: number | null

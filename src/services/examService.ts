@@ -33,7 +33,12 @@ export interface StartExamParams {
   unitId?: string;
   taskIds?: string[];
   approachFilter?: ApproachFilter;
+  /** Filtro por grupo de proceso (solo modos de práctica). */
+  processGroupFilter?: string;
+  /** Filtro por dominio de desempeño (solo modos de práctica). */
+  performanceDomainFilter?: string;
 }
+
 
 export interface ExamSession {
   examId: string;
@@ -96,7 +101,11 @@ interface RawItem {
   section_number: number | null;
   previously_seen?: boolean;
   difficulty?: number | null;
+  process_group?: string | null;
+  performance_domain?: string | null;
+  focus_tags?: string[] | null;
 }
+
 
 const DB_DOMAIN_CODE: Record<DomainCode, string> = {
   people: "people",
@@ -175,6 +184,13 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
       ...(params.approachFilter && params.mode !== "full_sim"
         ? { approach_filter: params.approachFilter }
         : {}),
+      ...(params.processGroupFilter && params.mode !== "full_sim"
+        ? { process_group_filter: params.processGroupFilter }
+        : {}),
+      ...(params.performanceDomainFilter && params.mode !== "full_sim"
+        ? { performance_domain_filter: params.performanceDomainFilter }
+        : {}),
+
     },
   });
   if (error) throw new Error(await readStartExamError(error));
@@ -230,7 +246,11 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
       domain: m?.domain ?? "process",
       approach: m?.approach ?? "predictive",
       difficulty,
+      processGroup: (item.process_group ?? undefined) as Question["processGroup"],
+      performanceDomain: (item.performance_domain ?? undefined) as Question["performanceDomain"],
+      focusTags: (item.focus_tags ?? []) as Question["focusTags"],
       sectionNumber: item.section_number ?? 1,
+
       explanation: { correct: "", distractors: [], reference: "Explicación disponible al corregir." },
     };
   });

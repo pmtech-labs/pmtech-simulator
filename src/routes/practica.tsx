@@ -13,6 +13,8 @@ import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
 import { MOCK_ERROR_TYPE_STATS, MOCK_FINISH_SUMMARY, MOCK_QUESTIONS, MOCK_UNIT_PROGRESS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
+import { PERFORMANCE_DOMAIN_LABELS, PROCESS_GROUP_LABELS } from "@/lib/questionTags";
+
 import { DOMAIN_LABELS } from "@/lib/export";
 import { cn } from "@/lib/utils";
 import { isAnswerCorrect } from "@/services/examService";
@@ -100,10 +102,17 @@ function buildDrill(
   domains: DomainCode[],
   approach: ApproachOption,
   errorTypes?: ErrorType[],
+  processGroup?: string,
+  performanceDomain?: string,
 ): Question[] {
   const base = MOCK_QUESTIONS.filter(
-    (q) => domains.includes(q.domain) && matchesApproach(q.approach, approach),
+    (q) =>
+      domains.includes(q.domain) &&
+      matchesApproach(q.approach, approach) &&
+      (!processGroup || !q.processGroup || q.processGroup === processGroup) &&
+      (!performanceDomain || !q.performanceDomain || q.performanceDomain === performanceDomain),
   );
+
   const pool = errorTypes?.length
     ? (base.filter((q) => q.errorType && errorTypes.includes(q.errorType)).length
         ? base.filter((q) => q.errorType && errorTypes.includes(q.errorType))
@@ -128,6 +137,9 @@ function PracticePage() {
   const [unitId, setUnitId] = useState<string>(search.unidad ?? "");
   const [errorReview, setErrorReview] = useState<boolean>(search.repaso === "errores");
   const [approachFilter, setApproachFilter] = useState<ApproachOption>("all");
+  const [processGroupFilter, setProcessGroupFilter] = useState<string>("");
+  const [performanceDomainFilter, setPerformanceDomainFilter] = useState<string>("");
+
   const [startError, setStartError] = useState<string | null>(null);
   const [drill, setDrill] = useState<Question[] | null>(null);
   const [index, setIndex] = useState(0);
@@ -160,7 +172,10 @@ function PracticePage() {
       mode === "domain_drill" ? selected : ALL_DOMAINS,
       approachFilter,
       errorReview && mode === "unit_quiz" ? recentErrorTypes(sequence) : undefined,
+      processGroupFilter || undefined,
+      performanceDomainFilter || undefined,
     );
+
     if (!built.length) {
       setStartError(NO_QUESTIONS_MESSAGE);
       return;
@@ -358,6 +373,45 @@ function PracticePage() {
                 ))}
               </select>
             </label>
+
+            <label className="mt-3 block text-xs font-medium">
+              Área de enfoque
+              <select
+                value={processGroupFilter}
+                onChange={(e) => {
+                  setProcessGroupFilter(e.target.value);
+                  setStartError(null);
+                }}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              >
+                <option value="">Todas las áreas</option>
+                {Object.entries(PROCESS_GROUP_LABELS).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="mt-3 block text-xs font-medium">
+              Dominio de desempeño
+              <select
+                value={performanceDomainFilter}
+                onChange={(e) => {
+                  setPerformanceDomainFilter(e.target.value);
+                  setStartError(null);
+                }}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              >
+                <option value="">Todos los dominios</option>
+                {Object.entries(PERFORMANCE_DOMAIN_LABELS).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
             <p className="mt-1 text-xs text-muted-foreground">
               El enfoque solo se aplica a los modos de práctica; el simulacro completo mantiene su reparto real.
             </p>
