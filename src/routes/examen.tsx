@@ -661,6 +661,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
         <aside className="hidden rounded-2xl border border-border bg-card p-4 lg:block lg:sticky lg:top-24 lg:h-fit">
           <QuestionNavigator
             questions={questions}
+            clusters={session.clusters}
             current={index}
             answers={answers}
             flagged={flagged}
@@ -689,6 +690,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
             </div>
             <QuestionNavigator
               questions={questions}
+              clusters={session.clusters}
               current={index}
               answers={answers}
               flagged={flagged}

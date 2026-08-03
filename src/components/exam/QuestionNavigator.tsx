@@ -100,6 +100,10 @@ export function QuestionNavigator({
         <li className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-accent" /> Marcada para revisión
         </li>
+        <li className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-sm border border-border bg-card ring-1 ring-accent/40" />
+          Pertenece a un caso (pasa el ratón para ver el título)
+        </li>
       </ul>
     </div>
   );
