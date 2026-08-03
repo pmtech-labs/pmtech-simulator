@@ -200,6 +200,8 @@ function GlossaryPage() {
         </Link>
         .
       </p>
-    </main>
+      </div>
+    </AppShell>
+
   );
 }
