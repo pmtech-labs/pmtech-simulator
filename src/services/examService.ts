@@ -246,7 +246,11 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
       domain: m?.domain ?? "process",
       approach: m?.approach ?? "predictive",
       difficulty,
+      processGroup: (item.process_group ?? undefined) as Question["processGroup"],
+      performanceDomain: (item.performance_domain ?? undefined) as Question["performanceDomain"],
+      focusTags: (item.focus_tags ?? []) as Question["focusTags"],
       sectionNumber: item.section_number ?? 1,
+
       explanation: { correct: "", distractors: [], reference: "Explicación disponible al corregir." },
     };
   });
