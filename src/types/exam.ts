@@ -4,6 +4,7 @@ export type QuestionFormat =
   | "mc_single"
   | "mc_multi"
   | "matching"
+  | "enhanced_matching"
   | "pulldown"
   | "graphic_based"
   | "hotspot";
@@ -59,11 +60,23 @@ export interface Option {
   label: string;
 }
 
+/**
+ * Payload de emparejamiento. En "enhanced_matching" al menos un lado incluye
+ * un gráfico SVG inline (`svg`) en lugar de solo texto.
+ */
+export interface MatchingItem {
+  id: string;
+  label: string;
+  /** SVG inline opcional (emparejamiento mejorado). */
+  svg?: string;
+}
+
 export interface MatchingPayload {
-  left: { id: string; label: string }[];
-  right: { id: string; label: string }[];
+  left: MatchingItem[];
+  right: MatchingItem[];
   correctPairs: [string, string][];
 }
+
 
 export interface CaseCluster {
   id: string;

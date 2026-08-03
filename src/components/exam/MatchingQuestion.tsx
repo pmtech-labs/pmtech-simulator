@@ -69,8 +69,22 @@ export function MatchingQuestion({
                   <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-secondary text-xs font-bold">
                     {i + 1}
                   </span>
-                  <p className="min-w-0 text-sm leading-relaxed">{l.label}</p>
+                  {l.svg ? (
+                    <div className="min-w-0 space-y-1">
+                      <div
+                        className="w-40 overflow-hidden rounded-md border border-border bg-background p-1 [&_svg]:h-24 [&_svg]:w-full"
+                        // El SVG procede del banco de preguntas gestionado por el equipo editorial.
+                        dangerouslySetInnerHTML={{ __html: l.svg }}
+                      />
+                      {l.label && (
+                        <p className="text-xs font-medium text-muted-foreground">{l.label}</p>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="min-w-0 text-sm leading-relaxed">{l.label}</p>
+                  )}
                 </div>
+
                 <div
                   className={cn(
                     "mt-2.5 rounded-lg border border-dashed px-3 py-2 text-xs",
@@ -111,7 +125,19 @@ export function MatchingQuestion({
                 )}
               >
                 <GripVertical className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
-                <span className="min-w-0">{r.label}</span>
+                {r.svg ? (
+                  <div className="min-w-0 space-y-1">
+                    <div
+                      className="w-40 overflow-hidden rounded-md border border-border bg-background p-1 [&_svg]:h-24 [&_svg]:w-full"
+                      // El SVG procede del banco de preguntas gestionado por el equipo editorial.
+                      dangerouslySetInnerHTML={{ __html: r.svg }}
+                    />
+                    {r.label && <p className="text-xs font-medium">{r.label}</p>}
+                  </div>
+                ) : (
+                  <span className="min-w-0">{r.label}</span>
+                )}
+
               </div>
             );
           })}

@@ -27,6 +27,7 @@ const FORMATS = [
   { value: "mc_single", label: "Opción única (mc_single)", stable: true },
   { value: "mc_multi", label: "Opción múltiple (mc_multi)", stable: true },
   { value: "matching", label: "Emparejamiento (matching)", stable: false },
+  { value: "enhanced_matching", label: "Emparejamiento mejorado (con gráficos)", stable: false },
   { value: "enhanced_matching", label: "Emparejamiento avanzado", stable: false },
   { value: "graphic_based", label: "Basada en gráfico", stable: false },
   { value: "hotspot", label: "Hotspot", stable: false },

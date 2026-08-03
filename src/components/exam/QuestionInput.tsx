@@ -59,7 +59,7 @@ export function QuestionInput({
     onChange([id]);
   };
 
-  if (question.format === "matching" && question.matching) {
+  if ((question.format === "matching" || question.format === "enhanced_matching") && question.matching) {
     return (
       <MatchingQuestion
         payload={question.matching}
