@@ -347,6 +347,8 @@ export function AppShell({
         </DialogContent>
       </Dialog>
 
+      <ChatbotWidget />
     </>
+
   );
 }
