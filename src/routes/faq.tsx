@@ -113,6 +113,8 @@ function FaqPage() {
           <TryFreeButton size="lg" className="mt-5" />
         </div>
       </section>
+      <ChatbotWidget />
     </MarketingShell>
+
   );
 }
