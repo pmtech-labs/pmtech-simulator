@@ -64,6 +64,26 @@ const MODE_LABELS: Record<PracticeMode, string> = {
 };
 const DRILL_SIZE = 5;
 
+/** Opciones del filtro de enfoque (se envían a `start_exam` como `approach_filter`). */
+export type ApproachOption = "all" | "predictive" | "agile_hybrid" | "agile" | "hybrid";
+
+const APPROACH_LABELS: Record<ApproachOption, string> = {
+  all: "Todos los enfoques",
+  predictive: "Predictivo",
+  agile_hybrid: "Ágil + Híbrido",
+  agile: "Solo Ágil",
+  hybrid: "Solo Híbrido",
+};
+
+const NO_QUESTIONS_MESSAGE =
+  "No hay preguntas disponibles para estos filtros. Prueba con otro enfoque o amplía los dominios seleccionados.";
+
+function matchesApproach(approach: Question["approach"], filter: ApproachOption) {
+  if (filter === "all") return true;
+  if (filter === "agile_hybrid") return approach === "agile" || approach === "hybrid";
+  return approach === filter;
+}
+
 /** Tipos de error recientes del candidato en una lección (fallback: patrón global). */
 export function recentErrorTypes(sequence?: number): ErrorType[] {
   const unit = sequence ? MOCK_UNIT_PROGRESS.find((u) => u.sequence === sequence) : undefined;
