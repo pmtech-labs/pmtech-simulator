@@ -22,6 +22,7 @@ import { Route as ExamenPmpRouteImport } from './routes/examen-pmp'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HistorialRouteImport } from './routes/historial'
+import { Route as InstruccionesRouteImport } from './routes/instrucciones'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as Pmbok8RouteImport } from './routes/pmbok-8'
@@ -106,6 +107,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
 const HistorialRoute = HistorialRouteImport.update({
   id: '/historial',
   path: '/historial',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstruccionesRoute = InstruccionesRouteImport.update({
+  id: '/instrucciones',
+  path: '/instrucciones',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -223,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
+  '/instrucciones': typeof InstruccionesRoute
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
@@ -257,6 +264,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
+  '/instrucciones': typeof InstruccionesRoute
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
@@ -293,6 +301,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/historial': typeof HistorialRoute
+  '/instrucciones': typeof InstruccionesRoute
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
@@ -330,6 +339,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/forgot-password'
     | '/historial'
+    | '/instrucciones'
     | '/login'
     | '/perfil'
     | '/pmbok-8'
@@ -364,6 +374,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/forgot-password'
     | '/historial'
+    | '/instrucciones'
     | '/login'
     | '/perfil'
     | '/pmbok-8'
@@ -399,6 +410,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/forgot-password'
     | '/historial'
+    | '/instrucciones'
     | '/login'
     | '/perfil'
     | '/pmbok-8'
@@ -435,6 +447,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistorialRoute: typeof HistorialRoute
+  InstruccionesRoute: typeof InstruccionesRoute
   LoginRoute: typeof LoginRoute
   PerfilRoute: typeof PerfilRoute
   Pmbok8Route: typeof Pmbok8Route
@@ -543,6 +556,13 @@ declare module '@tanstack/react-router' {
       path: '/historial'
       fullPath: '/historial'
       preLoaderRoute: typeof HistorialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instrucciones': {
+      id: '/instrucciones'
+      path: '/instrucciones'
+      fullPath: '/instrucciones'
+      preLoaderRoute: typeof InstruccionesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -720,6 +740,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HistorialRoute: HistorialRoute,
+  InstruccionesRoute: InstruccionesRoute,
   LoginRoute: LoginRoute,
   PerfilRoute: PerfilRoute,
   Pmbok8Route: Pmbok8Route,
