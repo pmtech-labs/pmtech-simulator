@@ -127,6 +127,8 @@ function PracticePage() {
   const [mode, setMode] = useState<PracticeMode>(search.modo ?? "domain_drill");
   const [unitId, setUnitId] = useState<string>(search.unidad ?? "");
   const [errorReview, setErrorReview] = useState<boolean>(search.repaso === "errores");
+  const [approachFilter, setApproachFilter] = useState<ApproachOption>("all");
+  const [startError, setStartError] = useState<string | null>(null);
   const [drill, setDrill] = useState<Question[] | null>(null);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, AnswerValue>>({});
