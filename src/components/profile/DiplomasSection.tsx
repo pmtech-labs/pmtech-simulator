@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Award, Loader2 } from "lucide-react";
+import { Award, Loader2, Trophy } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 
@@ -12,6 +12,7 @@ interface DiplomaRow {
   score_pct: number;
   threshold_pct: number;
   score_by_domain: Record<string, number> | null;
+  diploma_type: string | null;
 }
 
 const DOMAIN_LABEL: Record<string, string> = {
@@ -70,36 +71,61 @@ export function DiplomasSection({ userName }: { userName?: string }) {
       )}
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        {(data ?? []).map((d) => (
-          <article key={d.id} className="rounded-xl border border-border bg-secondary/40 p-4">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Diploma de logro
-            </p>
-            {userName && <p className="mt-1 font-display text-sm font-semibold">{userName}</p>}
-            <p className="num mt-2 font-display text-3xl font-bold">{Math.round(d.score_pct)}%</p>
-            <p className="text-xs text-muted-foreground">
-              Emitido el {formatDate(d.issued_at)} · umbral {Math.round(d.threshold_pct)}%
-            </p>
-            {d.score_by_domain && (
-              <ul className="mt-3 space-y-1">
-                {Object.entries(d.score_by_domain).map(([code, value]) => (
-                  <li key={code} className="flex justify-between text-xs">
-                    <span className="text-muted-foreground">{DOMAIN_LABEL[code] ?? code}</span>
-                    <span className="num font-medium">{Math.round(Number(value))}%</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <button
-              type="button"
-              disabled
-              title="Descarga en PDF disponible próximamente"
-              className="mt-4 w-full rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-muted-foreground disabled:opacity-60"
+        {(data ?? []).map((d) => {
+          const isCapstone = d.diploma_type === "programa_completo";
+          return (
+            <article
+              key={d.id}
+              className={
+                isCapstone
+                  ? "rounded-xl border-2 border-accent bg-gradient-to-br from-accent/15 to-warning-soft p-4 sm:col-span-2"
+                  : "rounded-xl border border-border bg-secondary/40 p-4"
+              }
             >
-              Descargar (próximamente)
-            </button>
-          </article>
-        ))}
+              <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                {isCapstone ? (
+                  <Trophy className="h-3.5 w-3.5 text-accent-foreground" />
+                ) : (
+                  <Award className="h-3.5 w-3.5" />
+                )}
+                {isCapstone ? "Programa completo" : "Simulacro"}
+              </p>
+              {userName && <p className="mt-1 font-display text-sm font-semibold">{userName}</p>}
+              {isCapstone ? (
+                <p className="mt-2 text-sm leading-relaxed">
+                  Todas las lecciones del temario aprobadas y un simulacro completo superado con
+                  buen desempeño.
+                </p>
+              ) : (
+                <p className="num mt-2 font-display text-3xl font-bold">
+                  {Math.round(d.score_pct)}%
+                </p>
+              )}
+              <p className="text-xs text-muted-foreground">
+                Emitido el {formatDate(d.issued_at)}
+                {!isCapstone && ` · umbral ${Math.round(d.threshold_pct)}%`}
+              </p>
+              {!isCapstone && d.score_by_domain && (
+                <ul className="mt-3 space-y-1">
+                  {Object.entries(d.score_by_domain).map(([code, value]) => (
+                    <li key={code} className="flex justify-between text-xs">
+                      <span className="text-muted-foreground">{DOMAIN_LABEL[code] ?? code}</span>
+                      <span className="num font-medium">{Math.round(Number(value))}%</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <button
+                type="button"
+                disabled
+                title="Descarga en PDF disponible próximamente"
+                className="mt-4 w-full rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-muted-foreground disabled:opacity-60"
+              >
+                Descargar (próximamente)
+              </button>
+            </article>
+          );
+        })}
       </div>
 
       <p className="mt-4 rounded-lg border border-border bg-muted/60 p-3 text-xs leading-relaxed text-muted-foreground">
