@@ -17,6 +17,12 @@ import {
   type AdminQuestion,
 } from "@/services/adminService";
 import { cn } from "@/lib/utils";
+import {
+  FOCUS_TAG_LABELS,
+  PERFORMANCE_DOMAIN_LABELS,
+  PROCESS_GROUP_LABELS,
+} from "@/lib/questionTags";
+
 
 export const Route = createFileRoute("/admin/review")({
   validateSearch: (search: Record<string, unknown>) => ({
