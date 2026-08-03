@@ -65,7 +65,11 @@ export interface AdminQuestion {
   generation_provider?: string | null;
   generation_model_id?: string | null;
   generation_connector_name?: string | null;
+  process_group?: string | null;
+  performance_domain?: string | null;
+  focus_tags?: string[] | null;
 }
+
 
 export interface TaskCoverageRow {
   domain_code: string;
