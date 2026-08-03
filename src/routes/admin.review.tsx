@@ -45,6 +45,9 @@ function ReviewPage() {
   const [domainId, setDomainId] = useState("");
   const [taskId, setTaskId] = useState("");
   const [approach, setApproach] = useState("");
+  const [processGroup, setProcessGroup] = useState("");
+  const [performanceDomain, setPerformanceDomain] = useState("");
+
   const [minUsed, setMinUsed] = useState("");
   const [maxSuccess, setMaxSuccess] = useState("");
   const [model, setModel] = useState("");
