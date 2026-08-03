@@ -969,6 +969,8 @@ function Results({
 
         )}
       </div>
+      <ChatbotWidget />
     </div>
+
   );
 }
