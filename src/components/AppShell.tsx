@@ -308,7 +308,20 @@ export function AppShell({
                   : "Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener disponibilidad antes de empezar."}
             </DialogDescription>
           </DialogHeader>
+          {!freeSimBlocked && (
+            <div className="space-y-2 rounded-lg border border-border bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground">
+              <p>{FULL_SIM_SECTIONS_NOTE}</p>
+              <Link
+                to="/tutorial-examen"
+                onClick={() => setShowExamConfirm(false)}
+                className="inline-flex font-semibold text-primary underline underline-offset-2"
+              >
+                Ver el tutorial de examen
+              </Link>
+            </div>
+          )}
           <DialogFooter className="gap-2 sm:gap-0">
+
             <Button variant="outline" onClick={() => setShowExamConfirm(false)}>
               Cancelar
             </Button>
