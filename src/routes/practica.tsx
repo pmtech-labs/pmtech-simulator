@@ -137,6 +137,9 @@ function PracticePage() {
   const [unitId, setUnitId] = useState<string>(search.unidad ?? "");
   const [errorReview, setErrorReview] = useState<boolean>(search.repaso === "errores");
   const [approachFilter, setApproachFilter] = useState<ApproachOption>("all");
+  const [processGroupFilter, setProcessGroupFilter] = useState<string>("");
+  const [performanceDomainFilter, setPerformanceDomainFilter] = useState<string>("");
+
   const [startError, setStartError] = useState<string | null>(null);
   const [drill, setDrill] = useState<Question[] | null>(null);
   const [index, setIndex] = useState(0);
