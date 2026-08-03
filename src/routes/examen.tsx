@@ -768,10 +768,14 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
         )}
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-          <FlagButton
-            flagged={Boolean(flagged[q.id])}
-            onToggle={() => setFlagged((f) => ({ ...f, [q.id]: !f[q.id] }))}
-          />
+          <div className="flex items-center gap-2">
+            <FlagButton
+              flagged={Boolean(flagged[q.id])}
+              onToggle={() => setFlagged((f) => ({ ...f, [q.id]: !f[q.id] }))}
+            />
+            <ReportIssueButton questionId={q.id} examId={session.examId} />
+          </div>
+
           <div className="flex items-center gap-2">
             <button
               disabled={index <= firstIndexOfSection}
