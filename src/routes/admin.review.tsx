@@ -183,6 +183,31 @@ function ReviewPage() {
               </option>
             ))}
           </select>
+          <select
+            value={processGroup}
+            onChange={(e) => { setProcessGroup(e.target.value); setPage(1); }}
+            className={inputCls}
+          >
+            <option value="">Todas las áreas de enfoque</option>
+            {Object.entries(PROCESS_GROUP_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={performanceDomain}
+            onChange={(e) => { setPerformanceDomain(e.target.value); setPage(1); }}
+            className={inputCls}
+          >
+            <option value="">Todos los dominios de desempeño</option>
+            {Object.entries(PERFORMANCE_DOMAIN_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+
           <input
             type="number"
             placeholder="Usos mín."
