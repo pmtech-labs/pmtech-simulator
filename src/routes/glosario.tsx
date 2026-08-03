@@ -81,18 +81,22 @@ function GlossaryPage() {
   const availableLetters = new Set(groups.map(([l]) => l));
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10">
+    <AppShell
+      title="Glosario PMP"
+      subtitle="Términos clave del examen PMP (ECO 2026)"
+    >
+      <div className="mx-auto max-w-4xl">
       <header className="space-y-2">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <BookMarked className="h-4 w-4" />
           <span>Recursos PMTech</span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Glosario PMP</h1>
         <p className="text-sm text-muted-foreground">
           Definiciones breves y en palabras propias de los términos que más aparecen en el examen PMP
           (ECO 2026). No son citas del PMBOK® ni de ninguna otra fuente con derechos de autor.
         </p>
       </header>
+
 
       <div className="mt-6 space-y-3">
         <div className="relative">
