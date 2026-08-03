@@ -131,8 +131,15 @@ export interface Question {
   difficulty: 1 | 2 | 3 | 4 | 5;
   /** Sección del examen completo a la que pertenece el ítem (1-3). */
   sectionNumber?: number;
+  /** Grupo de proceso (Inicio, Planificación…). */
+  processGroup?: ProcessGroup;
+  /** Dominio de desempeño (Gobernanza, Alcance…). */
+  performanceDomain?: PerformanceDomain;
+  /** Temáticas transversales (entrega de valor, sostenibilidad, IA). */
+  focusTags?: FocusTag[];
   /** Diagnóstico de error asociado a fallar este ítem (modos formativos). */
   errorType?: ErrorType;
+
   explanation: {
     correct: string;
     distractors: { optionId: string; text: string }[];
