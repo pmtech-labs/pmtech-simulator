@@ -24,6 +24,9 @@ import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { FlagButton } from "@/components/exam/OptionList";
 import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
 import { QuestionNavigator } from "@/components/exam/QuestionNavigator";
+import { ReportIssueButton } from "@/components/exam/ReportIssueButton";
+import { ChatbotWidget } from "@/components/support/ChatbotWidget";
+
 import { BREAK_SECONDS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 import {
