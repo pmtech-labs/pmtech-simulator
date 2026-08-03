@@ -489,6 +489,14 @@ function QuestionRow({
             <p className="mt-2 text-xs text-muted-foreground">
               Tarea: {q.task_title ?? q.task_id} · Enfoque: {q.approach} · Formato: {q.format} · Tipo:{" "}
               {q.item_type} · Dificultad: {q.difficulty ?? "—"}
+              {q.process_group &&
+                ` · Área de enfoque: ${PROCESS_GROUP_LABELS[q.process_group] ?? q.process_group}`}
+              {q.performance_domain &&
+                ` · Dominio de desempeño: ${PERFORMANCE_DOMAIN_LABELS[q.performance_domain] ?? q.performance_domain}`}
+              {q.focus_tags &&
+                q.focus_tags.length > 0 &&
+                ` · Temáticas: ${q.focus_tags.map((t) => FOCUS_TAG_LABELS[t] ?? t).join(", ")}`}
+
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               {q.generation_model_id
