@@ -598,6 +598,8 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
             <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
               {q.format === "mc_multi"
                 ? "Respuesta múltiple"
+                : q.format === "enhanced_matching"
+                  ? "Emparejamiento mejorado"
                 : q.format === "matching"
                   ? "Emparejamiento (practicum)"
                   : q.format === "hotspot"
