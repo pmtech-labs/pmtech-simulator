@@ -13,6 +13,8 @@ import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
 import { MOCK_ERROR_TYPE_STATS, MOCK_FINISH_SUMMARY, MOCK_QUESTIONS, MOCK_UNIT_PROGRESS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
+import { PERFORMANCE_DOMAIN_LABELS, PROCESS_GROUP_LABELS } from "@/lib/questionTags";
+
 import { DOMAIN_LABELS } from "@/lib/export";
 import { cn } from "@/lib/utils";
 import { isAnswerCorrect } from "@/services/examService";
