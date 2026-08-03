@@ -42,6 +42,7 @@ const NAV = [
   { to: "/practica", label: "Práctica por dominios", icon: Dumbbell },
   { to: "/historial", label: "Historial", icon: History },
   { to: "/progreso", label: "Mi progreso", icon: BarChart3 },
+  { to: "/glosario", label: "Glosario PMP", icon: BookMarked },
   { to: "/instrucciones", label: "Instrucciones", icon: BookOpen },
   { to: "/perfil", label: "Perfil y licencia", icon: UserCog },
 ] as const;
