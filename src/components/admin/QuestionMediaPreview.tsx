@@ -58,7 +58,11 @@ export function QuestionMediaPreview({
     );
   }
 
-  if (format === "matching" && Array.isArray(raw.left) && Array.isArray(raw.right)) {
+  if (
+    (format === "matching" || format === "enhanced_matching") &&
+    Array.isArray(raw.left) &&
+    Array.isArray(raw.right)
+  ) {
     return (
       <div className="mb-3">
         <MatchingQuestion

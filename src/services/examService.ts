@@ -200,6 +200,7 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
     const format = ([
       "mc_multi",
       "matching",
+      "enhanced_matching",
       "pulldown",
       "graphic_based",
       "hotspot",
@@ -213,7 +214,10 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
       clusterId: item.cluster_id ?? undefined,
       stem: item.stem,
       options: (item.options ?? []).map((o) => ({ id: o.id, label: o.text })),
-      matching: format === "matching" && raw ? (raw as unknown as Question["matching"]) : undefined,
+      matching:
+        (format === "matching" || format === "enhanced_matching") && raw
+          ? (raw as unknown as Question["matching"])
+          : undefined,
       graphic: format === "graphic_based" && raw ? (raw as unknown as Question["graphic"]) : undefined,
       hotspot:
         format === "hotspot" && raw && Array.isArray(raw.hotspots)
