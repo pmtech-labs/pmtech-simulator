@@ -715,7 +715,10 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
           </div>
         </div>
       )}
+
+      <ChatbotWidget />
     </div>
+
   );
 
   function QuestionBody() {
