@@ -595,6 +595,22 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
             <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
               {difficultyLabel(q.difficulty)}
             </span>
+            {q.processGroup && PROCESS_GROUP_LABELS[q.processGroup] && (
+              <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
+                {PROCESS_GROUP_LABELS[q.processGroup]}
+              </span>
+            )}
+            {q.performanceDomain && PERFORMANCE_DOMAIN_LABELS[q.performanceDomain] && (
+              <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
+                {PERFORMANCE_DOMAIN_LABELS[q.performanceDomain]}
+              </span>
+            )}
+            {(q.focusTags ?? []).map((tag) => (
+              <span key={tag} className="rounded-md border border-primary/40 px-2 py-1 text-primary">
+                {FOCUS_TAG_LABELS[tag] ?? tag}
+              </span>
+            ))}
+
             <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
               {q.format === "mc_multi"
                 ? "Respuesta múltiple"
