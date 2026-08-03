@@ -574,7 +574,16 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
 
       <div className="mx-auto grid w-full max-w-7xl flex-1 gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[minmax(0,1fr)_240px]">
         <main className="min-w-0 space-y-5">
+          {index === 0 && !Object.keys(answers).length && (
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-muted/50 p-3">
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                ¿Primera vez? Repasa cómo funciona el simulacro antes de responder.
+              </p>
+              <HelpLinks />
+            </div>
+          )}
           <div className="flex flex-wrap items-center gap-2 text-[11px]">
+
             <span className="rounded-md bg-secondary px-2 py-1 font-semibold text-secondary-foreground">
               {q.taskCode}
             </span>
