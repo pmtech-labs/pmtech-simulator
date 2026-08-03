@@ -1,5 +1,24 @@
 export type DomainCode = "people" | "process" | "business";
 
+export type ProcessGroup =
+  | "initiation"
+  | "planning"
+  | "execution"
+  | "monitoring_control"
+  | "closing";
+
+export type PerformanceDomain =
+  | "gobernanza"
+  | "alcance"
+  | "cronograma"
+  | "finanzas"
+  | "recursos"
+  | "riesgos"
+  | "interesados";
+
+export type FocusTag = "entrega_valor" | "sostenibilidad" | "ia";
+
+
 export type QuestionFormat =
   | "mc_single"
   | "mc_multi"
