@@ -373,6 +373,45 @@ function PracticePage() {
                 ))}
               </select>
             </label>
+
+            <label className="mt-3 block text-xs font-medium">
+              Área de enfoque
+              <select
+                value={processGroupFilter}
+                onChange={(e) => {
+                  setProcessGroupFilter(e.target.value);
+                  setStartError(null);
+                }}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              >
+                <option value="">Todas las áreas</option>
+                {Object.entries(PROCESS_GROUP_LABELS).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="mt-3 block text-xs font-medium">
+              Dominio de desempeño
+              <select
+                value={performanceDomainFilter}
+                onChange={(e) => {
+                  setPerformanceDomainFilter(e.target.value);
+                  setStartError(null);
+                }}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              >
+                <option value="">Todos los dominios</option>
+                {Object.entries(PERFORMANCE_DOMAIN_LABELS).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
             <p className="mt-1 text-xs text-muted-foreground">
               El enfoque solo se aplica a los modos de práctica; el simulacro completo mantiene su reparto real.
             </p>
