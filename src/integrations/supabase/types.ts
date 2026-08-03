@@ -161,6 +161,7 @@ export type Database = {
       }
       diplomas: {
         Row: {
+          diploma_type: string
           exam_id: string
           id: string
           issued_at: string
@@ -170,6 +171,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          diploma_type?: string
           exam_id: string
           id?: string
           issued_at?: string
@@ -179,6 +181,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          diploma_type?: string
           exam_id?: string
           id?: string
           issued_at?: string
@@ -191,7 +194,7 @@ export type Database = {
           {
             foreignKeyName: "diplomas_exam_id_fkey"
             columns: ["exam_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "exams"
             referencedColumns: ["id"]
           },
