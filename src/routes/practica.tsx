@@ -96,8 +96,14 @@ export function recentErrorTypes(sequence?: number): ErrorType[] {
     .map((e) => e.errorType);
 }
 
-function buildDrill(domains: DomainCode[], errorTypes?: ErrorType[]): Question[] {
-  const base = MOCK_QUESTIONS.filter((q) => domains.includes(q.domain));
+function buildDrill(
+  domains: DomainCode[],
+  approach: ApproachOption,
+  errorTypes?: ErrorType[],
+): Question[] {
+  const base = MOCK_QUESTIONS.filter(
+    (q) => domains.includes(q.domain) && matchesApproach(q.approach, approach),
+  );
   const pool = errorTypes?.length
     ? (base.filter((q) => q.errorType && errorTypes.includes(q.errorType)).length
         ? base.filter((q) => q.errorType && errorTypes.includes(q.errorType))
