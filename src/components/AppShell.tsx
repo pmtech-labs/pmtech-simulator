@@ -58,14 +58,17 @@ const SECONDARY_NAV = [
 function NavLinks({
   onNavigate,
   onExamClick,
+  items = NAV,
 }: {
   onNavigate?: () => void;
   onExamClick?: () => void;
+  items?: readonly { to: string; label: string; icon: typeof LayoutDashboard }[];
 }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
     <nav className="flex flex-col gap-1">
-      {NAV.map((item) => {
+      {items.map((item) => {
+
         const active = pathname === item.to;
         const isExam = item.to === "/examen";
         return (
