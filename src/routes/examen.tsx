@@ -456,7 +456,9 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   if (summary) {
     return (
       <Results
+        examId={session.examId}
         questions={questions.map((question) => {
+
           const f = feedback[question.id];
           if (!f) return question;
           return {
