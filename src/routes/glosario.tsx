@@ -3,7 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { BookMarked, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 
+import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
+
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
