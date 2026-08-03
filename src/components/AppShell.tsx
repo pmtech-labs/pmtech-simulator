@@ -1,6 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   BarChart3,
+  BookOpen,
   Dumbbell,
 
   GraduationCap,
@@ -19,8 +20,10 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useCurrentUser } from "@/hooks/useCandidateData";
 import { signOutCandidate } from "@/services/authService";
 import { clearExamProgress, describeProgress, loadExamProgress } from "@/lib/examResume";
+import { FULL_SIM_SECTIONS_NOTE } from "@/lib/examCopy";
 import { cn } from "@/lib/utils";
 
+import { ChatbotWidget } from "@/components/support/ChatbotWidget";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -38,8 +41,10 @@ const NAV = [
   { to: "/practica", label: "Práctica por dominios", icon: Dumbbell },
   { to: "/historial", label: "Historial", icon: History },
   { to: "/progreso", label: "Mi progreso", icon: BarChart3 },
+  { to: "/instrucciones", label: "Instrucciones", icon: BookOpen },
   { to: "/perfil", label: "Perfil y licencia", icon: UserCog },
 ] as const;
+
 
 
 function NavLinks({
