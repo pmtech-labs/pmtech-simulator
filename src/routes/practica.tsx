@@ -172,7 +172,10 @@ function PracticePage() {
       mode === "domain_drill" ? selected : ALL_DOMAINS,
       approachFilter,
       errorReview && mode === "unit_quiz" ? recentErrorTypes(sequence) : undefined,
+      processGroupFilter || undefined,
+      performanceDomainFilter || undefined,
     );
+
     if (!built.length) {
       setStartError(NO_QUESTIONS_MESSAGE);
       return;
