@@ -286,7 +286,10 @@ export interface QuestionFilters {
   task_id?: string;
   approach?: string;
   job_id?: string;
+  process_group?: string;
+  performance_domain?: string;
   min_times_used?: number;
+
   max_success_rate?: number;
 }
 
