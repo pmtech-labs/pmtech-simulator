@@ -813,16 +813,19 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
 }
 
 function Results({
+  examId,
   questions,
   answers,
   summary,
   reviewAvailable,
 }: {
+  examId: string;
   questions: Question[];
   answers: Record<string, AnswerValue>;
   summary: FinishSummary;
   reviewAvailable: boolean;
 }) {
+
   const totalItems = summary.newItemsCount + summary.repeatedItemsCount;
   const correct = Math.round((summary.scorePct / 100) * questions.length);
   const reviewable = questions.filter((q) => q.correctAnswer.length);
