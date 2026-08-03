@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils";
-import type { Question } from "@/types/exam";
+import type { CaseCluster, Question } from "@/types/exam";
 
 export function QuestionNavigator({
   questions,
+  clusters,
   current,
   answers,
   flagged,
@@ -10,6 +11,8 @@ export function QuestionNavigator({
   activeSection,
 }: {
   questions: Question[];
+  /** Casos/escenarios de la sesión, para mostrar su título al pasar el ratón. */
+  clusters?: Record<string, CaseCluster>;
   current: number;
   answers: Record<string, unknown>;
   flagged: Record<string, boolean>;
