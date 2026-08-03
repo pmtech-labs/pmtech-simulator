@@ -55,15 +55,23 @@ export function QuestionNavigator({
               {items.map(({ q, i }) => {
                 const answered = Boolean(answers[q.id]);
                 const isFlagged = flagged[q.id];
+                const clusterTitle = q.clusterId ? clusters?.[q.clusterId]?.title : undefined;
                 return (
                   <button
                     key={q.id}
                     onClick={() => !locked && onSelect(i)}
                     disabled={locked}
-                    title={locked ? `Sección ${section} no disponible` : undefined}
+                    title={
+                      locked
+                        ? `Sección ${section} no disponible`
+                        : clusterTitle
+                          ? `Caso: ${clusterTitle}`
+                          : undefined
+                    }
                     className={cn(
                       "num relative grid aspect-square place-items-center rounded-lg border text-xs font-semibold transition-colors",
                       i === current && "ring-2 ring-ring ring-offset-1 ring-offset-background",
+                      i !== current && clusterTitle && "ring-1 ring-accent/40",
                       locked && "cursor-not-allowed opacity-40",
                       answered
                         ? "border-primary bg-primary text-primary-foreground"
