@@ -1,4 +1,4 @@
-import { MessageCircle, Send, X } from "lucide-react";
+import { MessageCircle, RotateCcw, Send, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import {
@@ -6,21 +6,38 @@ import {
   sendChatMessage,
   type ChatMessage,
 } from "@/services/supportService";
+import { clearChatSession, loadChatSession, saveChatSession } from "@/lib/chatHistory";
 import { cn } from "@/lib/utils";
+
+const WELCOME: ChatMessage[] = [{ role: "assistant", content: CHATBOT_WELCOME }];
 
 /**
  * Widget flotante de ayuda: chat sencillo contra la Edge Function `faq_chatbot`.
- * El historial vive en el estado del componente y se envía en cada llamada.
+ * El historial se persiste en localStorage por sesión, de modo que al cambiar
+ * de ruta la conversación (y su contexto) se recupera intacta.
  */
 export function ChatbotWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: "assistant", content: CHATBOT_WELCOME },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>(WELCOME);
+  const [hydrated, setHydrated] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Restauración tras hidratación: evita desajustes entre SSR y cliente.
+  useEffect(() => {
+    const saved = loadChatSession();
+    if (saved) {
+      setMessages(saved.messages);
+      setOpen(saved.open);
+    }
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (hydrated) saveChatSession(messages, open);
+  }, [messages, open, hydrated]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -29,6 +46,13 @@ export function ChatbotWidget() {
   useEffect(() => {
     if (open) inputRef.current?.focus();
   }, [open]);
+
+  const resetConversation = () => {
+    clearChatSession();
+    setMessages(WELCOME);
+    setInput("");
+    inputRef.current?.focus();
+  };
 
   const submit = async () => {
     const text = input.trim();
@@ -42,6 +66,7 @@ export function ChatbotWidget() {
     setSending(false);
     inputRef.current?.focus();
   };
+
 
   return (
     <>
