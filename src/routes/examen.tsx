@@ -986,7 +986,13 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   function QuestionBody() {
     const isLastOfSection = index === lastIndexOfSection;
     return (
-      <>
+      <div
+        className="space-y-4 select-none"
+        onCopy={(e) => e.preventDefault()}
+        onCut={(e) => e.preventDefault()}
+        onContextMenu={(e) => e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
+      >
         <QuestionGraphic question={q} />
         <p className="text-[15px] font-medium leading-relaxed">{q.stem}</p>
 
