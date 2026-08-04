@@ -29,6 +29,10 @@ export const Route = createFileRoute("/practica")({
         : undefined,
     unidad: typeof search.unidad === "string" ? search.unidad : undefined,
     repaso: search.repaso === "errores" ? ("errores" as const) : undefined,
+    dominio: typeof search.dominio === "string" ? search.dominio : undefined,
+    enfoque: typeof search.enfoque === "string" ? search.enfoque : undefined,
+    desempeno: typeof search.desempeno === "string" ? search.desempeno : undefined,
+    foco: typeof search.foco === "string" ? search.foco : undefined,
   }),
   head: () => ({
     meta: [
@@ -132,13 +136,23 @@ function fmtTime(seconds: number) {
 
 function PracticePage() {
   const search = Route.useSearch();
-  const [selected, setSelected] = useState<DomainCode[]>(["process"]);
+  const [selected, setSelected] = useState<DomainCode[]>(
+    search.dominio && ALL_DOMAINS.includes(search.dominio as DomainCode)
+      ? [search.dominio as DomainCode]
+      : ["process"],
+  );
   const [mode, setMode] = useState<PracticeMode>(search.modo ?? "domain_drill");
   const [unitId, setUnitId] = useState<string>(search.unidad ?? "");
   const [errorReview, setErrorReview] = useState<boolean>(search.repaso === "errores");
-  const [approachFilter, setApproachFilter] = useState<ApproachOption>("all");
+  const [approachFilter, setApproachFilter] = useState<ApproachOption>(
+    search.enfoque === "predictive" || search.enfoque === "agile" || search.enfoque === "hybrid"
+      ? (search.enfoque as ApproachOption)
+      : "all",
+  );
   const [processGroupFilter, setProcessGroupFilter] = useState<string>("");
-  const [performanceDomainFilter, setPerformanceDomainFilter] = useState<string>("");
+  const [performanceDomainFilter, setPerformanceDomainFilter] = useState<string>(
+    search.desempeno && search.desempeno in PERFORMANCE_DOMAIN_LABELS ? search.desempeno : "",
+  );
 
   const [startError, setStartError] = useState<string | null>(null);
   const [drill, setDrill] = useState<Question[] | null>(null);
