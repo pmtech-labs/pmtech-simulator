@@ -40,7 +40,7 @@ const NAV = [
   { to: "/dashboard", label: "Panel", icon: LayoutDashboard },
   { to: "/aprendizaje", label: "Ruta de aprendizaje", icon: RouteIcon },
   { to: "/examen", label: "Simulación completa", icon: Target },
-  { to: "/practica", label: "Práctica por dominios", icon: Dumbbell },
+  { to: "/practica", label: "Prácticas parciales", icon: Dumbbell },
   { to: "/historial", label: "Historial", icon: History },
   { to: "/progreso", label: "Mi progreso", icon: BarChart3 },
   { to: "/glosario", label: "Glosario PMP", icon: BookMarked },
