@@ -9,7 +9,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-import { AppShell } from "@/components/AppShell";
+import { AppShell, useExamStartPrompt } from "@/components/AppShell";
 import {
   DomainLevelBadge,
   DomainMasteryLegend,
