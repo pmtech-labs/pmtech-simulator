@@ -246,10 +246,14 @@ function TagDistribution() {
   const processCounts: Record<string, number> = {};
   const performanceCounts: Record<string, number> = {};
   const focusCounts: Record<string, number> = {};
+  const approachCounts: Record<string, number> = {};
+  const formatCounts: Record<string, number> = {};
   rows.forEach((r) => {
     if (r.process_group) processCounts[r.process_group] = (processCounts[r.process_group] ?? 0) + 1;
     if (r.performance_domain)
       performanceCounts[r.performance_domain] = (performanceCounts[r.performance_domain] ?? 0) + 1;
+    if (r.approach) approachCounts[r.approach] = (approachCounts[r.approach] ?? 0) + 1;
+    if (r.format) formatCounts[r.format] = (formatCounts[r.format] ?? 0) + 1;
     (r.focus_tags ?? []).forEach((t) => {
       focusCounts[t] = (focusCounts[t] ?? 0) + 1;
     });
