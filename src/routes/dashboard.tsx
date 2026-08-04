@@ -3,7 +3,6 @@ import {
   ArrowRight,
   Clock3,
   Flame,
-  History,
   Layers,
   Target,
   Timer,
@@ -15,7 +14,7 @@ import { FeedbackDialog } from "@/components/feedback/FeedbackDialog";
 import { DomainLevelBadge, DomainMasteryLegend } from "@/components/progress/DomainMasteryLegend";
 import { RequireAuth } from "@/components/auth/RequireAuth";
 import { DOMAINS } from "@/data/mockData";
-import { useCurrentUser, useExamHistory } from "@/hooks/useCandidateData";
+import { useCurrentUser } from "@/hooks/useCandidateData";
 
 export const Route = createFileRoute("/dashboard")({
   ssr: false,
