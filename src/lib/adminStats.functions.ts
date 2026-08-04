@@ -48,8 +48,8 @@ export const getAdminStatsFn = createServerFn({ method: "POST" })
 
     if (data.view === "tags") {
       const { data: rows, error } = await db
-        .from("questions")
-        .select("status, process_group, performance_domain, focus_tags, approach, format")
+        .from("v_question_stats")
+        .select("status, tag_codes")
         .in("status", ["draft", "published"]);
       if (error) throw new Error(error.message);
       return rows ?? [];
@@ -62,7 +62,7 @@ export const getAdminStatsFn = createServerFn({ method: "POST" })
     }
 
     const columns =
-      "question_id, stem, domain_name, task_title, status, success_rate_pct, times_answered, times_used_in_exams, process_group, performance_domain, focus_tags";
+      "question_id, stem, domain_name, task_title, status, success_rate_pct, times_answered, times_used_in_exams, process_group, performance_domain, focus_tags, tag_codes";
 
     if (data.view === "hardest_questions") {
       const { data: rows, error } = await db

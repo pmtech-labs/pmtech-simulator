@@ -71,6 +71,8 @@ export interface AdminQuestion {
   process_group?: string | null;
   performance_domain?: string | null;
   focus_tags?: string[] | null;
+  /** Fuente de verdad: todos los códigos de etiqueta (DO/CI/AE/DD/FO/NT). */
+  tag_codes?: string[] | null;
 }
 
 
@@ -98,6 +100,7 @@ export interface QuestionStatRow {
   process_group?: string | null;
   performance_domain?: string | null;
   focus_tags?: string[] | null;
+  tag_codes?: string[] | null;
 }
 
 export interface ExamStatRow {
@@ -294,6 +297,8 @@ export interface QuestionFilters {
   job_id?: string;
   process_group?: string;
   performance_domain?: string;
+  /** Código(s) de etiqueta; varios separados por coma = Y lógico. */
+  tag_code?: string;
   min_times_used?: number;
 
   max_success_rate?: number;
@@ -314,6 +319,7 @@ export async function listQuestions(
       job_id: filters.job_id,
       process_group: filters.process_group,
       performance_domain: filters.performance_domain,
+      tag_code: filters.tag_code,
 
       min_times_used: filters.min_times_used,
       max_success_rate: filters.max_success_rate,
@@ -356,11 +362,7 @@ export type StatsView =
 
 export interface QuestionTagRow {
   status: string;
-  process_group: string | null;
-  performance_domain: string | null;
-  focus_tags: string[] | null;
-  approach: string | null;
-  format: string | null;
+  tag_codes: string[] | null;
 }
 
 export async function getStats<T>(view: StatsView, limit?: number): Promise<T[]> {
