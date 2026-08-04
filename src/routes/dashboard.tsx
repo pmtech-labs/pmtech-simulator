@@ -78,7 +78,7 @@ function StartSimCard() {
     >
       <div>
         <Target className="h-5 w-5 text-accent" />
-        <h3 className="mt-3 text-base font-semibold">Iniciar simulación real</h3>
+        <h3 className="mt-3 text-base font-semibold">Iniciar simulación completa</h3>
         <p className="mt-1 text-sm text-primary-foreground/70">
           180 preguntas · 240 minutos · estructura oficial con bloque de casos y 2 descansos.
         </p>
