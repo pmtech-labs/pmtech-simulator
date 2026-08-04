@@ -35,6 +35,36 @@ export type Database = {
         }
         Relationships: []
       }
+      app_feedback: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          page_context: string | null
+          rating: number | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          page_context?: string | null
+          rating?: number | null
+          status?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          page_context?: string | null
+          rating?: number | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       case_clusters: {
         Row: {
           created_at: string | null
@@ -1314,6 +1344,7 @@ export type Database = {
         | "custom"
         | "unit_quiz"
         | "cumulative"
+        | "half_sim"
       item_format:
         | "mc_single"
         | "mc_multi"
@@ -1484,6 +1515,7 @@ export const Constants = {
         "custom",
         "unit_quiz",
         "cumulative",
+        "half_sim",
       ],
       item_format: [
         "mc_single",

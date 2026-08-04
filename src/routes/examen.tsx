@@ -9,8 +9,6 @@ import {
   Info,
   ListChecks,
   Loader2,
-  Pause,
-  Play,
   Flag,
   Sparkles,
   SkipForward,
@@ -32,12 +30,6 @@ import { HelpLinks } from "@/components/support/HelpLinks";
 
 import { BREAK_SECONDS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
-import {
-  FOCUS_TAG_LABELS,
-  PERFORMANCE_DOMAIN_LABELS,
-  PROCESS_GROUP_LABELS,
-} from "@/lib/questionTags";
-
 import {
   clearExamProgress,
   loadExamProgress,
@@ -62,7 +54,6 @@ import { cn } from "@/lib/utils";
 
 /** Intervalo de auto-guardado del progreso de la simulación. */
 const AUTOSAVE_INTERVAL_MS = 10_000;
-
 
 interface ExamSearch {
   modo?: ExamMode;
@@ -120,12 +111,6 @@ function fmtShort(s: number) {
   return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
 }
 
-function difficultyLabel(d: Question["difficulty"]) {
-  if (d <= 2) return "Fácil";
-  if (d === 3) return "Media";
-  return "Difícil";
-}
-
 function ExamPage() {
   const search = Route.useSearch();
   const mode: ExamMode = search.modo ?? "full_sim";
@@ -158,7 +143,6 @@ function ExamPage() {
       .then(setSession)
       .catch((e: Error) => setLoadError(e.message));
   }, [mode, search.dominio, search.unidad, search.preguntas, search.reanudar]);
-
 
   if (loadError) {
     return (
@@ -222,7 +206,9 @@ function ExamPage() {
 }
 
 function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamProgress | null }) {
-  const formative = session.mode !== "full_sim";
+  const formative = session.mode !== "full_sim" && session.mode !== "half_sim";
+  /** El cronómetro solo existe si el backend devolvió límite de tiempo (full_sim / half_sim). */
+  const timed = session.timed;
   const questions = session.questions;
   const sections = session.sections;
 
@@ -247,7 +233,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   const [feedback, setFeedback] = useState<Record<string, AnswerFeedback>>(resume?.feedback ?? {});
   const [checking, setChecking] = useState(false);
   const [flagged, setFlagged] = useState<Record<string, boolean>>(resume?.flagged ?? {});
-  const [paused, setPaused] = useState(false);
+
   const [summary, setSummary] = useState<FinishSummary | null>(null);
   const [finishing, setFinishing] = useState(false);
   const [confirming, setConfirming] = useState(false);
@@ -316,8 +302,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   }, [index]);
 
   useEffect(() => {
-    if (summary || phase === "break") return;
-    if (paused) return;
+    if (summary || phase === "break" || !timed) return;
     deadline.current = Date.now() + seconds * 1000;
     const tick = () => {
       setSeconds(Math.max(0, Math.round((deadline.current - Date.now()) / 1000)));
@@ -325,7 +310,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     const t = setInterval(tick, 500);
     return () => clearInterval(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paused, summary, phase, clockEpoch]);
+  }, [summary, phase, clockEpoch, timed]);
 
   // Cuenta atrás informativa del descanso (no afecta al reloj principal).
   useEffect(() => {
@@ -397,7 +382,6 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
         interpretationNote: null,
         diploma: null,
         capstoneDiploma: null,
-
       });
     } finally {
       setFinishing(false);
@@ -560,16 +544,13 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     persist();
   }, [answers, feedback, flagged, index, sectionIdx, phase, summary, persist]);
 
-
   const answeredCount = Object.keys(answers).length;
-
 
   if (summary) {
     return (
       <Results
         examId={session.examId}
         questions={questions.map((question) => {
-
           const f = feedback[question.id];
           if (!f) return question;
           return {
@@ -689,8 +670,8 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
               Revisión de la sección {section.sectionNumber}
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Revisa tus respuestas antes de cerrar la sección. Pulsa cualquier pregunta para
-              volver a ella y modificar tu respuesta.
+              Revisa tus respuestas antes de cerrar la sección. Pulsa cualquier pregunta para volver
+              a ella y modificar tu respuesta.
             </p>
             <div className="num mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
               <span>{sectionQuestions.length - pending} respondidas</span>
@@ -816,24 +797,19 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <div
-              className={cn(
-                "num flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-sm font-semibold",
-                seconds < 600 ? "border-destructive text-destructive" : "border-border",
-              )}
-              title={`Tiempo restante de la sección ${section.sectionNumber}`}
-            >
-              <Clock className="h-4 w-4" />
-              <span className="hidden sm:inline">{fmt(seconds)}</span>
-              <span className="sm:hidden">{fmt(seconds).slice(0, 5)}</span>
-            </div>
-            <button
-              onClick={() => setPaused((p) => !p)}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-sm font-medium hover:bg-secondary"
-            >
-              {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
-              <span className="hidden sm:inline">{paused ? "Reanudar" : "Pausar"}</span>
-            </button>
+            {timed && (
+              <div
+                className={cn(
+                  "num flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-sm font-semibold",
+                  seconds < 600 ? "border-destructive text-destructive" : "border-border",
+                )}
+                title="Tiempo restante del examen"
+              >
+                <Clock className="h-4 w-4" />
+                <span className="hidden sm:inline">{fmt(seconds)}</span>
+                <span className="sm:hidden">{fmt(seconds).slice(0, 5)}</span>
+              </div>
+            )}
             <button
               onClick={() => setConfirming(true)}
               className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
@@ -861,52 +837,6 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
               <HelpLinks />
             </div>
           )}
-          <div className="flex flex-wrap items-center gap-2 text-[11px]">
-
-            <span className="rounded-md bg-secondary px-2 py-1 font-semibold text-secondary-foreground">
-              {q.taskCode}
-            </span>
-            <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
-              {q.approach === "agile" ? "Ágil" : q.approach === "hybrid" ? "Híbrido" : "Predictivo"}
-            </span>
-            <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
-              {difficultyLabel(q.difficulty)}
-            </span>
-            {q.processGroup && PROCESS_GROUP_LABELS[q.processGroup] && (
-              <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
-                {PROCESS_GROUP_LABELS[q.processGroup]}
-              </span>
-            )}
-            {q.performanceDomain && PERFORMANCE_DOMAIN_LABELS[q.performanceDomain] && (
-              <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
-                {PERFORMANCE_DOMAIN_LABELS[q.performanceDomain]}
-              </span>
-            )}
-            {(q.focusTags ?? []).map((tag) => (
-              <span key={tag} className="rounded-md border border-primary/40 px-2 py-1 text-primary">
-                {FOCUS_TAG_LABELS[tag] ?? tag}
-              </span>
-            ))}
-
-            <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
-              {q.format === "mc_multi"
-                ? "Respuesta múltiple"
-                : q.format === "enhanced_matching"
-                  ? "Emparejamiento mejorado"
-                : q.format === "matching"
-                  ? "Emparejamiento (practicum)"
-                  : q.format === "hotspot"
-                    ? "Diagrama interactivo"
-                  : q.format === "pulldown"
-                    ? "Desplegable"
-                  : q.format === "graphic_based"
-                    ? "Basada en gráfico"
-                  : q.itemType === "case_child"
-                    ? "Caso de estudio"
-                    : "Situacional"}
-            </span>
-          </div>
-
           {cluster ? (
             <div className="grid gap-5 lg:grid-cols-2">
               <aside className="space-y-3 rounded-2xl border border-border bg-card p-4 lg:sticky lg:top-24 lg:self-start">
@@ -970,32 +900,13 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
               answers={answers}
               flagged={flagged}
               activeSection={multiSection ? section.sectionNumber : undefined}
-            closedSections={closedSections}
-            onlyFlagged={onlyFlagged}
+              closedSections={closedSections}
+              onlyFlagged={onlyFlagged}
               onSelect={(i) => {
                 setIndex(i);
                 setNavOpen(false);
               }}
             />
-          </div>
-        </div>
-      )}
-
-      {paused && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-background/95 px-4">
-          <div className="max-w-sm rounded-2xl border border-border bg-card p-6 text-center">
-            <Pause className="mx-auto h-6 w-6 text-muted-foreground" />
-            <h2 className="mt-3 text-lg font-semibold">Examen en pausa</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              El cronómetro de la sección está detenido. En el examen real solo dispones de dos
-              descansos de 10 minutos entre secciones.
-            </p>
-            <button
-              onClick={() => setPaused(false)}
-              className="mt-4 w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-            >
-              Reanudar examen
-            </button>
           </div>
         </div>
       )}
@@ -1032,7 +943,6 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
 
       <ChatbotWidget />
     </div>
-
   );
 
   function NavActions() {
@@ -1087,7 +997,6 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
           correctAnswer={qFeedback?.correctAnswer}
           onChange={(next) => setAnswers((prev) => ({ ...prev, [q.id]: next }))}
         />
-
 
         {formative ? (
           qFeedback ? (
@@ -1181,7 +1090,6 @@ function Results({
   summary: FinishSummary;
   reviewAvailable: boolean;
 }) {
-
   const totalItems = summary.newItemsCount + summary.repeatedItemsCount;
   const correct = Math.round((summary.scorePct / 100) * questions.length);
   const reviewable = questions.filter((q) => q.correctAnswer.length);
@@ -1272,8 +1180,6 @@ function Results({
             </div>
           )}
 
-
-
           <div className="mt-5 flex flex-wrap justify-center gap-2">
             <Link
               to="/dashboard"
@@ -1281,7 +1187,10 @@ function Results({
             >
               Volver al panel
             </Link>
-            <Link to="/historial" className="rounded-lg border border-border px-4 py-2 text-sm font-medium">
+            <Link
+              to="/historial"
+              className="rounded-lg border border-border px-4 py-2 text-sm font-medium"
+            >
               Ver historial
             </Link>
             <ResultReportButton
@@ -1312,13 +1221,20 @@ function Results({
 
             <h2 className="text-base font-semibold">Revisión detallada</h2>
             {reviewable.map((q, i) => (
-              <div key={q.id} className="space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-5">
+              <div
+                key={q.id}
+                className="space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-5"
+              >
                 <div className="flex items-start justify-between gap-3">
                   <p className="text-sm font-medium leading-relaxed">
                     <span className="num mr-2 text-muted-foreground">{i + 1}.</span>
                     {q.stem}
                   </p>
-                  <ReportIssueButton questionId={q.id} examId={examId} className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-border px-2 py-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground" />
+                  <ReportIssueButton
+                    questionId={q.id}
+                    examId={examId}
+                    className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-border px-2 py-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  />
                 </div>
                 <QuestionGraphic question={q} />
 
@@ -1349,11 +1265,9 @@ function Results({
               y repasa tus fallos en los modos de práctica formativa.
             </p>
           </div>
-
         )}
       </div>
       <ChatbotWidget />
     </div>
-
   );
 }

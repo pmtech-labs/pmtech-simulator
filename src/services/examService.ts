@@ -20,7 +20,8 @@ export type ExamMode =
   | "case_only"
   | "custom"
   | "unit_quiz"
-  | "cumulative";
+  | "cumulative"
+  | "half_sim";
 
 /** Filtro de enfoque (solo modos de práctica; `full_sim` mantiene su reparto real). */
 export type ApproachFilter = "predictive" | "agile" | "hybrid" | "agile_hybrid";
@@ -45,8 +46,10 @@ export interface ExamSession {
   mode: ExamMode;
   questions: Question[];
   clusters: Record<string, CaseCluster>;
-  /** Reloj global del examen (240 min en full_sim). Único tiempo real. */
+  /** Reloj global del examen (240 min en full_sim, 120 en half_sim). Único tiempo real. */
   timeLimitSeconds: number;
+  /** El backend solo devuelve límite de tiempo en full_sim y half_sim. */
+  timed: boolean;
   /** Descansos ya consumidos (máximo 2 por examen). */
   breaksUsed: number;
   sections: ExamSection[];
@@ -320,6 +323,7 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
     questions,
     clusters,
     timeLimitSeconds: globalLimit,
+    timed: data.time_limit_seconds != null && Number(data.time_limit_seconds) > 0,
     breaksUsed: Number(data.breaks_used) || 0,
     sections,
   };

@@ -6,14 +6,13 @@ import {
   History,
   Layers,
   Target,
+  Timer,
   TrendingUp,
 } from "lucide-react";
 
 import { AppShell, useExamStartPrompt } from "@/components/AppShell";
-import {
-  DomainLevelBadge,
-  DomainMasteryLegend,
-} from "@/components/progress/DomainMasteryLegend";
+import { FeedbackDialog } from "@/components/feedback/FeedbackDialog";
+import { DomainLevelBadge, DomainMasteryLegend } from "@/components/progress/DomainMasteryLegend";
 import { RequireAuth } from "@/components/auth/RequireAuth";
 import { DOMAINS } from "@/data/mockData";
 import { useCurrentUser, useExamHistory } from "@/hooks/useCandidateData";
@@ -90,6 +89,28 @@ function StartSimCard() {
   );
 }
 
+/** Medio examen: 90 preguntas / 2 h, sin bloques ni descansos. */
+function StartHalfSimCard() {
+  return (
+    <Link
+      to="/examen"
+      search={{ modo: "half_sim" as const }}
+      className="group flex flex-col justify-between rounded-2xl border border-border bg-card p-5 transition-transform hover:-translate-y-0.5"
+    >
+      <div>
+        <Timer className="h-5 w-5 text-muted-foreground" />
+        <h3 className="mt-3 text-base font-semibold">Medio examen</h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          90 preguntas · 120 minutos · mismo reparto que el examen real, sin bloques ni descansos.
+        </p>
+      </div>
+      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground">
+        Comenzar <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+      </span>
+    </Link>
+  );
+}
+
 function Dashboard() {
   const { data: u, isLoading } = useCurrentUser();
   const { data: history = [] } = useExamHistory();
@@ -113,10 +134,15 @@ function Dashboard() {
   // Plan gratuito: un único simulacro completo de regalo.
   const freeSimBlocked = u.plan === "free" && u.freeFullSimUsed;
 
-
   return (
-    <AppShell title={`Hola, ${u.name.split(" ")[0]}`} subtitle="Tu preparación para el examen PMP (ECO 2026)">
+    <AppShell
+      title={`Hola, ${u.name.split(" ")[0]}`}
+      subtitle="Tu preparación para el examen PMP (ECO 2026)"
+    >
       <div className="mx-auto max-w-6xl space-y-6">
+        <div className="flex justify-end">
+          <FeedbackDialog pageContext="dashboard" />
+        </div>
         <section className="overflow-hidden rounded-2xl border border-border bg-card">
           <div className="grid gap-6 p-5 sm:p-6 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-center">
             <div className="flex items-center gap-4">
@@ -182,6 +208,8 @@ function Dashboard() {
             <StartSimCard />
           )}
 
+          <StartHalfSimCard />
+
           <div className="rounded-2xl border border-border bg-card p-5">
             <div className="flex items-start justify-between">
               <div>
@@ -236,7 +264,10 @@ function Dashboard() {
         <section className="rounded-2xl border border-border bg-card p-5">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
             <h3 className="truncate text-base font-semibold">Dominio por área ECO</h3>
-            <Link to="/progreso" className="shrink-0 text-sm font-medium text-muted-foreground hover:text-foreground">
+            <Link
+              to="/progreso"
+              className="shrink-0 text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
               Analítica
             </Link>
           </div>
