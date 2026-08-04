@@ -1,5 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { patchConnectorFn, setDefaultConnectorFn } from "@/lib/adminConnectors.functions";
+import { getAdminStatsFn } from "@/lib/adminStats.functions";
+
 
 /**
  * Capa de servicios exclusiva del panel de administración.
