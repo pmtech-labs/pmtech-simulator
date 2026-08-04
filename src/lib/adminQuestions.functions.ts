@@ -63,3 +63,33 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
       cluster_scenario: cluster?.data?.scenario_text ?? null,
     };
   });
+
+/**
+ * Cambia el estado de una o varias preguntas (borrador ↔ publicada ↔ retirada)
+ * desde el panel de administración, validando el rol admin con la sesión.
+ */
+export const setQuestionsStatusFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { ids: string[]; status: string }) =>
+    z
+      .object({
+        ids: z.array(z.string().uuid()).min(1),
+        status: z.enum(["draft", "published", "retired"]),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin, error: rpcError } = await context.supabase.rpc("is_admin", {
+      p_user_id: context.userId,
+    });
+    if (rpcError || !isAdmin) throw new Error("No autorizado");
+
+    const { data: rows, error } = await context.supabase
+      .from("questions")
+      .update({ status: data.status })
+      .in("id", data.ids)
+      .select("id");
+
+    if (error) throw new Error(error.message);
+    return { updated: rows?.length ?? 0 };
+  });
