@@ -45,7 +45,10 @@ export interface ExamSession {
   mode: ExamMode;
   questions: Question[];
   clusters: Record<string, CaseCluster>;
+  /** Reloj global del examen (240 min en full_sim). Único tiempo real. */
   timeLimitSeconds: number;
+  /** Descansos ya consumidos (máximo 2 por examen). */
+  breaksUsed: number;
   sections: ExamSection[];
 }
 
@@ -55,7 +58,20 @@ export interface AnswerFeedback {
   correctAnswer?: string[];
   explanation?: string;
   errorType?: ErrorType;
+  /** El reloj global llegó a 00:00: hay que finalizar el examen de inmediato. */
+  timeExpired?: boolean;
 }
+
+/** Respuesta autoritativa de la Edge Function `exam_section_control`. */
+export interface SectionControlResult {
+  sectionClosed?: number;
+  nextSection: number | null;
+  examComplete: boolean;
+  remainingSeconds: number;
+  paused: boolean;
+  breakAllowanceSeconds?: number;
+}
+
 
 export interface FinishSummary {
   examId: string;
