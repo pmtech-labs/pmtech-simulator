@@ -54,6 +54,7 @@ export interface ExamHistoryRow {
 
 const MODE_LABELS: Record<string, string> = {
   full_sim: "Simulación completa",
+  half_sim: "Medio examen",
   domain_drill: "Práctica por dominios",
   case_only: "Solo casos",
   custom: "Personalizado",

@@ -1,9 +1,14 @@
+import { useEffect, useRef, useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import type { Option } from "@/types/exam";
 
-/** Formato pulldown: misma lógica que mc_single, presentación en desplegable. */
+/**
+ * Formato pulldown: misma lógica que mc_single, presentación en desplegable.
+ * Se usa un desplegable propio (no <select> nativo) porque el re-render del
+ * cronómetro cerraba la lista nativa antes de poder elegir opción.
+ */
 export function PulldownQuestion({
   options,
   selected,
@@ -17,39 +22,88 @@ export function PulldownQuestion({
   correctAnswer?: string[];
   onSelect: (id: string) => void;
 }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
   const value = selected[0] ?? "";
   const reveal = Boolean(correctAnswer?.length);
   const isCorrect = reveal && value ? correctAnswer!.includes(value) : false;
   const correctOption = reveal ? options.find((o) => correctAnswer!.includes(o.id)) : undefined;
+  const currentOption = options.find((o) => o.id === value);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDocPointerDown = (e: PointerEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", onDocPointerDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDocPointerDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (disabled) setOpen(false);
+  }, [disabled]);
 
   return (
     <div className="space-y-2.5">
       <label className="block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         Selecciona la respuesta
       </label>
-      <div className="relative">
-        <select
-          value={value}
+      <div className="relative" ref={rootRef}>
+        <button
+          type="button"
           disabled={disabled}
-          onChange={(e) => onSelect(e.target.value)}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          onClick={() => setOpen((o) => !o)}
           className={cn(
-            "w-full appearance-none rounded-xl border bg-card px-3 py-3 pr-10 text-sm leading-relaxed",
+            "flex w-full items-center justify-between gap-2 rounded-xl border bg-card px-3 py-3 text-left text-sm leading-relaxed",
             "focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-80",
             !reveal && "border-border",
             reveal && isCorrect && "border-success bg-success-soft",
             reveal && !isCorrect && "border-destructive bg-danger-soft",
           )}
         >
-          <option value="" disabled>
-            — Elige una opción —
-          </option>
-          {options.map((o) => (
-            <option key={o.id} value={o.id}>
-              {o.id}. {o.label}
-            </option>
-          ))}
-        </select>
-        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <span className={cn(!currentOption && "text-muted-foreground")}>
+            {currentOption ? `${currentOption.id}. ${currentOption.label}` : "— Elige una opción —"}
+          </span>
+          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+        </button>
+
+        {open && !disabled && (
+          <ul
+            role="listbox"
+            className="absolute z-50 mt-1 max-h-72 w-full overflow-auto rounded-xl border border-border bg-card p-1 shadow-lg"
+          >
+            {options.map((o) => (
+              <li key={o.id}>
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={o.id === value}
+                  onClick={() => {
+                    onSelect(o.id);
+                    setOpen(false);
+                  }}
+                  className={cn(
+                    "flex w-full items-start gap-2 rounded-lg px-3 py-2 text-left text-sm leading-relaxed hover:bg-muted",
+                    o.id === value && "bg-muted font-medium",
+                  )}
+                >
+                  <span className="shrink-0 font-semibold">{o.id}.</span>
+                  <span>{o.label}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {reveal && correctOption && !isCorrect && (
