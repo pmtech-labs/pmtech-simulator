@@ -1078,7 +1078,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
             )}
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }
