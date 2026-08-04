@@ -11,7 +11,9 @@ import {
   Loader2,
   Pause,
   Play,
+  Flag,
   Sparkles,
+  SkipForward,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -44,7 +46,10 @@ import {
 } from "@/lib/examResume";
 
 import {
+  finalizeSection,
   finishExam,
+  resumeBreak,
+  startBreak,
   startExam,
   submitAnswer,
   type AnswerFeedback,
@@ -250,17 +255,37 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
 
   const [sectionIdx, setSectionIdx] = useState(initialSection);
   const section = sections[sectionIdx];
+
+  /**
+   * Reloj ÚNICO del examen (240 min en la simulación completa) compartido por
+   * los 3 bloques. Los descansos lo pausan en el backend; aquí lo resincronizamos
+   * con el `remaining_seconds` autoritativo que devuelve `exam_section_control`.
+   */
   const [seconds, setSeconds] = useState(
     resume?.secondsLeft && resume.secondsLeft > 0
-      ? Math.min(resume.secondsLeft, sections[initialSection].seconds)
-      : sections[initialSection].seconds,
+      ? Math.min(resume.secondsLeft, session.timeLimitSeconds)
+      : session.timeLimitSeconds,
   );
-  const [onBreak, setOnBreak] = useState(false);
+  const [clockEpoch, setClockEpoch] = useState(0);
+  const syncClock = useCallback((remaining: number) => {
+    setSeconds(Math.max(0, Math.round(remaining)));
+    setClockEpoch((e) => e + 1);
+  }, []);
+
+  /** Secciones finalizadas: bloqueadas de forma permanente. */
+  const [closedSections, setClosedSections] = useState<number[]>(resume?.closedSections ?? []);
+  /** Pantallas del flujo: examen, revisión de bloque, oferta de descanso y descanso. */
+  const [phase, setPhase] = useState<"exam" | "review" | "break_offer" | "break">("exam");
+  const [pendingNextSection, setPendingNextSection] = useState<number | null>(null);
+  const [breaksUsed, setBreaksUsed] = useState(resume?.breaksUsed ?? session.breaksUsed ?? 0);
+  const [closingSection, setClosingSection] = useState(false);
+  const [confirmCloseSection, setConfirmCloseSection] = useState(false);
+  const [sectionError, setSectionError] = useState<string | null>(null);
+  const [onlyFlagged, setOnlyFlagged] = useState(false);
   const [breakSeconds, setBreakSeconds] = useState(BREAK_SECONDS);
   const questionStart = useRef(Date.now());
-  /** Marca de tiempo de fin de la sección actual (ms). Evita desfases cuando la pestaña se suspende. */
-  const deadline = useRef<number>(Date.now() + sections[initialSection].seconds * 1000);
-
+  /** Marca de tiempo de fin del examen (ms). Evita desfases si la pestaña se suspende. */
+  const deadline = useRef<number>(Date.now() + seconds * 1000);
 
   const sectionQuestions = useMemo(
     () => questions.filter((q) => (q.sectionNumber ?? 1) === section.sectionNumber),
@@ -280,23 +305,20 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   }, [index]);
 
   useEffect(() => {
-    if (summary || onBreak) return;
-    if (paused) {
-      // Al pausar, congelamos el tiempo restante actual.
-      return;
-    }
+    if (summary || phase === "break") return;
+    if (paused) return;
     deadline.current = Date.now() + seconds * 1000;
     const tick = () => {
-      const left = Math.max(0, Math.round((deadline.current - Date.now()) / 1000));
-      setSeconds(left);
+      setSeconds(Math.max(0, Math.round((deadline.current - Date.now()) / 1000)));
     };
     const t = setInterval(tick, 500);
     return () => clearInterval(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paused, summary, onBreak, sectionIdx]);
+  }, [paused, summary, phase, clockEpoch]);
 
+  // Cuenta atrás informativa del descanso (no afecta al reloj principal).
   useEffect(() => {
-    if (!onBreak) return;
+    if (phase !== "break") return;
     const end = Date.now() + breakSeconds * 1000;
     const t = setInterval(
       () => setBreakSeconds(Math.max(0, Math.round((end - Date.now()) / 1000))),
@@ -304,8 +326,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     );
     return () => clearInterval(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onBreak]);
-
+  }, [phase]);
 
   const send = useCallback(
     async (question: Question, value: AnswerValue) => {
