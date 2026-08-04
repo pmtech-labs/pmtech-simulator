@@ -335,16 +335,9 @@ function serializeAnswer(answer: AnswerValue): string[] {
 }
 
 /** Detecta el 409 de tiempo agotado devuelto por `submit_answer`. */
-async function isTimeExpiredError(error: unknown): Promise<boolean> {
+function isTimeExpiredError(error: unknown): boolean {
   const ctx = (error as { context?: Response })?.context;
-  if (!ctx) return false;
-  if (ctx.status !== 409) return false;
-  try {
-    const body = (await ctx.clone().json()) as { error?: string };
-    return /tiempo/i.test(body?.error ?? "") || true;
-  } catch {
-    return true;
-  }
+  return ctx?.status === 409;
 }
 
 export async function submitAnswer(
@@ -361,7 +354,7 @@ export async function submitAnswer(
       time_spent_seconds: timeSpentSeconds,
     },
   });
-  if (error) return { saved: false, timeExpired: await isTimeExpiredError(error) };
+  if (error) return { saved: false, timeExpired: isTimeExpiredError(error) };
 
   if (data?.is_correct === undefined) return { saved: true };
   return {
