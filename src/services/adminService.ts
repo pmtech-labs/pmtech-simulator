@@ -359,6 +359,8 @@ export interface QuestionTagRow {
   process_group: string | null;
   performance_domain: string | null;
   focus_tags: string[] | null;
+  approach: string | null;
+  format: string | null;
 }
 
 export async function getStats<T>(view: StatsView, limit?: number): Promise<T[]> {
