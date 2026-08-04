@@ -30,7 +30,8 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     if (!q) throw new Error("Pregunta no encontrada");
 
-    const [{ data: task }, cluster] = await Promise.all([
+    const [{ data: tagRows }, { data: task }, cluster] = await Promise.all([
+      db.from("question_tags").select("tag_code").eq("question_id", data.id),
       db
         .from("eco_tasks")
         .select("title, task_number, domain_id")
@@ -61,6 +62,7 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
       domain_name: domainName,
       cluster_title: cluster?.data?.title ?? null,
       cluster_scenario: cluster?.data?.scenario_text ?? null,
+      tag_codes: (tagRows ?? []).map((t) => t.tag_code),
     };
   });
 
