@@ -288,12 +288,26 @@ function TagDistribution() {
             total={total}
           />
           <TagGroup
-            title="Temáticas"
+            title="Áreas de enfoque"
             note="Varias etiquetas posibles por pregunta"
             labels={FOCUS_TAG_LABELS}
             counts={focusCounts}
             total={total}
             multi
+          />
+          <TagGroup
+            title="Ciclos de vida"
+            note="Una etiqueta por pregunta"
+            labels={APPROACH_LABELS}
+            counts={approachCounts}
+            total={total}
+          />
+          <TagGroup
+            title="Formato"
+            note="Una etiqueta por pregunta"
+            labels={FORMAT_LABELS}
+            counts={formatCounts}
+            total={total}
           />
         </div>
       )}
