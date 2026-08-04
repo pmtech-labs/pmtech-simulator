@@ -203,12 +203,14 @@ function TagGroup({
   labels,
   counts,
   total,
+  multi,
 }: {
   title: string;
   note: string;
   labels: Record<string, string>;
   counts: Record<string, number>;
   total: number;
+  multi?: boolean;
 }) {
   const keys = Object.keys(labels);
   const unassigned = Math.max(0, total - keys.reduce((s, k) => s + (counts[k] ?? 0), 0));
@@ -220,7 +222,7 @@ function TagGroup({
         {keys.map((k) => (
           <TagBar key={k} label={labels[k] ?? k} count={counts[k] ?? 0} total={total} />
         ))}
-        {unassigned > 0 && <TagBar label="Sin etiqueta" count={unassigned} total={total} />}
+        {!multi && unassigned > 0 && <TagBar label="Sin etiqueta" count={unassigned} total={total} />}
       </div>
     </div>
   );
@@ -281,6 +283,7 @@ function TagDistribution() {
             labels={FOCUS_TAG_LABELS}
             counts={focusCounts}
             total={total}
+            multi
           />
         </div>
       )}
