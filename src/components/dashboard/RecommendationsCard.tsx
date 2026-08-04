@@ -3,6 +3,7 @@ import { ArrowRight, Compass, Sparkles } from "lucide-react";
 
 import {
   buildRecommendations,
+  type PerformanceBreakdown,
   type PerformanceDimension,
   type PerformanceSlice,
 } from "@/services/performanceService";
@@ -56,7 +57,7 @@ export function RecommendationsCard({
     return <div className="h-64 animate-pulse rounded-2xl border border-border bg-card" />;
   }
 
-  const breakdown = data ?? {
+  const breakdown: PerformanceBreakdown = data ?? {
     answered: 0,
     byDimension: { domain: [], approach: [], focus: [], performance_domain: [] },
   };
