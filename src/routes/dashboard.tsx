@@ -9,7 +9,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-import { AppShell } from "@/components/AppShell";
+import { AppShell, useExamStartPrompt } from "@/components/AppShell";
 import {
   DomainLevelBadge,
   DomainMasteryLegend,
@@ -59,6 +59,34 @@ function Ring({ value }: { value: number }) {
         strokeDasharray={`${(value / 100) * c} ${c}`}
       />
     </svg>
+  );
+}
+
+/** Tarjeta de inicio de simulación: abre el mismo aviso previo que el sidebar. */
+function StartSimCard() {
+  const examPrompt = useExamStartPrompt();
+  return (
+    <Link
+      to="/examen"
+      onClick={(e) => {
+        if (examPrompt) {
+          e.preventDefault();
+          examPrompt();
+        }
+      }}
+      className="group flex flex-col justify-between rounded-2xl border border-border bg-primary p-5 text-primary-foreground transition-transform hover:-translate-y-0.5"
+    >
+      <div>
+        <Target className="h-5 w-5 text-accent" />
+        <h3 className="mt-3 text-base font-semibold">Iniciar simulación real</h3>
+        <p className="mt-1 text-sm text-primary-foreground/70">
+          180 preguntas · 240 minutos · estructura oficial con bloque de casos y 2 descansos.
+        </p>
+      </div>
+      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
+        Comenzar <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+      </span>
+    </Link>
   );
 }
 
@@ -151,21 +179,7 @@ function Dashboard() {
               </Link>
             </div>
           ) : (
-          <Link
-            to="/examen"
-            className="group flex flex-col justify-between rounded-2xl border border-border bg-primary p-5 text-primary-foreground transition-transform hover:-translate-y-0.5"
-          >
-            <div>
-              <Target className="h-5 w-5 text-accent" />
-              <h3 className="mt-3 text-base font-semibold">Iniciar simulación real</h3>
-              <p className="mt-1 text-sm text-primary-foreground/70">
-                180 preguntas · 240 minutos · estructura oficial con bloque de casos y 2 descansos.
-              </p>
-            </div>
-            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
-              Comenzar <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </span>
-          </Link>
+            <StartSimCard />
           )}
 
           <div className="rounded-2xl border border-border bg-card p-5">

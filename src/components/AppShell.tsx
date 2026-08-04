@@ -16,7 +16,7 @@ import {
   UserCog,
   X,
 } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
 import { useCurrentUser } from "@/hooks/useCandidateData";
 import { signOutCandidate } from "@/services/authService";
@@ -54,6 +54,14 @@ const SECONDARY_NAV = [
 
 
 
+
+/** Permite a cualquier vista dentro de AppShell abrir el aviso previo a la simulación. */
+const ExamStartContext = createContext<(() => void) | null>(null);
+
+/** Devuelve la función que abre el popup de aviso de simulación (null fuera de AppShell). */
+export function useExamStartPrompt() {
+  return useContext(ExamStartContext);
+}
 
 function NavLinks({
   onNavigate,
@@ -222,7 +230,7 @@ export function AppShell({
   const freeSimBlocked = user?.plan === "free" && user.freeFullSimUsed && !inProgress;
 
   return (
-    <>
+    <ExamStartContext.Provider value={openExamConfirm}>
       <div className="flex min-h-screen w-full bg-background">
         <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-sidebar-border lg:block">
           <SidebarInner
@@ -361,7 +369,7 @@ export function AppShell({
       </Dialog>
 
       <ChatbotWidget />
-    </>
+    </ExamStartContext.Provider>
 
   );
 }
