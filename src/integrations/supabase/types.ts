@@ -1257,6 +1257,7 @@ export type Database = {
           status: Database["public"]["Enums"]["item_status"] | null
           stem: string | null
           success_rate_pct: number | null
+          tag_codes: string[] | null
           task_id: string | null
           task_title: string | null
           times_answered: number | null
@@ -1312,6 +1313,7 @@ export type Database = {
             | Database["public"]["Enums"]["process_group_type"]
             | null
           status: Database["public"]["Enums"]["item_status"] | null
+          tag_codes: string[] | null
           task_id: string | null
           task_number: number | null
           task_title: string | null
