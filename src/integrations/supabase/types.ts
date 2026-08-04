@@ -1249,6 +1249,15 @@ export type Database = {
       }
     }
     Functions: {
+      admin_exam_stats: {
+        Args: never
+        Returns: {
+          avg_score_pct: number
+          mode: string
+          status: string
+          total_exams: number
+        }[]
+      }
       is_admin: { Args: { p_user_id: string }; Returns: boolean }
       record_error_type: {
         Args: {
