@@ -73,6 +73,7 @@ export function clearExamProgress() {
 
 const MODE_LABELS: Record<ExamMode, string> = {
   full_sim: "Simulación completa",
+  half_sim: "Medio examen",
   domain_drill: "Práctica por dominios",
   case_only: "Práctica de casos",
   custom: "Práctica personalizada",

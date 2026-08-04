@@ -6,10 +6,12 @@ import {
   History,
   Layers,
   Target,
+  Timer,
   TrendingUp,
 } from "lucide-react";
 
 import { AppShell, useExamStartPrompt } from "@/components/AppShell";
+import { FeedbackDialog } from "@/components/feedback/FeedbackDialog";
 import {
   DomainLevelBadge,
   DomainMasteryLegend,
@@ -90,6 +92,28 @@ function StartSimCard() {
   );
 }
 
+/** Medio examen: 90 preguntas / 2 h, sin bloques ni descansos. */
+function StartHalfSimCard() {
+  return (
+    <Link
+      to="/examen"
+      search={{ modo: "half_sim" as const }}
+      className="group flex flex-col justify-between rounded-2xl border border-border bg-card p-5 transition-transform hover:-translate-y-0.5"
+    >
+      <div>
+        <Timer className="h-5 w-5 text-muted-foreground" />
+        <h3 className="mt-3 text-base font-semibold">Medio examen</h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          90 preguntas · 120 minutos · mismo reparto que el examen real, sin bloques ni descansos.
+        </p>
+      </div>
+      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground">
+        Comenzar <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+      </span>
+    </Link>
+  );
+}
+
 function Dashboard() {
   const { data: u, isLoading } = useCurrentUser();
   const { data: history = [] } = useExamHistory();
@@ -117,6 +141,9 @@ function Dashboard() {
   return (
     <AppShell title={`Hola, ${u.name.split(" ")[0]}`} subtitle="Tu preparación para el examen PMP (ECO 2026)">
       <div className="mx-auto max-w-6xl space-y-6">
+        <div className="flex justify-end">
+          <FeedbackDialog pageContext="dashboard" />
+        </div>
         <section className="overflow-hidden rounded-2xl border border-border bg-card">
           <div className="grid gap-6 p-5 sm:p-6 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-center">
             <div className="flex items-center gap-4">
@@ -181,6 +208,8 @@ function Dashboard() {
           ) : (
             <StartSimCard />
           )}
+
+          <StartHalfSimCard />
 
           <div className="rounded-2xl border border-border bg-card p-5">
             <div className="flex items-start justify-between">
