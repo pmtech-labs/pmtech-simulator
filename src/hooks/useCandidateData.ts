@@ -6,6 +6,7 @@ import {
   getExamHistory,
   getTaskMastery,
 } from "@/services/userService";
+import { getPerformanceBreakdown } from "@/services/performanceService";
 
 export function useCurrentUser() {
   return useQuery({ queryKey: ["current-user"], queryFn: getCurrentUser, staleTime: 60_000 });
@@ -21,4 +22,12 @@ export function useTaskMastery() {
 
 export function useErrorTypeStats() {
   return useQuery({ queryKey: ["error-type-stats"], queryFn: getErrorTypeStats, staleTime: 60_000 });
+}
+
+export function usePerformanceBreakdown() {
+  return useQuery({
+    queryKey: ["performance-breakdown"],
+    queryFn: getPerformanceBreakdown,
+    staleTime: 60_000,
+  });
 }
