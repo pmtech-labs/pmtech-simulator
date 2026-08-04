@@ -14,13 +14,7 @@ import {
   type QuestionTagRow,
   type TaskCoverageRow,
 } from "@/services/adminService";
-import {
-  APPROACH_LABELS,
-  FOCUS_TAG_LABELS,
-  FORMAT_LABELS,
-  PERFORMANCE_DOMAIN_LABELS,
-  PROCESS_GROUP_LABELS,
-} from "@/lib/questionTags";
+import { useTagDefs } from "@/hooks/useTagDefs";
 import { cn } from "@/lib/utils";
 
 
@@ -206,35 +200,29 @@ function TagBar({ label, count, total }: { label: string; count: number; total: 
 function TagGroup({
   title,
   note,
-  labels,
-  counts,
+  entries,
   total,
-  multi,
 }: {
   title: string;
   note: string;
-  labels: Record<string, string>;
-  counts: Record<string, number>;
+  entries: { code: string; label: string; count: number }[];
   total: number;
-  multi?: boolean;
 }) {
-  const keys = Object.keys(labels);
-  const unassigned = Math.max(0, total - keys.reduce((s, k) => s + (counts[k] ?? 0), 0));
   return (
     <div className="rounded-lg border border-border bg-card p-4">
       <h3 className="text-sm font-semibold">{title}</h3>
       <p className="mt-0.5 text-[11px] text-muted-foreground">{note}</p>
       <div className="mt-3 space-y-2.5">
-        {keys.map((k) => (
-          <TagBar key={k} label={labels[k] ?? k} count={counts[k] ?? 0} total={total} />
+        {entries.map((e) => (
+          <TagBar key={e.code} label={e.label} count={e.count} total={total} />
         ))}
-        {!multi && unassigned > 0 && <TagBar label="Sin etiqueta" count={unassigned} total={total} />}
       </div>
     </div>
   );
 }
 
 function TagDistribution() {
+  const { defs } = useTagDefs();
   const tags = useQuery({
     queryKey: ["admin-stats", "tags"],
     queryFn: () => getStats<QuestionTagRow>("tags"),
@@ -243,21 +231,20 @@ function TagDistribution() {
   const rows = tags.data ?? [];
   const total = rows.length;
 
-  const processCounts: Record<string, number> = {};
-  const performanceCounts: Record<string, number> = {};
-  const focusCounts: Record<string, number> = {};
-  const approachCounts: Record<string, number> = {};
-  const formatCounts: Record<string, number> = {};
-  rows.forEach((r) => {
-    if (r.process_group) processCounts[r.process_group] = (processCounts[r.process_group] ?? 0) + 1;
-    if (r.performance_domain)
-      performanceCounts[r.performance_domain] = (performanceCounts[r.performance_domain] ?? 0) + 1;
-    if (r.approach) approachCounts[r.approach] = (approachCounts[r.approach] ?? 0) + 1;
-    if (r.format) formatCounts[r.format] = (formatCounts[r.format] ?? 0) + 1;
-    (r.focus_tags ?? []).forEach((t) => {
-      focusCounts[t] = (focusCounts[t] ?? 0) + 1;
-    });
-  });
+  const counts: Record<string, number> = {};
+  for (const r of rows) {
+    for (const code of r.tag_codes ?? []) counts[code] = (counts[code] ?? 0) + 1;
+  }
+
+  const groups: { type: string; label: string; exclusive: boolean; entries: { code: string; label: string; count: number }[] }[] = [];
+  for (const d of defs) {
+    let group = groups.find((g) => g.type === d.tag_type);
+    if (!group) {
+      group = { type: d.tag_type, label: d.tag_type_label, exclusive: d.exclusive, entries: [] };
+      groups.push(group);
+    }
+    group.entries.push({ code: d.code, label: d.label, count: counts[d.code] ?? 0 });
+  }
 
   return (
     <section className="space-y-3">
@@ -273,42 +260,15 @@ function TagDistribution() {
         <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
       ) : (
         <div className="grid gap-3 lg:grid-cols-3">
-          <TagGroup
-            title="Grupo de proceso"
-            note="Una etiqueta por pregunta"
-            labels={PROCESS_GROUP_LABELS}
-            counts={processCounts}
-            total={total}
-          />
-          <TagGroup
-            title="Dominio de desempeño"
-            note="Una etiqueta por pregunta"
-            labels={PERFORMANCE_DOMAIN_LABELS}
-            counts={performanceCounts}
-            total={total}
-          />
-          <TagGroup
-            title="Áreas de enfoque"
-            note="Varias etiquetas posibles por pregunta"
-            labels={FOCUS_TAG_LABELS}
-            counts={focusCounts}
-            total={total}
-            multi
-          />
-          <TagGroup
-            title="Ciclos de vida"
-            note="Una etiqueta por pregunta"
-            labels={APPROACH_LABELS}
-            counts={approachCounts}
-            total={total}
-          />
-          <TagGroup
-            title="Formato"
-            note="Una etiqueta por pregunta"
-            labels={FORMAT_LABELS}
-            counts={formatCounts}
-            total={total}
-          />
+          {groups.map((g) => (
+            <TagGroup
+              key={g.type}
+              title={g.label}
+              note={g.exclusive ? "Una etiqueta por pregunta" : "Varias etiquetas posibles por pregunta"}
+              entries={g.entries}
+              total={total}
+            />
+          ))}
         </div>
       )}
     </section>
@@ -328,6 +288,7 @@ function StatsTable({
   showUsage?: boolean;
   pageSize?: number;
 }) {
+  const { labelOf, typeLabelOf } = useTagDefs();
   const rows = query.data ?? [];
   const [openId, setOpenId] = useState<string | null>(null);
   const [page, setPage] = useState(0);
@@ -378,22 +339,13 @@ function StatsTable({
               <td className="px-3 py-2 text-muted-foreground">{r.task_title ?? "—"}</td>
               <td className="px-3 py-2">
                 <div className="flex flex-wrap gap-1">
-                  {r.process_group && (
-                    <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                      {PROCESS_GROUP_LABELS[r.process_group] ?? r.process_group}
-                    </span>
-                  )}
-                  {r.performance_domain && (
-                    <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                      {PERFORMANCE_DOMAIN_LABELS[r.performance_domain] ?? r.performance_domain}
-                    </span>
-                  )}
-                  {(r.focus_tags ?? []).map((t) => (
+                  {(r.tag_codes ?? []).map((code) => (
                     <span
-                      key={t}
+                      key={code}
+                      title={typeLabelOf(code)}
                       className="rounded-md border border-primary/40 px-1.5 py-0.5 text-[10px] font-medium text-primary"
                     >
-                      {FOCUS_TAG_LABELS[t] ?? t}
+                      {labelOf(code)}
                     </span>
                   ))}
                 </div>

@@ -9,11 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { getAdminQuestionFn } from "@/lib/adminQuestions.functions";
-import {
-  FOCUS_TAG_LABELS,
-  PERFORMANCE_DOMAIN_LABELS,
-  PROCESS_GROUP_LABELS,
-} from "@/lib/questionTags";
+import { useTagDefs } from "@/hooks/useTagDefs";
 import { cn } from "@/lib/utils";
 
 
@@ -24,6 +20,7 @@ interface Props {
 
 /** Diálogo con el enunciado completo, opciones, respuesta correcta y explicación. */
 export function QuestionDetailDialog({ questionId, onOpenChange }: Props) {
+  const { labelOf, typeLabelOf } = useTagDefs();
   const detail = useQuery({
     queryKey: ["admin-question-detail", questionId],
     queryFn: () => getAdminQuestionFn({ data: { id: questionId as string } }),
@@ -96,16 +93,20 @@ export function QuestionDetailDialog({ questionId, onOpenChange }: Props) {
               <p className="mt-1 whitespace-pre-line">{q.explanation}</p>
             </div>
 
+            <div className="flex flex-wrap gap-1">
+              {(q.tag_codes ?? []).map((code) => (
+                <span
+                  key={code}
+                  title={typeLabelOf(code)}
+                  className="rounded-md border border-primary/40 px-1.5 py-0.5 text-[10px] font-medium text-primary"
+                >
+                  {typeLabelOf(code)}: {labelOf(code)}
+                </span>
+              ))}
+            </div>
+
             <p className="text-xs text-muted-foreground">
-              Estado: {q.status} · Enfoque: {q.approach} · Formato: {q.format} · Tipo: {q.item_type} ·
-              Dificultad: {q.difficulty ?? "—"}
-              {q.process_group &&
-                ` · Área de enfoque: ${PROCESS_GROUP_LABELS[q.process_group] ?? q.process_group}`}
-              {q.performance_domain &&
-                ` · Dominio de desempeño: ${PERFORMANCE_DOMAIN_LABELS[q.performance_domain] ?? q.performance_domain}`}
-              {q.focus_tags &&
-                q.focus_tags.length > 0 &&
-                ` · Temáticas: ${q.focus_tags.map((t: string) => FOCUS_TAG_LABELS[t] ?? t).join(", ")}`}
+              Estado: {q.status} · Dificultad: {q.difficulty ?? "—"}
               {" "}· Respondida {q.times_answered ?? 0} veces ({q.times_correct ?? 0} aciertos)
             </p>
 
