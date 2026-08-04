@@ -17,11 +17,7 @@ import {
   type AdminQuestion,
 } from "@/services/adminService";
 import { cn } from "@/lib/utils";
-import {
-  FOCUS_TAG_LABELS,
-  PERFORMANCE_DOMAIN_LABELS,
-  PROCESS_GROUP_LABELS,
-} from "@/lib/questionTags";
+import { useTagDefs } from "@/hooks/useTagDefs";
 
 
 export const Route = createFileRoute("/admin/review")({
@@ -45,8 +41,7 @@ function ReviewPage() {
   const [domainId, setDomainId] = useState("");
   const [taskId, setTaskId] = useState("");
   const [approach, setApproach] = useState("");
-  const [processGroup, setProcessGroup] = useState("");
-  const [performanceDomain, setPerformanceDomain] = useState("");
+  const [tagCode, setTagCode] = useState("");
 
   const [minUsed, setMinUsed] = useState("");
   const [maxSuccess, setMaxSuccess] = useState("");
@@ -54,6 +49,7 @@ function ReviewPage() {
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<string[]>([]);
 
+  const { defs: tagDefs } = useTagDefs();
   const domains = useQuery({ queryKey: ["eco-domains"], queryFn: listEcoDomains });
   const tasks = useQuery({ queryKey: ["eco-tasks"], queryFn: listEcoTasks });
   const domainTasks = useMemo(
@@ -68,8 +64,7 @@ function ReviewPage() {
     task_id: taskId || undefined,
     approach: approach || undefined,
     job_id: job,
-    process_group: processGroup || undefined,
-    performance_domain: performanceDomain || undefined,
+    tag_code: tagCode || undefined,
 
     min_times_used: minUsed ? Number(minUsed) : undefined,
     max_success_rate: maxSuccess ? Number(maxSuccess) : undefined,
@@ -184,26 +179,14 @@ function ReviewPage() {
             ))}
           </select>
           <select
-            value={processGroup}
-            onChange={(e) => { setProcessGroup(e.target.value); setPage(1); }}
-            className={inputCls}
+            value={tagCode}
+            onChange={(e) => { setTagCode(e.target.value); setPage(1); }}
+            className={cn(inputCls, "max-w-[16rem]")}
           >
-            <option value="">Todas las áreas de enfoque</option>
-            {Object.entries(PROCESS_GROUP_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-          <select
-            value={performanceDomain}
-            onChange={(e) => { setPerformanceDomain(e.target.value); setPage(1); }}
-            className={inputCls}
-          >
-            <option value="">Todos los dominios de desempeño</option>
-            {Object.entries(PERFORMANCE_DOMAIN_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
+            <option value="">Todas las etiquetas</option>
+            {tagDefs.map((d) => (
+              <option key={d.code} value={d.code}>
+                {d.tag_type_label} — {d.label}
               </option>
             ))}
           </select>
@@ -407,22 +390,13 @@ function QuestionRow({
         </td>
         <td className="px-3 py-2">
           <div className="flex flex-wrap gap-1">
-            {q.process_group && (
-              <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                {PROCESS_GROUP_LABELS[q.process_group] ?? q.process_group}
-              </span>
-            )}
-            {q.performance_domain && (
-              <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                {PERFORMANCE_DOMAIN_LABELS[q.performance_domain] ?? q.performance_domain}
-              </span>
-            )}
-            {(q.focus_tags ?? []).map((t) => (
+            {(q.tag_codes ?? []).map((code) => (
               <span
-                key={t}
+                key={code}
+                title={typeLabelOf(code)}
                 className="rounded-md border border-primary/40 px-1.5 py-0.5 text-[10px] font-medium text-primary"
               >
-                {FOCUS_TAG_LABELS[t] ?? t}
+                {labelOf(code)}
               </span>
             ))}
           </div>
@@ -510,16 +484,12 @@ function QuestionRow({
               {q.explanation}
             </p>
             <p className="mt-2 text-xs text-muted-foreground">
-              Tarea: {q.task_title ?? q.task_id} · Enfoque: {q.approach} · Formato: {q.format} · Tipo:{" "}
-              {q.item_type} · Dificultad: {q.difficulty ?? "—"}
-              {q.process_group &&
-                ` · Área de enfoque: ${PROCESS_GROUP_LABELS[q.process_group] ?? q.process_group}`}
-              {q.performance_domain &&
-                ` · Dominio de desempeño: ${PERFORMANCE_DOMAIN_LABELS[q.performance_domain] ?? q.performance_domain}`}
-              {q.focus_tags &&
-                q.focus_tags.length > 0 &&
-                ` · Temáticas: ${q.focus_tags.map((t) => FOCUS_TAG_LABELS[t] ?? t).join(", ")}`}
-
+              Tarea: {q.task_title ?? q.task_id} · Tipo: {q.item_type} · Dificultad:{" "}
+              {q.difficulty ?? "—"}
+              {(q.tag_codes ?? []).length > 0 &&
+                ` · ${(q.tag_codes ?? [])
+                  .map((code) => `${typeLabelOf(code)}: ${labelOf(code)}`)
+                  .join(" · ")}`}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               {q.generation_model_id
