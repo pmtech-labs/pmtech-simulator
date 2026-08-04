@@ -591,27 +591,195 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     );
   }
 
-  if (onBreak) {
+  // R7 — Oferta de descanso tras cerrar el bloque 1 o 2.
+  if (phase === "break_offer") {
+    return (
+      <div className="grid min-h-screen place-items-center bg-background px-4">
+        <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 text-center">
+          <CircleCheck className="mx-auto h-7 w-7 text-success" />
+          <h1 className="mt-3 font-display text-xl font-bold">
+            Sección {section.sectionNumber} finalizada
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Ya no puedes volver a esta sección. Puedes tomar un descanso opcional de 10 minutos
+            antes de continuar con la sección {pendingNextSection}: el reloj del examen se detiene
+            mientras descansas.
+          </p>
+          <p className="num mt-3 text-xs text-muted-foreground">
+            Tiempo restante del examen: {fmt(seconds)} · Descansos usados: {breaksUsed} de 2
+          </p>
+          {sectionError && (
+            <p className="mt-3 rounded-lg border border-destructive/40 bg-destructive/10 p-2 text-xs text-destructive">
+              {sectionError}
+            </p>
+          )}
+          <div className="mt-5 space-y-2">
+            {breaksUsed < 2 && (
+              <button
+                onClick={() => void beginBreak()}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
+              >
+                <Coffee className="h-4 w-4" /> Tomar descanso (10 min)
+              </button>
+            )}
+            <button
+              onClick={() => pendingNextSection !== null && goToSection(pendingNextSection)}
+              className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+            >
+              Continuar sin descanso
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // R7 — Pantalla de descanso con reloj propio (informativo).
+  if (phase === "break") {
     return (
       <div className="grid min-h-screen place-items-center bg-background px-4">
         <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 text-center">
           <Coffee className="mx-auto h-7 w-7 text-accent" />
-          <h1 className="mt-3 font-display text-xl font-bold">
-            Sección {section.sectionNumber} completada
-          </h1>
+          <h1 className="mt-3 font-display text-xl font-bold">Descanso en curso</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Dispones de un descanso opcional de 10 minutos antes de la sección{" "}
-            {section.sectionNumber + 1}. El cronómetro de la siguiente sección no empieza hasta que
-            continúes.
+            El reloj del examen está detenido. Puedes reanudar cuando quieras, sin esperar a que
+            termine el descanso.
           </p>
           <p className="num mt-4 font-display text-4xl font-bold">{fmtShort(breakSeconds)}</p>
+          <p className="num mt-2 text-xs text-muted-foreground">
+            Tiempo restante del examen: {fmt(seconds)}
+          </p>
+          {sectionError && (
+            <p className="mt-3 rounded-lg border border-destructive/40 bg-destructive/10 p-2 text-xs text-destructive">
+              {sectionError}
+            </p>
+          )}
           <button
-            onClick={endBreak}
-            className="mt-5 w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+            onClick={() => void endBreak()}
+            disabled={resuming}
+            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
-            Omitir descanso y continuar
+            {resuming && <Loader2 className="h-4 w-4 animate-spin" />} Reanudar examen
           </button>
         </div>
+      </div>
+    );
+  }
+
+  // R6 — Pantalla de revisión obligatoria al final de cada bloque.
+  if (phase === "review") {
+    const pending = sectionQuestions.filter((item) => !answers[item.id]).length;
+    const marked = sectionQuestions.filter((item) => flagged[item.id]).length;
+    return (
+      <div className="min-h-screen bg-background px-4 py-8 sm:px-6">
+        <div className="mx-auto max-w-3xl space-y-5">
+          <div className="rounded-2xl border border-border bg-card p-5">
+            <h1 className="font-display text-xl font-bold">
+              Revisión de la sección {section.sectionNumber}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Revisa tus respuestas antes de cerrar la sección. Pulsa cualquier pregunta para
+              volver a ella y modificar tu respuesta.
+            </p>
+            <div className="num mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
+              <span>{sectionQuestions.length - pending} respondidas</span>
+              <span>{pending} sin responder</span>
+              <span>{marked} marcadas</span>
+              <span>Tiempo restante: {fmt(seconds)}</span>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-5">
+            <ul className="divide-y divide-border">
+              {sectionQuestions.map((item) => {
+                const globalIdx = questions.findIndex((x) => x.id === item.id);
+                const answered = Boolean(answers[item.id]);
+                return (
+                  <li key={item.id}>
+                    <button
+                      onClick={() => {
+                        setIndex(globalIdx);
+                        setPhase("exam");
+                      }}
+                      className="flex w-full items-center gap-3 py-2.5 text-left hover:bg-secondary/60"
+                    >
+                      <span className="num w-10 shrink-0 text-xs font-semibold text-muted-foreground">
+                        {globalIdx + 1}
+                      </span>
+                      <span className="min-w-0 flex-1 truncate text-sm">{item.stem}</span>
+                      <span className="flex shrink-0 items-center gap-1.5">
+                        <span
+                          className={cn(
+                            "rounded-md px-2 py-0.5 text-[11px] font-semibold",
+                            answered
+                              ? "bg-primary text-primary-foreground"
+                              : "border border-border text-muted-foreground",
+                          )}
+                        >
+                          {answered ? "Respondida" : "Sin responder"}
+                        </span>
+                        {flagged[item.id] && (
+                          <span className="inline-flex items-center gap-1 rounded-md bg-warning-soft px-2 py-0.5 text-[11px] font-semibold text-accent-foreground">
+                            <Flag className="h-3 w-3" /> Marcada
+                          </span>
+                        )}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {sectionError && (
+            <p className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+              {sectionError}
+            </p>
+          )}
+
+          <div className="flex flex-wrap justify-end gap-2">
+            <button
+              onClick={() => setPhase("exam")}
+              className="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+            >
+              Seguir revisando
+            </button>
+            <button
+              onClick={() => setConfirmCloseSectionOpen(true)}
+              disabled={closingSection}
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+            >
+              {closingSection && <Loader2 className="h-4 w-4 animate-spin" />}
+              {isLastSection ? "Finalizar examen" : "Finalizar sección"}
+            </button>
+          </div>
+        </div>
+
+        {confirmCloseSectionOpen && (
+          <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/50 px-4">
+            <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-6">
+              <AlertTriangle className="h-6 w-6 text-accent" />
+              <h2 className="mt-3 text-lg font-semibold">¿Seguro que quieres finalizar?</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                No podrás volver a esta sección ni modificar sus respuestas.
+              </p>
+              <div className="mt-5 flex gap-2">
+                <button
+                  onClick={() => setConfirmCloseSectionOpen(false)}
+                  className="flex-1 rounded-lg border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => void confirmCloseSection()}
+                  className="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                >
+                  Finalizar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
