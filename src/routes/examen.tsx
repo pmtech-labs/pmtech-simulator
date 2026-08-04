@@ -9,8 +9,6 @@ import {
   Info,
   ListChecks,
   Loader2,
-  Pause,
-  Play,
   Flag,
   Sparkles,
   SkipForward,
@@ -222,7 +220,9 @@ function ExamPage() {
 }
 
 function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamProgress | null }) {
-  const formative = session.mode !== "full_sim";
+  const formative = session.mode !== "full_sim" && session.mode !== "half_sim";
+  /** El cronómetro solo existe si el backend devolvió límite de tiempo (full_sim / half_sim). */
+  const timed = session.timed;
   const questions = session.questions;
   const sections = session.sections;
 
@@ -247,7 +247,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   const [feedback, setFeedback] = useState<Record<string, AnswerFeedback>>(resume?.feedback ?? {});
   const [checking, setChecking] = useState(false);
   const [flagged, setFlagged] = useState<Record<string, boolean>>(resume?.flagged ?? {});
-  const [paused, setPaused] = useState(false);
+  
   const [summary, setSummary] = useState<FinishSummary | null>(null);
   const [finishing, setFinishing] = useState(false);
   const [confirming, setConfirming] = useState(false);
@@ -316,8 +316,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   }, [index]);
 
   useEffect(() => {
-    if (summary || phase === "break") return;
-    if (paused) return;
+    if (summary || phase === "break" || !timed) return;
     deadline.current = Date.now() + seconds * 1000;
     const tick = () => {
       setSeconds(Math.max(0, Math.round((deadline.current - Date.now()) / 1000)));
@@ -325,7 +324,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     const t = setInterval(tick, 500);
     return () => clearInterval(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paused, summary, phase, clockEpoch]);
+  }, [summary, phase, clockEpoch, timed]);
 
   // Cuenta atrás informativa del descanso (no afecta al reloj principal).
   useEffect(() => {
@@ -816,24 +815,19 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <div
-              className={cn(
-                "num flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-sm font-semibold",
-                seconds < 600 ? "border-destructive text-destructive" : "border-border",
-              )}
-              title={`Tiempo restante de la sección ${section.sectionNumber}`}
-            >
-              <Clock className="h-4 w-4" />
-              <span className="hidden sm:inline">{fmt(seconds)}</span>
-              <span className="sm:hidden">{fmt(seconds).slice(0, 5)}</span>
-            </div>
-            <button
-              onClick={() => setPaused((p) => !p)}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-sm font-medium hover:bg-secondary"
-            >
-              {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
-              <span className="hidden sm:inline">{paused ? "Reanudar" : "Pausar"}</span>
-            </button>
+            {timed && (
+              <div
+                className={cn(
+                  "num flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-sm font-semibold",
+                  seconds < 600 ? "border-destructive text-destructive" : "border-border",
+                )}
+                title="Tiempo restante del examen"
+              >
+                <Clock className="h-4 w-4" />
+                <span className="hidden sm:inline">{fmt(seconds)}</span>
+                <span className="sm:hidden">{fmt(seconds).slice(0, 5)}</span>
+              </div>
+            )}
             <button
               onClick={() => setConfirming(true)}
               className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
@@ -861,52 +855,6 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
               <HelpLinks />
             </div>
           )}
-          <div className="flex flex-wrap items-center gap-2 text-[11px]">
-
-            <span className="rounded-md bg-secondary px-2 py-1 font-semibold text-secondary-foreground">
-              {q.taskCode}
-            </span>
-            <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
-              {q.approach === "agile" ? "Ágil" : q.approach === "hybrid" ? "Híbrido" : "Predictivo"}
-            </span>
-            <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
-              {difficultyLabel(q.difficulty)}
-            </span>
-            {q.processGroup && PROCESS_GROUP_LABELS[q.processGroup] && (
-              <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
-                {PROCESS_GROUP_LABELS[q.processGroup]}
-              </span>
-            )}
-            {q.performanceDomain && PERFORMANCE_DOMAIN_LABELS[q.performanceDomain] && (
-              <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
-                {PERFORMANCE_DOMAIN_LABELS[q.performanceDomain]}
-              </span>
-            )}
-            {(q.focusTags ?? []).map((tag) => (
-              <span key={tag} className="rounded-md border border-primary/40 px-2 py-1 text-primary">
-                {FOCUS_TAG_LABELS[tag] ?? tag}
-              </span>
-            ))}
-
-            <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
-              {q.format === "mc_multi"
-                ? "Respuesta múltiple"
-                : q.format === "enhanced_matching"
-                  ? "Emparejamiento mejorado"
-                : q.format === "matching"
-                  ? "Emparejamiento (practicum)"
-                  : q.format === "hotspot"
-                    ? "Diagrama interactivo"
-                  : q.format === "pulldown"
-                    ? "Desplegable"
-                  : q.format === "graphic_based"
-                    ? "Basada en gráfico"
-                  : q.itemType === "case_child"
-                    ? "Caso de estudio"
-                    : "Situacional"}
-            </span>
-          </div>
-
           {cluster ? (
             <div className="grid gap-5 lg:grid-cols-2">
               <aside className="space-y-3 rounded-2xl border border-border bg-card p-4 lg:sticky lg:top-24 lg:self-start">
@@ -977,25 +925,6 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
                 setNavOpen(false);
               }}
             />
-          </div>
-        </div>
-      )}
-
-      {paused && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-background/95 px-4">
-          <div className="max-w-sm rounded-2xl border border-border bg-card p-6 text-center">
-            <Pause className="mx-auto h-6 w-6 text-muted-foreground" />
-            <h2 className="mt-3 text-lg font-semibold">Examen en pausa</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              El cronómetro de la sección está detenido. En el examen real solo dispones de dos
-              descansos de 10 minutos entre secciones.
-            </p>
-            <button
-              onClick={() => setPaused(false)}
-              className="mt-4 w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-            >
-              Reanudar examen
-            </button>
           </div>
         </div>
       )}
