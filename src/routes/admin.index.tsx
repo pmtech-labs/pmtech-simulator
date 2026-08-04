@@ -7,7 +7,13 @@ import { AdminShell, DataTable } from "@/components/admin/AdminShell";
 import { NewsletterExportCard } from "@/components/admin/NewsletterExportCard";
 import { QuestionDetailDialog } from "@/components/admin/QuestionDetailDialog";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
-import { getStats, type ExamStatRow, type QuestionStatRow, type TaskCoverageRow } from "@/services/adminService";
+import {
+  getStats,
+  type ExamStatRow,
+  type QuestionStatRow,
+  type QuestionTagRow,
+  type TaskCoverageRow,
+} from "@/services/adminService";
 import {
   FOCUS_TAG_LABELS,
   PERFORMANCE_DOMAIN_LABELS,
@@ -105,6 +111,9 @@ function AdminDashboard() {
           />
         </section>
 
+        <TagDistribution />
+
+
         <NewsletterExportCard />
 
 
@@ -168,6 +177,117 @@ function AdminDashboard() {
         <StatsTable title="Preguntas más usadas" query={mostUsed} metricLabel="% acierto" showUsage pageSize={10} />
       </div>
     </AdminShell>
+  );
+}
+
+function TagBar({ label, count, total }: { label: string; count: number; total: number }) {
+  const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-2 text-xs">
+        <span className="font-medium">{label}</span>
+        <span className="num text-muted-foreground">
+          {count} · {pct}%
+        </span>
+      </div>
+      <div className="mt-1 h-2 rounded-full bg-muted">
+        <div className="h-2 rounded-full bg-primary" style={{ width: `${Math.min(100, pct)}%` }} />
+      </div>
+    </div>
+  );
+}
+
+function TagGroup({
+  title,
+  note,
+  labels,
+  counts,
+  total,
+  multi,
+}: {
+  title: string;
+  note: string;
+  labels: Record<string, string>;
+  counts: Record<string, number>;
+  total: number;
+  multi?: boolean;
+}) {
+  const keys = Object.keys(labels);
+  const unassigned = Math.max(0, total - keys.reduce((s, k) => s + (counts[k] ?? 0), 0));
+  return (
+    <div className="rounded-lg border border-border bg-card p-4">
+      <h3 className="text-sm font-semibold">{title}</h3>
+      <p className="mt-0.5 text-[11px] text-muted-foreground">{note}</p>
+      <div className="mt-3 space-y-2.5">
+        {keys.map((k) => (
+          <TagBar key={k} label={labels[k] ?? k} count={counts[k] ?? 0} total={total} />
+        ))}
+        {!multi && unassigned > 0 && <TagBar label="Sin etiqueta" count={unassigned} total={total} />}
+      </div>
+    </div>
+  );
+}
+
+function TagDistribution() {
+  const tags = useQuery({
+    queryKey: ["admin-stats", "tags"],
+    queryFn: () => getStats<QuestionTagRow>("tags"),
+  });
+
+  const rows = tags.data ?? [];
+  const total = rows.length;
+
+  const processCounts: Record<string, number> = {};
+  const performanceCounts: Record<string, number> = {};
+  const focusCounts: Record<string, number> = {};
+  rows.forEach((r) => {
+    if (r.process_group) processCounts[r.process_group] = (processCounts[r.process_group] ?? 0) + 1;
+    if (r.performance_domain)
+      performanceCounts[r.performance_domain] = (performanceCounts[r.performance_domain] ?? 0) + 1;
+    (r.focus_tags ?? []).forEach((t) => {
+      focusCounts[t] = (focusCounts[t] ?? 0) + 1;
+    });
+  });
+
+  return (
+    <section className="space-y-3">
+      <div>
+        <h2 className="text-sm font-semibold">Representación por etiqueta</h2>
+        <p className="text-xs text-muted-foreground">
+          Sobre {total} preguntas en borrador y publicadas
+        </p>
+      </div>
+      {tags.error ? (
+        <p className="text-xs text-destructive">No se han podido cargar las etiquetas.</p>
+      ) : tags.isPending ? (
+        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+      ) : (
+        <div className="grid gap-3 lg:grid-cols-3">
+          <TagGroup
+            title="Grupo de proceso"
+            note="Una etiqueta por pregunta"
+            labels={PROCESS_GROUP_LABELS}
+            counts={processCounts}
+            total={total}
+          />
+          <TagGroup
+            title="Dominio de desempeño"
+            note="Una etiqueta por pregunta"
+            labels={PERFORMANCE_DOMAIN_LABELS}
+            counts={performanceCounts}
+            total={total}
+          />
+          <TagGroup
+            title="Temáticas"
+            note="Varias etiquetas posibles por pregunta"
+            labels={FOCUS_TAG_LABELS}
+            counts={focusCounts}
+            total={total}
+            multi
+          />
+        </div>
+      )}
+    </section>
   );
 }
 

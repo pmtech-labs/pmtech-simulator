@@ -13,7 +13,13 @@ export const getAdminStatsFn = createServerFn({ method: "POST" })
   .inputValidator((input: { view: string; limit?: number }) =>
     z
       .object({
-        view: z.enum(["coverage", "hardest_questions", "most_used_questions", "exams"]),
+        view: z.enum([
+          "coverage",
+          "hardest_questions",
+          "most_used_questions",
+          "exams",
+          "tags",
+        ]),
         limit: z.number().int().positive().max(200).optional(),
       })
       .parse(input),
@@ -36,6 +42,15 @@ export const getAdminStatsFn = createServerFn({ method: "POST" })
         )
         .order("domain_sort_order")
         .order("task_number");
+      if (error) throw new Error(error.message);
+      return rows ?? [];
+    }
+
+    if (data.view === "tags") {
+      const { data: rows, error } = await db
+        .from("questions")
+        .select("status, process_group, performance_domain, focus_tags")
+        .in("status", ["draft", "published"]);
       if (error) throw new Error(error.message);
       return rows ?? [];
     }

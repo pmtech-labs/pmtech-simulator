@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { patchConnectorFn, setDefaultConnectorFn } from "@/lib/adminConnectors.functions";
+import { setQuestionsStatusFn } from "@/lib/adminQuestions.functions";
 import { getAdminStatsFn } from "@/lib/adminStats.functions";
 
 
@@ -326,10 +327,7 @@ export async function listQuestions(
 }
 
 export async function updateQuestionsStatus(ids: string[], status: string) {
-  return callFunction<{ updated?: number }>("admin_questions", {
-    method: "PATCH",
-    body: { ids, id: ids[0], status },
-  });
+  return setQuestionsStatusFn({ data: { ids, status } });
 }
 
 export interface DeleteQuestionResult {
@@ -349,7 +347,19 @@ export async function deleteQuestion(id: string) {
 
 /* -------------------------------- Estadísticas ----------------------------- */
 
-export type StatsView = "coverage" | "hardest_questions" | "most_used_questions" | "exams";
+export type StatsView =
+  | "coverage"
+  | "hardest_questions"
+  | "most_used_questions"
+  | "exams"
+  | "tags";
+
+export interface QuestionTagRow {
+  status: string;
+  process_group: string | null;
+  performance_domain: string | null;
+  focus_tags: string[] | null;
+}
 
 export async function getStats<T>(view: StatsView, limit?: number): Promise<T[]> {
   const rows = await getAdminStatsFn({
