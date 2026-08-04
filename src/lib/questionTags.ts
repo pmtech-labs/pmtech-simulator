@@ -22,3 +22,19 @@ export const FOCUS_TAG_LABELS: Record<string, string> = {
   sostenibilidad: "Sostenibilidad",
   ia: "IA",
 };
+
+export const APPROACH_LABELS: Record<string, string> = {
+  predictive: "Predictivo",
+  agile: "Ágil",
+  hybrid: "Híbrido",
+};
+
+export const FORMAT_LABELS: Record<string, string> = {
+  mc_single: "Opción única",
+  mc_multi: "Opción múltiple",
+  matching: "Emparejamiento",
+  enhanced_matching: "Emparejamiento con gráficos",
+  graphic_based: "Basada en gráfico",
+  hotspot: "Hotspot",
+  pulldown: "Desplegables",
+};

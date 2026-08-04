@@ -15,7 +15,9 @@ import {
   type TaskCoverageRow,
 } from "@/services/adminService";
 import {
+  APPROACH_LABELS,
   FOCUS_TAG_LABELS,
+  FORMAT_LABELS,
   PERFORMANCE_DOMAIN_LABELS,
   PROCESS_GROUP_LABELS,
 } from "@/lib/questionTags";
@@ -26,11 +28,15 @@ export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
 });
 
-const TARGET_WEIGHT: Record<string, number> = { people: 33, process: 41, business: 26 };
+const TARGET_WEIGHT: Record<string, number> = {
+  people: 33,
+  process: 41,
+  business_environment: 26,
+};
 const DOMAIN_LABEL: Record<string, string> = {
   people: "Personas",
   process: "Proceso",
-  business: "Entorno de negocio",
+  business_environment: "Entorno de negocio",
 };
 
 function Kpi({ label, value, tone }: { label: string; value: string | number; tone?: "danger" | "ok" }) {
@@ -240,10 +246,14 @@ function TagDistribution() {
   const processCounts: Record<string, number> = {};
   const performanceCounts: Record<string, number> = {};
   const focusCounts: Record<string, number> = {};
+  const approachCounts: Record<string, number> = {};
+  const formatCounts: Record<string, number> = {};
   rows.forEach((r) => {
     if (r.process_group) processCounts[r.process_group] = (processCounts[r.process_group] ?? 0) + 1;
     if (r.performance_domain)
       performanceCounts[r.performance_domain] = (performanceCounts[r.performance_domain] ?? 0) + 1;
+    if (r.approach) approachCounts[r.approach] = (approachCounts[r.approach] ?? 0) + 1;
+    if (r.format) formatCounts[r.format] = (formatCounts[r.format] ?? 0) + 1;
     (r.focus_tags ?? []).forEach((t) => {
       focusCounts[t] = (focusCounts[t] ?? 0) + 1;
     });
@@ -278,12 +288,26 @@ function TagDistribution() {
             total={total}
           />
           <TagGroup
-            title="Temáticas"
+            title="Áreas de enfoque"
             note="Varias etiquetas posibles por pregunta"
             labels={FOCUS_TAG_LABELS}
             counts={focusCounts}
             total={total}
             multi
+          />
+          <TagGroup
+            title="Ciclos de vida"
+            note="Una etiqueta por pregunta"
+            labels={APPROACH_LABELS}
+            counts={approachCounts}
+            total={total}
+          />
+          <TagGroup
+            title="Formato"
+            note="Una etiqueta por pregunta"
+            labels={FORMAT_LABELS}
+            counts={formatCounts}
+            total={total}
           />
         </div>
       )}
