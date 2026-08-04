@@ -878,6 +878,77 @@ export type Database = {
           },
         ]
       }
+      question_tag_defs: {
+        Row: {
+          code: string
+          exclusive: boolean
+          label: string
+          sort_order: number
+          tag_type: string
+          tag_type_label: string
+        }
+        Insert: {
+          code: string
+          exclusive: boolean
+          label: string
+          sort_order: number
+          tag_type: string
+          tag_type_label: string
+        }
+        Update: {
+          code?: string
+          exclusive?: boolean
+          label?: string
+          sort_order?: number
+          tag_type?: string
+          tag_type_label?: string
+        }
+        Relationships: []
+      }
+      question_tags: {
+        Row: {
+          question_id: string
+          tag_code: string
+        }
+        Insert: {
+          question_id: string
+          tag_code: string
+        }
+        Update: {
+          question_id?: string
+          tag_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_tags_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_tags_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "v_question_stats"
+            referencedColumns: ["question_id"]
+          },
+          {
+            foreignKeyName: "question_tags_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "v_questions_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_tags_tag_code_fkey"
+            columns: ["tag_code"]
+            isOneToOne: false
+            referencedRelation: "question_tag_defs"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
       questions: {
         Row: {
           approach: Database["public"]["Enums"]["approach_type"]
@@ -1295,6 +1366,17 @@ export type Database = {
           mode: string
           status: string
           total_exams: number
+        }[]
+      }
+      get_untagged_ae_questions: {
+        Args: { p_limit: number }
+        Returns: {
+          format: string
+          id: string
+          performance_domain: string
+          practicum_payload: Json
+          process_group: string
+          stem: string
         }[]
       }
       is_admin: { Args: { p_user_id: string }; Returns: boolean }
