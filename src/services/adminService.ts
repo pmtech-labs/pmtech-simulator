@@ -350,12 +350,12 @@ export async function deleteQuestion(id: string) {
 export type StatsView = "coverage" | "hardest_questions" | "most_used_questions" | "exams";
 
 export async function getStats<T>(view: StatsView, limit?: number): Promise<T[]> {
-  const payload = await callFunction<unknown>("admin_stats", {
-    method: "GET",
-    query: { view, limit },
+  const rows = await getAdminStatsFn({
+    data: { view, ...(limit !== undefined ? { limit } : {}) },
   });
-  return toPaged<T>(payload, limit ?? 20).rows;
+  return (rows ?? []) as T[];
 }
+
 
 /* ------------------------------- Catálogo ECO ------------------------------ */
 
