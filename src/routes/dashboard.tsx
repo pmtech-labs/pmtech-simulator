@@ -12,10 +12,7 @@ import {
 
 import { AppShell, useExamStartPrompt } from "@/components/AppShell";
 import { FeedbackDialog } from "@/components/feedback/FeedbackDialog";
-import {
-  DomainLevelBadge,
-  DomainMasteryLegend,
-} from "@/components/progress/DomainMasteryLegend";
+import { DomainLevelBadge, DomainMasteryLegend } from "@/components/progress/DomainMasteryLegend";
 import { RequireAuth } from "@/components/auth/RequireAuth";
 import { DOMAINS } from "@/data/mockData";
 import { useCurrentUser, useExamHistory } from "@/hooks/useCandidateData";
@@ -137,9 +134,11 @@ function Dashboard() {
   // Plan gratuito: un único simulacro completo de regalo.
   const freeSimBlocked = u.plan === "free" && u.freeFullSimUsed;
 
-
   return (
-    <AppShell title={`Hola, ${u.name.split(" ")[0]}`} subtitle="Tu preparación para el examen PMP (ECO 2026)">
+    <AppShell
+      title={`Hola, ${u.name.split(" ")[0]}`}
+      subtitle="Tu preparación para el examen PMP (ECO 2026)"
+    >
       <div className="mx-auto max-w-6xl space-y-6">
         <div className="flex justify-end">
           <FeedbackDialog pageContext="dashboard" />
@@ -265,7 +264,10 @@ function Dashboard() {
         <section className="rounded-2xl border border-border bg-card p-5">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
             <h3 className="truncate text-base font-semibold">Dominio por área ECO</h3>
-            <Link to="/progreso" className="shrink-0 text-sm font-medium text-muted-foreground hover:text-foreground">
+            <Link
+              to="/progreso"
+              className="shrink-0 text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
               Analítica
             </Link>
           </div>

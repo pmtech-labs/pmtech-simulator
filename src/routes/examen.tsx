@@ -55,7 +55,6 @@ import { cn } from "@/lib/utils";
 /** Intervalo de auto-guardado del progreso de la simulación. */
 const AUTOSAVE_INTERVAL_MS = 10_000;
 
-
 interface ExamSearch {
   modo?: ExamMode;
   dominio?: DomainCode;
@@ -144,7 +143,6 @@ function ExamPage() {
       .then(setSession)
       .catch((e: Error) => setLoadError(e.message));
   }, [mode, search.dominio, search.unidad, search.preguntas, search.reanudar]);
-
 
   if (loadError) {
     return (
@@ -235,7 +233,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   const [feedback, setFeedback] = useState<Record<string, AnswerFeedback>>(resume?.feedback ?? {});
   const [checking, setChecking] = useState(false);
   const [flagged, setFlagged] = useState<Record<string, boolean>>(resume?.flagged ?? {});
-  
+
   const [summary, setSummary] = useState<FinishSummary | null>(null);
   const [finishing, setFinishing] = useState(false);
   const [confirming, setConfirming] = useState(false);
@@ -384,7 +382,6 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
         interpretationNote: null,
         diploma: null,
         capstoneDiploma: null,
-
       });
     } finally {
       setFinishing(false);
@@ -547,16 +544,13 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     persist();
   }, [answers, feedback, flagged, index, sectionIdx, phase, summary, persist]);
 
-
   const answeredCount = Object.keys(answers).length;
-
 
   if (summary) {
     return (
       <Results
         examId={session.examId}
         questions={questions.map((question) => {
-
           const f = feedback[question.id];
           if (!f) return question;
           return {
@@ -676,8 +670,8 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
               Revisión de la sección {section.sectionNumber}
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Revisa tus respuestas antes de cerrar la sección. Pulsa cualquier pregunta para
-              volver a ella y modificar tu respuesta.
+              Revisa tus respuestas antes de cerrar la sección. Pulsa cualquier pregunta para volver
+              a ella y modificar tu respuesta.
             </p>
             <div className="num mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
               <span>{sectionQuestions.length - pending} respondidas</span>
@@ -906,8 +900,8 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
               answers={answers}
               flagged={flagged}
               activeSection={multiSection ? section.sectionNumber : undefined}
-            closedSections={closedSections}
-            onlyFlagged={onlyFlagged}
+              closedSections={closedSections}
+              onlyFlagged={onlyFlagged}
               onSelect={(i) => {
                 setIndex(i);
                 setNavOpen(false);
@@ -949,7 +943,6 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
 
       <ChatbotWidget />
     </div>
-
   );
 
   function NavActions() {
@@ -1004,7 +997,6 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
           correctAnswer={qFeedback?.correctAnswer}
           onChange={(next) => setAnswers((prev) => ({ ...prev, [q.id]: next }))}
         />
-
 
         {formative ? (
           qFeedback ? (
@@ -1098,7 +1090,6 @@ function Results({
   summary: FinishSummary;
   reviewAvailable: boolean;
 }) {
-
   const totalItems = summary.newItemsCount + summary.repeatedItemsCount;
   const correct = Math.round((summary.scorePct / 100) * questions.length);
   const reviewable = questions.filter((q) => q.correctAnswer.length);
@@ -1189,8 +1180,6 @@ function Results({
             </div>
           )}
 
-
-
           <div className="mt-5 flex flex-wrap justify-center gap-2">
             <Link
               to="/dashboard"
@@ -1198,7 +1187,10 @@ function Results({
             >
               Volver al panel
             </Link>
-            <Link to="/historial" className="rounded-lg border border-border px-4 py-2 text-sm font-medium">
+            <Link
+              to="/historial"
+              className="rounded-lg border border-border px-4 py-2 text-sm font-medium"
+            >
               Ver historial
             </Link>
             <ResultReportButton
@@ -1229,13 +1221,20 @@ function Results({
 
             <h2 className="text-base font-semibold">Revisión detallada</h2>
             {reviewable.map((q, i) => (
-              <div key={q.id} className="space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-5">
+              <div
+                key={q.id}
+                className="space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-5"
+              >
                 <div className="flex items-start justify-between gap-3">
                   <p className="text-sm font-medium leading-relaxed">
                     <span className="num mr-2 text-muted-foreground">{i + 1}.</span>
                     {q.stem}
                   </p>
-                  <ReportIssueButton questionId={q.id} examId={examId} className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-border px-2 py-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground" />
+                  <ReportIssueButton
+                    questionId={q.id}
+                    examId={examId}
+                    className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-border px-2 py-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  />
                 </div>
                 <QuestionGraphic question={q} />
 
@@ -1266,11 +1265,9 @@ function Results({
               y repasa tus fallos en los modos de práctica formativa.
             </p>
           </div>
-
         )}
       </div>
       <ChatbotWidget />
     </div>
-
   );
 }

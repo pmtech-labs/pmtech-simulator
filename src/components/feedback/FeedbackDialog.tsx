@@ -78,7 +78,11 @@ export function FeedbackDialog({
               </button>
             </div>
 
-            <div className="mt-4 flex items-center gap-1.5" role="radiogroup" aria-label="Valoración">
+            <div
+              className="mt-4 flex items-center gap-1.5"
+              role="radiogroup"
+              aria-label="Valoración"
+            >
               {[1, 2, 3, 4, 5].map((v) => (
                 <button
                   key={v}
