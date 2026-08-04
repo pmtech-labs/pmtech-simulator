@@ -112,7 +112,6 @@ function StartHalfSimCard() {
 
 function Dashboard() {
   const { data: u, isLoading } = useCurrentUser();
-  const { data: history = [] } = useExamHistory();
 
   if (isLoading || !u) {
     return (
