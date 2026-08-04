@@ -279,7 +279,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   const [pendingNextSection, setPendingNextSection] = useState<number | null>(null);
   const [breaksUsed, setBreaksUsed] = useState(resume?.breaksUsed ?? session.breaksUsed ?? 0);
   const [closingSection, setClosingSection] = useState(false);
-  const [confirmCloseSection, setConfirmCloseSection] = useState(false);
+  const [confirmCloseSectionOpen, setConfirmCloseSectionOpen] = useState(false);
   const [sectionError, setSectionError] = useState<string | null>(null);
   const [onlyFlagged, setOnlyFlagged] = useState(false);
   const [breakSeconds, setBreakSeconds] = useState(BREAK_SECONDS);
@@ -332,6 +332,10 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     async (question: Question, value: AnswerValue) => {
       const spent = Math.round((Date.now() - questionStart.current) / 1000);
       const res = await submitAnswer(session.examId, question.id, value, spent);
+      if (res.timeExpired) {
+        setSeconds(0);
+        return res;
+      }
       if (res.isCorrect !== undefined) {
         setFeedback((prev) => ({ ...prev, [question.id]: res }));
       }
@@ -389,53 +393,118 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     }
   }
 
-  async function closeSection() {
-    if (!formative) await saveSilently();
-    if (sectionIdx === sections.length - 1) {
-      await finalize();
-      return;
+  const goToSection = useCallback(
+    (sectionNumber: number) => {
+      const idx = sections.findIndex((sec) => sec.sectionNumber === sectionNumber);
+      const targetIdx = idx >= 0 ? idx : Math.min(sectionIdx + 1, sections.length - 1);
+      setSectionIdx(targetIdx);
+      const first = questions.findIndex(
+        (item) => (item.sectionNumber ?? 1) === sections[targetIdx].sectionNumber,
+      );
+      setIndex(first === -1 ? 0 : first);
+      setOnlyFlagged(false);
+      setPhase("exam");
+    },
+    [questions, sectionIdx, sections],
+  );
+
+  /** Cierra el bloque actual contra el backend (R6). */
+  async function confirmCloseSection() {
+    setConfirmCloseSectionOpen(false);
+    setClosingSection(true);
+    setSectionError(null);
+    await saveSilently();
+    try {
+      const res = await finalizeSection(session.examId, section.sectionNumber);
+      setClosedSections((prev) =>
+        prev.includes(section.sectionNumber) ? prev : [...prev, section.sectionNumber],
+      );
+      syncClock(res.remainingSeconds);
+      if (res.examComplete || res.nextSection === null) {
+        await finalize();
+        return;
+      }
+      setPendingNextSection(res.nextSection);
+      setPhase("break_offer");
+    } catch (e) {
+      setSectionError(e instanceof Error ? e.message : "No hemos podido cerrar la sección.");
+    } finally {
+      setClosingSection(false);
     }
-    setBreakSeconds(BREAK_SECONDS);
-    setOnBreak(true);
   }
 
-  const endBreak = useCallback(() => {
-    const nextIdx = sectionIdx + 1;
-    setOnBreak(false);
-    if (nextIdx >= sections.length) {
-      void finalize();
-      return;
+  async function beginBreak() {
+    setSectionError(null);
+    try {
+      const res = await startBreak(session.examId);
+      syncClock(res.remainingSeconds);
+      setBreakSeconds(res.breakAllowanceSeconds ?? BREAK_SECONDS);
+      setBreaksUsed((n) => n + 1);
+      setPhase("break");
+    } catch (e) {
+      setSectionError(e instanceof Error ? e.message : "No hemos podido iniciar el descanso.");
     }
-    setSectionIdx(nextIdx);
-    setSeconds(sections[nextIdx].seconds);
-    const first = questions.findIndex(
-      (item) => (item.sectionNumber ?? 1) === sections[nextIdx].sectionNumber,
-    );
-    setIndex(first === -1 ? 0 : first);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sectionIdx, sections, questions]);
+  }
 
+  const [resuming, setResuming] = useState(false);
+  async function endBreak() {
+    setResuming(true);
+    setSectionError(null);
+    try {
+      const res = await resumeBreak(session.examId);
+      syncClock(res.remainingSeconds);
+    } catch (e) {
+      setSectionError(e instanceof Error ? e.message : "No hemos podido reanudar el examen.");
+    } finally {
+      setResuming(false);
+    }
+    if (pendingNextSection !== null) goToSection(pendingNextSection);
+    else setPhase("exam");
+  }
+
+  // Descanso agotado: se reanuda automáticamente.
   useEffect(() => {
-    if (onBreak && breakSeconds === 0) endBreak();
-  }, [onBreak, breakSeconds, endBreak]);
+    if (phase === "break" && breakSeconds === 0 && !resuming) void endBreak();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, breakSeconds]);
 
-  // Fin de tiempo de la sección: se cierra automáticamente.
+  // R6 — Corte automático a los 00:00 del reloj global.
   const timeUp = useRef(false);
   useEffect(() => {
-    if (onBreak || summary || paused) return;
+    if (summary || finishing || phase === "break") return;
     if (seconds > 0) {
       timeUp.current = false;
       return;
     }
     if (timeUp.current) return;
     timeUp.current = true;
-    void closeSection();
+    void finalize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [seconds, onBreak, summary, paused]);
+  }, [seconds, summary, finishing, phase]);
 
   // Auto-guardado local del progreso (respuestas, marcadas y tiempo restante).
-  const snapshot = useRef({ session, index, answers, feedback, flagged, sectionIdx, seconds });
-  snapshot.current = { session, index, answers, feedback, flagged, sectionIdx, seconds };
+  const snapshot = useRef({
+    session,
+    index,
+    answers,
+    feedback,
+    flagged,
+    sectionIdx,
+    seconds,
+    closedSections,
+    breaksUsed,
+  });
+  snapshot.current = {
+    session,
+    index,
+    answers,
+    feedback,
+    flagged,
+    sectionIdx,
+    seconds,
+    closedSections,
+    breaksUsed,
+  };
 
   const persist = useCallback(() => {
     const s = snapshot.current;
@@ -448,6 +517,8 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
       flagged: s.flagged,
       sectionIdx: s.sectionIdx,
       secondsLeft: s.seconds,
+      closedSections: s.closedSections,
+      breaksUsed: s.breaksUsed,
     });
   }, []);
 
@@ -476,7 +547,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   useEffect(() => {
     if (summary) return;
     persist();
-  }, [answers, feedback, flagged, index, sectionIdx, onBreak, summary, persist]);
+  }, [answers, feedback, flagged, index, sectionIdx, phase, summary, persist]);
 
 
   const answeredCount = Object.keys(answers).length;
