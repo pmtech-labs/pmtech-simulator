@@ -238,27 +238,6 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className="flex flex-col rounded-2xl border border-border bg-card p-5">
-            <History className="h-5 w-5 text-muted-foreground" />
-            <h3 className="mt-3 text-base font-semibold">Historial de exámenes</h3>
-            <ul className="mt-3 space-y-2">
-              {history.slice(0, 3).map((e) => (
-                <li key={e.id} className="flex items-center justify-between gap-3 text-sm">
-                  <span className="min-w-0 truncate text-muted-foreground">{e.mode}</span>
-                  <span className="num shrink-0 font-semibold">{e.score}%</span>
-                </li>
-              ))}
-            </ul>
-            {!history.length && (
-              <p className="mt-3 text-sm text-muted-foreground">Aún no has completado exámenes.</p>
-            )}
-            <Link
-              to="/historial"
-              className="mt-auto inline-flex items-center gap-1.5 pt-4 text-sm font-semibold text-foreground hover:underline"
-            >
-              Ver historial completo <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
         </section>
 
         <section className="rounded-2xl border border-border bg-card p-5">
