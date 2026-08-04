@@ -15,7 +15,9 @@ import {
   type TaskCoverageRow,
 } from "@/services/adminService";
 import {
+  APPROACH_LABELS,
   FOCUS_TAG_LABELS,
+  FORMAT_LABELS,
   PERFORMANCE_DOMAIN_LABELS,
   PROCESS_GROUP_LABELS,
 } from "@/lib/questionTags";
