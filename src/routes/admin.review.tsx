@@ -349,7 +349,9 @@ function QuestionRow({
   onDelete: () => void;
   busy: boolean;
 }) {
+  const { labelOf, typeLabelOf } = useTagDefs();
   const [open, setOpen] = useState(false);
+
   const options = Array.isArray(q.options) ? (q.options as Array<Record<string, unknown>>) : [];
   const correct = JSON.stringify(q.correct_answer ?? "");
   const needsMedia = ["graphic_based", "hotspot", "matching", "enhanced_matching"].includes(q.format);
