@@ -1,0 +1,2 @@
+GRANT UPDATE ON public.questions TO authenticated;
+CREATE POLICY "admins actualizan preguntas" ON public.questions FOR UPDATE TO authenticated USING (public.is_admin(auth.uid())) WITH CHECK (public.is_admin(auth.uid()));
