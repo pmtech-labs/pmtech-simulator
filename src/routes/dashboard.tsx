@@ -153,6 +153,12 @@ function Dashboard() {
           ) : (
           <Link
             to="/examen"
+            onClick={(e) => {
+              if (examPrompt) {
+                e.preventDefault();
+                examPrompt();
+              }
+            }}
             className="group flex flex-col justify-between rounded-2xl border border-border bg-primary p-5 text-primary-foreground transition-transform hover:-translate-y-0.5"
           >
             <div>
