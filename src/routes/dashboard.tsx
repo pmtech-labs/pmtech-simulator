@@ -6,11 +6,11 @@ import {
   Layers,
   Target,
   Timer,
-  TrendingUp,
 } from "lucide-react";
 
 import { AppShell, useExamStartPrompt } from "@/components/AppShell";
 import { FeedbackDialog } from "@/components/feedback/FeedbackDialog";
+import { RecommendationsCard } from "@/components/dashboard/RecommendationsCard";
 import { DomainLevelBadge, DomainMasteryLegend } from "@/components/progress/DomainMasteryLegend";
 import { RequireAuth } from "@/components/auth/RequireAuth";
 import { DOMAINS } from "@/data/mockData";
@@ -238,6 +238,8 @@ function Dashboard() {
 
         </section>
 
+        <RecommendationsCard masteryByDomain={u.masteryByDomain} />
+
         <section className="rounded-2xl border border-border bg-card p-5">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
             <h3 className="truncate text-base font-semibold">Dominio por área ECO</h3>
@@ -269,11 +271,6 @@ function Dashboard() {
               </div>
             ))}
           </div>
-          <p className="mt-4 flex items-start gap-2 rounded-lg bg-warning-soft p-3 text-xs leading-relaxed text-accent-foreground">
-            <TrendingUp className="mt-0.5 h-4 w-4 shrink-0" />
-            Recomendación: dedica la próxima sesión a <strong>{weakest.name}</strong>, tu área con
-            menor dominio ({u.masteryByDomain[weakest.code]} %).
-          </p>
         </section>
       </div>
     </AppShell>
