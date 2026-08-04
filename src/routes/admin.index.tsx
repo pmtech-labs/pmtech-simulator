@@ -26,11 +26,15 @@ export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
 });
 
-const TARGET_WEIGHT: Record<string, number> = { people: 33, process: 41, business: 26 };
+const TARGET_WEIGHT: Record<string, number> = {
+  people: 33,
+  process: 41,
+  business_environment: 26,
+};
 const DOMAIN_LABEL: Record<string, string> = {
   people: "Personas",
   process: "Proceso",
-  business: "Entorno de negocio",
+  business_environment: "Entorno de negocio",
 };
 
 function Kpi({ label, value, tone }: { label: string; value: string | number; tone?: "danger" | "ok" }) {
