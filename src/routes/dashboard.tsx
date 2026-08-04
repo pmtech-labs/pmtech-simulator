@@ -155,34 +155,36 @@ function Dashboard() {
         </section>
 
         <section className="grid gap-4 md:grid-cols-3">
-          {freeSimBlocked ? (
-            <div className="flex flex-col justify-between rounded-2xl border border-border bg-primary/90 p-5 text-primary-foreground">
-              <div>
-                <div className="flex items-start justify-between gap-2">
-                  <Target className="h-5 w-5 text-accent" />
-                  <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-bold text-accent-foreground">
-                    Ya usado — mejora tu plan
-                  </span>
+          <div className="md:col-span-3">
+            {freeSimBlocked ? (
+              <div className="flex flex-col justify-between rounded-2xl border border-border bg-primary/90 p-5 text-primary-foreground">
+                <div>
+                  <div className="flex items-start justify-between gap-2">
+                    <Target className="h-5 w-5 text-accent" />
+                    <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-bold text-accent-foreground">
+                      Ya usado — mejora tu plan
+                    </span>
+                  </div>
+                  <h3 className="mt-3 text-base font-semibold">Simulacro completo</h3>
+                  <p className="mt-1 text-sm text-primary-foreground/70">
+                    Ya usaste el simulacro completo de regalo del plan gratuito. La práctica por
+                    dominio, lección y acumulativa sigue disponible sin límite.
+                  </p>
                 </div>
-                <h3 className="mt-3 text-base font-semibold">Simulacro completo</h3>
-                <p className="mt-1 text-sm text-primary-foreground/70">
-                  Ya usaste el simulacro completo de regalo del plan gratuito. La práctica por
-                  dominio, lección y acumulativa sigue disponible sin límite.
-                </p>
+                <Link
+                  to="/checkout"
+                  search={{ plan: "premium_6m" }}
+                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
+                >
+                  Mejorar mi plan <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
-              <Link
-                to="/checkout"
-                search={{ plan: "premium_6m" }}
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
-              >
-                Mejorar mi plan <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          ) : (
-            <StartSimCard />
-          )}
+            ) : (
+              <StartSimCard />
+            )}
+          </div>
 
-          <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="md:col-span-3 rounded-2xl border border-border bg-card p-5">
             <div className="flex items-start justify-between">
               <div>
                 <Layers className="h-5 w-5 text-muted-foreground" />
@@ -190,7 +192,7 @@ function Dashboard() {
               </div>
               <DomainMasteryLegend />
             </div>
-            <div className="mt-3 space-y-2">
+            <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {DOMAINS.map((d) => (
                 <Link
                   key={d.code}
@@ -210,7 +212,7 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className="flex flex-col rounded-2xl border border-border bg-card p-5">
+          <div className="md:col-span-3 flex flex-col rounded-2xl border border-border bg-card p-5">
             <History className="h-5 w-5 text-muted-foreground" />
             <h3 className="mt-3 text-base font-semibold">Historial de exámenes</h3>
             <ul className="mt-3 space-y-2">
