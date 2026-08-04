@@ -20,6 +20,11 @@ export interface ExamProgress {
   flagged: Record<string, boolean>;
   sectionIdx: number;
   secondsLeft: number;
+  /** Secciones ya cerradas (no se pueden reabrir). */
+  closedSections?: number[];
+  /** Descansos consumidos (máximo 2 en la simulación completa). */
+  breaksUsed?: number;
+
 }
 
 export function saveExamProgress(progress: Omit<ExamProgress, "savedAt">) {

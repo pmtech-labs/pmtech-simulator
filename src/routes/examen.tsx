@@ -11,7 +11,9 @@ import {
   Loader2,
   Pause,
   Play,
+  Flag,
   Sparkles,
+  SkipForward,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -44,7 +46,10 @@ import {
 } from "@/lib/examResume";
 
 import {
+  finalizeSection,
   finishExam,
+  resumeBreak,
+  startBreak,
   startExam,
   submitAnswer,
   type AnswerFeedback,
@@ -250,17 +255,37 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
 
   const [sectionIdx, setSectionIdx] = useState(initialSection);
   const section = sections[sectionIdx];
+
+  /**
+   * Reloj ÚNICO del examen (240 min en la simulación completa) compartido por
+   * los 3 bloques. Los descansos lo pausan en el backend; aquí lo resincronizamos
+   * con el `remaining_seconds` autoritativo que devuelve `exam_section_control`.
+   */
   const [seconds, setSeconds] = useState(
     resume?.secondsLeft && resume.secondsLeft > 0
-      ? Math.min(resume.secondsLeft, sections[initialSection].seconds)
-      : sections[initialSection].seconds,
+      ? Math.min(resume.secondsLeft, session.timeLimitSeconds)
+      : session.timeLimitSeconds,
   );
-  const [onBreak, setOnBreak] = useState(false);
+  const [clockEpoch, setClockEpoch] = useState(0);
+  const syncClock = useCallback((remaining: number) => {
+    setSeconds(Math.max(0, Math.round(remaining)));
+    setClockEpoch((e) => e + 1);
+  }, []);
+
+  /** Secciones finalizadas: bloqueadas de forma permanente. */
+  const [closedSections, setClosedSections] = useState<number[]>(resume?.closedSections ?? []);
+  /** Pantallas del flujo: examen, revisión de bloque, oferta de descanso y descanso. */
+  const [phase, setPhase] = useState<"exam" | "review" | "break_offer" | "break">("exam");
+  const [pendingNextSection, setPendingNextSection] = useState<number | null>(null);
+  const [breaksUsed, setBreaksUsed] = useState(resume?.breaksUsed ?? session.breaksUsed ?? 0);
+  const [closingSection, setClosingSection] = useState(false);
+  const [confirmCloseSectionOpen, setConfirmCloseSectionOpen] = useState(false);
+  const [sectionError, setSectionError] = useState<string | null>(null);
+  const [onlyFlagged, setOnlyFlagged] = useState(false);
   const [breakSeconds, setBreakSeconds] = useState(BREAK_SECONDS);
   const questionStart = useRef(Date.now());
-  /** Marca de tiempo de fin de la sección actual (ms). Evita desfases cuando la pestaña se suspende. */
-  const deadline = useRef<number>(Date.now() + sections[initialSection].seconds * 1000);
-
+  /** Marca de tiempo de fin del examen (ms). Evita desfases si la pestaña se suspende. */
+  const deadline = useRef<number>(Date.now() + seconds * 1000);
 
   const sectionQuestions = useMemo(
     () => questions.filter((q) => (q.sectionNumber ?? 1) === section.sectionNumber),
@@ -270,6 +295,17 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     (q) => (q.sectionNumber ?? 1) === section.sectionNumber,
   );
   const lastIndexOfSection = firstIndexOfSection + sectionQuestions.length - 1;
+  const isLastSection = sectionIdx === sections.length - 1;
+  const multiSection = sections.length > 1;
+  /** R4 — primera pregunta sin responder del bloque activo. */
+  const firstUnansweredIndex = useMemo(() => {
+    const target = sectionQuestions.find((item) => !answers[item.id]);
+    return target ? questions.findIndex((x) => x.id === target.id) : -1;
+  }, [sectionQuestions, answers, questions]);
+  const flaggedInSection = useMemo(
+    () => sectionQuestions.filter((item) => flagged[item.id]).length,
+    [sectionQuestions, flagged],
+  );
 
   const q = questions[index];
   const answer = answers[q.id];
@@ -280,23 +316,20 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   }, [index]);
 
   useEffect(() => {
-    if (summary || onBreak) return;
-    if (paused) {
-      // Al pausar, congelamos el tiempo restante actual.
-      return;
-    }
+    if (summary || phase === "break") return;
+    if (paused) return;
     deadline.current = Date.now() + seconds * 1000;
     const tick = () => {
-      const left = Math.max(0, Math.round((deadline.current - Date.now()) / 1000));
-      setSeconds(left);
+      setSeconds(Math.max(0, Math.round((deadline.current - Date.now()) / 1000)));
     };
     const t = setInterval(tick, 500);
     return () => clearInterval(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paused, summary, onBreak, sectionIdx]);
+  }, [paused, summary, phase, clockEpoch]);
 
+  // Cuenta atrás informativa del descanso (no afecta al reloj principal).
   useEffect(() => {
-    if (!onBreak) return;
+    if (phase !== "break") return;
     const end = Date.now() + breakSeconds * 1000;
     const t = setInterval(
       () => setBreakSeconds(Math.max(0, Math.round((end - Date.now()) / 1000))),
@@ -304,13 +337,16 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     );
     return () => clearInterval(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onBreak]);
-
+  }, [phase]);
 
   const send = useCallback(
     async (question: Question, value: AnswerValue) => {
       const spent = Math.round((Date.now() - questionStart.current) / 1000);
       const res = await submitAnswer(session.examId, question.id, value, spent);
+      if (res.timeExpired) {
+        setSeconds(0);
+        return res;
+      }
       if (res.isCorrect !== undefined) {
         setFeedback((prev) => ({ ...prev, [question.id]: res }));
       }
@@ -368,53 +404,118 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     }
   }
 
-  async function closeSection() {
-    if (!formative) await saveSilently();
-    if (sectionIdx === sections.length - 1) {
-      await finalize();
-      return;
+  const goToSection = useCallback(
+    (sectionNumber: number) => {
+      const idx = sections.findIndex((sec) => sec.sectionNumber === sectionNumber);
+      const targetIdx = idx >= 0 ? idx : Math.min(sectionIdx + 1, sections.length - 1);
+      setSectionIdx(targetIdx);
+      const first = questions.findIndex(
+        (item) => (item.sectionNumber ?? 1) === sections[targetIdx].sectionNumber,
+      );
+      setIndex(first === -1 ? 0 : first);
+      setOnlyFlagged(false);
+      setPhase("exam");
+    },
+    [questions, sectionIdx, sections],
+  );
+
+  /** Cierra el bloque actual contra el backend (R6). */
+  async function confirmCloseSection() {
+    setConfirmCloseSectionOpen(false);
+    setClosingSection(true);
+    setSectionError(null);
+    await saveSilently();
+    try {
+      const res = await finalizeSection(session.examId, section.sectionNumber);
+      setClosedSections((prev) =>
+        prev.includes(section.sectionNumber) ? prev : [...prev, section.sectionNumber],
+      );
+      syncClock(res.remainingSeconds);
+      if (res.examComplete || res.nextSection === null) {
+        await finalize();
+        return;
+      }
+      setPendingNextSection(res.nextSection);
+      setPhase("break_offer");
+    } catch (e) {
+      setSectionError(e instanceof Error ? e.message : "No hemos podido cerrar la sección.");
+    } finally {
+      setClosingSection(false);
     }
-    setBreakSeconds(BREAK_SECONDS);
-    setOnBreak(true);
   }
 
-  const endBreak = useCallback(() => {
-    const nextIdx = sectionIdx + 1;
-    setOnBreak(false);
-    if (nextIdx >= sections.length) {
-      void finalize();
-      return;
+  async function beginBreak() {
+    setSectionError(null);
+    try {
+      const res = await startBreak(session.examId);
+      syncClock(res.remainingSeconds);
+      setBreakSeconds(res.breakAllowanceSeconds ?? BREAK_SECONDS);
+      setBreaksUsed((n) => n + 1);
+      setPhase("break");
+    } catch (e) {
+      setSectionError(e instanceof Error ? e.message : "No hemos podido iniciar el descanso.");
     }
-    setSectionIdx(nextIdx);
-    setSeconds(sections[nextIdx].seconds);
-    const first = questions.findIndex(
-      (item) => (item.sectionNumber ?? 1) === sections[nextIdx].sectionNumber,
-    );
-    setIndex(first === -1 ? 0 : first);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sectionIdx, sections, questions]);
+  }
 
+  const [resuming, setResuming] = useState(false);
+  async function endBreak() {
+    setResuming(true);
+    setSectionError(null);
+    try {
+      const res = await resumeBreak(session.examId);
+      syncClock(res.remainingSeconds);
+    } catch (e) {
+      setSectionError(e instanceof Error ? e.message : "No hemos podido reanudar el examen.");
+    } finally {
+      setResuming(false);
+    }
+    if (pendingNextSection !== null) goToSection(pendingNextSection);
+    else setPhase("exam");
+  }
+
+  // Descanso agotado: se reanuda automáticamente.
   useEffect(() => {
-    if (onBreak && breakSeconds === 0) endBreak();
-  }, [onBreak, breakSeconds, endBreak]);
+    if (phase === "break" && breakSeconds === 0 && !resuming) void endBreak();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, breakSeconds]);
 
-  // Fin de tiempo de la sección: se cierra automáticamente.
+  // R6 — Corte automático a los 00:00 del reloj global.
   const timeUp = useRef(false);
   useEffect(() => {
-    if (onBreak || summary || paused) return;
+    if (summary || finishing || phase === "break") return;
     if (seconds > 0) {
       timeUp.current = false;
       return;
     }
     if (timeUp.current) return;
     timeUp.current = true;
-    void closeSection();
+    void finalize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [seconds, onBreak, summary, paused]);
+  }, [seconds, summary, finishing, phase]);
 
   // Auto-guardado local del progreso (respuestas, marcadas y tiempo restante).
-  const snapshot = useRef({ session, index, answers, feedback, flagged, sectionIdx, seconds });
-  snapshot.current = { session, index, answers, feedback, flagged, sectionIdx, seconds };
+  const snapshot = useRef({
+    session,
+    index,
+    answers,
+    feedback,
+    flagged,
+    sectionIdx,
+    seconds,
+    closedSections,
+    breaksUsed,
+  });
+  snapshot.current = {
+    session,
+    index,
+    answers,
+    feedback,
+    flagged,
+    sectionIdx,
+    seconds,
+    closedSections,
+    breaksUsed,
+  };
 
   const persist = useCallback(() => {
     const s = snapshot.current;
@@ -427,6 +528,8 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
       flagged: s.flagged,
       sectionIdx: s.sectionIdx,
       secondsLeft: s.seconds,
+      closedSections: s.closedSections,
+      breaksUsed: s.breaksUsed,
     });
   }, []);
 
@@ -455,7 +558,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   useEffect(() => {
     if (summary) return;
     persist();
-  }, [answers, feedback, flagged, index, sectionIdx, onBreak, summary, persist]);
+  }, [answers, feedback, flagged, index, sectionIdx, phase, summary, persist]);
 
 
   const answeredCount = Object.keys(answers).length;
@@ -499,27 +602,195 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     );
   }
 
-  if (onBreak) {
+  // R7 — Oferta de descanso tras cerrar el bloque 1 o 2.
+  if (phase === "break_offer") {
+    return (
+      <div className="grid min-h-screen place-items-center bg-background px-4">
+        <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 text-center">
+          <CircleCheck className="mx-auto h-7 w-7 text-success" />
+          <h1 className="mt-3 font-display text-xl font-bold">
+            Sección {section.sectionNumber} finalizada
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Ya no puedes volver a esta sección. Puedes tomar un descanso opcional de 10 minutos
+            antes de continuar con la sección {pendingNextSection}: el reloj del examen se detiene
+            mientras descansas.
+          </p>
+          <p className="num mt-3 text-xs text-muted-foreground">
+            Tiempo restante del examen: {fmt(seconds)} · Descansos usados: {breaksUsed} de 2
+          </p>
+          {sectionError && (
+            <p className="mt-3 rounded-lg border border-destructive/40 bg-destructive/10 p-2 text-xs text-destructive">
+              {sectionError}
+            </p>
+          )}
+          <div className="mt-5 space-y-2">
+            {breaksUsed < 2 && (
+              <button
+                onClick={() => void beginBreak()}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
+              >
+                <Coffee className="h-4 w-4" /> Tomar descanso (10 min)
+              </button>
+            )}
+            <button
+              onClick={() => pendingNextSection !== null && goToSection(pendingNextSection)}
+              className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+            >
+              Continuar sin descanso
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // R7 — Pantalla de descanso con reloj propio (informativo).
+  if (phase === "break") {
     return (
       <div className="grid min-h-screen place-items-center bg-background px-4">
         <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 text-center">
           <Coffee className="mx-auto h-7 w-7 text-accent" />
-          <h1 className="mt-3 font-display text-xl font-bold">
-            Sección {section.sectionNumber} completada
-          </h1>
+          <h1 className="mt-3 font-display text-xl font-bold">Descanso en curso</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Dispones de un descanso opcional de 10 minutos antes de la sección{" "}
-            {section.sectionNumber + 1}. El cronómetro de la siguiente sección no empieza hasta que
-            continúes.
+            El reloj del examen está detenido. Puedes reanudar cuando quieras, sin esperar a que
+            termine el descanso.
           </p>
           <p className="num mt-4 font-display text-4xl font-bold">{fmtShort(breakSeconds)}</p>
+          <p className="num mt-2 text-xs text-muted-foreground">
+            Tiempo restante del examen: {fmt(seconds)}
+          </p>
+          {sectionError && (
+            <p className="mt-3 rounded-lg border border-destructive/40 bg-destructive/10 p-2 text-xs text-destructive">
+              {sectionError}
+            </p>
+          )}
           <button
-            onClick={endBreak}
-            className="mt-5 w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+            onClick={() => void endBreak()}
+            disabled={resuming}
+            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
-            Omitir descanso y continuar
+            {resuming && <Loader2 className="h-4 w-4 animate-spin" />} Reanudar examen
           </button>
         </div>
+      </div>
+    );
+  }
+
+  // R6 — Pantalla de revisión obligatoria al final de cada bloque.
+  if (phase === "review") {
+    const pending = sectionQuestions.filter((item) => !answers[item.id]).length;
+    const marked = sectionQuestions.filter((item) => flagged[item.id]).length;
+    return (
+      <div className="min-h-screen bg-background px-4 py-8 sm:px-6">
+        <div className="mx-auto max-w-3xl space-y-5">
+          <div className="rounded-2xl border border-border bg-card p-5">
+            <h1 className="font-display text-xl font-bold">
+              Revisión de la sección {section.sectionNumber}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Revisa tus respuestas antes de cerrar la sección. Pulsa cualquier pregunta para
+              volver a ella y modificar tu respuesta.
+            </p>
+            <div className="num mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
+              <span>{sectionQuestions.length - pending} respondidas</span>
+              <span>{pending} sin responder</span>
+              <span>{marked} marcadas</span>
+              <span>Tiempo restante: {fmt(seconds)}</span>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-5">
+            <ul className="divide-y divide-border">
+              {sectionQuestions.map((item) => {
+                const globalIdx = questions.findIndex((x) => x.id === item.id);
+                const answered = Boolean(answers[item.id]);
+                return (
+                  <li key={item.id}>
+                    <button
+                      onClick={() => {
+                        setIndex(globalIdx);
+                        setPhase("exam");
+                      }}
+                      className="flex w-full items-center gap-3 py-2.5 text-left hover:bg-secondary/60"
+                    >
+                      <span className="num w-10 shrink-0 text-xs font-semibold text-muted-foreground">
+                        {globalIdx + 1}
+                      </span>
+                      <span className="min-w-0 flex-1 truncate text-sm">{item.stem}</span>
+                      <span className="flex shrink-0 items-center gap-1.5">
+                        <span
+                          className={cn(
+                            "rounded-md px-2 py-0.5 text-[11px] font-semibold",
+                            answered
+                              ? "bg-primary text-primary-foreground"
+                              : "border border-border text-muted-foreground",
+                          )}
+                        >
+                          {answered ? "Respondida" : "Sin responder"}
+                        </span>
+                        {flagged[item.id] && (
+                          <span className="inline-flex items-center gap-1 rounded-md bg-warning-soft px-2 py-0.5 text-[11px] font-semibold text-accent-foreground">
+                            <Flag className="h-3 w-3" /> Marcada
+                          </span>
+                        )}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {sectionError && (
+            <p className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+              {sectionError}
+            </p>
+          )}
+
+          <div className="flex flex-wrap justify-end gap-2">
+            <button
+              onClick={() => setPhase("exam")}
+              className="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+            >
+              Seguir revisando
+            </button>
+            <button
+              onClick={() => setConfirmCloseSectionOpen(true)}
+              disabled={closingSection}
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+            >
+              {closingSection && <Loader2 className="h-4 w-4 animate-spin" />}
+              {isLastSection ? "Finalizar examen" : "Finalizar sección"}
+            </button>
+          </div>
+        </div>
+
+        {confirmCloseSectionOpen && (
+          <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/50 px-4">
+            <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-6">
+              <AlertTriangle className="h-6 w-6 text-accent" />
+              <h2 className="mt-3 text-lg font-semibold">¿Seguro que quieres finalizar?</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                No podrás volver a esta sección ni modificar sus respuestas.
+              </p>
+              <div className="mt-5 flex gap-2">
+                <button
+                  onClick={() => setConfirmCloseSectionOpen(false)}
+                  className="flex-1 rounded-lg border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => void confirmCloseSection()}
+                  className="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                >
+                  Finalizar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -659,6 +930,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
         </main>
 
         <aside className="hidden rounded-2xl border border-border bg-card p-4 lg:block lg:sticky lg:top-24 lg:h-fit">
+          <NavActions />
           <QuestionNavigator
             questions={questions}
             clusters={session.clusters}
@@ -666,7 +938,9 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
             answers={answers}
             flagged={flagged}
             onSelect={setIndex}
-            activeSection={sections.length > 1 ? section.sectionNumber : undefined}
+            activeSection={multiSection ? section.sectionNumber : undefined}
+            closedSections={closedSections}
+            onlyFlagged={onlyFlagged}
           />
           <p className="num mt-4 border-t border-border pt-3 text-xs text-muted-foreground">
             {answeredCount} de {questions.length} respondidas
@@ -688,13 +962,16 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
                 <X className="h-4 w-4" />
               </button>
             </div>
+            <NavActions />
             <QuestionNavigator
               questions={questions}
               clusters={session.clusters}
               current={index}
               answers={answers}
               flagged={flagged}
-              activeSection={sections.length > 1 ? section.sectionNumber : undefined}
+              activeSection={multiSection ? section.sectionNumber : undefined}
+            closedSections={closedSections}
+            onlyFlagged={onlyFlagged}
               onSelect={(i) => {
                 setIndex(i);
                 setNavOpen(false);
@@ -757,6 +1034,44 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     </div>
 
   );
+
+  function NavActions() {
+    return (
+      <div className="mb-3 space-y-1.5 border-b border-border pb-3">
+        <button
+          onClick={() => setOnlyFlagged((v) => !v)}
+          disabled={!flaggedInSection && !onlyFlagged}
+          className={cn(
+            "inline-flex w-full items-center gap-2 rounded-lg border px-2.5 py-1.5 text-xs font-medium disabled:opacity-40",
+            onlyFlagged ? "border-accent bg-warning-soft text-accent-foreground" : "border-border",
+          )}
+        >
+          <Flag className="h-3.5 w-3.5" />
+          {onlyFlagged ? "Ver todas las preguntas" : `Ir a marcadas (${flaggedInSection})`}
+        </button>
+        <button
+          onClick={() => firstUnansweredIndex >= 0 && setIndex(firstUnansweredIndex)}
+          disabled={firstUnansweredIndex < 0}
+          className="inline-flex w-full items-center gap-2 rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium disabled:opacity-40"
+          title={
+            firstUnansweredIndex < 0
+              ? "Todas las preguntas de esta sección están respondidas"
+              : undefined
+          }
+        >
+          <SkipForward className="h-3.5 w-3.5" /> Primera sin responder
+        </button>
+        {multiSection && (
+          <button
+            onClick={() => setPhase("review")}
+            className="inline-flex w-full items-center gap-2 rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium"
+          >
+            <ListChecks className="h-3.5 w-3.5" /> Revisar sección {section.sectionNumber}
+          </button>
+        )}
+      </div>
+    );
+  }
 
   function QuestionBody() {
     const isLastOfSection = index === lastIndexOfSection;
@@ -826,12 +1141,13 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
             </button>
             {isLastOfSection ? (
               <button
-                onClick={() => void closeSection()}
+                onClick={() => {
+                  void saveSilently();
+                  setPhase("review");
+                }}
                 className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground"
               >
-                {sectionIdx === sections.length - 1
-                  ? "Finalizar examen"
-                  : `Cerrar sección ${section.sectionNumber}`}
+                Revisar sección {section.sectionNumber}
                 <ChevronRight className="h-4 w-4" />
               </button>
             ) : (

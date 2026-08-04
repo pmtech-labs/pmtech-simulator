@@ -460,12 +460,15 @@ export type Database = {
       }
       exams: {
         Row: {
+          break_extension_seconds: number
+          breaks_used: number
           config: Json | null
           finished_at: string | null
           id: string
           license_id: string | null
           mode: Database["public"]["Enums"]["exam_mode"]
           new_items_count: number | null
+          paused_at: string | null
           repeated_items_count: number | null
           score_by_approach: Json | null
           score_by_domain: Json | null
@@ -477,12 +480,15 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          break_extension_seconds?: number
+          breaks_used?: number
           config?: Json | null
           finished_at?: string | null
           id?: string
           license_id?: string | null
           mode?: Database["public"]["Enums"]["exam_mode"]
           new_items_count?: number | null
+          paused_at?: string | null
           repeated_items_count?: number | null
           score_by_approach?: Json | null
           score_by_domain?: Json | null
@@ -494,12 +500,15 @@ export type Database = {
           user_id: string
         }
         Update: {
+          break_extension_seconds?: number
+          breaks_used?: number
           config?: Json | null
           finished_at?: string | null
           id?: string
           license_id?: string | null
           mode?: Database["public"]["Enums"]["exam_mode"]
           new_items_count?: number | null
+          paused_at?: string | null
           repeated_items_count?: number | null
           score_by_approach?: Json | null
           score_by_domain?: Json | null

@@ -9,6 +9,8 @@ export function QuestionNavigator({
   flagged,
   onSelect,
   activeSection,
+  closedSections,
+  onlyFlagged,
 }: {
   questions: Question[];
   /** Casos/escenarios de la sesión, para mostrar su título al pasar el ratón. */
@@ -19,6 +21,10 @@ export function QuestionNavigator({
   onSelect: (i: number) => void;
   /** Si se indica, las preguntas de secciones ya cerradas quedan bloqueadas. */
   activeSection?: number;
+  /** Secciones ya finalizadas: bloqueadas de forma permanente. */
+  closedSections?: number[];
+  /** Muestra solo las preguntas marcadas para revisión. */
+  onlyFlagged?: boolean;
 }) {
   const grouped = new Map<number, { q: Question; i: number }[]>();
   questions.forEach((q, i) => {
@@ -35,8 +41,10 @@ export function QuestionNavigator({
       </p>
 
       {[...grouped.entries()].map(([section, items]) => {
-        const closed = activeSection !== undefined && section < activeSection;
-        const locked = activeSection !== undefined && section !== activeSection;
+        const closed = closedSections?.includes(section) ?? false;
+        const locked = closed || (activeSection !== undefined && section !== activeSection);
+        const visible = onlyFlagged ? items.filter(({ q }) => flagged[q.id]) : items;
+        if (onlyFlagged && !visible.length) return null;
         return (
           <div key={section} className="space-y-1.5">
             {activeSection !== undefined && (
@@ -52,7 +60,7 @@ export function QuestionNavigator({
               </p>
             )}
             <div className="grid grid-cols-8 gap-1.5 sm:grid-cols-10 lg:grid-cols-5">
-              {items.map(({ q, i }) => {
+              {visible.map(({ q, i }) => {
                 const answered = Boolean(answers[q.id]);
                 const isFlagged = flagged[q.id];
                 const clusterTitle = q.clusterId ? clusters?.[q.clusterId]?.title : undefined;

@@ -45,7 +45,10 @@ export interface ExamSession {
   mode: ExamMode;
   questions: Question[];
   clusters: Record<string, CaseCluster>;
+  /** Reloj global del examen (240 min en full_sim). Único tiempo real. */
   timeLimitSeconds: number;
+  /** Descansos ya consumidos (máximo 2 por examen). */
+  breaksUsed: number;
   sections: ExamSection[];
 }
 
@@ -55,7 +58,20 @@ export interface AnswerFeedback {
   correctAnswer?: string[];
   explanation?: string;
   errorType?: ErrorType;
+  /** El reloj global llegó a 00:00: hay que finalizar el examen de inmediato. */
+  timeExpired?: boolean;
 }
+
+/** Respuesta autoritativa de la Edge Function `exam_section_control`. */
+export interface SectionControlResult {
+  sectionClosed?: number;
+  nextSection: number | null;
+  examComplete: boolean;
+  remainingSeconds: number;
+  paused: boolean;
+  breakAllowanceSeconds?: number;
+}
+
 
 export interface FinishSummary {
   examId: string;
@@ -291,13 +307,20 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
         },
       ];
 
+  // El reloj real del examen es global (240 min en full_sim). Los presupuestos
+  // por sección son informativos y no gobiernan el cronómetro.
+  const globalLimit =
+    Number(data.time_limit_seconds) > 0
+      ? Number(data.time_limit_seconds)
+      : sections.reduce((a, s) => a + s.seconds, 0);
+
   return {
     examId: data.exam_id,
     mode: params.mode,
     questions,
     clusters,
-    timeLimitSeconds: sections.reduce((a, s) => a + s.seconds, 0),
-
+    timeLimitSeconds: globalLimit,
+    breaksUsed: Number(data.breaks_used) || 0,
     sections,
   };
 }
@@ -309,6 +332,12 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
 function serializeAnswer(answer: AnswerValue): string[] {
   if (Array.isArray(answer)) return answer;
   return Object.entries(answer).map(([l, r]) => `${l}:${r}`);
+}
+
+/** Detecta el 409 de tiempo agotado devuelto por `submit_answer`. */
+function isTimeExpiredError(error: unknown): boolean {
+  const ctx = (error as { context?: Response })?.context;
+  return ctx?.status === 409;
 }
 
 export async function submitAnswer(
@@ -325,7 +354,7 @@ export async function submitAnswer(
       time_spent_seconds: timeSpentSeconds,
     },
   });
-  if (error) return { saved: false };
+  if (error) return { saved: false, timeExpired: isTimeExpiredError(error) };
 
   if (data?.is_correct === undefined) return { saved: true };
   return {
@@ -336,6 +365,55 @@ export async function submitAnswer(
     errorType: data.error_type as ErrorType | undefined,
   };
 }
+
+/** Cierra una sección, inicia o reanuda un descanso. Devuelve el reloj autoritativo. */
+async function sectionControl(
+  examId: string,
+  action: "finalize_section" | "start_break" | "resume_break",
+  sectionNumber?: number,
+): Promise<SectionControlResult> {
+  const { data, error } = await supabase.functions.invoke("exam_section_control", {
+    method: "POST",
+    body: {
+      exam_id: examId,
+      action,
+      ...(sectionNumber !== undefined ? { section_number: sectionNumber } : {}),
+    },
+  });
+  if (error) {
+    const ctx = (error as { context?: Response })?.context;
+    let message = "No hemos podido actualizar el estado del examen.";
+    try {
+      const body = ctx ? ((await ctx.clone().json()) as { error?: string }) : null;
+      if (body?.error) message = body.error;
+    } catch {
+      /* mensaje genérico */
+    }
+    throw new Error(message);
+  }
+
+  return {
+    sectionClosed: data.section_closed ?? undefined,
+    nextSection: data.next_section ?? null,
+    examComplete: Boolean(data.exam_complete),
+    remainingSeconds: Number(data.remaining_seconds) || 0,
+    paused: Boolean(data.paused),
+    breakAllowanceSeconds: Number(data.break_allowance_seconds) || undefined,
+  };
+}
+
+export function finalizeSection(examId: string, sectionNumber: number) {
+  return sectionControl(examId, "finalize_section", sectionNumber);
+}
+
+export function startBreak(examId: string) {
+  return sectionControl(examId, "start_break");
+}
+
+export function resumeBreak(examId: string) {
+  return sectionControl(examId, "resume_break");
+}
+
 
 export async function finishExam(examId: string): Promise<FinishSummary> {
   const { data, error } = await supabase.functions.invoke("finish_exam", {
