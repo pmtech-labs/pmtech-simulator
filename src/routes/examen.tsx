@@ -31,12 +31,6 @@ import { HelpLinks } from "@/components/support/HelpLinks";
 import { BREAK_SECONDS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 import {
-  FOCUS_TAG_LABELS,
-  PERFORMANCE_DOMAIN_LABELS,
-  PROCESS_GROUP_LABELS,
-} from "@/lib/questionTags";
-
-import {
   clearExamProgress,
   loadExamProgress,
   saveExamProgress,
@@ -116,12 +110,6 @@ function fmtShort(s: number) {
   const m = Math.floor(s / 60);
   const sec = s % 60;
   return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
-}
-
-function difficultyLabel(d: Question["difficulty"]) {
-  if (d <= 2) return "Fácil";
-  if (d === 3) return "Media";
-  return "Difícil";
 }
 
 function ExamPage() {
