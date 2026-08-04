@@ -49,7 +49,7 @@ export const getAdminStatsFn = createServerFn({ method: "POST" })
     if (data.view === "tags") {
       const { data: rows, error } = await db
         .from("questions")
-        .select("status, process_group, performance_domain, focus_tags")
+        .select("status, process_group, performance_domain, focus_tags, approach, format")
         .in("status", ["draft", "published"]);
       if (error) throw new Error(error.message);
       return rows ?? [];
