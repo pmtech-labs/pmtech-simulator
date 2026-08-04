@@ -1373,6 +1373,7 @@ export type Database = {
       get_untagged_ae_questions: {
         Args: { p_limit: number }
         Returns: {
+          focus_tags: string[]
           format: string
           id: string
           performance_domain: string
