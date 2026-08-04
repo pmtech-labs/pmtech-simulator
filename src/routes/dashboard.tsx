@@ -186,7 +186,7 @@ function Dashboard() {
             <div className="flex items-start justify-between">
               <div>
                 <Layers className="h-5 w-5 text-muted-foreground" />
-                <h3 className="mt-3 text-base font-semibold">Práctica por dominios</h3>
+                <h3 className="mt-3 text-base font-semibold">Prácticas parciales</h3>
               </div>
               <DomainMasteryLegend />
             </div>
