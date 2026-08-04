@@ -295,6 +295,17 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     (q) => (q.sectionNumber ?? 1) === section.sectionNumber,
   );
   const lastIndexOfSection = firstIndexOfSection + sectionQuestions.length - 1;
+  const isLastSection = sectionIdx === sections.length - 1;
+  const multiSection = sections.length > 1;
+  /** R4 — primera pregunta sin responder del bloque activo. */
+  const firstUnansweredIndex = useMemo(() => {
+    const target = sectionQuestions.find((item) => !answers[item.id]);
+    return target ? questions.findIndex((x) => x.id === target.id) : -1;
+  }, [sectionQuestions, answers, questions]);
+  const flaggedInSection = useMemo(
+    () => sectionQuestions.filter((item) => flagged[item.id]).length,
+    [sectionQuestions, flagged],
+  );
 
   const q = questions[index];
   const answer = answers[q.id];
@@ -919,6 +930,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
         </main>
 
         <aside className="hidden rounded-2xl border border-border bg-card p-4 lg:block lg:sticky lg:top-24 lg:h-fit">
+          <NavActions />
           <QuestionNavigator
             questions={questions}
             clusters={session.clusters}
@@ -926,7 +938,9 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
             answers={answers}
             flagged={flagged}
             onSelect={setIndex}
-            activeSection={sections.length > 1 ? section.sectionNumber : undefined}
+            activeSection={multiSection ? section.sectionNumber : undefined}
+            closedSections={closedSections}
+            onlyFlagged={onlyFlagged}
           />
           <p className="num mt-4 border-t border-border pt-3 text-xs text-muted-foreground">
             {answeredCount} de {questions.length} respondidas
@@ -948,13 +962,16 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
                 <X className="h-4 w-4" />
               </button>
             </div>
+            <NavActions />
             <QuestionNavigator
               questions={questions}
               clusters={session.clusters}
               current={index}
               answers={answers}
               flagged={flagged}
-              activeSection={sections.length > 1 ? section.sectionNumber : undefined}
+              activeSection={multiSection ? section.sectionNumber : undefined}
+            closedSections={closedSections}
+            onlyFlagged={onlyFlagged}
               onSelect={(i) => {
                 setIndex(i);
                 setNavOpen(false);
@@ -1017,6 +1034,44 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     </div>
 
   );
+
+  function NavActions() {
+    return (
+      <div className="mb-3 space-y-1.5 border-b border-border pb-3">
+        <button
+          onClick={() => setOnlyFlagged((v) => !v)}
+          disabled={!flaggedInSection && !onlyFlagged}
+          className={cn(
+            "inline-flex w-full items-center gap-2 rounded-lg border px-2.5 py-1.5 text-xs font-medium disabled:opacity-40",
+            onlyFlagged ? "border-accent bg-warning-soft text-accent-foreground" : "border-border",
+          )}
+        >
+          <Flag className="h-3.5 w-3.5" />
+          {onlyFlagged ? "Ver todas las preguntas" : `Ir a marcadas (${flaggedInSection})`}
+        </button>
+        <button
+          onClick={() => firstUnansweredIndex >= 0 && setIndex(firstUnansweredIndex)}
+          disabled={firstUnansweredIndex < 0}
+          className="inline-flex w-full items-center gap-2 rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium disabled:opacity-40"
+          title={
+            firstUnansweredIndex < 0
+              ? "Todas las preguntas de esta sección están respondidas"
+              : undefined
+          }
+        >
+          <SkipForward className="h-3.5 w-3.5" /> Primera sin responder
+        </button>
+        {multiSection && (
+          <button
+            onClick={() => setPhase("review")}
+            className="inline-flex w-full items-center gap-2 rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium"
+          >
+            <ListChecks className="h-3.5 w-3.5" /> Revisar sección {section.sectionNumber}
+          </button>
+        )}
+      </div>
+    );
+  }
 
   function QuestionBody() {
     const isLastOfSection = index === lastIndexOfSection;
@@ -1086,12 +1141,13 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
             </button>
             {isLastOfSection ? (
               <button
-                onClick={() => void closeSection()}
+                onClick={() => {
+                  void saveSilently();
+                  setPhase("review");
+                }}
                 className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground"
               >
-                {sectionIdx === sections.length - 1
-                  ? "Finalizar examen"
-                  : `Cerrar sección ${section.sectionNumber}`}
+                Revisar sección {section.sectionNumber}
                 <ChevronRight className="h-4 w-4" />
               </button>
             ) : (
