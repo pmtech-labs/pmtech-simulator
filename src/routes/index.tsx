@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Sparkles,
   Target,
+  Timer,
   TrendingUp,
   X,
 } from "lucide-react";
@@ -181,6 +182,12 @@ const FEATURES = [
     description:
       "Casos con varias preguntas sobre el mismo contexto, y explicaciones que no solo justifican la correcta: te dicen por qué cada alternativa era prematura, de otro rol o del enfoque equivocado.",
   },
+  {
+    icon: Timer,
+    title: "Simulacro completo o medio examen, tú eliges",
+    description:
+      "180 preguntas en 4 horas con la estructura real del examen, o 90 preguntas en 2 horas con los mismos criterios de reparto — para cuando no puedes permitirte una sesión completa pero quieres presión real, no una práctica cualquiera.",
+  },
 ];
 
 
@@ -198,7 +205,8 @@ const STEPS = [
   {
     number: "03",
     title: "Haz el simulacro completo",
-    description: "180 preguntas, 240 minutos, estructura y presión idénticas al examen real.",
+    description:
+      "180 preguntas, 240 minutos, estructura y presión idénticas al examen real. ¿Menos tiempo? Prueba el medio examen: 90 preguntas, 2 horas, mismo rigor.",
   },
   {
     number: "04",
@@ -556,7 +564,7 @@ function Pricing() {
         <Reveal className="h-full">
           <div className="relative h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
             <h3 className="text-base font-semibold">Gratis</h3>
-            <p className="mt-1 text-xs text-muted-foreground">Sin tarjeta y sin cronómetro</p>
+            <p className="mt-1 text-xs text-muted-foreground">Sin tarjeta · practica sin límite de tiempo</p>
             <p className="mt-4 flex items-baseline gap-1">
               <span className="num font-display text-4xl font-bold">0 €</span>
               <span className="text-sm text-muted-foreground">/ siempre</span>
