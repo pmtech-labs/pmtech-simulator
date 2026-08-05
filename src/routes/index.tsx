@@ -364,7 +364,7 @@ function Hero() {
                 </a>
               </div>
               <p className="mt-3 text-xs text-hero-muted/80">
-                Sin permanencia · Cancela cuando quieras · No afiliado a PMI
+                Sin permanencia · Cancela cuando quieras · Licencias para 1, 3 o 6 meses
               </p>
             </Reveal>
 
