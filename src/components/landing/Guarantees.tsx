@@ -28,7 +28,7 @@ const GUARANTEES = [
   {
     icon: Clock3,
     title: "Tiempos claros",
-    text: "Planes de 3 o 6 meses con fecha de inicio y fin visibles. Sin renovaciones automáticas sorpresa: te avisamos antes de que caduque.",
+    text: "Desde 1 mes hasta 6, con fecha de inicio y fin siempre visible (el plan Gratis no caduca). Sin renovaciones automáticas sorpresa: te avisamos antes de que caduque tu licencia de pago.",
   },
   {
     icon: Headphones,
