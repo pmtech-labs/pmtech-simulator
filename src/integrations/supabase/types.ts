@@ -663,6 +663,7 @@ export type Database = {
           created_at: string | null
           expires_at: string
           free_full_sim_used: boolean
+          free_half_sim_used: boolean
           id: string
           plan_id: string | null
           starts_at: string | null
@@ -675,6 +676,7 @@ export type Database = {
           created_at?: string | null
           expires_at: string
           free_full_sim_used?: boolean
+          free_half_sim_used?: boolean
           id?: string
           plan_id?: string | null
           starts_at?: string | null
@@ -687,6 +689,7 @@ export type Database = {
           created_at?: string | null
           expires_at?: string
           free_full_sim_used?: boolean
+          free_half_sim_used?: boolean
           id?: string
           plan_id?: string | null
           starts_at?: string | null
