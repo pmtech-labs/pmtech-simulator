@@ -568,6 +568,7 @@ function Pricing() {
                 { label: "1 simulacro completo de regalo", included: true },
                 { label: "Practicum completo (hotspot, gráficos)", included: false },
                 { label: "Analítica por tarea ECO", included: false },
+                { label: "Motor adaptativo", included: false },
               ].map((f) => (
                 <li
                   key={f.label}
