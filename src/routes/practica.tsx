@@ -108,14 +108,17 @@ function buildDrill(
   errorTypes?: ErrorType[],
   processGroup?: string,
   performanceDomain?: string,
+  focusTag?: string,
 ): Question[] {
   const base = MOCK_QUESTIONS.filter(
     (q) =>
       domains.includes(q.domain) &&
       matchesApproach(q.approach, approach) &&
       (!processGroup || !q.processGroup || q.processGroup === processGroup) &&
-      (!performanceDomain || !q.performanceDomain || q.performanceDomain === performanceDomain),
+      (!performanceDomain || !q.performanceDomain || q.performanceDomain === performanceDomain) &&
+      (!focusTag || (q.focusTags ?? []).some((t) => t === focusTag)),
   );
+
 
   const pool = errorTypes?.length
     ? (base.filter((q) => q.errorType && errorTypes.includes(q.errorType)).length
