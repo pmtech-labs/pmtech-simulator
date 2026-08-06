@@ -13,7 +13,7 @@ import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
 import { MOCK_ERROR_TYPE_STATS, MOCK_FINISH_SUMMARY, MOCK_QUESTIONS, MOCK_UNIT_PROGRESS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
-import { PERFORMANCE_DOMAIN_LABELS, PROCESS_GROUP_LABELS } from "@/lib/questionTags";
+import { FOCUS_TAG_LABELS, PERFORMANCE_DOMAIN_LABELS, PROCESS_GROUP_LABELS } from "@/lib/questionTags";
 
 import { DOMAIN_LABELS } from "@/lib/export";
 import { cn } from "@/lib/utils";
@@ -108,14 +108,17 @@ function buildDrill(
   errorTypes?: ErrorType[],
   processGroup?: string,
   performanceDomain?: string,
+  focusTag?: string,
 ): Question[] {
   const base = MOCK_QUESTIONS.filter(
     (q) =>
       domains.includes(q.domain) &&
       matchesApproach(q.approach, approach) &&
       (!processGroup || !q.processGroup || q.processGroup === processGroup) &&
-      (!performanceDomain || !q.performanceDomain || q.performanceDomain === performanceDomain),
+      (!performanceDomain || !q.performanceDomain || q.performanceDomain === performanceDomain) &&
+      (!focusTag || (q.focusTags ?? []).some((t) => t === focusTag)),
   );
+
 
   const pool = errorTypes?.length
     ? (base.filter((q) => q.errorType && errorTypes.includes(q.errorType)).length
@@ -139,7 +142,9 @@ function PracticePage() {
   const [selected, setSelected] = useState<DomainCode[]>(
     search.dominio && ALL_DOMAINS.includes(search.dominio as DomainCode)
       ? [search.dominio as DomainCode]
-      : ["process"],
+      : search.foco
+        ? [...ALL_DOMAINS]
+        : ["process"],
   );
   const [mode, setMode] = useState<PracticeMode>(search.modo ?? "domain_drill");
   const [unitId, setUnitId] = useState<string>(search.unidad ?? "");
@@ -153,6 +158,10 @@ function PracticePage() {
   const [performanceDomainFilter, setPerformanceDomainFilter] = useState<string>(
     search.desempeno && search.desempeno in PERFORMANCE_DOMAIN_LABELS ? search.desempeno : "",
   );
+  const [focusTagFilter, setFocusTagFilter] = useState<string>(
+    search.foco && search.foco in FOCUS_TAG_LABELS ? search.foco : "",
+  );
+
 
   const [startError, setStartError] = useState<string | null>(null);
   const [drill, setDrill] = useState<Question[] | null>(null);
@@ -188,7 +197,9 @@ function PracticePage() {
       errorReview && mode === "unit_quiz" ? recentErrorTypes(sequence) : undefined,
       processGroupFilter || undefined,
       performanceDomainFilter || undefined,
+      focusTagFilter || undefined,
     );
+
 
     if (!built.length) {
       setStartError(NO_QUESTIONS_MESSAGE);
@@ -425,6 +436,27 @@ function PracticePage() {
                 ))}
               </select>
             </label>
+
+            <label className="mt-3 block text-xs font-medium">
+              Temática transversal
+              <select
+                value={focusTagFilter}
+                onChange={(e) => {
+                  setFocusTagFilter(e.target.value);
+                  setStartError(null);
+                }}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              >
+                <option value="">Todas las temáticas</option>
+                {Object.entries(FOCUS_TAG_LABELS).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+
 
             <p className="mt-1 text-xs text-muted-foreground">
               El enfoque solo se aplica a los modos de práctica; el simulacro completo mantiene su reparto real.
