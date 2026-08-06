@@ -255,12 +255,6 @@ function RegistroPage() {
                   </p>
                   <p>
                     <strong className="font-semibold text-foreground">
-                      Responsable del tratamiento:
-                    </strong>{" "}
-                    [Razón social completa], con NIF [NIF/CIF] y domicilio en [dirección completa].
-                  </p>
-                  <p>
-                    <strong className="font-semibold text-foreground">
                       Encargados de tratamiento:
                     </strong>{" "}
                     usamos Supabase (alojamiento y autenticación), Resend (envío de correos y del
@@ -271,9 +265,21 @@ function RegistroPage() {
                   <p>
                     <strong className="font-semibold text-foreground">Tus derechos:</strong> puedes
                     ejercer tus derechos de acceso, rectificación, supresión, limitación,
-                    portabilidad y oposición escribiendo a [email de contacto]. Más detalles en
-                    nuestra Política de Privacidad completa.
+                    portabilidad y oposición en cualquier momento. Consulta los datos del
+                    responsable del tratamiento y el canal de contacto en la{" "}
+                    <Link
+                      to="/politica-de-privacidad"
+                      className="font-semibold text-foreground hover:underline"
+                    >
+                      Política de Privacidad
+                    </Link>{" "}
+                    y en el{" "}
+                    <Link to="/aviso-legal" className="font-semibold text-foreground hover:underline">
+                      Aviso Legal
+                    </Link>
+                    .
                   </p>
+
                 </div>
               </form>
 
