@@ -197,7 +197,9 @@ function PracticePage() {
       errorReview && mode === "unit_quiz" ? recentErrorTypes(sequence) : undefined,
       processGroupFilter || undefined,
       performanceDomainFilter || undefined,
+      focusTagFilter || undefined,
     );
+
 
     if (!built.length) {
       setStartError(NO_QUESTIONS_MESSAGE);
