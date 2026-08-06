@@ -437,6 +437,27 @@ function PracticePage() {
               </select>
             </label>
 
+            <label className="mt-3 block text-xs font-medium">
+              Temática transversal
+              <select
+                value={focusTagFilter}
+                onChange={(e) => {
+                  setFocusTagFilter(e.target.value);
+                  setStartError(null);
+                }}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              >
+                <option value="">Todas las temáticas</option>
+                {Object.entries(FOCUS_TAG_LABELS).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+
+
             <p className="mt-1 text-xs text-muted-foreground">
               El enfoque solo se aplica a los modos de práctica; el simulacro completo mantiene su reparto real.
             </p>
