@@ -142,7 +142,9 @@ function PracticePage() {
   const [selected, setSelected] = useState<DomainCode[]>(
     search.dominio && ALL_DOMAINS.includes(search.dominio as DomainCode)
       ? [search.dominio as DomainCode]
-      : ["process"],
+      : search.foco
+        ? [...ALL_DOMAINS]
+        : ["process"],
   );
   const [mode, setMode] = useState<PracticeMode>(search.modo ?? "domain_drill");
   const [unitId, setUnitId] = useState<string>(search.unidad ?? "");
@@ -156,6 +158,10 @@ function PracticePage() {
   const [performanceDomainFilter, setPerformanceDomainFilter] = useState<string>(
     search.desempeno && search.desempeno in PERFORMANCE_DOMAIN_LABELS ? search.desempeno : "",
   );
+  const [focusTagFilter, setFocusTagFilter] = useState<string>(
+    search.foco && search.foco in FOCUS_TAG_LABELS ? search.foco : "",
+  );
+
 
   const [startError, setStartError] = useState<string | null>(null);
   const [drill, setDrill] = useState<Question[] | null>(null);
