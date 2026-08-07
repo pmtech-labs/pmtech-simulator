@@ -329,7 +329,7 @@ function ReviewPage() {
               type="number"
               placeholder="desde"
               value={numFrom}
-              onChange={(e) => setNumFrom(e.target.value)}
+              onChange={(e) => { setNumFrom(e.target.value); setPage(1); }}
               className={cn(inputCls, "w-20")}
             />
             <span>–</span>
@@ -337,12 +337,12 @@ function ReviewPage() {
               type="number"
               placeholder="hasta"
               value={numTo}
-              onChange={(e) => setNumTo(e.target.value)}
+              onChange={(e) => { setNumTo(e.target.value); setPage(1); }}
               className={cn(inputCls, "w-20")}
             />
           </div>
 
-          <select value={model} onChange={(e) => setModel(e.target.value)} className={inputCls}>
+          <select value={model} onChange={(e) => { setModel(e.target.value); setPage(1); }} className={inputCls}>
             <option value="">Todos los modelos</option>
             {modelOptions.map((m) => (
               <option key={m} value={m}>
