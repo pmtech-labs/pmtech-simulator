@@ -59,9 +59,12 @@ function ReviewPage() {
 
   const [minUsed, setMinUsed] = useState("");
   const [maxSuccess, setMaxSuccess] = useState("");
+  const [numFrom, setNumFrom] = useState("");
+  const [numTo, setNumTo] = useState("");
   const [model, setModel] = useState("");
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<string[]>([]);
+
 
   const { defs: tagDefs } = useTagDefs();
   const domains = useQuery({ queryKey: ["eco-domains"], queryFn: listEcoDomains });
