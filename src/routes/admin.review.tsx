@@ -442,6 +442,11 @@ function QuestionRow({
         <td className="px-3 py-2">
           <input type="checkbox" checked={checked} onChange={(e) => onCheck(e.target.checked)} />
         </td>
+        <td className="px-3 py-2">
+          <span className="num rounded-md bg-secondary px-2 py-0.5 text-xs font-semibold text-foreground">
+            #{q.question_number}
+          </span>
+        </td>
         <td className="max-w-md px-3 py-2">
           <button onClick={() => setOpen((o) => !o)} className="flex items-start gap-1.5 text-left">
             <ChevronDown className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", open && "rotate-180")} />
