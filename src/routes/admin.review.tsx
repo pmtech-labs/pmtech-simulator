@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChevronDown, Loader2 } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, Download, Loader2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -27,6 +27,7 @@ import {
   type AdminQuestion,
 } from "@/services/adminService";
 import { cn } from "@/lib/utils";
+import { buildCsv, downloadCsv } from "@/lib/export";
 import { useTagDefs } from "@/hooks/useTagDefs";
 
 
@@ -46,6 +47,9 @@ const APPROACHES = ["predictive", "agile", "hybrid"];
 const PAGE_SIZE = 20;
 const inputCls = "rounded-md border border-border bg-background px-2.5 py-1.5 text-xs";
 
+type SortKey = "question_number" | "status";
+
+
 function ReviewPage() {
   const email = useAdminEmail();
   const qc = useQueryClient();
@@ -63,7 +67,10 @@ function ReviewPage() {
   const [numTo, setNumTo] = useState("");
   const [model, setModel] = useState("");
   const [page, setPage] = useState(1);
+  const [sortKey, setSortKey] = useState<SortKey>("question_number");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [selected, setSelected] = useState<string[]>([]);
+
 
 
   const { defs: tagDefs } = useTagDefs();
@@ -101,14 +108,57 @@ function ReviewPage() {
   const rows = useMemo(() => {
     const from = numFrom ? Number(numFrom) : null;
     const to = numTo ? Number(numTo) : null;
-    return allRows.filter((r) => {
+    const filtered = allRows.filter((r) => {
       if (model && (r.generation_model_id ?? "__manual__") !== model) return false;
       if (from !== null && r.question_number < from) return false;
       if (to !== null && r.question_number > to) return false;
       return true;
     });
-  }, [allRows, model, numFrom, numTo]);
+    const dir = sortDir === "asc" ? 1 : -1;
+    return [...filtered].sort((a, b) => {
+      if (sortKey === "status") {
+        const cmp = String(a.status).localeCompare(String(b.status));
+        if (cmp !== 0) return cmp * dir;
+        return (a.question_number - b.question_number) * dir;
+      }
+      return (a.question_number - b.question_number) * dir;
+    });
+  }, [allRows, model, numFrom, numTo, sortKey, sortDir]);
   const clientFiltered = Boolean(model || numFrom || numTo);
+
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
+
+  const exportCsv = () => {
+    if (rows.length === 0) {
+      toast.error("No hay preguntas que exportar con los filtros actuales");
+      return;
+    }
+    const csv = buildCsv(
+      ["Nº", "Estado", "Dominio", "Tarea", "Enfoque", "Dificultad", "Usos", "% acierto", "Enunciado", "Motivo de rechazo"],
+      rows.map((r) => [
+        r.question_number,
+        r.status,
+        r.domain_name ?? "",
+        r.task_title ?? "",
+        r.approach ?? "",
+        r.difficulty ?? "",
+        r.times_used_in_exams ?? r.times_answered ?? 0,
+        r.success_rate_pct ?? "",
+        r.stem,
+        r.status === "retired" ? (r.latest_rejection_reason ?? "") : "",
+      ]),
+    );
+    const stamp = new Date().toISOString().slice(0, 10);
+    downloadCsv(`preguntas-${stamp}.csv`, csv);
+    toast.success(`${rows.length} pregunta(s) exportadas`);
+  };
+
 
 
   const [rejectTarget, setRejectTarget] = useState<{ ids: string[]; label: string } | null>(null);
@@ -269,7 +319,16 @@ function ReviewPage() {
               </option>
             ))}
           </select>
+
+          <button
+            type="button"
+            onClick={exportCsv}
+            className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 text-xs font-medium hover:bg-secondary"
+          >
+            <Download className="h-3.5 w-3.5" /> Exportar CSV
+          </button>
         </div>
+
 
 
         {selected.length > 0 && (
@@ -337,9 +396,13 @@ function ReviewPage() {
                       onChange={(e) => setSelected(e.target.checked ? rows.map((r) => r.id) : [])}
                     />
                   </th>
-                  <th className="px-3 py-2">Nº</th>
+                  <th className="px-3 py-2">
+                    <SortBtn label="Nº" active={sortKey === "question_number"} dir={sortDir} onClick={() => toggleSort("question_number")} />
+                  </th>
                   <th className="px-3 py-2">Enunciado</th>
-                  <th className="px-3 py-2">Estado</th>
+                  <th className="px-3 py-2">
+                    <SortBtn label="Estado" active={sortKey === "status"} dir={sortDir} onClick={() => toggleSort("status")} />
+                  </th>
                   <th className="px-3 py-2">Dominio / Tarea</th>
                   <th className="px-3 py-2">Generado con</th>
                   <th className="px-3 py-2">Etiquetas</th>
@@ -449,6 +512,31 @@ function ReviewPage() {
 
       </div>
     </AdminShell>
+  );
+}
+
+function SortBtn({
+  label,
+  active,
+  dir,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  dir: "asc" | "desc";
+  onClick: () => void;
+}) {
+  const Icon = dir === "asc" ? ArrowUp : ArrowDown;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn("inline-flex items-center gap-1 hover:text-foreground", active && "text-primary")}
+      title={`Ordenar por ${label}`}
+    >
+      {label}
+      {active && <Icon className="h-3 w-3" />}
+    </button>
   );
 }
 
