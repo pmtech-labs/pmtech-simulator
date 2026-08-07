@@ -98,17 +98,22 @@ function ReviewPage() {
     for (const r of allRows) set.add(r.generation_model_id ?? "__manual__");
     return Array.from(set).sort();
   }, [allRows]);
-  const rows = useMemo(
-    () =>
-      model
-        ? allRows.filter((r) => (r.generation_model_id ?? "__manual__") === model)
-        : allRows,
-    [allRows, model],
-  );
+  const rows = useMemo(() => {
+    const from = numFrom ? Number(numFrom) : null;
+    const to = numTo ? Number(numTo) : null;
+    return allRows.filter((r) => {
+      if (model && (r.generation_model_id ?? "__manual__") !== model) return false;
+      if (from !== null && r.question_number < from) return false;
+      if (to !== null && r.question_number > to) return false;
+      return true;
+    });
+  }, [allRows, model, numFrom, numTo]);
+  const clientFiltered = Boolean(model || numFrom || numTo);
 
 
   const [rejectTarget, setRejectTarget] = useState<{ ids: string[]; label: string } | null>(null);
   const [rejectReason, setRejectReason] = useState("");
+  const [confirmStep, setConfirmStep] = useState(false);
 
   const changeStatus = useMutation({
     mutationFn: ({ ids, status, reason }: { ids: string[]; status: string; reason?: string }) =>
@@ -118,6 +123,7 @@ function ReviewPage() {
       setSelected([]);
       setRejectTarget(null);
       setRejectReason("");
+      setConfirmStep(false);
       qc.invalidateQueries({ queryKey: ["admin-questions"] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -125,8 +131,10 @@ function ReviewPage() {
 
   const askRetire = (ids: string[], label: string) => {
     setRejectReason("");
+    setConfirmStep(false);
     setRejectTarget({ ids, label });
   };
+
 
 
   const remove = useMutation({
