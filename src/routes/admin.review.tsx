@@ -424,7 +424,6 @@ function ReviewPage() {
                     <SelectAllCheckbox
                       totalFiltered={totalFiltered}
                       selectedCount={selected.length}
-                      visibleCount={rows.length}
                       onChange={(checked) =>
                         setSelected(checked ? filteredRows.map((r) => r.id) : [])
                       }
