@@ -59,9 +59,12 @@ function ReviewPage() {
 
   const [minUsed, setMinUsed] = useState("");
   const [maxSuccess, setMaxSuccess] = useState("");
+  const [numFrom, setNumFrom] = useState("");
+  const [numTo, setNumTo] = useState("");
   const [model, setModel] = useState("");
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<string[]>([]);
+
 
   const { defs: tagDefs } = useTagDefs();
   const domains = useQuery({ queryKey: ["eco-domains"], queryFn: listEcoDomains });
@@ -95,17 +98,22 @@ function ReviewPage() {
     for (const r of allRows) set.add(r.generation_model_id ?? "__manual__");
     return Array.from(set).sort();
   }, [allRows]);
-  const rows = useMemo(
-    () =>
-      model
-        ? allRows.filter((r) => (r.generation_model_id ?? "__manual__") === model)
-        : allRows,
-    [allRows, model],
-  );
+  const rows = useMemo(() => {
+    const from = numFrom ? Number(numFrom) : null;
+    const to = numTo ? Number(numTo) : null;
+    return allRows.filter((r) => {
+      if (model && (r.generation_model_id ?? "__manual__") !== model) return false;
+      if (from !== null && r.question_number < from) return false;
+      if (to !== null && r.question_number > to) return false;
+      return true;
+    });
+  }, [allRows, model, numFrom, numTo]);
+  const clientFiltered = Boolean(model || numFrom || numTo);
 
 
   const [rejectTarget, setRejectTarget] = useState<{ ids: string[]; label: string } | null>(null);
   const [rejectReason, setRejectReason] = useState("");
+  const [confirmStep, setConfirmStep] = useState(false);
 
   const changeStatus = useMutation({
     mutationFn: ({ ids, status, reason }: { ids: string[]; status: string; reason?: string }) =>
@@ -115,6 +123,7 @@ function ReviewPage() {
       setSelected([]);
       setRejectTarget(null);
       setRejectReason("");
+      setConfirmStep(false);
       qc.invalidateQueries({ queryKey: ["admin-questions"] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -122,8 +131,10 @@ function ReviewPage() {
 
   const askRetire = (ids: string[], label: string) => {
     setRejectReason("");
+    setConfirmStep(false);
     setRejectTarget({ ids, label });
   };
+
 
 
   const remove = useMutation({
@@ -231,6 +242,25 @@ function ReviewPage() {
             onChange={(e) => { setMaxSuccess(e.target.value); setPage(1); }}
             className={cn(inputCls, "w-32")}
           />
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <span>Nº</span>
+            <input
+              type="number"
+              placeholder="desde"
+              value={numFrom}
+              onChange={(e) => setNumFrom(e.target.value)}
+              className={cn(inputCls, "w-20")}
+            />
+            <span>–</span>
+            <input
+              type="number"
+              placeholder="hasta"
+              value={numTo}
+              onChange={(e) => setNumTo(e.target.value)}
+              className={cn(inputCls, "w-20")}
+            />
+          </div>
+
           <select value={model} onChange={(e) => setModel(e.target.value)} className={inputCls}>
             <option value="">Todos los modelos</option>
             {modelOptions.map((m) => (
@@ -269,7 +299,16 @@ function ReviewPage() {
             </BulkBtn>
             <BulkBtn
               disabled={busy || selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")}
-              onClick={() => askRetire(selected, `${selected.length} pregunta(s) seleccionada(s)`)}
+              onClick={() =>
+                askRetire(
+                  selected,
+                  selected
+                    .map((id) => allRows.find((r) => r.id === id)?.question_number)
+                    .filter(Boolean)
+                    .map((n) => `#${n}`)
+                    .join(", ") || `${selected.length} pregunta(s)`,
+                )
+              }
               title={
                 selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")
                   ? "Todas las seleccionadas ya están retiradas"
@@ -329,7 +368,7 @@ function ReviewPage() {
             <Pager
               page={page}
               pageSize={PAGE_SIZE}
-              total={model ? rows.length : (questions.data?.total ?? rows.length)}
+              total={clientFiltered ? rows.length : (questions.data?.total ?? rows.length)}
               onPage={setPage}
             />
           </>
@@ -338,45 +377,76 @@ function ReviewPage() {
         <Dialog
           open={Boolean(rejectTarget)}
           onOpenChange={(open) => {
-            if (!open) setRejectTarget(null);
+            if (!open) {
+              setRejectTarget(null);
+              setConfirmStep(false);
+            }
           }}
         >
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Retirar pregunta {rejectTarget?.label}</DialogTitle>
+              <DialogTitle>
+                {confirmStep ? "Confirmar retirada" : `Retirar pregunta ${rejectTarget?.label ?? ""}`}
+              </DialogTitle>
               <DialogDescription>
-                Esta pregunta no se borra, queda retirada del banco. Explica brevemente por qué no
-                tiene calidad suficiente — este motivo se usará automáticamente para mejorar la
-                generación de preguntas futuras de esta misma tarea.
+                {confirmStep
+                  ? "Revisa antes de confirmar. Esta acción retira las preguntas del banco."
+                  : "Las preguntas no se borran, quedan retiradas del banco. Explica brevemente por qué no tienen calidad suficiente — este motivo se usará automáticamente para mejorar la generación de preguntas futuras de esta misma tarea."}
               </DialogDescription>
             </DialogHeader>
-            <Textarea
-              placeholder="Ej: El distractor C es demasiado obvio, cualquier candidato lo descarta sin razonar."
-              value={rejectReason}
-              onChange={(e) => setRejectReason(e.target.value)}
-              rows={3}
-            />
+            {confirmStep ? (
+              <div className="space-y-2 rounded-md border border-border bg-muted/40 p-3 text-sm">
+                <p>
+                  <span className="font-semibold">Preguntas: </span>
+                  <span className="num">{rejectTarget?.label}</span>{" "}
+                  <span className="text-muted-foreground">
+                    ({rejectTarget?.ids.length} en total)
+                  </span>
+                </p>
+                <p>
+                  <span className="font-semibold">Motivo: </span>
+                  {rejectReason.trim().length > 160
+                    ? `${rejectReason.trim().slice(0, 160)}…`
+                    : rejectReason.trim()}
+                </p>
+              </div>
+            ) : (
+              <Textarea
+                placeholder="Ej: El distractor C es demasiado obvio, cualquier candidato lo descarta sin razonar."
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                rows={3}
+              />
+            )}
             <DialogFooter>
-              <Button variant="outline" onClick={() => setRejectTarget(null)}>
-                Cancelar
+              <Button
+                variant="outline"
+                onClick={() => (confirmStep ? setConfirmStep(false) : setRejectTarget(null))}
+              >
+                {confirmStep ? "Volver" : "Cancelar"}
               </Button>
               <Button
                 variant="destructive"
                 disabled={!rejectReason.trim() || busy}
-                onClick={() =>
-                  rejectTarget &&
-                  changeStatus.mutate({
-                    ids: rejectTarget.ids,
-                    status: "retired",
-                    reason: rejectReason.trim(),
-                  })
-                }
+                onClick={() => {
+                  if (!confirmStep) {
+                    setConfirmStep(true);
+                    return;
+                  }
+                  if (rejectTarget)
+                    changeStatus.mutate({
+                      ids: rejectTarget.ids,
+                      status: "retired",
+                      reason: rejectReason.trim(),
+                    });
+                }}
               >
-                Retirar pregunta
+                {confirmStep ? "Sí, retirar definitivamente" : "Continuar"}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
       </div>
     </AdminShell>
   );
@@ -452,6 +522,15 @@ function QuestionRow({
             <ChevronDown className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", open && "rotate-180")} />
             <span className="line-clamp-2">{q.stem}</span>
           </button>
+          {q.status === "retired" && q.latest_rejection_reason && (
+            <p
+              title={q.latest_rejection_reason}
+              className="mt-1 line-clamp-2 rounded-md bg-destructive/10 px-2 py-1 text-[11px] text-destructive"
+            >
+              <span className="font-semibold">Motivo: </span>
+              {q.latest_rejection_reason}
+            </p>
+          )}
         </td>
         <td className="px-3 py-2">
           <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
