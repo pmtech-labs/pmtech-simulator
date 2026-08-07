@@ -242,6 +242,25 @@ function ReviewPage() {
             onChange={(e) => { setMaxSuccess(e.target.value); setPage(1); }}
             className={cn(inputCls, "w-32")}
           />
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <span>Nº</span>
+            <input
+              type="number"
+              placeholder="desde"
+              value={numFrom}
+              onChange={(e) => setNumFrom(e.target.value)}
+              className={cn(inputCls, "w-20")}
+            />
+            <span>–</span>
+            <input
+              type="number"
+              placeholder="hasta"
+              value={numTo}
+              onChange={(e) => setNumTo(e.target.value)}
+              className={cn(inputCls, "w-20")}
+            />
+          </div>
+
           <select value={model} onChange={(e) => setModel(e.target.value)} className={inputCls}>
             <option value="">Todos los modelos</option>
             {modelOptions.map((m) => (
