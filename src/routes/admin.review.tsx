@@ -368,7 +368,7 @@ function ReviewPage() {
             <Pager
               page={page}
               pageSize={PAGE_SIZE}
-              total={model ? rows.length : (questions.data?.total ?? rows.length)}
+              total={clientFiltered ? rows.length : (questions.data?.total ?? rows.length)}
               onPage={setPage}
             />
           </>
@@ -377,45 +377,76 @@ function ReviewPage() {
         <Dialog
           open={Boolean(rejectTarget)}
           onOpenChange={(open) => {
-            if (!open) setRejectTarget(null);
+            if (!open) {
+              setRejectTarget(null);
+              setConfirmStep(false);
+            }
           }}
         >
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Retirar pregunta {rejectTarget?.label}</DialogTitle>
+              <DialogTitle>
+                {confirmStep ? "Confirmar retirada" : `Retirar pregunta ${rejectTarget?.label ?? ""}`}
+              </DialogTitle>
               <DialogDescription>
-                Esta pregunta no se borra, queda retirada del banco. Explica brevemente por qué no
-                tiene calidad suficiente — este motivo se usará automáticamente para mejorar la
-                generación de preguntas futuras de esta misma tarea.
+                {confirmStep
+                  ? "Revisa antes de confirmar. Esta acción retira las preguntas del banco."
+                  : "Las preguntas no se borran, quedan retiradas del banco. Explica brevemente por qué no tienen calidad suficiente — este motivo se usará automáticamente para mejorar la generación de preguntas futuras de esta misma tarea."}
               </DialogDescription>
             </DialogHeader>
-            <Textarea
-              placeholder="Ej: El distractor C es demasiado obvio, cualquier candidato lo descarta sin razonar."
-              value={rejectReason}
-              onChange={(e) => setRejectReason(e.target.value)}
-              rows={3}
-            />
+            {confirmStep ? (
+              <div className="space-y-2 rounded-md border border-border bg-muted/40 p-3 text-sm">
+                <p>
+                  <span className="font-semibold">Preguntas: </span>
+                  <span className="num">{rejectTarget?.label}</span>{" "}
+                  <span className="text-muted-foreground">
+                    ({rejectTarget?.ids.length} en total)
+                  </span>
+                </p>
+                <p>
+                  <span className="font-semibold">Motivo: </span>
+                  {rejectReason.trim().length > 160
+                    ? `${rejectReason.trim().slice(0, 160)}…`
+                    : rejectReason.trim()}
+                </p>
+              </div>
+            ) : (
+              <Textarea
+                placeholder="Ej: El distractor C es demasiado obvio, cualquier candidato lo descarta sin razonar."
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                rows={3}
+              />
+            )}
             <DialogFooter>
-              <Button variant="outline" onClick={() => setRejectTarget(null)}>
-                Cancelar
+              <Button
+                variant="outline"
+                onClick={() => (confirmStep ? setConfirmStep(false) : setRejectTarget(null))}
+              >
+                {confirmStep ? "Volver" : "Cancelar"}
               </Button>
               <Button
                 variant="destructive"
                 disabled={!rejectReason.trim() || busy}
-                onClick={() =>
-                  rejectTarget &&
-                  changeStatus.mutate({
-                    ids: rejectTarget.ids,
-                    status: "retired",
-                    reason: rejectReason.trim(),
-                  })
-                }
+                onClick={() => {
+                  if (!confirmStep) {
+                    setConfirmStep(true);
+                    return;
+                  }
+                  if (rejectTarget)
+                    changeStatus.mutate({
+                      ids: rejectTarget.ids,
+                      status: "retired",
+                      reason: rejectReason.trim(),
+                    });
+                }}
               >
-                Retirar pregunta
+                {confirmStep ? "Sí, retirar definitivamente" : "Continuar"}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
       </div>
     </AdminShell>
   );
