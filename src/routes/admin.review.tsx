@@ -94,9 +94,27 @@ function ReviewPage() {
     max_success_rate: maxSuccess ? Number(maxSuccess) : undefined,
   };
 
+  // Se descarga el conjunto COMPLETO que cumple los filtros de servidor, para
+  // que la búsqueda por rango, el modelo, la ordenación y la selección operen
+  // sobre todos los registros y no solo sobre la página visible.
   const questions = useQuery({
-    queryKey: ["admin-questions", filters, page],
-    queryFn: () => listQuestions(filters, page, PAGE_SIZE),
+    queryKey: ["admin-questions", filters],
+    queryFn: async () => {
+      const CHUNK = 200;
+      const first = await listQuestions(filters, 1, CHUNK);
+      const rows = [...first.rows];
+      const total = first.total ?? rows.length;
+      let p = 2;
+      while (rows.length < total && first.rows.length === CHUNK) {
+        const next = await listQuestions(filters, p, CHUNK);
+        if (next.rows.length === 0) break;
+        rows.push(...next.rows);
+        if (next.rows.length < CHUNK) break;
+        p += 1;
+        if (p > 50) break;
+      }
+      return { rows, total: rows.length };
+    },
   });
 
   const allRows = questions.data?.rows ?? [];
@@ -105,7 +123,9 @@ function ReviewPage() {
     for (const r of allRows) set.add(r.generation_model_id ?? "__manual__");
     return Array.from(set).sort();
   }, [allRows]);
-  const rows = useMemo(() => {
+
+  /** Todas las preguntas que cumplen filtros de cliente + ordenación (sin paginar). */
+  const filteredRows = useMemo(() => {
     const from = numFrom ? Number(numFrom) : null;
     const to = numTo ? Number(numTo) : null;
     const filtered = allRows.filter((r) => {
@@ -124,9 +144,18 @@ function ReviewPage() {
       return (a.question_number - b.question_number) * dir;
     });
   }, [allRows, model, numFrom, numTo, sortKey, sortDir]);
-  const clientFiltered = Boolean(model || numFrom || numTo);
+
+  const totalFiltered = filteredRows.length;
+  const pageCount = Math.max(1, Math.ceil(totalFiltered / PAGE_SIZE));
+  const safePage = Math.min(page, pageCount);
+  /** Solo la página visible. */
+  const rows = useMemo(
+    () => filteredRows.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
+    [filteredRows, safePage],
+  );
 
   const toggleSort = (key: SortKey) => {
+    setPage(1);
     if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
     else {
       setSortKey(key);
@@ -134,14 +163,15 @@ function ReviewPage() {
     }
   };
 
+
   const exportCsv = () => {
-    if (rows.length === 0) {
+    if (filteredRows.length === 0) {
       toast.error("No hay preguntas que exportar con los filtros actuales");
       return;
     }
     const csv = buildCsv(
       ["Nº", "Estado", "Dominio", "Tarea", "Enfoque", "Dificultad", "Usos", "% acierto", "Enunciado", "Motivo de rechazo"],
-      rows.map((r) => [
+      filteredRows.map((r) => [
         r.question_number,
         r.status,
         r.domain_name ?? "",
@@ -156,8 +186,9 @@ function ReviewPage() {
     );
     const stamp = new Date().toISOString().slice(0, 10);
     downloadCsv(`preguntas-${stamp}.csv`, csv);
-    toast.success(`${rows.length} pregunta(s) exportadas`);
+    toast.success(`${filteredRows.length} pregunta(s) exportadas`);
   };
+
 
 
 
@@ -298,7 +329,7 @@ function ReviewPage() {
               type="number"
               placeholder="desde"
               value={numFrom}
-              onChange={(e) => setNumFrom(e.target.value)}
+              onChange={(e) => { setNumFrom(e.target.value); setPage(1); }}
               className={cn(inputCls, "w-20")}
             />
             <span>–</span>
@@ -306,12 +337,12 @@ function ReviewPage() {
               type="number"
               placeholder="hasta"
               value={numTo}
-              onChange={(e) => setNumTo(e.target.value)}
+              onChange={(e) => { setNumTo(e.target.value); setPage(1); }}
               className={cn(inputCls, "w-20")}
             />
           </div>
 
-          <select value={model} onChange={(e) => setModel(e.target.value)} className={inputCls}>
+          <select value={model} onChange={(e) => { setModel(e.target.value); setPage(1); }} className={inputCls}>
             <option value="">Todos los modelos</option>
             {modelOptions.map((m) => (
               <option key={m} value={m}>
@@ -392,10 +423,14 @@ function ReviewPage() {
                   <th className="w-8 px-3 py-2">
                     <input
                       type="checkbox"
-                      checked={rows.length > 0 && selected.length === rows.length}
-                      onChange={(e) => setSelected(e.target.checked ? rows.map((r) => r.id) : [])}
+                      title="Seleccionar todas las preguntas filtradas (no solo esta página)"
+                      checked={totalFiltered > 0 && selected.length === totalFiltered}
+                      onChange={(e) =>
+                        setSelected(e.target.checked ? filteredRows.map((r) => r.id) : [])
+                      }
                     />
                   </th>
+
                   <th className="px-3 py-2">
                     <SortBtn label="Nº" active={sortKey === "question_number"} dir={sortDir} onClick={() => toggleSort("question_number")} />
                   </th>
@@ -429,11 +464,12 @@ function ReviewPage() {
               ))}
             </DataTable>
             <Pager
-              page={page}
+              page={safePage}
               pageSize={PAGE_SIZE}
-              total={clientFiltered ? rows.length : (questions.data?.total ?? rows.length)}
+              total={totalFiltered}
               onPage={setPage}
             />
+
           </>
         )}
 
