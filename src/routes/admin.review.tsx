@@ -20,8 +20,12 @@ import { cn } from "@/lib/utils";
 import { useTagDefs } from "@/hooks/useTagDefs";
 
 
+interface ReviewSearch {
+  job?: string;
+}
+
 export const Route = createFileRoute("/admin/review")({
-  validateSearch: (search: Record<string, unknown>) => ({
+  validateSearch: (search: Record<string, unknown>): ReviewSearch => ({
     job: typeof search.job === "string" ? search.job : undefined,
   }),
   component: ReviewPage,
