@@ -288,6 +288,7 @@ function ReviewPage() {
                       onChange={(e) => setSelected(e.target.checked ? rows.map((r) => r.id) : [])}
                     />
                   </th>
+                  <th className="px-3 py-2">Nº</th>
                   <th className="px-3 py-2">Enunciado</th>
                   <th className="px-3 py-2">Estado</th>
                   <th className="px-3 py-2">Dominio / Tarea</th>
