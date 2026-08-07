@@ -576,6 +576,57 @@ function SortBtn({
   );
 }
 
+function SelectAllCheckbox({
+  totalFiltered,
+  selectedCount,
+  visibleCount,
+  onChange,
+}: {
+  totalFiltered: number;
+  selectedCount: number;
+  visibleCount: number;
+  onChange: (checked: boolean) => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const allSelected = totalFiltered > 0 && selectedCount === totalFiltered;
+  const someSelected = selectedCount > 0 && selectedCount < totalFiltered;
+  const someVisibleSelected = visibleCount > 0 && rowsSomeSelected(visibleCount, selectedCount, totalFiltered);
+
+  useEffect(() => {
+    if (ref.current) ref.current.indeterminate = someSelected;
+  }, [someSelected]);
+
+  return (
+    <div className="flex flex-col items-start gap-1">
+      <input
+        ref={ref}
+        type="checkbox"
+        title="Seleccionar todas las preguntas filtradas (no solo esta página)"
+        checked={allSelected}
+        onChange={(e) => onChange(e.target.checked)}
+      />
+      {selectedCount > 0 && (
+        <span
+          className={cn(
+            "max-w-[10rem] text-[10px] leading-tight",
+            allSelected ? "font-semibold text-primary" : "text-muted-foreground",
+          )}
+        >
+          {allSelected
+            ? `Todas las ${totalFiltered} filtradas`
+            : someVisibleSelected
+              ? `${selectedCount} de ${totalFiltered} filtradas`
+              : `${selectedCount} seleccionadas`}
+        </span>
+      )}
+    </div>
+  );
+}
+
+function rowsSomeSelected(visibleCount: number, selectedCount: number, totalFiltered: number) {
+  return selectedCount > 0 && selectedCount <= totalFiltered;
+}
+
 function BulkBtn({
   children,
   onClick,
