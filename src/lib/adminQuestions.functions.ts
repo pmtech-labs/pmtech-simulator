@@ -56,12 +56,25 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
       domainName = domain?.name ?? null;
     }
 
+    let latestRejectionReason: string | null = null;
+    if (q.status === "retired") {
+      const { data: rejection } = await db
+        .from("question_rejections")
+        .select("reason")
+        .eq("question_id", data.id)
+        .order("rejected_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      latestRejectionReason = rejection?.reason ?? null;
+    }
+
     return {
       ...q,
       task_title: task ? `${task.task_number}. ${task.title}` : null,
       domain_name: domainName,
       cluster_title: cluster?.data?.title ?? null,
       cluster_scenario: cluster?.data?.scenario_text ?? null,
+      latest_rejection_reason: latestRejectionReason,
       tag_codes: (tagRows ?? []).map((t) => t.tag_code),
     };
   });
