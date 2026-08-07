@@ -579,18 +579,15 @@ function SortBtn({
 function SelectAllCheckbox({
   totalFiltered,
   selectedCount,
-  visibleCount,
   onChange,
 }: {
   totalFiltered: number;
   selectedCount: number;
-  visibleCount: number;
   onChange: (checked: boolean) => void;
 }) {
   const ref = useRef<HTMLInputElement>(null);
   const allSelected = totalFiltered > 0 && selectedCount === totalFiltered;
   const someSelected = selectedCount > 0 && selectedCount < totalFiltered;
-  const someVisibleSelected = visibleCount > 0 && rowsSomeSelected(visibleCount, selectedCount, totalFiltered);
 
   useEffect(() => {
     if (ref.current) ref.current.indeterminate = someSelected;
@@ -614,17 +611,11 @@ function SelectAllCheckbox({
         >
           {allSelected
             ? `Todas las ${totalFiltered} filtradas`
-            : someVisibleSelected
-              ? `${selectedCount} de ${totalFiltered} filtradas`
-              : `${selectedCount} seleccionadas`}
+            : `${selectedCount} de ${totalFiltered} filtradas`}
         </span>
       )}
     </div>
   );
-}
-
-function rowsSomeSelected(visibleCount: number, selectedCount: number, totalFiltered: number) {
-  return selectedCount > 0 && selectedCount <= totalFiltered;
 }
 
 function BulkBtn({
