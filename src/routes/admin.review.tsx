@@ -503,7 +503,7 @@ function QuestionRow({
             <BulkBtn
               disabled={busy || q.status === "retired"}
               title={q.status === "retired" ? "Ya está retirada" : "Retirar pregunta"}
-              onClick={() => onStatus("retired")}
+              onClick={onRetire}
             >
               Retirar
             </BulkBtn>
