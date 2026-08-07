@@ -515,6 +515,31 @@ function ReviewPage() {
   );
 }
 
+function SortBtn({
+  label,
+  active,
+  dir,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  dir: "asc" | "desc";
+  onClick: () => void;
+}) {
+  const Icon = dir === "asc" ? ArrowUp : ArrowDown;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn("inline-flex items-center gap-1 hover:text-foreground", active && "text-primary")}
+      title={`Ordenar por ${label}`}
+    >
+      {label}
+      {active && <Icon className="h-3 w-3" />}
+    </button>
+  );
+}
+
 function BulkBtn({
   children,
   onClick,
