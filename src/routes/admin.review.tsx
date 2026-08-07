@@ -6,6 +6,16 @@ import { toast } from "sonner";
 
 import { AdminShell, DataTable, Pager } from "@/components/admin/AdminShell";
 import { QuestionMediaPreview } from "@/components/admin/QuestionMediaPreview";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import { getAdminQuestionFn } from "@/lib/adminQuestions.functions";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import {
