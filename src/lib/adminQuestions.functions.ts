@@ -72,11 +72,12 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
  */
 export const setQuestionsStatusFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { ids: string[]; status: string }) =>
+  .inputValidator((input: { ids: string[]; status: string; reason?: string }) =>
     z
       .object({
         ids: z.array(z.string().uuid()).min(1),
         status: z.enum(["draft", "published", "retired"]),
+        reason: z.string().trim().min(1).max(2000).optional(),
       })
       .parse(input),
   )
@@ -86,6 +87,22 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
     });
     if (rpcError || !isAdmin) throw new Error("No autorizado");
 
+    // Snapshot previo: necesario para registrar el motivo del rechazo.
+    let snapshots: Array<{
+      id: string;
+      question_number: number;
+      task_id: string;
+      format: string;
+      stem: string;
+    }> = [];
+    if (data.status === "retired" && data.reason) {
+      const { data: rows } = await context.supabase
+        .from("questions")
+        .select("id, question_number, task_id, format, stem")
+        .in("id", data.ids);
+      snapshots = rows ?? [];
+    }
+
     const { data: rows, error } = await context.supabase
       .from("questions")
       .update({ status: data.status })
@@ -93,5 +110,21 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
       .select("id");
 
     if (error) throw new Error(error.message);
+
+    if (snapshots.length > 0 && data.reason) {
+      const reason = data.reason;
+      await context.supabase.from("question_rejections").insert(
+        snapshots.map((s) => ({
+          question_id: s.id,
+          question_number: s.question_number,
+          task_id: s.task_id,
+          format: s.format,
+          stem_snapshot: s.stem,
+          reason,
+          rejected_by: context.userId,
+        })),
+      );
+    }
+
     return { updated: rows?.length ?? 0 };
   });
