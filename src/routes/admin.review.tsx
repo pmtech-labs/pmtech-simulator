@@ -94,9 +94,27 @@ function ReviewPage() {
     max_success_rate: maxSuccess ? Number(maxSuccess) : undefined,
   };
 
+  // Se descarga el conjunto COMPLETO que cumple los filtros de servidor, para
+  // que la búsqueda por rango, el modelo, la ordenación y la selección operen
+  // sobre todos los registros y no solo sobre la página visible.
   const questions = useQuery({
-    queryKey: ["admin-questions", filters, page],
-    queryFn: () => listQuestions(filters, page, PAGE_SIZE),
+    queryKey: ["admin-questions", filters],
+    queryFn: async () => {
+      const CHUNK = 200;
+      const first = await listQuestions(filters, 1, CHUNK);
+      const rows = [...first.rows];
+      const total = first.total ?? rows.length;
+      let p = 2;
+      while (rows.length < total && first.rows.length === CHUNK) {
+        const next = await listQuestions(filters, p, CHUNK);
+        if (next.rows.length === 0) break;
+        rows.push(...next.rows);
+        if (next.rows.length < CHUNK) break;
+        p += 1;
+        if (p > 50) break;
+      }
+      return { rows, total: rows.length };
+    },
   });
 
   const allRows = questions.data?.rows ?? [];
@@ -105,7 +123,9 @@ function ReviewPage() {
     for (const r of allRows) set.add(r.generation_model_id ?? "__manual__");
     return Array.from(set).sort();
   }, [allRows]);
-  const rows = useMemo(() => {
+
+  /** Todas las preguntas que cumplen filtros de cliente + ordenación (sin paginar). */
+  const filteredRows = useMemo(() => {
     const from = numFrom ? Number(numFrom) : null;
     const to = numTo ? Number(numTo) : null;
     const filtered = allRows.filter((r) => {
@@ -124,7 +144,25 @@ function ReviewPage() {
       return (a.question_number - b.question_number) * dir;
     });
   }, [allRows, model, numFrom, numTo, sortKey, sortDir]);
-  const clientFiltered = Boolean(model || numFrom || numTo);
+
+  const totalFiltered = filteredRows.length;
+  const pageCount = Math.max(1, Math.ceil(totalFiltered / PAGE_SIZE));
+  const safePage = Math.min(page, pageCount);
+  /** Solo la página visible. */
+  const rows = useMemo(
+    () => filteredRows.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
+    [filteredRows, safePage],
+  );
+
+  const toggleSort = (key: SortKey) => {
+    setPage(1);
+    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
+
 
   const toggleSort = (key: SortKey) => {
     if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
