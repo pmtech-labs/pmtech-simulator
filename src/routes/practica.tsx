@@ -21,8 +21,18 @@ import { isAnswerCorrect } from "@/services/examService";
 import { listPublishedUnits } from "@/services/curriculumService";
 import type { AnswerValue, DomainCode, ErrorType, Question } from "@/types/exam";
 
+interface PracticeSearch {
+  modo?: "unit_quiz" | "cumulative" | "domain_drill";
+  unidad?: string;
+  repaso?: "errores";
+  dominio?: string;
+  enfoque?: string;
+  desempeno?: string;
+  foco?: string;
+}
+
 export const Route = createFileRoute("/practica")({
-  validateSearch: (search: Record<string, unknown>) => ({
+  validateSearch: (search: Record<string, unknown>): PracticeSearch => ({
     modo:
       search.modo === "unit_quiz" || search.modo === "cumulative" || search.modo === "domain_drill"
         ? (search.modo as "unit_quiz" | "cumulative" | "domain_drill")

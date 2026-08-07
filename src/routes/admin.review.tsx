@@ -6,6 +6,16 @@ import { toast } from "sonner";
 
 import { AdminShell, DataTable, Pager } from "@/components/admin/AdminShell";
 import { QuestionMediaPreview } from "@/components/admin/QuestionMediaPreview";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import { getAdminQuestionFn } from "@/lib/adminQuestions.functions";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import {
@@ -20,8 +30,12 @@ import { cn } from "@/lib/utils";
 import { useTagDefs } from "@/hooks/useTagDefs";
 
 
+interface ReviewSearch {
+  job?: string;
+}
+
 export const Route = createFileRoute("/admin/review")({
-  validateSearch: (search: Record<string, unknown>) => ({
+  validateSearch: (search: Record<string, unknown>): ReviewSearch => ({
     job: typeof search.job === "string" ? search.job : undefined,
   }),
   component: ReviewPage,
@@ -90,15 +104,27 @@ function ReviewPage() {
   );
 
 
+  const [rejectTarget, setRejectTarget] = useState<{ ids: string[]; label: string } | null>(null);
+  const [rejectReason, setRejectReason] = useState("");
+
   const changeStatus = useMutation({
-    mutationFn: ({ ids, status }: { ids: string[]; status: string }) => updateQuestionsStatus(ids, status),
+    mutationFn: ({ ids, status, reason }: { ids: string[]; status: string; reason?: string }) =>
+      updateQuestionsStatus(ids, status, reason),
     onSuccess: (_d, v) => {
       toast.success(`${v.ids.length} pregunta(s) → ${v.status}`);
       setSelected([]);
+      setRejectTarget(null);
+      setRejectReason("");
       qc.invalidateQueries({ queryKey: ["admin-questions"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const askRetire = (ids: string[], label: string) => {
+    setRejectReason("");
+    setRejectTarget({ ids, label });
+  };
+
 
   const remove = useMutation({
     mutationFn: deleteQuestion,
@@ -243,7 +269,7 @@ function ReviewPage() {
             </BulkBtn>
             <BulkBtn
               disabled={busy || selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")}
-              onClick={() => changeStatus.mutate({ ids: selected, status: "retired" })}
+              onClick={() => askRetire(selected, `${selected.length} pregunta(s) seleccionada(s)`)}
               title={
                 selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")
                   ? "Todas las seleccionadas ya están retiradas"
@@ -272,6 +298,7 @@ function ReviewPage() {
                       onChange={(e) => setSelected(e.target.checked ? rows.map((r) => r.id) : [])}
                     />
                   </th>
+                  <th className="px-3 py-2">Nº</th>
                   <th className="px-3 py-2">Enunciado</th>
                   <th className="px-3 py-2">Estado</th>
                   <th className="px-3 py-2">Dominio / Tarea</th>
@@ -294,6 +321,7 @@ function ReviewPage() {
                   }
                   busy={busy}
                   onStatus={(status) => changeStatus.mutate({ ids: [q.id], status })}
+                  onRetire={() => askRetire([q.id], `#${q.question_number}`)}
                   onDelete={() => remove.mutate(q.id)}
                 />
               ))}
@@ -306,6 +334,49 @@ function ReviewPage() {
             />
           </>
         )}
+
+        <Dialog
+          open={Boolean(rejectTarget)}
+          onOpenChange={(open) => {
+            if (!open) setRejectTarget(null);
+          }}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Retirar pregunta {rejectTarget?.label}</DialogTitle>
+              <DialogDescription>
+                Esta pregunta no se borra, queda retirada del banco. Explica brevemente por qué no
+                tiene calidad suficiente — este motivo se usará automáticamente para mejorar la
+                generación de preguntas futuras de esta misma tarea.
+              </DialogDescription>
+            </DialogHeader>
+            <Textarea
+              placeholder="Ej: El distractor C es demasiado obvio, cualquier candidato lo descarta sin razonar."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              rows={3}
+            />
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setRejectTarget(null)}>
+                Cancelar
+              </Button>
+              <Button
+                variant="destructive"
+                disabled={!rejectReason.trim() || busy}
+                onClick={() =>
+                  rejectTarget &&
+                  changeStatus.mutate({
+                    ids: rejectTarget.ids,
+                    status: "retired",
+                    reason: rejectReason.trim(),
+                  })
+                }
+              >
+                Retirar pregunta
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </AdminShell>
   );
@@ -339,6 +410,7 @@ function QuestionRow({
   checked,
   onCheck,
   onStatus,
+  onRetire,
   onDelete,
   busy,
 }: {
@@ -346,6 +418,7 @@ function QuestionRow({
   checked: boolean;
   onCheck: (on: boolean) => void;
   onStatus: (status: string) => void;
+  onRetire: () => void;
   onDelete: () => void;
   busy: boolean;
 }) {
@@ -368,6 +441,11 @@ function QuestionRow({
       <tr className="align-top">
         <td className="px-3 py-2">
           <input type="checkbox" checked={checked} onChange={(e) => onCheck(e.target.checked)} />
+        </td>
+        <td className="px-3 py-2">
+          <span className="num rounded-md bg-secondary px-2 py-0.5 text-xs font-semibold text-foreground">
+            #{q.question_number}
+          </span>
         </td>
         <td className="max-w-md px-3 py-2">
           <button onClick={() => setOpen((o) => !o)} className="flex items-start gap-1.5 text-left">
@@ -425,7 +503,7 @@ function QuestionRow({
             <BulkBtn
               disabled={busy || q.status === "retired"}
               title={q.status === "retired" ? "Ya está retirada" : "Retirar pregunta"}
-              onClick={() => onStatus("retired")}
+              onClick={onRetire}
             >
               Retirar
             </BulkBtn>
@@ -443,7 +521,16 @@ function QuestionRow({
       </tr>
       {open && (
         <tr>
-          <td colSpan={10} className="bg-muted/40 px-4 py-3 text-sm">
+          <td colSpan={11} className="bg-muted/40 px-4 py-3 text-sm">
+            <p className="num mb-2 text-xs font-semibold text-muted-foreground">
+              Pregunta #{q.question_number}
+            </p>
+            {q.status === "retired" && q.latest_rejection_reason && (
+              <div className="mb-3 rounded-md bg-muted p-3 text-sm text-muted-foreground">
+                <span className="font-medium">Motivo del rechazo: </span>
+                {q.latest_rejection_reason}
+              </div>
+            )}
             {q.cluster_scenario && (
               <div className="mb-3 rounded-md border border-border bg-card p-3">
                 <p className="text-[11px] font-semibold uppercase text-muted-foreground">Escenario del caso</p>

@@ -44,6 +44,10 @@ export interface GenerationJob {
 
 export interface AdminQuestion {
   id: string;
+  /** Número fijo de la pregunta en el banco (no depende del filtro ni la página). */
+  question_number: number;
+  /** Motivo de rechazo más reciente, si la pregunta está retirada. */
+  latest_rejection_reason?: string | null;
   stem: string;
   options: unknown;
   correct_answer: unknown;
@@ -90,6 +94,8 @@ export interface TaskCoverageRow {
 
 export interface QuestionStatRow {
   question_id: string;
+  question_number?: number | null;
+  latest_rejection_reason?: string | null;
   stem?: string | null;
   domain_name: string | null;
   task_title: string | null;
@@ -332,8 +338,10 @@ export async function listQuestions(
   return toPaged<AdminQuestion>(payload, pageSize);
 }
 
-export async function updateQuestionsStatus(ids: string[], status: string) {
-  return setQuestionsStatusFn({ data: { ids, status } });
+export async function updateQuestionsStatus(ids: string[], status: string, reason?: string) {
+  return setQuestionsStatusFn({
+    data: { ids, status, ...(reason?.trim() ? { reason: reason.trim() } : {}) },
+  });
 }
 
 export interface DeleteQuestionResult {

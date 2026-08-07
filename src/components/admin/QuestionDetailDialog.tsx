@@ -35,7 +35,9 @@ export function QuestionDetailDialog({ questionId, onOpenChange }: Props) {
     <Dialog open={Boolean(questionId)} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Detalle de la pregunta</DialogTitle>
+          <DialogTitle>
+            {q ? `Detalle de la pregunta #${q.question_number}` : "Detalle de la pregunta"}
+          </DialogTitle>
           <DialogDescription>
             {q ? `${q.domain_name ?? "—"} · ${q.task_title ?? "—"}` : "Cargando información…"}
           </DialogDescription>
@@ -55,6 +57,12 @@ export function QuestionDetailDialog({ questionId, onOpenChange }: Props) {
 
         {q && (
           <div className="space-y-4 text-sm">
+            {q.status === "retired" && q.latest_rejection_reason && (
+              <div className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
+                <span className="font-medium">Motivo del rechazo: </span>
+                {q.latest_rejection_reason}
+              </div>
+            )}
             {q.cluster_scenario && (
               <div className="rounded-md border border-border bg-muted/40 p-3">
                 <p className="text-[11px] font-semibold uppercase text-muted-foreground">

@@ -22,7 +22,7 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
     const { data: q, error } = await db
       .from("questions")
       .select(
-        "id, stem, options, correct_answer, practicum_payload, explanation, status, item_type, format, approach, difficulty, task_id, cluster_id, times_answered, times_correct, created_at, process_group, performance_domain, focus_tags",
+        "id, question_number, stem, options, correct_answer, practicum_payload, explanation, status, item_type, format, approach, difficulty, task_id, cluster_id, times_answered, times_correct, created_at, process_group, performance_domain, focus_tags",
       )
       .eq("id", data.id)
       .maybeSingle();
@@ -56,12 +56,25 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
       domainName = domain?.name ?? null;
     }
 
+    let latestRejectionReason: string | null = null;
+    if (q.status === "retired") {
+      const { data: rejection } = await db
+        .from("question_rejections")
+        .select("reason")
+        .eq("question_id", data.id)
+        .order("rejected_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      latestRejectionReason = rejection?.reason ?? null;
+    }
+
     return {
       ...q,
       task_title: task ? `${task.task_number}. ${task.title}` : null,
       domain_name: domainName,
       cluster_title: cluster?.data?.title ?? null,
       cluster_scenario: cluster?.data?.scenario_text ?? null,
+      latest_rejection_reason: latestRejectionReason,
       tag_codes: (tagRows ?? []).map((t) => t.tag_code),
     };
   });
@@ -72,11 +85,12 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
  */
 export const setQuestionsStatusFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { ids: string[]; status: string }) =>
+  .inputValidator((input: { ids: string[]; status: string; reason?: string }) =>
     z
       .object({
         ids: z.array(z.string().uuid()).min(1),
         status: z.enum(["draft", "published", "retired"]),
+        reason: z.string().trim().min(1).max(2000).optional(),
       })
       .parse(input),
   )
@@ -86,6 +100,22 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
     });
     if (rpcError || !isAdmin) throw new Error("No autorizado");
 
+    // Snapshot previo: necesario para registrar el motivo del rechazo.
+    let snapshots: Array<{
+      id: string;
+      question_number: number;
+      task_id: string;
+      format: string;
+      stem: string;
+    }> = [];
+    if (data.status === "retired" && data.reason) {
+      const { data: rows } = await context.supabase
+        .from("questions")
+        .select("id, question_number, task_id, format, stem")
+        .in("id", data.ids);
+      snapshots = rows ?? [];
+    }
+
     const { data: rows, error } = await context.supabase
       .from("questions")
       .update({ status: data.status })
@@ -93,5 +123,21 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
       .select("id");
 
     if (error) throw new Error(error.message);
+
+    if (snapshots.length > 0 && data.reason) {
+      const reason = data.reason;
+      await context.supabase.from("question_rejections").insert(
+        snapshots.map((s) => ({
+          question_id: s.id,
+          question_number: s.question_number,
+          task_id: s.task_id,
+          format: s.format,
+          stem_snapshot: s.stem,
+          reason,
+          rejected_by: context.userId,
+        })),
+      );
+    }
+
     return { updated: rows?.length ?? 0 };
   });
