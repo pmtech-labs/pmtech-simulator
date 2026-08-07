@@ -822,6 +822,78 @@ export type Database = {
         }
         Relationships: []
       }
+      question_rejections: {
+        Row: {
+          format: string
+          id: string
+          question_id: string | null
+          question_number: number
+          reason: string
+          rejected_at: string
+          rejected_by: string
+          stem_snapshot: string
+          task_id: string
+        }
+        Insert: {
+          format: string
+          id?: string
+          question_id?: string | null
+          question_number: number
+          reason: string
+          rejected_at?: string
+          rejected_by: string
+          stem_snapshot: string
+          task_id: string
+        }
+        Update: {
+          format?: string
+          id?: string
+          question_id?: string | null
+          question_number?: number
+          reason?: string
+          rejected_at?: string
+          rejected_by?: string
+          stem_snapshot?: string
+          task_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_rejections_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_rejections_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "v_question_stats"
+            referencedColumns: ["question_id"]
+          },
+          {
+            foreignKeyName: "question_rejections_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "v_questions_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_rejections_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "eco_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_rejections_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "v_task_coverage"
+            referencedColumns: ["task_id"]
+          },
+        ]
+      }
       question_reports: {
         Row: {
           comment: string
@@ -976,6 +1048,7 @@ export type Database = {
           process_group:
             | Database["public"]["Enums"]["process_group_type"]
             | null
+          question_number: number
           reviewed_at: string | null
           reviewed_by: string | null
           status: Database["public"]["Enums"]["item_status"] | null
@@ -1008,6 +1081,7 @@ export type Database = {
           process_group?:
             | Database["public"]["Enums"]["process_group_type"]
             | null
+          question_number?: number
           reviewed_at?: string | null
           reviewed_by?: string | null
           status?: Database["public"]["Enums"]["item_status"] | null
@@ -1040,6 +1114,7 @@ export type Database = {
           process_group?:
             | Database["public"]["Enums"]["process_group_type"]
             | null
+          question_number?: number
           reviewed_at?: string | null
           reviewed_by?: string | null
           status?: Database["public"]["Enums"]["item_status"] | null
@@ -1248,6 +1323,7 @@ export type Database = {
           generation_model_id: string | null
           generation_provider: string | null
           item_type: Database["public"]["Enums"]["item_type"] | null
+          latest_rejection_reason: string | null
           open_reports_count: number | null
           options: Json | null
           performance_domain:
@@ -1257,6 +1333,7 @@ export type Database = {
             | Database["public"]["Enums"]["process_group_type"]
             | null
           question_id: string | null
+          question_number: number | null
           status: Database["public"]["Enums"]["item_status"] | null
           stem: string | null
           success_rate_pct: number | null
@@ -1315,6 +1392,7 @@ export type Database = {
           process_group:
             | Database["public"]["Enums"]["process_group_type"]
             | null
+          question_number: number | null
           status: Database["public"]["Enums"]["item_status"] | null
           tag_codes: string[] | null
           task_id: string | null
