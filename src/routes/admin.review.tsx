@@ -311,6 +311,7 @@ function ReviewPage() {
                   }
                   busy={busy}
                   onStatus={(status) => changeStatus.mutate({ ids: [q.id], status })}
+                  onRetire={() => askRetire([q.id], `#${q.question_number}`)}
                   onDelete={() => remove.mutate(q.id)}
                 />
               ))}
@@ -323,6 +324,49 @@ function ReviewPage() {
             />
           </>
         )}
+
+        <Dialog
+          open={Boolean(rejectTarget)}
+          onOpenChange={(open) => {
+            if (!open) setRejectTarget(null);
+          }}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Retirar pregunta {rejectTarget?.label}</DialogTitle>
+              <DialogDescription>
+                Esta pregunta no se borra, queda retirada del banco. Explica brevemente por qué no
+                tiene calidad suficiente — este motivo se usará automáticamente para mejorar la
+                generación de preguntas futuras de esta misma tarea.
+              </DialogDescription>
+            </DialogHeader>
+            <Textarea
+              placeholder="Ej: El distractor C es demasiado obvio, cualquier candidato lo descarta sin razonar."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              rows={3}
+            />
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setRejectTarget(null)}>
+                Cancelar
+              </Button>
+              <Button
+                variant="destructive"
+                disabled={!rejectReason.trim() || busy}
+                onClick={() =>
+                  rejectTarget &&
+                  changeStatus.mutate({
+                    ids: rejectTarget.ids,
+                    status: "retired",
+                    reason: rejectReason.trim(),
+                  })
+                }
+              >
+                Retirar pregunta
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </AdminShell>
   );
