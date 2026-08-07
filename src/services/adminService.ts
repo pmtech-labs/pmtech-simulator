@@ -44,6 +44,10 @@ export interface GenerationJob {
 
 export interface AdminQuestion {
   id: string;
+  /** Número fijo de la pregunta en el banco (no depende del filtro ni la página). */
+  question_number: number;
+  /** Motivo de rechazo más reciente, si la pregunta está retirada. */
+  latest_rejection_reason?: string | null;
   stem: string;
   options: unknown;
   correct_answer: unknown;
