@@ -299,7 +299,16 @@ function ReviewPage() {
             </BulkBtn>
             <BulkBtn
               disabled={busy || selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")}
-              onClick={() => askRetire(selected, `${selected.length} pregunta(s) seleccionada(s)`)}
+              onClick={() =>
+                askRetire(
+                  selected,
+                  selected
+                    .map((id) => allRows.find((r) => r.id === id)?.question_number)
+                    .filter(Boolean)
+                    .map((n) => `#${n}`)
+                    .join(", ") || `${selected.length} pregunta(s)`,
+                )
+              }
               title={
                 selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")
                   ? "Todas las seleccionadas ya están retiradas"
