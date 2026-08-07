@@ -423,10 +423,14 @@ function ReviewPage() {
                   <th className="w-8 px-3 py-2">
                     <input
                       type="checkbox"
-                      checked={rows.length > 0 && selected.length === rows.length}
-                      onChange={(e) => setSelected(e.target.checked ? rows.map((r) => r.id) : [])}
+                      title="Seleccionar todas las preguntas filtradas (no solo esta página)"
+                      checked={totalFiltered > 0 && selected.length === totalFiltered}
+                      onChange={(e) =>
+                        setSelected(e.target.checked ? filteredRows.map((r) => r.id) : [])
+                      }
                     />
                   </th>
+
                   <th className="px-3 py-2">
                     <SortBtn label="Nº" active={sortKey === "question_number"} dir={sortDir} onClick={() => toggleSort("question_number")} />
                   </th>
