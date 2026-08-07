@@ -47,6 +47,9 @@ const APPROACHES = ["predictive", "agile", "hybrid"];
 const PAGE_SIZE = 20;
 const inputCls = "rounded-md border border-border bg-background px-2.5 py-1.5 text-xs";
 
+type SortKey = "question_number" | "status";
+
+
 function ReviewPage() {
   const email = useAdminEmail();
   const qc = useQueryClient();
