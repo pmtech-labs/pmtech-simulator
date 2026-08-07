@@ -410,6 +410,7 @@ function QuestionRow({
   checked,
   onCheck,
   onStatus,
+  onRetire,
   onDelete,
   busy,
 }: {
@@ -417,6 +418,7 @@ function QuestionRow({
   checked: boolean;
   onCheck: (on: boolean) => void;
   onStatus: (status: string) => void;
+  onRetire: () => void;
   onDelete: () => void;
   busy: boolean;
 }) {
