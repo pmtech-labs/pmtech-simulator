@@ -420,13 +420,13 @@ function ReviewPage() {
               empty={rows.length === 0}
               head={
                 <tr>
-                  <th className="w-8 px-3 py-2">
-                    <input
-                      type="checkbox"
-                      title="Seleccionar todas las preguntas filtradas (no solo esta página)"
-                      checked={totalFiltered > 0 && selected.length === totalFiltered}
-                      onChange={(e) =>
-                        setSelected(e.target.checked ? filteredRows.map((r) => r.id) : [])
+                  <th className="w-8 px-3 py-2 align-bottom">
+                    <SelectAllCheckbox
+                      totalFiltered={totalFiltered}
+                      selectedCount={selected.length}
+                      visibleCount={rows.length}
+                      onChange={(checked) =>
+                        setSelected(checked ? filteredRows.map((r) => r.id) : [])
                       }
                     />
                   </th>
