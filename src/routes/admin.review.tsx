@@ -101,14 +101,57 @@ function ReviewPage() {
   const rows = useMemo(() => {
     const from = numFrom ? Number(numFrom) : null;
     const to = numTo ? Number(numTo) : null;
-    return allRows.filter((r) => {
+    const filtered = allRows.filter((r) => {
       if (model && (r.generation_model_id ?? "__manual__") !== model) return false;
       if (from !== null && r.question_number < from) return false;
       if (to !== null && r.question_number > to) return false;
       return true;
     });
-  }, [allRows, model, numFrom, numTo]);
+    const dir = sortDir === "asc" ? 1 : -1;
+    return [...filtered].sort((a, b) => {
+      if (sortKey === "status") {
+        const cmp = String(a.status).localeCompare(String(b.status));
+        if (cmp !== 0) return cmp * dir;
+        return (a.question_number - b.question_number) * dir;
+      }
+      return (a.question_number - b.question_number) * dir;
+    });
+  }, [allRows, model, numFrom, numTo, sortKey, sortDir]);
   const clientFiltered = Boolean(model || numFrom || numTo);
+
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
+
+  const exportCsv = () => {
+    if (rows.length === 0) {
+      toast.error("No hay preguntas que exportar con los filtros actuales");
+      return;
+    }
+    const csv = buildCsv(
+      ["Nº", "Estado", "Dominio", "Tarea", "Enfoque", "Dificultad", "Usos", "% acierto", "Enunciado", "Motivo de rechazo"],
+      rows.map((r) => [
+        r.question_number,
+        r.status,
+        r.domain_name ?? "",
+        r.task_title ?? "",
+        r.approach ?? "",
+        r.difficulty ?? "",
+        r.times_used_in_exams ?? r.times_answered ?? 0,
+        r.success_rate_pct ?? "",
+        r.stem,
+        r.status === "retired" ? (r.latest_rejection_reason ?? "") : "",
+      ]),
+    );
+    const stamp = new Date().toISOString().slice(0, 10);
+    downloadCsv(`preguntas-${stamp}.csv`, csv);
+    toast.success(`${rows.length} pregunta(s) exportadas`);
+  };
+
 
 
   const [rejectTarget, setRejectTarget] = useState<{ ids: string[]; label: string } | null>(null);
