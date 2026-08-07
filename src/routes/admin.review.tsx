@@ -94,15 +94,27 @@ function ReviewPage() {
   );
 
 
+  const [rejectTarget, setRejectTarget] = useState<{ ids: string[]; label: string } | null>(null);
+  const [rejectReason, setRejectReason] = useState("");
+
   const changeStatus = useMutation({
-    mutationFn: ({ ids, status }: { ids: string[]; status: string }) => updateQuestionsStatus(ids, status),
+    mutationFn: ({ ids, status, reason }: { ids: string[]; status: string; reason?: string }) =>
+      updateQuestionsStatus(ids, status, reason),
     onSuccess: (_d, v) => {
       toast.success(`${v.ids.length} pregunta(s) → ${v.status}`);
       setSelected([]);
+      setRejectTarget(null);
+      setRejectReason("");
       qc.invalidateQueries({ queryKey: ["admin-questions"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const askRetire = (ids: string[], label: string) => {
+    setRejectReason("");
+    setRejectTarget({ ids, label });
+  };
+
 
   const remove = useMutation({
     mutationFn: deleteQuestion,
