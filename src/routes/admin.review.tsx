@@ -164,22 +164,14 @@ function ReviewPage() {
   };
 
 
-  const toggleSort = (key: SortKey) => {
-    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    else {
-      setSortKey(key);
-      setSortDir("asc");
-    }
-  };
-
   const exportCsv = () => {
-    if (rows.length === 0) {
+    if (filteredRows.length === 0) {
       toast.error("No hay preguntas que exportar con los filtros actuales");
       return;
     }
     const csv = buildCsv(
       ["Nº", "Estado", "Dominio", "Tarea", "Enfoque", "Dificultad", "Usos", "% acierto", "Enunciado", "Motivo de rechazo"],
-      rows.map((r) => [
+      filteredRows.map((r) => [
         r.question_number,
         r.status,
         r.domain_name ?? "",
@@ -194,8 +186,9 @@ function ReviewPage() {
     );
     const stamp = new Date().toISOString().slice(0, 10);
     downloadCsv(`preguntas-${stamp}.csv`, csv);
-    toast.success(`${rows.length} pregunta(s) exportadas`);
+    toast.success(`${filteredRows.length} pregunta(s) exportadas`);
   };
+
 
 
 
