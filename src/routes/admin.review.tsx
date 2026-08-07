@@ -64,7 +64,10 @@ function ReviewPage() {
   const [numTo, setNumTo] = useState("");
   const [model, setModel] = useState("");
   const [page, setPage] = useState(1);
+  const [sortKey, setSortKey] = useState<SortKey>("question_number");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [selected, setSelected] = useState<string[]>([]);
+
 
 
   const { defs: tagDefs } = useTagDefs();
