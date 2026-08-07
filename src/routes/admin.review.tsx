@@ -464,11 +464,12 @@ function ReviewPage() {
               ))}
             </DataTable>
             <Pager
-              page={page}
+              page={safePage}
               pageSize={PAGE_SIZE}
-              total={clientFiltered ? rows.length : (questions.data?.total ?? rows.length)}
+              total={totalFiltered}
               onPage={setPage}
             />
+
           </>
         )}
 
