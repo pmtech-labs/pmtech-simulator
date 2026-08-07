@@ -387,9 +387,13 @@ function ReviewPage() {
                       onChange={(e) => setSelected(e.target.checked ? rows.map((r) => r.id) : [])}
                     />
                   </th>
-                  <th className="px-3 py-2">Nº</th>
+                  <th className="px-3 py-2">
+                    <SortBtn label="Nº" active={sortKey === "question_number"} dir={sortDir} onClick={() => toggleSort("question_number")} />
+                  </th>
                   <th className="px-3 py-2">Enunciado</th>
-                  <th className="px-3 py-2">Estado</th>
+                  <th className="px-3 py-2">
+                    <SortBtn label="Estado" active={sortKey === "status"} dir={sortDir} onClick={() => toggleSort("status")} />
+                  </th>
                   <th className="px-3 py-2">Dominio / Tarea</th>
                   <th className="px-3 py-2">Generado con</th>
                   <th className="px-3 py-2">Etiquetas</th>
