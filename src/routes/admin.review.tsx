@@ -312,7 +312,6 @@ function ReviewPage() {
           </div>
 
           <select value={model} onChange={(e) => setModel(e.target.value)} className={inputCls}>
-
             <option value="">Todos los modelos</option>
             {modelOptions.map((m) => (
               <option key={m} value={m}>
@@ -320,7 +319,16 @@ function ReviewPage() {
               </option>
             ))}
           </select>
+
+          <button
+            type="button"
+            onClick={exportCsv}
+            className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 text-xs font-medium hover:bg-secondary"
+          >
+            <Download className="h-3.5 w-3.5" /> Exportar CSV
+          </button>
         </div>
+
 
 
         {selected.length > 0 && (
