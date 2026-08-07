@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowDown, ArrowUp, ChevronDown, Download, Loader2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { AdminShell, DataTable, Pager } from "@/components/admin/AdminShell";
@@ -420,13 +420,12 @@ function ReviewPage() {
               empty={rows.length === 0}
               head={
                 <tr>
-                  <th className="w-8 px-3 py-2">
-                    <input
-                      type="checkbox"
-                      title="Seleccionar todas las preguntas filtradas (no solo esta página)"
-                      checked={totalFiltered > 0 && selected.length === totalFiltered}
-                      onChange={(e) =>
-                        setSelected(e.target.checked ? filteredRows.map((r) => r.id) : [])
+                  <th className="w-8 px-3 py-2 align-bottom">
+                    <SelectAllCheckbox
+                      totalFiltered={totalFiltered}
+                      selectedCount={selected.length}
+                      onChange={(checked) =>
+                        setSelected(checked ? filteredRows.map((r) => r.id) : [])
                       }
                     />
                   </th>
@@ -573,6 +572,48 @@ function SortBtn({
       {label}
       {active && <Icon className="h-3 w-3" />}
     </button>
+  );
+}
+
+function SelectAllCheckbox({
+  totalFiltered,
+  selectedCount,
+  onChange,
+}: {
+  totalFiltered: number;
+  selectedCount: number;
+  onChange: (checked: boolean) => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const allSelected = totalFiltered > 0 && selectedCount === totalFiltered;
+  const someSelected = selectedCount > 0 && selectedCount < totalFiltered;
+
+  useEffect(() => {
+    if (ref.current) ref.current.indeterminate = someSelected;
+  }, [someSelected]);
+
+  return (
+    <div className="flex flex-col items-start gap-1">
+      <input
+        ref={ref}
+        type="checkbox"
+        title="Seleccionar todas las preguntas filtradas (no solo esta página)"
+        checked={allSelected}
+        onChange={(e) => onChange(e.target.checked)}
+      />
+      {selectedCount > 0 && (
+        <span
+          className={cn(
+            "max-w-[10rem] text-[10px] leading-tight",
+            allSelected ? "font-semibold text-primary" : "text-muted-foreground",
+          )}
+        >
+          {allSelected
+            ? `Todas las ${totalFiltered} filtradas`
+            : `${selectedCount} de ${totalFiltered} filtradas`}
+        </span>
+      )}
+    </div>
   );
 }
 
