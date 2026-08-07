@@ -336,8 +336,10 @@ export async function listQuestions(
   return toPaged<AdminQuestion>(payload, pageSize);
 }
 
-export async function updateQuestionsStatus(ids: string[], status: string) {
-  return setQuestionsStatusFn({ data: { ids, status } });
+export async function updateQuestionsStatus(ids: string[], status: string, reason?: string) {
+  return setQuestionsStatusFn({
+    data: { ids, status, ...(reason?.trim() ? { reason: reason.trim() } : {}) },
+  });
 }
 
 export interface DeleteQuestionResult {
