@@ -94,6 +94,8 @@ export interface TaskCoverageRow {
 
 export interface QuestionStatRow {
   question_id: string;
+  question_number?: number | null;
+  latest_rejection_reason?: string | null;
   stem?: string | null;
   domain_name: string | null;
   task_title: string | null;
