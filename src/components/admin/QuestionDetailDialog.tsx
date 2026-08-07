@@ -35,7 +35,9 @@ export function QuestionDetailDialog({ questionId, onOpenChange }: Props) {
     <Dialog open={Boolean(questionId)} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Detalle de la pregunta</DialogTitle>
+          <DialogTitle>
+            {q ? `Detalle de la pregunta #${q.question_number}` : "Detalle de la pregunta"}
+          </DialogTitle>
           <DialogDescription>
             {q ? `${q.domain_name ?? "—"} · ${q.task_title ?? "—"}` : "Cargando información…"}
           </DialogDescription>
