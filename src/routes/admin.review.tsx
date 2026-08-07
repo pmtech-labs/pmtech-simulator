@@ -521,7 +521,16 @@ function QuestionRow({
       </tr>
       {open && (
         <tr>
-          <td colSpan={10} className="bg-muted/40 px-4 py-3 text-sm">
+          <td colSpan={11} className="bg-muted/40 px-4 py-3 text-sm">
+            <p className="num mb-2 text-xs font-semibold text-muted-foreground">
+              Pregunta #{q.question_number}
+            </p>
+            {q.status === "retired" && q.latest_rejection_reason && (
+              <div className="mb-3 rounded-md bg-muted p-3 text-sm text-muted-foreground">
+                <span className="font-medium">Motivo del rechazo: </span>
+                {q.latest_rejection_reason}
+              </div>
+            )}
             {q.cluster_scenario && (
               <div className="mb-3 rounded-md border border-border bg-card p-3">
                 <p className="text-[11px] font-semibold uppercase text-muted-foreground">Escenario del caso</p>
