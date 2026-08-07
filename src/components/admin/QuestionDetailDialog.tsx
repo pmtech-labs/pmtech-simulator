@@ -57,6 +57,12 @@ export function QuestionDetailDialog({ questionId, onOpenChange }: Props) {
 
         {q && (
           <div className="space-y-4 text-sm">
+            {q.status === "retired" && q.latest_rejection_reason && (
+              <div className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
+                <span className="font-medium">Motivo del rechazo: </span>
+                {q.latest_rejection_reason}
+              </div>
+            )}
             {q.cluster_scenario && (
               <div className="rounded-md border border-border bg-muted/40 p-3">
                 <p className="text-[11px] font-semibold uppercase text-muted-foreground">
