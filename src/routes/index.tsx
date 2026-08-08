@@ -610,17 +610,19 @@ function Pricing() {
             <div
               className={
                 isPremium
-                  ? "relative h-full overflow-hidden rounded-2xl border-2 border-accent bg-card p-6 shadow-panel transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_50px_-24px_var(--accent)]"
+                  ? "relative h-full rounded-2xl border-2 border-accent bg-card p-6 shadow-panel transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_50px_-24px_var(--accent)]"
                   : "relative h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel"
               }
             >
               {isPremium && (
-                <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-accent/15 blur-2xl" />
-              )}
-              {isPremium && (
-                <span className="absolute -top-3 left-6 rounded-full bg-accent px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-accent-foreground">
-                  Recomendado
-                </span>
+                <>
+                  <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
+                    <div className="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-accent/15 blur-2xl" />
+                  </div>
+                  <span className="absolute -top-3 left-6 rounded-full bg-accent px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-accent-foreground">
+                    Recomendado
+                  </span>
+                </>
               )}
               <h3 className="text-base font-semibold">{plan.name}</h3>
               <p className="mt-1 text-xs text-muted-foreground">
