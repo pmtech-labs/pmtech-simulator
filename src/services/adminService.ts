@@ -2,6 +2,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { patchConnectorFn, setDefaultConnectorFn } from "@/lib/adminConnectors.functions";
 import { setQuestionsStatusFn } from "@/lib/adminQuestions.functions";
 import { getAdminStatsFn } from "@/lib/adminStats.functions";
+import { patchAdminUserFn } from "@/lib/adminUsers.functions";
+
 
 
 /**
