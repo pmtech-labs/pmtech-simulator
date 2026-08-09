@@ -45,6 +45,7 @@ import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
 import { Route as AdminCurriculumRouteImport } from './routes/admin.curriculum'
 import { Route as AdminGenerateRouteImport } from './routes/admin.generate'
 import { Route as AdminReviewRouteImport } from './routes/admin.review'
+import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -226,6 +227,11 @@ const AdminReviewRoute = AdminReviewRouteImport.update({
   path: '/review',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
+  id: '/usuarios',
+  path: '/usuarios',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -263,6 +269,7 @@ export interface FileRoutesByFullPath {
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
   '/admin/review': typeof AdminReviewRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -300,6 +307,7 @@ export interface FileRoutesByTo {
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
   '/admin/review': typeof AdminReviewRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -339,6 +347,7 @@ export interface FileRoutesById {
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
   '/admin/review': typeof AdminReviewRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -379,6 +388,7 @@ export interface FileRouteTypes {
     | '/admin/curriculum'
     | '/admin/generate'
     | '/admin/review'
+    | '/admin/usuarios'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -416,6 +426,7 @@ export interface FileRouteTypes {
     | '/admin/curriculum'
     | '/admin/generate'
     | '/admin/review'
+    | '/admin/usuarios'
     | '/admin'
   id:
     | '__root__'
@@ -454,6 +465,7 @@ export interface FileRouteTypes {
     | '/admin/curriculum'
     | '/admin/generate'
     | '/admin/review'
+    | '/admin/usuarios'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -745,6 +757,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReviewRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/usuarios': {
+      id: '/admin/usuarios'
+      path: '/usuarios'
+      fullPath: '/admin/usuarios'
+      preLoaderRoute: typeof AdminUsuariosRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
@@ -753,6 +772,7 @@ interface AdminRouteChildren {
   AdminCurriculumRoute: typeof AdminCurriculumRoute
   AdminGenerateRoute: typeof AdminGenerateRoute
   AdminReviewRoute: typeof AdminReviewRoute
+  AdminUsuariosRoute: typeof AdminUsuariosRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -761,6 +781,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCurriculumRoute: AdminCurriculumRoute,
   AdminGenerateRoute: AdminGenerateRoute,
   AdminReviewRoute: AdminReviewRoute,
+  AdminUsuariosRoute: AdminUsuariosRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -802,13 +823,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
