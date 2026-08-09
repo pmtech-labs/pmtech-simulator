@@ -186,7 +186,7 @@ export const previewUnitCoverage = createServerFn({ method: "GET" })
     const countQuestions = async (taskIds: string[]) => {
       if (!taskIds.length) return 0;
       const { count, error } = await context.supabase
-        .from("questions")
+        .from("v_questions_public")
         .select("id", { count: "exact", head: true })
         .eq("status", "published")
         .in("task_id", taskIds);
@@ -208,7 +208,7 @@ export const previewUnitCoverage = createServerFn({ method: "GET" })
       if (tasksError) throw new Error(tasksError.message);
 
       const { data: published, error: pubError } = await context.supabase
-        .from("questions")
+        .from("v_questions_public")
         .select("task_id")
         .eq("status", "published")
         .in("task_id", unitTaskIds);
