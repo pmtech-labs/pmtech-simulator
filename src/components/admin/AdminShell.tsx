@@ -1,5 +1,14 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Boxes, Database, GraduationCap, LayoutDashboard, LogOut, Sparkles } from "lucide-react";
+import {
+  BarChart3,
+  Boxes,
+  Database,
+  GraduationCap,
+  LayoutDashboard,
+  LogOut,
+  Sparkles,
+  Users,
+} from "lucide-react";
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
@@ -11,7 +20,10 @@ const ADMIN_NAV = [
   { to: "/admin/connectors", label: "Conectores LLM", icon: Boxes },
   { to: "/admin/generate", label: "Generar preguntas", icon: Sparkles },
   { to: "/admin/review", label: "Revisión del banco", icon: Database },
+  { to: "/admin/usuarios", label: "Usuarios", icon: Users },
+  { to: "/admin/metricas", label: "Métricas", icon: BarChart3 },
 ] as const;
+
 
 
 export function AdminShell({
