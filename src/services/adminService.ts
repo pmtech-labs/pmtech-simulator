@@ -2,6 +2,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { patchConnectorFn, setDefaultConnectorFn } from "@/lib/adminConnectors.functions";
 import { setQuestionsStatusFn } from "@/lib/adminQuestions.functions";
 import { getAdminStatsFn } from "@/lib/adminStats.functions";
+import { patchAdminUserFn } from "@/lib/adminUsers.functions";
+
 
 
 /**
@@ -414,4 +416,98 @@ export async function listEcoTasks(): Promise<EcoTask[]> {
     .order("sort_order");
   if (error) throw new AdminApiError(error.message);
   return (data ?? []) as EcoTask[];
+}
+
+/* ----------------------------- Gestión de usuarios ------------------------- */
+
+export interface AdminUserRow {
+  user_id: string;
+  email: string;
+  signed_up_at: string;
+  last_sign_in_at: string | null;
+  current_plan_code: string | null;
+  latest_license_status: string | null;
+  current_expires_at: string | null;
+  paid_licenses_count: number;
+  exams_taken: number;
+  last_exam_at: string | null;
+  is_admin: boolean;
+}
+
+export interface AdminUsersFilters {
+  search?: string;
+  plan_code?: string;
+  only_admins?: boolean;
+}
+
+export async function listAdminUsers(
+  filters: AdminUsersFilters,
+  page = 1,
+  pageSize = 20,
+): Promise<Paged<AdminUserRow>> {
+  const payload = await callFunction<unknown>("admin_users", {
+    method: "GET",
+    query: {
+      search: filters.search,
+      plan_code: filters.plan_code,
+      only_admins: filters.only_admins ? "true" : undefined,
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+    },
+  });
+  return toPaged<AdminUserRow>(payload, pageSize);
+}
+
+export type AdminUserAction =
+  | { user_id: string; action: "extend_license"; days: number }
+  | { user_id: string; action: "change_plan"; plan_code: string }
+  | { user_id: string; action: "revoke_license" }
+  | { user_id: string; action: "toggle_admin"; make_admin: boolean };
+
+export async function patchAdminUser(input: AdminUserAction) {
+  return patchAdminUserFn({ data: input });
+}
+
+/* ---------------------------- Métricas de negocio -------------------------- */
+
+export type MetricsGranularity = "week" | "month" | "year";
+
+export interface AdminMetricsResponse {
+  summary: {
+    total_users: number;
+    active_paid_licenses: number;
+    current_mrr_cents: number;
+    overall_conversion_pct: number;
+  };
+  mrr_trend: { period_start: string; mrr_cents: number; active_paid_licenses: number }[];
+  signups_vs_purchases: {
+    period_start: string;
+    signups: number;
+    purchases: number;
+    conversion_pct: number;
+  }[];
+  sales_by_plan: {
+    plan_code: string;
+    plan_name: string;
+    purchases: number;
+    revenue_cents: number;
+  }[];
+  data_limitations: string;
+}
+
+export async function getAdminMetrics(params: {
+  granularity: MetricsGranularity;
+  periods: number;
+  sales_from?: string;
+  sales_to?: string;
+}): Promise<AdminMetricsResponse> {
+  return callFunction<AdminMetricsResponse>("admin_metrics", {
+    method: "GET",
+    query: {
+      granularity: params.granularity,
+      periods: params.periods,
+      sales_from: params.sales_from,
+      sales_to: params.sales_to,
+    },
+  });
 }
