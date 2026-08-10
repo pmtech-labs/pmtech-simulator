@@ -51,10 +51,22 @@ export function LeadWizard() {
   const inputClass =
     "w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm outline-none transition-colors focus:border-accent";
 
-  const canContinue =
-    step === 0
-      ? form.fullName.trim().length >= 2 && /\S+@\S+\.\S+/.test(form.email)
-      : true;
+  const nameError =
+    form.fullName.trim().length >= 2 ? "" : "Indica tu nombre y apellidos.";
+  const emailError = /\S+@\S+\.\S+/.test(form.email.trim())
+    ? ""
+    : "Indica un email válido para poder responderte.";
+  const canContinue = step === 0 ? !nameError && !emailError : true;
+
+  function handleNext() {
+    if (step === 0 && !canContinue) {
+      setShowErrors(true);
+      return;
+    }
+    setShowErrors(false);
+    setStep((s) => s + 1);
+  }
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
