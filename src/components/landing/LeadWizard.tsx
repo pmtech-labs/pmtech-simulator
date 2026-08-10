@@ -184,9 +184,14 @@ export function LeadWizard() {
                         onChange={(e) =>
                           setForm((f) => ({ ...f, fullName: e.target.value }))
                         }
-                        className={`mt-1.5 ${inputClass}`}
+                        className={`mt-1.5 ${inputClass} ${
+                          showErrors && nameError ? "border-destructive" : ""
+                        }`}
                         placeholder="Ana García"
                       />
+                      {showErrors && nameError && (
+                        <p className="mt-1 text-[11px] text-destructive">{nameError}</p>
+                      )}
                     </div>
                     <div>
                       <label htmlFor="wiz-email" className="text-xs font-semibold">
@@ -198,10 +203,16 @@ export function LeadWizard() {
                         maxLength={255}
                         value={form.email}
                         onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                        className={`mt-1.5 ${inputClass}`}
+                        className={`mt-1.5 ${inputClass} ${
+                          showErrors && emailError ? "border-destructive" : ""
+                        }`}
                         placeholder="ana@empresa.com"
                       />
+                      {showErrors && emailError && (
+                        <p className="mt-1 text-[11px] text-destructive">{emailError}</p>
+                      )}
                     </div>
+
                   </>
                 )}
 
