@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { submitTrainingLead } from "@/lib/leads.functions";
 
 const CALL_URL = "https://isaaclopezpena.com/contacto/";
+const CONTACT_EMAIL = "contacto@glacimonto.com";
 
 const GOALS = [
   {
