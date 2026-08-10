@@ -41,6 +41,8 @@ export function LeadWizard() {
   const [step, setStep] = useState(0);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
+  const [showErrors, setShowErrors] = useState(false);
+
   const [form, setForm] = useState({
     fullName: "",
     email: "",
