@@ -275,8 +275,8 @@ export function LeadWizard() {
                 {step < STEPS.length - 1 ? (
                   <button
                     type="button"
-                    disabled={!canContinue}
-                    onClick={() => setStep((s) => s + 1)}
+                    onClick={handleNext}
+
                     className="group inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-transform duration-300 hover:-translate-y-0.5 disabled:opacity-50"
                   >
                     Continuar
