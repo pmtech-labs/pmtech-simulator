@@ -65,8 +65,8 @@ function AvisoLegalPage() {
               </li>
               <li>
                 <strong className="text-foreground">Correo electrónico:</strong>{" "}
-                <a href="mailto:[EMAIL DE CONTACTO]" className="text-primary hover:underline">
-                  [EMAIL DE CONTACTO]
+                <a href="mailto:contacto@glacimonto.com" className="text-primary hover:underline">
+                  contacto@glacimonto.com
                 </a>
               </li>
               <li>
@@ -88,12 +88,18 @@ function AvisoLegalPage() {
           </section>
 
           <section>
-            <h2 className="font-display text-lg font-semibold text-foreground">3. Propiedad intelectual</h2>
+            <h2 className="font-display text-lg font-semibold text-foreground">3. Propiedad intelectual y marcas</h2>
             <p className="mt-3">
               Los contenidos, diseño, código, textos, imágenes, logotipos y demás elementos del sitio están protegidos
               por derechos de propiedad intelectual e industrial. Queda prohibida su reproducción, distribución,
               comunicación pública o transformación sin autorización expresa del titular, salvo uso personal y privado
               conforme a la normativa aplicable.
+            </p>
+            <p className="mt-3">
+              <strong className="text-foreground">Glacimonto</strong> y{" "}
+              <strong className="text-foreground">PMTech Simulator</strong> son marcas registradas de
+              [NOMBRE COMPLETO DE LA EMPRESA]. Su uso no autorizado por parte de terceros queda expresamente
+              prohibido.
             </p>
           </section>
 

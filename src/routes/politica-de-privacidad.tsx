@@ -66,8 +66,8 @@ function PrivacidadPage() {
               </li>
               <li>
                 <strong className="text-foreground">Correo electrónico:</strong>{" "}
-                <a href="mailto:[EMAIL DE PRIVACIDAD]" className="text-primary hover:underline">
-                  [EMAIL DE PRIVACIDAD]
+                <a href="mailto:contacto@glacimonto.com" className="text-primary hover:underline">
+                  contacto@glacimonto.com
                 </a>
               </li>
             </ul>
@@ -109,8 +109,8 @@ function PrivacidadPage() {
               Como usuario, tienes derecho a acceder, rectificar, suprimir, limitar el tratamiento, oponerte y solicitar
               la portabilidad de tus datos. También puedes retirar el consentimiento prestado en cualquier momento.
               Para ejercer estos derechos, escríbenos a{" "}
-              <a href="mailto:[EMAIL DE PRIVACIDAD]" className="text-primary hover:underline">
-                [EMAIL DE PRIVACIDAD]
+              <a href="mailto:contacto@glacimonto.com" className="text-primary hover:underline">
+                contacto@glacimonto.com
               </a>{" "}
               adjuntando copia de un documento identificativo. Si consideras que el tratamiento no se ajusta a la
               normativa, tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos
@@ -135,8 +135,8 @@ function PrivacidadPage() {
               proveedores de confianza. Algunos pueden tener sede fuera del Espacio Económico Europeo; en esos casos,
               adoptamos las garantías previstas en el RGPD, como cláusulas contractuales tipo u otros mecanismos
               reconocidos. Puedes solicitar la lista actualizada de encargados del tratamiento escribiendo a{" "}
-              <a href="mailto:[EMAIL DE PRIVACIDAD]" className="text-primary hover:underline">
-                [EMAIL DE PRIVACIDAD]
+              <a href="mailto:contacto@glacimonto.com" className="text-primary hover:underline">
+                contacto@glacimonto.com
               </a>.
             </p>
           </section>

@@ -84,8 +84,8 @@ function TerminosPage() {
               duraciones y condiciones de cada plan se muestran en la página correspondiente. Los pagos se procesan a
               través de proveedores externos seguros. Las suscripciones se renuevan automáticamente salvo que canceles
               antes de la fecha de renovación. Consulta nuestra política de cancelaciones y reembolsos en{" "}
-              <a href="mailto:[EMAIL DE SOPORTE]" className="text-primary hover:underline">
-                [EMAIL DE SOPORTE]
+              <a href="mailto:contacto@glacimonto.com" className="text-primary hover:underline">
+                contacto@glacimonto.com
               </a>.
             </p>
           </section>
@@ -102,11 +102,17 @@ function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="font-display text-lg font-semibold text-foreground">6. Propiedad intelectual</h2>
+            <h2 className="font-display text-lg font-semibold text-foreground">6. Propiedad intelectual y marcas</h2>
             <p className="mt-3">
               Todos los derechos de propiedad intelectual sobre el sitio, el software, las preguntas, las explicaciones
               y los materiales pertenecen al titular o a sus licenciantes. El usuario no adquiere derecho alguno sobre
               ellos más allá del uso personal dentro del servicio contratado.
+            </p>
+            <p className="mt-3">
+              <strong className="text-foreground">Glacimonto</strong> y{" "}
+              <strong className="text-foreground">PMTech Simulator</strong> son marcas registradas de
+              [NOMBRE COMPLETO DE LA EMPRESA]. PMP® y PMBOK® son marcas registradas del Project Management
+              Institute (PMI)®, sin relación de afiliación ni patrocinio con esta plataforma.
             </p>
           </section>
 
@@ -126,8 +132,8 @@ function TerminosPage() {
               Podemos actualizar estas condiciones, el servicio o los planes en cualquier momento. Te notificaremos los
               cambios sustanciales por los medios adecuados. Puedes dar de baja tu cuenta en cualquier momento desde tu
               perfil o solicitándolo a{" "}
-              <a href="mailto:[EMAIL DE SOPORTE]" className="text-primary hover:underline">
-                [EMAIL DE SOPORTE]
+              <a href="mailto:contacto@glacimonto.com" className="text-primary hover:underline">
+                contacto@glacimonto.com
               </a>.
             </p>
           </section>
