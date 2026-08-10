@@ -311,7 +311,15 @@ export function LeadWizard() {
               </a>
               <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
                 Usaremos tus datos solo para responderte. Sin spam, sin cesión a terceros.
+                ¿Prefieres escribirnos?{" "}
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="font-semibold text-accent underline-offset-2 hover:underline"
+                >
+                  {CONTACT_EMAIL}
+                </a>
               </p>
+
             </form>
           )}
         </div>
