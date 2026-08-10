@@ -15,7 +15,9 @@ import {
   type TaskCoverageRow,
 } from "@/services/adminService";
 import { useTagDefs } from "@/hooks/useTagDefs";
+import { TAG_TARGET_PCT, deviationTone } from "@/lib/tagTargets";
 import { cn } from "@/lib/utils";
+
 
 
 export const Route = createFileRoute("/admin/")({
@@ -180,22 +182,76 @@ function AdminDashboard() {
   );
 }
 
-function TagBar({ label, count, total }: { label: string; count: number; total: number }) {
+function TagBar({
+  label,
+  code,
+  count,
+  total,
+}: {
+  label: string;
+  code: string;
+  count: number;
+  total: number;
+}) {
   const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+  const target = TAG_TARGET_PCT[code];
+  const diff = target === undefined ? null : pct - target;
+  const tone = diff === null ? null : deviationTone(diff);
+
+  const toneText =
+    tone === "ok"
+      ? "text-emerald-600 dark:text-emerald-400"
+      : tone === "warn"
+        ? "text-amber-600 dark:text-amber-400"
+        : tone === "bad"
+          ? "text-destructive"
+          : "text-muted-foreground";
+  const toneBar =
+    tone === "ok"
+      ? "bg-emerald-500"
+      : tone === "warn"
+        ? "bg-amber-500"
+        : tone === "bad"
+          ? "bg-destructive"
+          : "bg-primary";
+
   return (
     <div>
       <div className="flex items-center justify-between gap-2 text-xs">
         <span className="font-medium">{label}</span>
-        <span className="num text-muted-foreground">
-          {count} · {pct}%
+        <span className="num flex items-center gap-1.5">
+          <span className="text-muted-foreground">{count}</span>
+          <span className={cn("font-semibold", toneText)}>
+            {pct}%
+            {diff !== null && (
+              <span className="ml-0.5">
+                ({diff > 0 ? "+" : diff < 0 ? "−" : "±"}
+                {Math.abs(diff)})
+              </span>
+            )}
+          </span>
+          {target !== undefined && (
+            <span className="text-[10px] text-muted-foreground">obj. {target}%</span>
+          )}
         </span>
       </div>
-      <div className="mt-1 h-2 rounded-full bg-muted">
-        <div className="h-2 rounded-full bg-primary" style={{ width: `${Math.min(100, pct)}%` }} />
+      <div className="relative mt-1 h-2 rounded-full bg-muted">
+        <div
+          className={cn("h-2 rounded-full", toneBar)}
+          style={{ width: `${Math.min(100, pct)}%` }}
+        />
+        {target !== undefined && (
+          <span
+            className="absolute top-[-2px] h-3 w-px bg-foreground/50"
+            style={{ left: `${Math.min(100, target)}%` }}
+            aria-hidden
+          />
+        )}
       </div>
     </div>
   );
 }
+
 
 function TagGroup({
   title,
@@ -214,7 +270,7 @@ function TagGroup({
       <p className="mt-0.5 text-[11px] text-muted-foreground">{note}</p>
       <div className="mt-3 space-y-2.5">
         {entries.map((e) => (
-          <TagBar key={e.code} label={e.label} count={e.count} total={total} />
+          <TagBar key={e.code} code={e.code} label={e.label} count={e.count} total={total} />
         ))}
       </div>
     </div>
@@ -228,7 +284,8 @@ function TagDistribution() {
     queryFn: () => getStats<QuestionTagRow>("tags"),
   });
 
-  const rows = tags.data ?? [];
+  // Solo cuentan las preguntas publicadas: son las que se usan en simulacros.
+  const rows = (tags.data ?? []).filter((r) => r.status === "published");
   const total = rows.length;
 
   const counts: Record<string, number> = {};
@@ -251,9 +308,11 @@ function TagDistribution() {
       <div>
         <h2 className="text-sm font-semibold">Representación por etiqueta</h2>
         <p className="text-xs text-muted-foreground">
-          Sobre {total} preguntas en borrador y publicadas
+          Sobre {total} preguntas publicadas · comparado con el % objetivo de cada etiqueta
+          (verde ≤5 pp, naranja 5-10 pp, rojo &gt;10 pp de desviación)
         </p>
       </div>
+
       {tags.error ? (
         <p className="text-xs text-destructive">No se han podido cargar las etiquetas.</p>
       ) : tags.isPending ? (

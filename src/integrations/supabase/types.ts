@@ -33,15 +33,7 @@ export type Database = {
           role?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "admin_users_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "v_admin_users"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       app_feedback: {
         Row: {
@@ -71,15 +63,7 @@ export type Database = {
           status?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "app_feedback_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "v_admin_users"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       case_clusters: {
         Row: {
@@ -243,13 +227,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "exams"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "diplomas_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "v_admin_users"
-            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -580,13 +557,6 @@ export type Database = {
             referencedRelation: "licenses"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "exams_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "v_admin_users"
-            referencedColumns: ["user_id"]
-          },
         ]
       }
       generation_jobs: {
@@ -662,13 +632,6 @@ export type Database = {
             referencedRelation: "v_question_stats"
             referencedColumns: ["generation_connector_id"]
           },
-          {
-            foreignKeyName: "generation_jobs_requested_by_fkey"
-            columns: ["requested_by"]
-            isOneToOne: false
-            referencedRelation: "v_admin_users"
-            referencedColumns: ["user_id"]
-          },
         ]
       }
       glossary_terms: {
@@ -743,13 +706,6 @@ export type Database = {
             referencedRelation: "plans"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "licenses_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "v_admin_users"
-            referencedColumns: ["user_id"]
-          },
         ]
       }
       llm_connectors: {
@@ -789,15 +745,7 @@ export type Database = {
           provider?: string
           secret_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "llm_connectors_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "v_admin_users"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       newsletter_subscribers: {
         Row: {
@@ -931,13 +879,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "question_rejections_rejected_by_fkey"
-            columns: ["rejected_by"]
-            isOneToOne: false
-            referencedRelation: "v_admin_users"
-            referencedColumns: ["user_id"]
-          },
-          {
             foreignKeyName: "question_rejections_task_id_fkey"
             columns: ["task_id"]
             isOneToOne: false
@@ -1009,13 +950,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_questions_public"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "question_reports_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "v_admin_users"
-            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -1253,15 +1187,7 @@ export type Database = {
           reason?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "retargeting_signals_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "v_admin_users"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       training_leads: {
         Row: {
@@ -1321,15 +1247,7 @@ export type Database = {
           occurrences?: number | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "user_error_type_stats_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "v_admin_users"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       user_task_mastery: {
         Row: {
@@ -1371,59 +1289,10 @@ export type Database = {
             referencedRelation: "v_task_coverage"
             referencedColumns: ["task_id"]
           },
-          {
-            foreignKeyName: "user_task_mastery_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "v_admin_users"
-            referencedColumns: ["user_id"]
-          },
         ]
       }
     }
     Views: {
-      v_admin_users: {
-        Row: {
-          current_expires_at: string | null
-          current_plan_code: Database["public"]["Enums"]["plan_code"] | null
-          email: string | null
-          exams_taken: number | null
-          is_admin: boolean | null
-          last_exam_at: string | null
-          last_sign_in_at: string | null
-          latest_license_status: string | null
-          paid_licenses_count: number | null
-          signed_up_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          current_expires_at?: never
-          current_plan_code?: never
-          email?: string | null
-          exams_taken?: never
-          is_admin?: never
-          last_exam_at?: never
-          last_sign_in_at?: string | null
-          latest_license_status?: never
-          paid_licenses_count?: never
-          signed_up_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          current_expires_at?: never
-          current_plan_code?: never
-          email?: string | null
-          exams_taken?: never
-          is_admin?: never
-          last_exam_at?: never
-          last_sign_in_at?: string | null
-          latest_license_status?: never
-          paid_licenses_count?: never
-          signed_up_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       v_exam_stats: {
         Row: {
           avg_score_pct: number | null
@@ -1580,6 +1449,22 @@ export type Database = {
           mode: string
           status: string
           total_exams: number
+        }[]
+      }
+      admin_list_users: {
+        Args: never
+        Returns: {
+          current_expires_at: string
+          current_plan_code: string
+          email: string
+          exams_taken: number
+          is_admin: boolean
+          last_exam_at: string
+          last_sign_in_at: string
+          latest_license_status: string
+          paid_licenses_count: number
+          signed_up_at: string
+          user_id: string
         }[]
       }
       admin_mrr_trend: {
