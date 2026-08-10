@@ -102,11 +102,17 @@ function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="font-display text-lg font-semibold text-foreground">6. Propiedad intelectual</h2>
+            <h2 className="font-display text-lg font-semibold text-foreground">6. Propiedad intelectual y marcas</h2>
             <p className="mt-3">
               Todos los derechos de propiedad intelectual sobre el sitio, el software, las preguntas, las explicaciones
               y los materiales pertenecen al titular o a sus licenciantes. El usuario no adquiere derecho alguno sobre
               ellos más allá del uso personal dentro del servicio contratado.
+            </p>
+            <p className="mt-3">
+              <strong className="text-foreground">Glacimonto</strong> y{" "}
+              <strong className="text-foreground">PMTech Simulator</strong> son marcas registradas de
+              [NOMBRE COMPLETO DE LA EMPRESA]. PMP® y PMBOK® son marcas registradas del Project Management
+              Institute (PMI)®, sin relación de afiliación ni patrocinio con esta plataforma.
             </p>
           </section>
 
