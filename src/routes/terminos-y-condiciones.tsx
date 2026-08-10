@@ -84,8 +84,8 @@ function TerminosPage() {
               duraciones y condiciones de cada plan se muestran en la página correspondiente. Los pagos se procesan a
               través de proveedores externos seguros. Las suscripciones se renuevan automáticamente salvo que canceles
               antes de la fecha de renovación. Consulta nuestra política de cancelaciones y reembolsos en{" "}
-              <a href="mailto:[EMAIL DE SOPORTE]" className="text-primary hover:underline">
-                [EMAIL DE SOPORTE]
+              <a href="mailto:contacto@glacimonto.com" className="text-primary hover:underline">
+                contacto@glacimonto.com
               </a>.
             </p>
           </section>
@@ -126,8 +126,8 @@ function TerminosPage() {
               Podemos actualizar estas condiciones, el servicio o los planes en cualquier momento. Te notificaremos los
               cambios sustanciales por los medios adecuados. Puedes dar de baja tu cuenta en cualquier momento desde tu
               perfil o solicitándolo a{" "}
-              <a href="mailto:[EMAIL DE SOPORTE]" className="text-primary hover:underline">
-                [EMAIL DE SOPORTE]
+              <a href="mailto:contacto@glacimonto.com" className="text-primary hover:underline">
+                contacto@glacimonto.com
               </a>.
             </p>
           </section>

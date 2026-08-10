@@ -65,8 +65,8 @@ function AvisoLegalPage() {
               </li>
               <li>
                 <strong className="text-foreground">Correo electrónico:</strong>{" "}
-                <a href="mailto:[EMAIL DE CONTACTO]" className="text-primary hover:underline">
-                  [EMAIL DE CONTACTO]
+                <a href="mailto:contacto@glacimonto.com" className="text-primary hover:underline">
+                  contacto@glacimonto.com
                 </a>
               </li>
               <li>

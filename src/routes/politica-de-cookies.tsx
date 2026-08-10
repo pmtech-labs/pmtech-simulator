@@ -157,8 +157,8 @@ function CookiesPage() {
             <h2 className="font-display text-lg font-semibold text-foreground">5. Contacto</h2>
             <p className="mt-3">
               Si tienes dudas sobre el uso de cookies, puedes escribirnos a{" "}
-              <a href="mailto:[EMAIL DE PRIVACIDAD]" className="text-primary hover:underline">
-                [EMAIL DE PRIVACIDAD]
+              <a href="mailto:contacto@glacimonto.com" className="text-primary hover:underline">
+                contacto@glacimonto.com
               </a>.
             </p>
           </section>

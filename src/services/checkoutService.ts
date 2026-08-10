@@ -27,7 +27,7 @@ export async function createCheckoutSession({ planCode }: CheckoutParams): Promi
 }
 
 /** Contacto para activación manual de licencia mientras no hay cobro online. */
-export const SALES_EMAIL = "info@pmtechsimulator.com";
+export const SALES_EMAIL = "contacto@glacimonto.com";
 
 export const PLANS = [
   {
