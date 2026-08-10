@@ -268,7 +268,7 @@ function TagGroup({
       <p className="mt-0.5 text-[11px] text-muted-foreground">{note}</p>
       <div className="mt-3 space-y-2.5">
         {entries.map((e) => (
-          <TagBar key={e.code} label={e.label} count={e.count} total={total} />
+          <TagBar key={e.code} code={e.code} label={e.label} count={e.count} total={total} />
         ))}
       </div>
     </div>
