@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
-const BASE_URL = "https://pmtech-simulator.lovable.app";
+const BASE_URL = "https://simulador.glacimonto.com";
 
 interface SitemapEntry {
   path: string;
@@ -24,7 +24,15 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/pmtech-vs-pmi-study-hall", changefreq: "monthly", priority: "0.8" },
           { path: "/pmtech-vs-prepcast", changefreq: "monthly", priority: "0.8" },
           { path: "/faq", changefreq: "monthly", priority: "0.7" },
-
+          { path: "/glosario", changefreq: "monthly", priority: "0.7" },
+          { path: "/instrucciones", changefreq: "monthly", priority: "0.6" },
+          { path: "/tutorial-examen", changefreq: "monthly", priority: "0.6" },
+          { path: "/registro", changefreq: "monthly", priority: "0.6" },
+          { path: "/login", changefreq: "yearly", priority: "0.3" },
+          { path: "/aviso-legal", changefreq: "yearly", priority: "0.2" },
+          { path: "/politica-de-privacidad", changefreq: "yearly", priority: "0.2" },
+          { path: "/politica-de-cookies", changefreq: "yearly", priority: "0.2" },
+          { path: "/terminos-y-condiciones", changefreq: "yearly", priority: "0.2" },
         ];
 
 
