@@ -284,7 +284,8 @@ function TagDistribution() {
     queryFn: () => getStats<QuestionTagRow>("tags"),
   });
 
-  const rows = tags.data ?? [];
+  // Solo cuentan las preguntas publicadas: son las que se usan en simulacros.
+  const rows = (tags.data ?? []).filter((r) => r.status === "published");
   const total = rows.length;
 
   const counts: Record<string, number> = {};
@@ -307,9 +308,11 @@ function TagDistribution() {
       <div>
         <h2 className="text-sm font-semibold">Representación por etiqueta</h2>
         <p className="text-xs text-muted-foreground">
-          Sobre {total} preguntas en borrador y publicadas
+          Sobre {total} preguntas publicadas · comparado con el % objetivo de cada etiqueta
+          (verde ≤5 pp, naranja 5-10 pp, rojo &gt;10 pp de desviación)
         </p>
       </div>
+
       {tags.error ? (
         <p className="text-xs text-destructive">No se han podido cargar las etiquetas.</p>
       ) : tags.isPending ? (
