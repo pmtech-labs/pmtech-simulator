@@ -174,8 +174,16 @@ export function TrainingContactForm() {
       </button>
       <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
         Usaremos tus datos solo para responder a esta solicitud. Sin spam, sin cesión a
-        terceros.
+        terceros. También puedes escribirnos a{" "}
+        <a
+          href="mailto:contacto@glacimonto.com"
+          className="font-semibold text-accent underline-offset-2 hover:underline"
+        >
+          contacto@glacimonto.com
+        </a>
+        .
       </p>
+
     </form>
   );
 }

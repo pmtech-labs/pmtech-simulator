@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { submitTrainingLead } from "@/lib/leads.functions";
 
 const CALL_URL = "https://isaaclopezpena.com/contacto/";
+const CONTACT_EMAIL = "contacto@glacimonto.com";
 
 const GOALS = [
   {
@@ -40,6 +41,8 @@ export function LeadWizard() {
   const [step, setStep] = useState(0);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
+  const [showErrors, setShowErrors] = useState(false);
+
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -50,10 +53,22 @@ export function LeadWizard() {
   const inputClass =
     "w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm outline-none transition-colors focus:border-accent";
 
-  const canContinue =
-    step === 0
-      ? form.fullName.trim().length >= 2 && /\S+@\S+\.\S+/.test(form.email)
-      : true;
+  const nameError =
+    form.fullName.trim().length >= 2 ? "" : "Indica tu nombre y apellidos.";
+  const emailError = /\S+@\S+\.\S+/.test(form.email.trim())
+    ? ""
+    : "Indica un email válido para poder responderte.";
+  const canContinue = step === 0 ? !nameError && !emailError : true;
+
+  function handleNext() {
+    if (step === 0 && !canContinue) {
+      setShowErrors(true);
+      return;
+    }
+    setShowErrors(false);
+    setStep((s) => s + 1);
+  }
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -169,9 +184,14 @@ export function LeadWizard() {
                         onChange={(e) =>
                           setForm((f) => ({ ...f, fullName: e.target.value }))
                         }
-                        className={`mt-1.5 ${inputClass}`}
+                        className={`mt-1.5 ${inputClass} ${
+                          showErrors && nameError ? "border-destructive" : ""
+                        }`}
                         placeholder="Ana García"
                       />
+                      {showErrors && nameError && (
+                        <p className="mt-1 text-[11px] text-destructive">{nameError}</p>
+                      )}
                     </div>
                     <div>
                       <label htmlFor="wiz-email" className="text-xs font-semibold">
@@ -183,10 +203,16 @@ export function LeadWizard() {
                         maxLength={255}
                         value={form.email}
                         onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                        className={`mt-1.5 ${inputClass}`}
+                        className={`mt-1.5 ${inputClass} ${
+                          showErrors && emailError ? "border-destructive" : ""
+                        }`}
                         placeholder="ana@empresa.com"
                       />
+                      {showErrors && emailError && (
+                        <p className="mt-1 text-[11px] text-destructive">{emailError}</p>
+                      )}
                     </div>
+
                   </>
                 )}
 
@@ -249,8 +275,8 @@ export function LeadWizard() {
                 {step < STEPS.length - 1 ? (
                   <button
                     type="button"
-                    disabled={!canContinue}
-                    onClick={() => setStep((s) => s + 1)}
+                    onClick={handleNext}
+
                     className="group inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-transform duration-300 hover:-translate-y-0.5 disabled:opacity-50"
                   >
                     Continuar
@@ -285,7 +311,15 @@ export function LeadWizard() {
               </a>
               <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
                 Usaremos tus datos solo para responderte. Sin spam, sin cesión a terceros.
+                ¿Prefieres escribirnos?{" "}
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="font-semibold text-accent underline-offset-2 hover:underline"
+                >
+                  {CONTACT_EMAIL}
+                </a>
               </p>
+
             </form>
           )}
         </div>
