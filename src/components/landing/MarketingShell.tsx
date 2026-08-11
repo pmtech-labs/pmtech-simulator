@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { GraduationCap } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { LoginButton } from "@/components/LoginButton";
+import { AuthNavStatus } from "@/components/AuthNavStatus";
 import { TryFreeButton } from "@/components/TryFreeButton";
 
 /**
@@ -29,7 +29,7 @@ export function MarketingShell({ children }: { children: ReactNode }) {
           </Link>
 
           <div className="flex items-center gap-3">
-            <LoginButton className="hidden sm:inline-flex" />
+            <AuthNavStatus className="hidden sm:inline-flex" />
             <TryFreeButton />
           </div>
         </div>

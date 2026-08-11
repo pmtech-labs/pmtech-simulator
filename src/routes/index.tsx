@@ -22,7 +22,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { LoginButton } from "@/components/LoginButton";
+import { AuthNavStatus } from "@/components/AuthNavStatus";
 import { TryFreeButton } from "@/components/TryFreeButton";
 import { AboutUs } from "@/components/landing/AboutUs";
 import { SocialProof } from "@/components/landing/SocialProof";
@@ -260,7 +260,7 @@ function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <LoginButton />
+            <AuthNavStatus />
             <TryFreeButton />
           </div>
         </div>
@@ -307,7 +307,7 @@ function Header() {
             </a>
 
             <div className="flex w-fit items-center gap-3 pt-2">
-              <LoginButton onClick={() => setOpen(false)} />
+              <AuthNavStatus onClick={() => setOpen(false)} />
               <TryFreeButton onClick={() => setOpen(false)} />
             </div>
           </nav>
@@ -761,7 +761,7 @@ function Footer() {
           </div>
           <div className="flex flex-col items-center gap-4 sm:items-end">
             <div className="flex items-center gap-3">
-              <LoginButton size="sm" />
+              <AuthNavStatus className="text-xs px-2.5 py-1.5" />
               <TryFreeButton size="sm" />
             </div>
             <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-medium text-muted-foreground sm:justify-end">
