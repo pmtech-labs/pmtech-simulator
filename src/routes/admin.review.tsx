@@ -15,7 +15,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
+
+import { DictationTextarea } from "@/components/admin/DictationTextarea";
 import { getAdminQuestionFn } from "@/lib/adminQuestions.functions";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import {
@@ -509,10 +510,10 @@ function ReviewPage() {
                 </p>
               </div>
             ) : (
-              <Textarea
+              <DictationTextarea
                 placeholder="Ej: El distractor C es demasiado obvio, cualquier candidato lo descarta sin razonar."
                 value={rejectReason}
-                onChange={(e) => setRejectReason(e.target.value)}
+                onChange={setRejectReason}
                 rows={3}
               />
             )}

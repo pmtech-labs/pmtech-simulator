@@ -783,6 +783,60 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: {
+          currency: string
+          id: string
+          license_id: string | null
+          plan_id: string
+          price_cents_charged: number
+          purchased_at: string
+          status: string
+          stripe_invoice_id: string | null
+          stripe_payment_intent_id: string | null
+          user_id: string
+        }
+        Insert: {
+          currency?: string
+          id?: string
+          license_id?: string | null
+          plan_id: string
+          price_cents_charged: number
+          purchased_at?: string
+          status?: string
+          stripe_invoice_id?: string | null
+          stripe_payment_intent_id?: string | null
+          user_id: string
+        }
+        Update: {
+          currency?: string
+          id?: string
+          license_id?: string | null
+          plan_id?: string
+          price_cents_charged?: number
+          purchased_at?: string
+          status?: string
+          stripe_invoice_id?: string | null
+          stripe_payment_intent_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_license_id_fkey"
+            columns: ["license_id"]
+            isOneToOne: false
+            referencedRelation: "licenses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       plans: {
         Row: {
           code: Database["public"]["Enums"]["plan_code"]
@@ -1493,6 +1547,7 @@ export type Database = {
           signups: number
         }[]
       }
+      expire_licenses: { Args: never; Returns: undefined }
       get_untagged_ae_questions: {
         Args: { p_limit: number }
         Returns: {
