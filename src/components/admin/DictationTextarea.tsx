@@ -55,6 +55,7 @@ export function DictationTextarea({
   const [interim, setInterim] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [baseValue, setBaseValue] = useState("");
+  const [originalValue, setOriginalValue] = useState("");
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
   useEffect(() => {
@@ -82,6 +83,7 @@ export function DictationTextarea({
     // Al iniciar o reanudar, consolidamos todo lo que ya hay en el campo
     // (texto original + dictado previo) como base, y empezamos un tramo nuevo.
     // Así el dictado siempre se añade y nunca sustituye lo anterior.
+    if (!hasPreview) setOriginalValue(value);
     setBaseValue(displayValue);
     setDraft("");
     setInterim("");
@@ -136,6 +138,7 @@ export function DictationTextarea({
   const accept = () => {
     stop();
     onChange(displayValue);
+    setOriginalValue("");
     setBaseValue("");
     setDraft("");
     setInterim("");
@@ -143,7 +146,8 @@ export function DictationTextarea({
 
   const discard = () => {
     stop();
-    onChange(baseValue);
+    onChange(originalValue);
+    setOriginalValue("");
     setBaseValue("");
     setDraft("");
     setInterim("");
@@ -200,7 +204,7 @@ export function DictationTextarea({
               type="button"
               size="sm"
               onClick={accept}
-              disabled={!preview}
+              disabled={!displayValue.trim()}
               className="gap-2"
               aria-label="Aceptar y transcribir"
             >
