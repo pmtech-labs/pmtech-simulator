@@ -187,7 +187,17 @@ export function DictationTextarea({
                 Grabando… habla con claridad
               </span>
             ) : (
-              <span className="text-xs text-muted-foreground">Dictado en pausa</span>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={start}
+                disabled={!supported}
+                className="gap-2"
+              >
+                <Mic className="h-4 w-4" />
+                Continuar dictado
+              </Button>
             )}
             <Button
               type="button"
