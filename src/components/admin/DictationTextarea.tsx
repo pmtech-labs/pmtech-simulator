@@ -79,9 +79,15 @@ export function DictationTextarea({
       return;
     }
     setError(null);
-    setDraft("");
     setInterim("");
-    setBaseValue(value);
+    // Si ya habíamos dictado algo y estamos reanudando tras una pausa,
+    // conservamos el texto acumulado para que el nuevo dictado se añada
+    // a lo anterior en lugar de sustituirlo.
+    const isResuming = baseValue !== "" || draft !== "";
+    if (!isResuming) {
+      setDraft("");
+      setBaseValue(value);
+    }
 
     const recognition = new Ctor();
     recognition.lang = "es-ES";
@@ -181,7 +187,17 @@ export function DictationTextarea({
                 Grabando… habla con claridad
               </span>
             ) : (
-              <span className="text-xs text-muted-foreground">Dictado en pausa</span>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={start}
+                disabled={!supported}
+                className="gap-2"
+              >
+                <Mic className="h-4 w-4" />
+                Continuar dictado
+              </Button>
             )}
             <Button
               type="button"
