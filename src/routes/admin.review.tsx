@@ -509,10 +509,10 @@ function ReviewPage() {
                 </p>
               </div>
             ) : (
-              <Textarea
+              <DictationTextarea
                 placeholder="Ej: El distractor C es demasiado obvio, cualquier candidato lo descarta sin razonar."
                 value={rejectReason}
-                onChange={(e) => setRejectReason(e.target.value)}
+                onChange={setRejectReason}
                 rows={3}
               />
             )}
