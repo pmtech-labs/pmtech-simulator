@@ -55,6 +55,7 @@ export function DictationTextarea({
   const [interim, setInterim] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [baseValue, setBaseValue] = useState("");
+  const [originalValue, setOriginalValue] = useState("");
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
   useEffect(() => {
@@ -79,15 +80,13 @@ export function DictationTextarea({
       return;
     }
     setError(null);
+    // Al iniciar o reanudar, consolidamos todo lo que ya hay en el campo
+    // (texto original + dictado previo) como base, y empezamos un tramo nuevo.
+    // Así el dictado siempre se añade y nunca sustituye lo anterior.
+    if (!hasPreview) setOriginalValue(value);
+    setBaseValue(displayValue);
+    setDraft("");
     setInterim("");
-    // Si ya habíamos dictado algo y estamos reanudando tras una pausa,
-    // conservamos el texto acumulado para que el nuevo dictado se añada
-    // a lo anterior en lugar de sustituirlo.
-    const isResuming = baseValue !== "" || draft !== "";
-    if (!isResuming) {
-      setDraft("");
-      setBaseValue(value);
-    }
 
     const recognition = new Ctor();
     recognition.lang = "es-ES";
@@ -139,6 +138,7 @@ export function DictationTextarea({
   const accept = () => {
     stop();
     onChange(displayValue);
+    setOriginalValue("");
     setBaseValue("");
     setDraft("");
     setInterim("");
@@ -146,7 +146,8 @@ export function DictationTextarea({
 
   const discard = () => {
     stop();
-    onChange(baseValue);
+    onChange(originalValue);
+    setOriginalValue("");
     setBaseValue("");
     setDraft("");
     setInterim("");
@@ -203,7 +204,7 @@ export function DictationTextarea({
               type="button"
               size="sm"
               onClick={accept}
-              disabled={!preview}
+              disabled={!displayValue.trim()}
               className="gap-2"
               aria-label="Aceptar y transcribir"
             >
