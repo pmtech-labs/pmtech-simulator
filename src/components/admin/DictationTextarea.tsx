@@ -79,9 +79,15 @@ export function DictationTextarea({
       return;
     }
     setError(null);
-    setDraft("");
     setInterim("");
-    setBaseValue(value);
+    // Si ya habíamos dictado algo y estamos reanudando tras una pausa,
+    // conservamos el texto acumulado para que el nuevo dictado se añada
+    // a lo anterior en lugar de sustituirlo.
+    const isResuming = baseValue !== "" || draft !== "";
+    if (!isResuming) {
+      setDraft("");
+      setBaseValue(value);
+    }
 
     const recognition = new Ctor();
     recognition.lang = "es-ES";
