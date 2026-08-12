@@ -37,9 +37,10 @@ interface DictationTextareaProps {
 }
 
 /**
- * Textarea con dictado por voz (es-ES). El texto reconocido se muestra en vivo
- * y solo se incorpora al campo al pulsar el tick de aceptar, para poder
- * revisarlo antes de guardar.
+ * Textarea con dictado por voz (es-ES). Durante la grabación, la transcripción
+ * se muestra directamente en el campo de texto. Al pulsar el tick de aceptar,
+ * se confirma; al pulsar descartar, se restaura el valor que tenía el campo
+ * antes de empezar a dictar.
  */
 export function DictationTextarea({
   value,
@@ -53,6 +54,7 @@ export function DictationTextarea({
   const [draft, setDraft] = useState("");
   const [interim, setInterim] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [baseValue, setBaseValue] = useState("");
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
   useEffect(() => {
@@ -63,6 +65,13 @@ export function DictationTextarea({
     };
   }, []);
 
+  const preview = `${draft}${interim ? ` ${interim}` : ""}`.trim();
+  const hasPreview = listening || preview !== "";
+
+  const displayValue = hasPreview
+    ? `${baseValue.trim()}${baseValue.trim() && preview ? " " : ""}${preview}`.trim()
+    : value;
+
   const start = () => {
     const Ctor = getRecognitionCtor();
     if (!Ctor) {
@@ -72,6 +81,7 @@ export function DictationTextarea({
     setError(null);
     setDraft("");
     setInterim("");
+    setBaseValue(value);
 
     const recognition = new Ctor();
     recognition.lang = "es-ES";
@@ -122,31 +132,36 @@ export function DictationTextarea({
 
   const accept = () => {
     stop();
-    const text = `${draft} ${interim}`.replace(/\s+/g, " ").trim();
-    if (text) onChange(value.trim() ? `${value.trim()} ${text}` : text);
+    onChange(displayValue);
+    setBaseValue("");
     setDraft("");
     setInterim("");
   };
 
   const discard = () => {
     stop();
+    onChange(baseValue);
+    setBaseValue("");
     setDraft("");
     setInterim("");
   };
-
-  const preview = `${draft}${interim ? ` ${interim}` : ""}`.trim();
 
   return (
     <div className={cn("space-y-2", className)}>
       <Textarea
         placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        value={displayValue}
+        onChange={(e) => {
+          // Mientras se dicta, el valor se construye automáticamente.
+          if (!hasPreview) onChange(e.target.value);
+        }}
         rows={rows}
+        readOnly={hasPreview}
+        className={cn(hasPreview && "bg-muted/40")}
       />
 
       <div className="flex flex-wrap items-center gap-2">
-        {!listening && !preview ? (
+        {!hasPreview ? (
           <Button
             type="button"
             variant="outline"
@@ -193,12 +208,6 @@ export function DictationTextarea({
           </>
         )}
       </div>
-
-      {preview && (
-        <p className="rounded-md border border-dashed border-border bg-muted/40 p-2 text-sm text-muted-foreground">
-          {preview}
-        </p>
-      )}
 
       {!supported && (
         <p className="text-xs text-muted-foreground">
