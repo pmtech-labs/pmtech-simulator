@@ -51,12 +51,16 @@ export function DictationTextarea({
 }: DictationTextareaProps) {
   const [supported, setSupported] = useState(true);
   const [listening, setListening] = useState(false);
+  const [sessionActive, setSessionActive] = useState(false);
   const [draft, setDraft] = useState("");
   const [interim, setInterim] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [baseValue, setBaseValue] = useState("");
   const [originalValue, setOriginalValue] = useState("");
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const baseValueRef = useRef("");
+  const draftRef = useRef("");
+  const interimRef = useRef("");
 
   useEffect(() => {
     setSupported(Boolean(getRecognitionCtor()));
@@ -66,12 +70,10 @@ export function DictationTextarea({
     };
   }, []);
 
-  const preview = `${draft}${interim ? ` ${interim}` : ""}`.trim();
-  const hasPreview = listening || preview !== "";
+  const joinText = (base: string, dictated: string, live: string) =>
+    [base.trim(), dictated.trim(), live.trim()].filter(Boolean).join(" ");
 
-  const displayValue = hasPreview
-    ? `${baseValue.trim()}${baseValue.trim() && preview ? " " : ""}${preview}`.trim()
-    : value;
+  const displayValue = sessionActive ? joinText(baseValue, draft, interim) : value;
 
   const start = () => {
     const Ctor = getRecognitionCtor();
@@ -80,13 +82,18 @@ export function DictationTextarea({
       return;
     }
     setError(null);
-    // Al iniciar o reanudar, consolidamos todo lo que ya hay en el campo
-    // (texto original + dictado previo) como base, y empezamos un tramo nuevo.
-    // Así el dictado siempre se añade y nunca sustituye lo anterior.
-    if (!hasPreview) setOriginalValue(value);
-    setBaseValue(displayValue);
-    setDraft("");
+    // Una sesión conserva siempre la misma base y acumula todos los tramos.
+    // Al continuar después de una pausa no se reinicia ningún texto dictado.
+    if (!sessionActive) {
+      setOriginalValue(value);
+      setBaseValue(value);
+      setDraft("");
+      baseValueRef.current = value;
+      draftRef.current = "";
+      setSessionActive(true);
+    }
     setInterim("");
+    interimRef.current = "";
 
     const recognition = new Ctor();
     recognition.lang = "es-ES";
@@ -105,7 +112,12 @@ export function DictationTextarea({
         if (result.isFinal) finalChunk += result[0].transcript;
         else interimChunk += result[0].transcript;
       }
-      if (finalChunk) setDraft((prev) => `${prev}${prev ? " " : ""}${finalChunk.trim()}`);
+      if (finalChunk) {
+        const nextDraft = [draftRef.current.trim(), finalChunk.trim()].filter(Boolean).join(" ");
+        draftRef.current = nextDraft;
+        setDraft(nextDraft);
+      }
+      interimRef.current = interimChunk;
       setInterim(interimChunk);
     };
 
@@ -137,20 +149,30 @@ export function DictationTextarea({
 
   const accept = () => {
     stop();
-    onChange(displayValue);
+    // Los refs evitan perder texto si el último evento de voz y el clic en
+    // Aceptar ocurren antes de que React haya renderizado el nuevo estado.
+    onChange(joinText(baseValueRef.current, draftRef.current, interimRef.current));
+    setSessionActive(false);
     setOriginalValue("");
     setBaseValue("");
     setDraft("");
     setInterim("");
+    baseValueRef.current = "";
+    draftRef.current = "";
+    interimRef.current = "";
   };
 
   const discard = () => {
     stop();
     onChange(originalValue);
+    setSessionActive(false);
     setOriginalValue("");
     setBaseValue("");
     setDraft("");
     setInterim("");
+    baseValueRef.current = "";
+    draftRef.current = "";
+    interimRef.current = "";
   };
 
   return (
@@ -160,15 +182,15 @@ export function DictationTextarea({
         value={displayValue}
         onChange={(e) => {
           // Mientras se dicta, el valor se construye automáticamente.
-          if (!hasPreview) onChange(e.target.value);
+          if (!sessionActive) onChange(e.target.value);
         }}
         rows={rows}
-        readOnly={hasPreview}
-        className={cn(hasPreview && "bg-muted/40")}
+        readOnly={sessionActive}
+        className={cn(sessionActive && "bg-muted/40")}
       />
 
       <div className="flex flex-wrap items-center gap-2">
-        {!hasPreview ? (
+        {!sessionActive ? (
           <Button
             type="button"
             variant="outline"
