@@ -110,14 +110,11 @@ function PartnersPage() {
             alt="UNIR — Universidad Internacional de La Rioja"
             className="h-8 w-auto opacity-80 grayscale transition-all hover:opacity-100 hover:grayscale-0 sm:h-9"
           />
-          <div className="text-center">
-            <p className="font-display text-lg font-bold tracking-tight text-foreground/80">
-              Cámara de Comercio
-            </p>
-            <p className="-mt-1 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-              de Madrid
-            </p>
-          </div>
+          <img
+            src="/partners/camara-madrid-logo.png"
+            alt="Cámara de Comercio de Madrid"
+            className="h-14 w-auto opacity-80 grayscale transition-all hover:opacity-100 hover:grayscale-0 sm:h-16"
+          />
         </div>
       </section>
 
