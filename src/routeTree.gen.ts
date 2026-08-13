@@ -25,6 +25,7 @@ import { Route as GlosarioRouteImport } from './routes/glosario'
 import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as InstruccionesRouteImport } from './routes/instrucciones'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as Pmbok8RouteImport } from './routes/pmbok-8'
 import { Route as PmtechVsPmiStudyHallRouteImport } from './routes/pmtech-vs-pmi-study-hall'
@@ -126,6 +127,11 @@ const InstruccionesRoute = InstruccionesRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnersRoute = PartnersRouteImport.update({
+  id: '/partners',
+  path: '/partners',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerfilRoute = PerfilRouteImport.update({
@@ -256,6 +262,7 @@ export interface FileRoutesByFullPath {
   '/historial': typeof HistorialRoute
   '/instrucciones': typeof InstruccionesRoute
   '/login': typeof LoginRoute
+  '/partners': typeof PartnersRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
   '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
@@ -295,6 +302,7 @@ export interface FileRoutesByTo {
   '/historial': typeof HistorialRoute
   '/instrucciones': typeof InstruccionesRoute
   '/login': typeof LoginRoute
+  '/partners': typeof PartnersRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
   '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
@@ -336,6 +344,7 @@ export interface FileRoutesById {
   '/historial': typeof HistorialRoute
   '/instrucciones': typeof InstruccionesRoute
   '/login': typeof LoginRoute
+  '/partners': typeof PartnersRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
   '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
@@ -378,6 +387,7 @@ export interface FileRouteTypes {
     | '/historial'
     | '/instrucciones'
     | '/login'
+    | '/partners'
     | '/perfil'
     | '/pmbok-8'
     | '/pmtech-vs-pmi-study-hall'
@@ -417,6 +427,7 @@ export interface FileRouteTypes {
     | '/historial'
     | '/instrucciones'
     | '/login'
+    | '/partners'
     | '/perfil'
     | '/pmbok-8'
     | '/pmtech-vs-pmi-study-hall'
@@ -457,6 +468,7 @@ export interface FileRouteTypes {
     | '/historial'
     | '/instrucciones'
     | '/login'
+    | '/partners'
     | '/perfil'
     | '/pmbok-8'
     | '/pmtech-vs-pmi-study-hall'
@@ -498,6 +510,7 @@ export interface RootRouteChildren {
   HistorialRoute: typeof HistorialRoute
   InstruccionesRoute: typeof InstruccionesRoute
   LoginRoute: typeof LoginRoute
+  PartnersRoute: typeof PartnersRoute
   PerfilRoute: typeof PerfilRoute
   Pmbok8Route: typeof Pmbok8Route
   PmtechVsPmiStudyHallRoute: typeof PmtechVsPmiStudyHallRoute
@@ -627,6 +640,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partners': {
+      id: '/partners'
+      path: '/partners'
+      fullPath: '/partners'
+      preLoaderRoute: typeof PartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/perfil': {
@@ -825,6 +845,7 @@ const rootRouteChildren: RootRouteChildren = {
   HistorialRoute: HistorialRoute,
   InstruccionesRoute: InstruccionesRoute,
   LoginRoute: LoginRoute,
+  PartnersRoute: PartnersRoute,
   PerfilRoute: PerfilRoute,
   Pmbok8Route: Pmbok8Route,
   PmtechVsPmiStudyHallRoute: PmtechVsPmiStudyHallRoute,

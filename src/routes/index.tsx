@@ -573,7 +573,7 @@ function Pricing() {
               {[
                 { label: "Práctica ilimitada por dominio y lección", included: true },
                 { label: "Simulacros acumulativos por unidad", included: true },
-                { label: "1 simulacro completo de regalo", included: true },
+                { label: "1 medio simulacro de regalo (90 preguntas)", included: true },
                 { label: "Practicum completo (hotspot, gráficos)", included: false },
                 { label: "Analítica por tarea ECO", included: false },
                 { label: "Motor adaptativo", included: false },

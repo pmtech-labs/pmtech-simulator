@@ -64,7 +64,7 @@ export const FAQ_BLOCKS: FaqBlock[] = [
       {
         id: "plan-gratuito",
         q: "¿Qué incluye el plan gratuito y cómo paso a uno de pago?",
-        a: "El plan gratuito te da acceso sin límite de tiempo a la práctica por dominio, por lección y acumulativa, más un simulacro completo de regalo para que pruebes la estructura real del examen. Cuando quieras simulacros completos ilimitados y el resto de funciones (práctica interactiva avanzada, analítica por tarea, motor adaptativo), puedes mejorar tu plan en cualquier momento desde tu perfil — no pierdes tu progreso ni tienes que crear una cuenta nueva.",
+        a: "El plan gratuito te da acceso sin límite de tiempo a la práctica por dominio, por lección y acumulativa, más un medio simulacro de regalo (90 preguntas, 2 horas) para que pruebes la presión real de un examen cronometrado. Cuando quieras simulacros completos (180 preguntas) ilimitados y el resto de funciones (práctica interactiva avanzada, analítica por tarea, motor adaptativo que prioriza tus áreas más débiles en la práctica libre), puedes mejorar tu plan en cualquier momento desde tu perfil — no pierdes tu progreso ni tienes que crear una cuenta nueva.",
       },
       {
         id: "upgrade-premium",
