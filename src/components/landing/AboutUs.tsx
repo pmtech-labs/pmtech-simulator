@@ -28,6 +28,8 @@ export function AboutUs() {
             <p className="mt-1 inline-block rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
               PMP® · PMO-CP® · PSM® · CSM®
             </p>
+            <p className="mt-2 text-xs text-muted-foreground">Liderazgo académico y técnico del equipo</p>
+
           </div>
         </div>
 
