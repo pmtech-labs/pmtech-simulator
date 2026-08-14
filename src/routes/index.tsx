@@ -1,18 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
+  Award,
+  BarChart3,
   Building2,
   CheckCircle2,
   ClipboardList,
   GraduationCap,
+  Handshake,
   ListChecks,
   Menu,
   Puzzle,
+  Rocket,
   ShieldCheck,
   Sparkles,
   Target,
   Timer,
   TrendingUp,
+  Users,
   X,
 } from "lucide-react";
 import { useState } from "react";
