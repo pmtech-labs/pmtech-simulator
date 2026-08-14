@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
+  Building2,
   CheckCircle2,
   ClipboardList,
   GraduationCap,
@@ -29,6 +30,7 @@ import { SocialProof } from "@/components/landing/SocialProof";
 import { NewsletterSignup } from "@/components/landing/NewsletterSignup";
 import { Guarantees } from "@/components/landing/Guarantees";
 import { LeadWizard } from "@/components/landing/LeadWizard";
+import { HeaderNav, MobileNav } from "@/components/landing/HeaderNav";
 import { Reveal } from "@/components/landing/Reveal";
 import heroDashboard from "@/assets/hero-dashboard.jpg";
 import diagnosticAbstract from "@/assets/diagnostic-abstract.jpg";
@@ -240,30 +242,8 @@ function Header() {
           </div>
         </div>
 
-        <div className="hidden items-center gap-4 xl:flex">
-          <nav className="flex items-center gap-4 text-[13px] font-medium text-muted-foreground">
-            <a href="#caracteristicas" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Características
-            </a>
-            <a href="#opiniones" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Opiniones
-            </a>
-            <a href="#sobre-nosotros" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Sobre nosotros
-            </a>
-            <a href="#garantias" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Garantías
-            </a>
-            <a href="#precios" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Precios
-            </a>
-            <a href="#formacion" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Formación
-            </a>
-            <Link to="/faq" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Preguntas frecuentes
-            </Link>
-          </nav>
+        <div className="hidden items-center gap-5 xl:flex">
+          <HeaderNav onHome />
 
           <div className="flex items-center gap-3">
             <AuthNavStatus />
@@ -281,44 +261,15 @@ function Header() {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-card px-4 py-4 xl:hidden">
-          <nav className="flex flex-col gap-3 text-sm font-medium">
-            <a href="#caracteristicas" onClick={() => setOpen(false)}>
-              Características
-            </a>
-            <a href="#como-funciona" onClick={() => setOpen(false)}>
-              Cómo funciona
-            </a>
-            <a href="#opiniones" onClick={() => setOpen(false)}>
-              Opiniones
-            </a>
-            <a href="#sobre-nosotros" onClick={() => setOpen(false)}>
-              Sobre nosotros
-            </a>
-
-            <a href="#garantias" onClick={() => setOpen(false)}>
-              Garantías
-            </a>
-            <a href="#precios" onClick={() => setOpen(false)}>
-              Precios
-            </a>
-            <a href="#formacion" onClick={() => setOpen(false)}>
-              Formación
-            </a>
-            <Link to="/faq" onClick={() => setOpen(false)}>
-              Preguntas frecuentes
-            </Link>
-            <a href="#contacto" onClick={() => setOpen(false)}>
-              Contacto
-            </a>
-
-            <div className="flex w-fit items-center gap-3 pt-2">
-              <AuthNavStatus onClick={() => setOpen(false)} />
-              <TryFreeButton onClick={() => setOpen(false)} />
-            </div>
-          </nav>
+        <div className="max-h-[75vh] overflow-y-auto border-t border-border bg-card px-4 py-4 xl:hidden">
+          <MobileNav onHome onNavigate={() => setOpen(false)} />
+          <div className="mt-5 flex w-fit items-center gap-3">
+            <AuthNavStatus onClick={() => setOpen(false)} />
+            <TryFreeButton onClick={() => setOpen(false)} />
+          </div>
         </div>
       )}
+
     </header>
   );
 }
@@ -815,6 +766,12 @@ function Footer() {
               <Link to="/curso-pmp-online" className="hover:text-foreground">
                 Curso PMP online
               </Link>
+              <Link to="/partners" className="hover:text-foreground">
+                Partners y empresas
+              </Link>
+              <Link to="/glosario" className="hover:text-foreground">
+                Glosario PMP
+              </Link>
               <Link to="/pmbok-8" className="hover:text-foreground">
                 PMBOK 7 vs 8
               </Link>
@@ -911,6 +868,65 @@ function Training() {
   );
 }
 
+function PartnersBand() {
+  return (
+    <section id="partners" className="border-y border-border bg-secondary/40">
+      <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+        <Reveal>
+          <div className="grid items-center gap-8 md:grid-cols-[1.2fr_1fr]">
+            <div>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+                <Building2 className="h-3.5 w-3.5" />
+                Centros de formación y empresas
+              </span>
+              <h2 className="mt-4 font-display text-2xl font-bold tracking-tight sm:text-3xl">
+                ¿Formas equipos o alumnos para el PMP?
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                Licencias por volumen desde 10 plazas, panel de seguimiento del progreso de tus
+                alumnos y el único simulador en español nativo ECO 2026 / PMBOK 8. Ya trabajamos
+                con universidades y cámaras de comercio.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  to="/partners"
+                  className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
+                >
+                  Ver programa de partners <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/partners"
+                  hash="contacto"
+                  className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary"
+                >
+                  Solicitar propuesta
+                </Link>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Ya colaboramos con
+              </p>
+              <div className="mt-5 flex flex-wrap items-center gap-x-8 gap-y-5">
+                <img
+                  src="/partners/unir-logo.svg"
+                  alt="UNIR — Universidad Internacional de La Rioja"
+                  className="h-7 w-auto opacity-80 grayscale"
+                />
+                <img
+                  src="/partners/camara-madrid-logo.png"
+                  alt="Cámara de Comercio de Madrid"
+                  className="h-12 w-auto opacity-80 grayscale"
+                />
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 function Newsletter() {
   return (
     <section id="boletin" className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
@@ -948,6 +964,7 @@ function LandingPage() {
         <AboutUs />
         <Pricing />
         <Training />
+        <PartnersBand />
         <FAQ />
         <Newsletter />
         <FinalCta />

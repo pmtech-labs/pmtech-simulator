@@ -1,12 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
+  BarChart3,
   Building2,
   CheckCircle2,
+  Clock,
+  GraduationCap,
+  Handshake,
   Loader2,
   Mail,
+  Rocket,
+  ShieldCheck,
   Sparkles,
   Target,
   TrendingUp,
+  Users,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -20,10 +27,16 @@ export const Route = createFileRoute("/partners")({
       {
         name: "description",
         content:
-          "Ofrece a tus alumnos el único simulador PMP nativo ECO 2026 / PMBOK 8, con contenido adaptativo y practicum interactivo real. Planes con descuento por volumen para centros de formación y empresas.",
+          "Licencias por volumen del único simulador PMP nativo ECO 2026 / PMBOK 8: contenido adaptativo, practicum interactivo y seguimiento del progreso de tus alumnos. Propuesta en 48 h.",
       },
-      { property: "og:title", content: "Partners · Simulador PMP" },
+      { property: "og:title", content: "Partners · Simulador PMP para centros y empresas" },
+      {
+        property: "og:description",
+        content:
+          "Mejora la tasa de aprobados de tus alumnos con el simulador PMP nativo ECO 2026. Descuentos por volumen desde 10 plazas.",
+      },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: PartnersPage,
@@ -33,43 +46,132 @@ const DIFERENCIADORES = [
   {
     icon: Sparkles,
     title: "Nativo ECO 2026 / PMBOK 8",
-    body: "Construido desde cero sobre el examen que entró en vigor el 9 de julio de 2026 — no es un banco antiguo remapeado. Ningún otro simulador en español parte de este estándar.",
+    body: "Construido desde cero sobre el examen vigente desde el 9 de julio de 2026 — no es un banco antiguo remapeado. Tus alumnos practican exactamente lo que se les va a preguntar.",
   },
   {
     icon: Target,
     title: "Motor adaptativo real",
-    body: "El sistema mide el dominio de cada alumno tarea a tarea del ECO y prioriza automáticamente sus áreas más débiles en la práctica libre — no es un banco de preguntas al azar.",
+    body: "Mide el dominio de cada alumno tarea a tarea del ECO y prioriza sus áreas débiles. Menos horas de aula perdidas repasando lo que ya dominan.",
   },
   {
     icon: TrendingUp,
     title: "Practicum interactivo, no solo test",
-    body: "Casos con escenario narrativo real, paneles de datos con tensión entre métricas, hotspots y emparejamiento — formatos que replican el tipo de juicio situacional que exige el examen real.",
+    body: "Casos narrativos, paneles de datos, hotspots y emparejamiento: el juicio situacional que hunde a los candidatos en el examen real.",
+  },
+];
+
+const BENEFICIOS = [
+  {
+    icon: BarChart3,
+    title: "Datos para tu tutor, no solo para el alumno",
+    body: "Ves en qué dominios ECO falla el grupo y puedes ajustar la siguiente sesión con evidencia, no por intuición.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Mejor tasa de aprobados = mejor reputación",
+    body: "El simulacro realista es el mayor predictor de aprobado. Súbelo y tus testimonios y renovaciones suben contigo.",
+  },
+  {
+    icon: Rocket,
+    title: "Diferencia tu programa en la propuesta comercial",
+    body: "Incluir un simulador nativo ECO 2026 en español es un argumento que tu competencia hoy no puede poner en su folleto.",
+  },
+  {
+    icon: Clock,
+    title: "Cero carga operativa",
+    body: "Nosotros mantenemos el banco, las actualizaciones del estándar y el soporte al alumno. Tú solo repartes las plazas.",
+  },
+  {
+    icon: Users,
+    title: "Alta de grupos en minutos",
+    body: "Nos pasas el listado de alumnos y activamos las licencias el mismo día, con fechas de inicio y fin que tú decides.",
+  },
+  {
+    icon: Handshake,
+    title: "Acuerdo flexible",
+    body: "Licencias por convocatoria o anuales, marca conjunta y facturación única para tu centro o departamento de RRHH.",
+  },
+];
+
+const PASOS = [
+  {
+    n: "01",
+    title: "Nos cuentas tu programa",
+    body: "Número de alumnos, convocatorias al año y formato (presencial, online o mixto).",
+  },
+  {
+    n: "02",
+    title: "Recibes propuesta en 48 h",
+    body: "Precio por plaza con descuento por volumen y una demo con acceso completo para tu equipo docente.",
+  },
+  {
+    n: "03",
+    title: "Activamos las plazas",
+    body: "Alta de alumnos, arranque de la convocatoria y seguimiento del progreso desde el primer día.",
+  },
+];
+
+const CASOS = [
+  {
+    icon: GraduationCap,
+    title: "Centros de formación y escuelas de negocio",
+    body: "Añade el simulador a tu curso de preparación PMP como valor incluido o como upsell con margen.",
+  },
+  {
+    icon: Building2,
+    title: "Empresas y departamentos de PMO",
+    body: "Certifica a tu equipo interno con un plan de estudio medible y reporting agregado del avance.",
+  },
+  {
+    icon: Users,
+    title: "Formadores y consultores independientes",
+    body: "Ofrece práctica ilimitada a tus alumnos sin construir ni mantener tu propio banco de preguntas.",
+  },
+];
+
+const FAQ_PARTNERS = [
+  {
+    q: "¿Cuál es el mínimo de plazas?",
+    a: "Trabajamos desde 5 plazas; el descuento por volumen empieza a aplicarse a partir de 10.",
+  },
+  {
+    q: "¿Podemos probarlo antes de contratar?",
+    a: "Sí. Damos acceso completo gratuito a tu equipo docente durante la evaluación, sin compromiso.",
+  },
+  {
+    q: "¿Se puede personalizar con nuestra marca?",
+    a: "Ofrecemos marca conjunta y comunicaciones a alumnos con tu identidad en los planes de centro.",
+  },
+  {
+    q: "¿Qué pasa si cambia el estándar del PMI?",
+    a: "Las actualizaciones de contenido están incluidas en la licencia: mantenemos el banco alineado al ECO vigente.",
   },
 ];
 
 function PartnersPage() {
   return (
     <MarketingShell>
-      <section className="mx-auto max-w-5xl px-4 pb-20 pt-16 sm:px-6 sm:pt-24">
+      <section className="mx-auto max-w-5xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24">
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
             <Building2 className="h-3.5 w-3.5" />
             Para centros de formación y empresas
           </span>
           <h1 className="mt-5 font-display text-3xl font-bold leading-tight sm:text-5xl">
-            El simulador PMP que tus alumnos <span className="text-accent">no van a encontrar en otro sitio</span>
+            Sube la tasa de aprobados de tus alumnos{" "}
+            <span className="text-accent">con el simulador PMP que nadie más tiene</span>
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Ofrece a tus estudiantes un simulador construido nativamente para el examen actual
-            (ECO 2026 / PMBOK 8), con contenido adaptativo y practicum interactivo real — no un
-            banco de test genérico con una etiqueta nueva.
+            Licencias por volumen del único simulador en español construido nativamente para el
+            examen actual (ECO 2026 / PMBOK 8), con motor adaptativo y practicum interactivo real.
+            Te preparamos la propuesta en menos de 48 horas.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a
               href="#contacto"
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
             >
-              Hablar con nuestro equipo
+              Pedir propuesta para mi centro
             </a>
             <a
               href="#pricing"
@@ -78,13 +180,30 @@ function PartnersPage() {
               Ver precio de referencia
             </a>
           </div>
+          <p className="mt-4 text-xs text-muted-foreground">
+            Demo gratuita para tu equipo docente · Sin permanencia · Facturación única
+          </p>
         </div>
+
+        <dl className="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4">
+          {[
+            { k: "180", v: "preguntas por simulacro" },
+            { k: "48 h", v: "para tu propuesta" },
+            { k: "-25 %", v: "desde 10 plazas" },
+            { k: "100 %", v: "alineado al ECO 2026" },
+          ].map((s) => (
+            <div key={s.v} className="rounded-xl border border-border bg-card p-4 text-center">
+              <dt className="font-display text-2xl font-bold text-accent">{s.k}</dt>
+              <dd className="mt-1 text-[11px] leading-snug text-muted-foreground">{s.v}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
       <section className="border-t border-border bg-card/40">
         <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
           <h2 className="text-center font-display text-2xl font-bold sm:text-3xl">
-            Por qué un centro de formación elige esto en vez de un banco de test genérico
+            Por qué un centro elige esto en vez de un banco de test genérico
           </h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-3">
             {DIFERENCIADORES.map((d) => (
@@ -102,28 +221,79 @@ function PartnersPage() {
 
       <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
         <h2 className="text-center font-display text-2xl font-bold sm:text-3xl">
-          Ya colaboramos con
+          Lo que gana tu centro (no solo tu alumno)
         </h2>
-        <div className="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-x-14 gap-y-8">
-          <img
-            src="/partners/unir-logo.svg"
-            alt="UNIR — Universidad Internacional de La Rioja"
-            className="h-8 w-auto opacity-80 grayscale transition-all hover:opacity-100 hover:grayscale-0 sm:h-9"
-          />
-          <img
-            src="/partners/camara-madrid-logo.png"
-            alt="Cámara de Comercio de Madrid"
-            className="h-14 w-auto opacity-80 grayscale transition-all hover:opacity-100 hover:grayscale-0 sm:h-16"
-          />
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {BENEFICIOS.map((b) => (
+            <div key={b.title} className="rounded-2xl border border-border bg-card p-6">
+              <b.icon className="h-5 w-5 text-accent" />
+              <h3 className="mt-3 text-sm font-semibold">{b.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{b.body}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section id="pricing" className="border-t border-border bg-card/40">
+      <section className="border-y border-border bg-card/40">
+        <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+          <h2 className="text-center font-display text-2xl font-bold sm:text-3xl">
+            Encaja con tu modelo
+          </h2>
+          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+            {CASOS.map((c) => (
+              <div key={c.title} className="rounded-2xl border border-border bg-card p-6">
+                <div className="grid h-10 w-10 place-items-center rounded-lg bg-accent/10">
+                  <c.icon className="h-5 w-5 text-accent" />
+                </div>
+                <h3 className="mt-4 text-base font-semibold">{c.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+        <h2 className="text-center font-display text-2xl font-bold sm:text-3xl">
+          Cómo empezamos
+        </h2>
+        <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          {PASOS.map((p) => (
+            <div key={p.n} className="rounded-2xl border border-border bg-card p-6">
+              <span className="font-display text-3xl font-bold text-accent/40">{p.n}</span>
+              <h3 className="mt-3 text-base font-semibold">{p.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="border-t border-border bg-card/40">
+        <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+          <h2 className="text-center font-display text-2xl font-bold sm:text-3xl">
+            Ya colaboramos con
+          </h2>
+          <div className="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-x-14 gap-y-8">
+            <img
+              src="/partners/unir-logo.svg"
+              alt="UNIR — Universidad Internacional de La Rioja"
+              className="h-8 w-auto opacity-80 grayscale transition-all hover:opacity-100 hover:grayscale-0 sm:h-9"
+            />
+            <img
+              src="/partners/camara-madrid-logo.png"
+              alt="Cámara de Comercio de Madrid"
+              className="h-14 w-auto opacity-80 grayscale transition-all hover:opacity-100 hover:grayscale-0 sm:h-16"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" className="border-t border-border">
         <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
           <h2 className="font-display text-2xl font-bold sm:text-3xl">Precio de referencia</h2>
           <p className="mt-3 text-sm text-muted-foreground">
             Licencia anual por alumno. Con descuento por volumen a partir de 10 plazas —
-            cuéntanos cuántas necesitas y te preparamos una propuesta.
+            cuéntanos cuántas necesitas y te preparamos una propuesta cerrada.
           </p>
           <div className="mx-auto mt-8 max-w-sm rounded-2xl border-2 border-accent bg-card p-8">
             <p className="text-sm font-medium text-muted-foreground">Licencia anual · por plaza</p>
@@ -137,6 +307,8 @@ function PartnersPage() {
                 "Simulacros completos de 180 preguntas",
                 "Practicum interactivo completo (hotspot, gráficos, casos)",
                 "Motor adaptativo y analítica por tarea ECO",
+                "Actualizaciones del estándar incluidas",
+                "Soporte al alumno y alta de grupos gestionada",
                 "Descuento por volumen desde 10 plazas",
               ].map((f) => (
                 <li key={f} className="flex items-start gap-2">
@@ -155,18 +327,35 @@ function PartnersPage() {
         </div>
       </section>
 
+      <section className="border-t border-border bg-card/40">
+        <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+          <h2 className="text-center font-display text-2xl font-bold sm:text-3xl">
+            Dudas habituales de un partner
+          </h2>
+          <div className="mt-8 space-y-4">
+            {FAQ_PARTNERS.map((f) => (
+              <div key={f.q} className="rounded-xl border border-border bg-card p-5">
+                <p className="text-sm font-semibold">{f.q}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section id="contacto" className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
         <h2 className="text-center font-display text-2xl font-bold sm:text-3xl">
           Cuéntanos sobre tu centro o empresa
         </h2>
         <p className="mt-3 text-center text-sm text-muted-foreground">
-          Te respondemos en menos de 48 horas laborables.
+          Te respondemos en menos de 48 horas laborables con una propuesta a medida.
         </p>
         <ContactForm />
       </section>
     </MarketingShell>
   );
 }
+
 
 function ContactForm() {
   const [nombre, setNombre] = useState("");
