@@ -949,18 +949,33 @@ function Training() {
 
 function PartnersBenefits() {
   return (
-    <section id="partners" className="border-y border-border bg-secondary/40">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+    <section
+      id="partners"
+      className="relative overflow-hidden bg-primary py-20 text-primary-foreground"
+    >
+      {/* Decoración de fondo para enmarcar la sección como bloque premium */}
+      <div className="pointer-events-none absolute -left-40 top-0 h-[28rem] w-[28rem] rounded-full bg-accent/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-32 bottom-0 h-[24rem] w-[24rem] rounded-full bg-primary-foreground/8 blur-3xl" />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.08]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 1px 1px, var(--color-primary-foreground) 1px, transparent 0)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal>
           <div className="mx-auto max-w-2xl text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-3 py-1 text-xs font-medium text-primary-foreground">
               <Building2 className="h-3.5 w-3.5" />
               Centros de formación y empresas
             </span>
-            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl">
               ¿Formas equipos o alumnos para el PMP?
             </h2>
-            <p className="mt-3 text-muted-foreground">
+            <p className="mt-3 text-primary-foreground/80">
               Licencias por volumen, panel de seguimiento y el único simulador en español nativo ECO 2026 / PMBOK 8.
             </p>
           </div>
@@ -969,33 +984,33 @@ function PartnersBenefits() {
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {PARTNER_BENEFITS.map((b, i) => (
             <Reveal key={b.title} delay={i * 90}>
-              <div className="group h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
-                <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary transition-colors duration-300 group-hover:bg-accent/20">
-                  <b.icon className="h-5 w-5 text-foreground transition-transform duration-300 group-hover:scale-110" />
+              <div className="group h-full rounded-2xl border border-primary-foreground/10 bg-primary-foreground/[0.07] p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:bg-primary-foreground/10 hover:shadow-[0_12px_40px_-12px_oklch(0.2_0.04_260/0.35)]">
+                <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary-foreground/15 transition-colors duration-300 group-hover:bg-accent/20">
+                  <b.icon className="h-5 w-5 text-primary-foreground transition-transform duration-300 group-hover:scale-110" />
                 </div>
-                <h3 className="mt-4 text-base font-semibold">{b.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{b.description}</p>
+                <h3 className="mt-4 text-base font-semibold text-primary-foreground">{b.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-primary-foreground/75">{b.description}</p>
               </div>
             </Reveal>
           ))}
         </div>
 
         <Reveal delay={360}>
-          <div className="mt-12 grid items-center gap-8 rounded-2xl border border-border bg-card p-6 sm:p-8 md:grid-cols-[1fr_auto]">
+          <div className="mt-12 grid items-center gap-8 rounded-2xl border border-primary-foreground/10 bg-primary-foreground/[0.05] p-6 sm:p-8 md:grid-cols-[1fr_auto]">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary-foreground/70">
                 Ya colaboramos con
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-x-8 gap-y-5">
                 <img
                   src="/partners/unir-logo.svg"
                   alt="UNIR — Universidad Internacional de La Rioja"
-                  className="h-7 w-auto opacity-80 grayscale"
+                  className="h-7 w-auto brightness-0 invert opacity-90"
                 />
                 <img
                   src="/partners/camara-madrid-logo.png"
                   alt="Cámara de Comercio de Madrid"
-                  className="h-12 w-auto opacity-80 grayscale"
+                  className="h-12 w-auto brightness-0 invert opacity-90"
                 />
               </div>
             </div>
@@ -1009,7 +1024,7 @@ function PartnersBenefits() {
               <Link
                 to="/partners"
                 hash="contacto"
-                className="inline-flex items-center gap-2 rounded-lg border border-border bg-secondary px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary/70"
+                className="inline-flex items-center gap-2 rounded-lg border border-primary-foreground/20 bg-primary-foreground/10 px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-foreground/20"
               >
                 Solicitar propuesta
               </Link>
@@ -1020,6 +1035,7 @@ function PartnersBenefits() {
     </section>
   );
 }
+
 
 function Newsletter() {
   return (
