@@ -861,6 +861,65 @@ function Training() {
   );
 }
 
+function PartnersBand() {
+  return (
+    <section id="partners" className="border-y border-border bg-secondary/40">
+      <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+        <Reveal>
+          <div className="grid items-center gap-8 md:grid-cols-[1.2fr_1fr]">
+            <div>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+                <Building2 className="h-3.5 w-3.5" />
+                Centros de formación y empresas
+              </span>
+              <h2 className="mt-4 font-display text-2xl font-bold tracking-tight sm:text-3xl">
+                ¿Formas equipos o alumnos para el PMP?
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                Licencias por volumen desde 10 plazas, panel de seguimiento del progreso de tus
+                alumnos y el único simulador en español nativo ECO 2026 / PMBOK 8. Ya trabajamos
+                con universidades y cámaras de comercio.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  to="/partners"
+                  className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
+                >
+                  Ver programa de partners <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/partners"
+                  hash="contacto"
+                  className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary"
+                >
+                  Solicitar propuesta
+                </Link>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Ya colaboramos con
+              </p>
+              <div className="mt-5 flex flex-wrap items-center gap-x-8 gap-y-5">
+                <img
+                  src="/partners/unir-logo.svg"
+                  alt="UNIR — Universidad Internacional de La Rioja"
+                  className="h-7 w-auto opacity-80 grayscale"
+                />
+                <img
+                  src="/partners/camara-madrid-logo.png"
+                  alt="Cámara de Comercio de Madrid"
+                  className="h-12 w-auto opacity-80 grayscale"
+                />
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 function Newsletter() {
   return (
     <section id="boletin" className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
