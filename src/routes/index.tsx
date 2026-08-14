@@ -203,6 +203,32 @@ const FEATURES = [
   },
 ];
 
+const PARTNER_BENEFITS = [
+  {
+    icon: BarChart3,
+    title: "Panel de progreso de tus alumnos",
+    description:
+      "Ves en qué dominios y tareas ECO falla cada grupo para ajustar tus sesiones con datos, no con intuición.",
+  },
+  {
+    icon: Users,
+    title: "Licencias por volumen desde 5 plazas",
+    description:
+      "Desde pequeños grupos hasta convocatorias de cientos de alumnos, con descuento progresivo y facturación única.",
+  },
+  {
+    icon: Rocket,
+    title: "Simulador nativo ECO 2026 / PMBOK 8",
+    description:
+      "No es un banco antiguo remapeado: tus alumnos practican exactamente lo que se les va a preguntar desde julio de 2026.",
+  },
+  {
+    icon: Handshake,
+    title: "Soporte y alta en el mismo día",
+    description:
+      "Nosotros mantenemos el contenido y atendemos al alumno. Tú solo repartes las plazas y sigues el avance.",
+  },
+];
 
 const STEPS = [
   {
