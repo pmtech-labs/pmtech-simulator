@@ -1,17 +1,19 @@
 const STATS = [
   { value: "24+", label: "años dirigiendo proyectos y PMOs" },
   { value: "12+", label: "años formando a profesionales" },
-  { value: "6.600+", label: "profesionales me siguen en LinkedIn" },
+  { value: "6.600+", label: "profesionales nos siguen en LinkedIn" },
   { value: "26", label: "tareas del ECO cubiertas en el simulador" },
 ];
+
 
 export function AboutUs() {
   return (
     <section id="sobre-nosotros" className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-          Experiencia real dirigiendo proyectos, tecnología puntera detrás del simulador
+          Mi equipo y yo: experiencia real, tecnología puntera detrás del simulador
         </h2>
+
       </div>
 
       <div className="mt-12 grid items-start gap-10 sm:grid-cols-[220px_1fr]">
