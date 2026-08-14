@@ -362,6 +362,15 @@ function Hero() {
               <p className="mt-3 text-xs text-hero-muted/80">
                 Sin permanencia · Cancela cuando quieras · Licencias para 1, 3 o 6 meses
               </p>
+              <p className="mt-2 text-xs text-hero-muted/80">
+                ¿Eres centro de formación?{" "}
+                <Link
+                  to="/partners"
+                  className="font-semibold text-hero-foreground underline underline-offset-4 transition-colors hover:text-accent"
+                >
+                  Descubre nuestro programa de partners
+                </Link>
+              </p>
             </Reveal>
 
             {/* Stats en fila horizontal */}
