@@ -922,6 +922,21 @@ function Training() {
               Déjanos tus datos y te enviamos programa, fechas y precio sin compromiso. Nada
               de llamadas comerciales insistentes.
             </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Link
+                to="/partners"
+                className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
+              >
+                Formación in-company para equipos <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/partners"
+                hash="contacto"
+                className="text-sm font-semibold text-accent-foreground underline-offset-4 hover:underline"
+              >
+                Solicitar propuesta para mi centro
+              </Link>
+            </div>
           </Reveal>
           <Reveal delay={140}>
             <TrainingContactForm />
