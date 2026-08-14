@@ -240,30 +240,8 @@ function Header() {
           </div>
         </div>
 
-        <div className="hidden items-center gap-4 xl:flex">
-          <nav className="flex items-center gap-4 text-[13px] font-medium text-muted-foreground">
-            <a href="#caracteristicas" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Características
-            </a>
-            <a href="#opiniones" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Opiniones
-            </a>
-            <a href="#sobre-nosotros" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Sobre nosotros
-            </a>
-            <a href="#garantias" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Garantías
-            </a>
-            <a href="#precios" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Precios
-            </a>
-            <a href="#formacion" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Formación
-            </a>
-            <Link to="/faq" className="whitespace-nowrap transition-colors hover:text-foreground">
-              Preguntas frecuentes
-            </Link>
-          </nav>
+        <div className="hidden items-center gap-5 xl:flex">
+          <HeaderNav onHome />
 
           <div className="flex items-center gap-3">
             <AuthNavStatus />
@@ -281,44 +259,15 @@ function Header() {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-card px-4 py-4 xl:hidden">
-          <nav className="flex flex-col gap-3 text-sm font-medium">
-            <a href="#caracteristicas" onClick={() => setOpen(false)}>
-              Características
-            </a>
-            <a href="#como-funciona" onClick={() => setOpen(false)}>
-              Cómo funciona
-            </a>
-            <a href="#opiniones" onClick={() => setOpen(false)}>
-              Opiniones
-            </a>
-            <a href="#sobre-nosotros" onClick={() => setOpen(false)}>
-              Sobre nosotros
-            </a>
-
-            <a href="#garantias" onClick={() => setOpen(false)}>
-              Garantías
-            </a>
-            <a href="#precios" onClick={() => setOpen(false)}>
-              Precios
-            </a>
-            <a href="#formacion" onClick={() => setOpen(false)}>
-              Formación
-            </a>
-            <Link to="/faq" onClick={() => setOpen(false)}>
-              Preguntas frecuentes
-            </Link>
-            <a href="#contacto" onClick={() => setOpen(false)}>
-              Contacto
-            </a>
-
-            <div className="flex w-fit items-center gap-3 pt-2">
-              <AuthNavStatus onClick={() => setOpen(false)} />
-              <TryFreeButton onClick={() => setOpen(false)} />
-            </div>
-          </nav>
+        <div className="max-h-[75vh] overflow-y-auto border-t border-border bg-card px-4 py-4 xl:hidden">
+          <MobileNav onHome onNavigate={() => setOpen(false)} />
+          <div className="mt-5 flex w-fit items-center gap-3">
+            <AuthNavStatus onClick={() => setOpen(false)} />
+            <TryFreeButton onClick={() => setOpen(false)} />
+          </div>
         </div>
       )}
+
     </header>
   );
 }
