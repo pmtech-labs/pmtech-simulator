@@ -899,6 +899,59 @@ function Training() {
   );
 }
 
+function PartnersBenefits() {
+  return (
+    <section id="centros" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <Reveal>
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+            <Building2 className="h-3.5 w-3.5" />
+            Centros de formación y empresas
+          </span>
+          <h2 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            ¿Formas equipos o alumnos para el PMP?
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Licencias por volumen, panel de seguimiento y el único simulador en español nativo ECO 2026.
+          </p>
+        </div>
+      </Reveal>
+
+      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {PARTNER_BENEFITS.map((b, i) => (
+          <Reveal key={b.title} delay={i * 90}>
+            <div className="group h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
+              <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary transition-colors duration-300 group-hover:bg-accent/20">
+                <b.icon className="h-5 w-5 text-foreground transition-transform duration-300 group-hover:scale-110" />
+              </div>
+              <h3 className="mt-4 text-base font-semibold">{b.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{b.description}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+
+      <Reveal delay={360}>
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Link
+            to="/partners"
+            className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
+          >
+            Ver programa de partners <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link
+            to="/partners"
+            hash="contacto"
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:bg-secondary"
+          >
+            Solicitar propuesta
+          </Link>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
 function PartnersBand() {
   return (
     <section id="partners" className="border-y border-border bg-secondary/40">
