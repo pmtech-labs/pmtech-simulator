@@ -675,6 +675,30 @@ function Pricing() {
         Precios en EUR, impuestos no incluidos. Puedes cancelar o hacer upgrade en cualquier
         momento desde tu perfil.
       </p>
+
+      <Reveal>
+        <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-border bg-card p-6 text-center sm:p-8">
+          <h3 className="font-display text-lg font-semibold">¿Necesitas licencias para tu centro o empresa?</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Descuentos por volumen, panel de seguimiento del progreso y propuesta en 48 horas.
+          </p>
+          <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              to="/partners"
+              className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
+            >
+              Ver programa de partners <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/partners"
+              hash="contacto"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-secondary px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary/70"
+            >
+              Solicitar propuesta
+            </Link>
+          </div>
+        </div>
+      </Reveal>
     </section>
   );
 }
