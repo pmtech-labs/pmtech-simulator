@@ -1048,6 +1048,7 @@ function LandingPage() {
         <AboutUs />
         <Pricing />
         <Training />
+        <PartnersBenefits />
         <PartnersBand />
         <FAQ />
         <Newsletter />
