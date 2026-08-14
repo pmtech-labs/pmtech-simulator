@@ -171,6 +171,12 @@ const FEATURES = [
       "Medimos tu nivel tarea por tarea —no solo por dominio general— y lo cruzamos con tu evolución en el tiempo. Puedes tener un 78 % global y un agujero crítico en una sola tarea: aquí lo ves.",
   },
   {
+    icon: Sparkles,
+    title: "Motor adaptativo: practica más lo que peor llevas",
+    description:
+      "Cuando practicas por dominio o por lección, el sistema prioriza automáticamente las tareas ECO donde tienes menos dominio real — sin dejar de repasar lo que ya sabes. No es un banco de preguntas al azar, es una cola priorizada por tu propio historial.",
+  },
+  {
     icon: ShieldCheck,
     title: "Nota honesta: nuevas vs. repetidas",
     description:
