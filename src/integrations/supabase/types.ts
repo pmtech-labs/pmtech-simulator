@@ -837,6 +837,33 @@ export type Database = {
           },
         ]
       }
+      partner_contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          empresa: string
+          id: string
+          ip_address: string
+          nombre: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          empresa: string
+          id?: string
+          ip_address: string
+          nombre: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          empresa?: string
+          id?: string
+          ip_address?: string
+          nombre?: string
+        }
+        Relationships: []
+      }
       plans: {
         Row: {
           code: Database["public"]["Enums"]["plan_code"]
@@ -1584,6 +1611,7 @@ export type Database = {
         Args: { p_name: string; p_secret_value: string }
         Returns: string
       }
+      vault_read_resend_api_key: { Args: never; Returns: string }
       vault_read_secret_for_connector: {
         Args: { p_secret_id: string }
         Returns: string
