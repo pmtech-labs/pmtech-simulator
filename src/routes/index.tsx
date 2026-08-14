@@ -1,18 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
+  Award,
+  BarChart3,
   Building2,
   CheckCircle2,
   ClipboardList,
   GraduationCap,
+  Handshake,
   ListChecks,
   Menu,
   Puzzle,
+  Rocket,
   ShieldCheck,
   Sparkles,
   Target,
   Timer,
   TrendingUp,
+  Users,
   X,
 } from "lucide-react";
 import { useState } from "react";
@@ -198,6 +203,32 @@ const FEATURES = [
   },
 ];
 
+const PARTNER_BENEFITS = [
+  {
+    icon: BarChart3,
+    title: "Panel de progreso de tus alumnos",
+    description:
+      "Ves en qué dominios y tareas ECO falla cada grupo para ajustar tus sesiones con datos, no con intuición.",
+  },
+  {
+    icon: Users,
+    title: "Licencias por volumen desde 5 plazas",
+    description:
+      "Desde pequeños grupos hasta convocatorias de cientos de alumnos, con descuento progresivo y facturación única.",
+  },
+  {
+    icon: Rocket,
+    title: "Simulador nativo ECO 2026 / PMBOK 8",
+    description:
+      "No es un banco antiguo remapeado: tus alumnos practican exactamente lo que se les va a preguntar desde julio de 2026.",
+  },
+  {
+    icon: Handshake,
+    title: "Soporte y alta en el mismo día",
+    description:
+      "Nosotros mantenemos el contenido y atendemos al alumno. Tú solo repartes las plazas y sigues el avance.",
+  },
+];
 
 const STEPS = [
   {
@@ -330,6 +361,15 @@ function Hero() {
               </div>
               <p className="mt-3 text-xs text-hero-muted/80">
                 Sin permanencia · Cancela cuando quieras · Licencias para 1, 3 o 6 meses
+              </p>
+              <p className="mt-2 text-xs text-hero-muted/80">
+                ¿Eres centro de formación?{" "}
+                <Link
+                  to="/partners"
+                  className="font-semibold text-hero-foreground underline underline-offset-4 transition-colors hover:text-accent"
+                >
+                  Descubre nuestro programa de partners
+                </Link>
               </p>
             </Reveal>
 
@@ -635,6 +675,30 @@ function Pricing() {
         Precios en EUR, impuestos no incluidos. Puedes cancelar o hacer upgrade en cualquier
         momento desde tu perfil.
       </p>
+
+      <Reveal>
+        <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-border bg-card p-6 text-center sm:p-8">
+          <h3 className="font-display text-lg font-semibold">¿Necesitas licencias para tu centro o empresa?</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Descuentos por volumen, panel de seguimiento del progreso y propuesta en 48 horas.
+          </p>
+          <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              to="/partners"
+              className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
+            >
+              Ver programa de partners <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/partners"
+              hash="contacto"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-secondary px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary/70"
+            >
+              Solicitar propuesta
+            </Link>
+          </div>
+        </div>
+      </Reveal>
     </section>
   );
 }
@@ -858,12 +922,80 @@ function Training() {
               Déjanos tus datos y te enviamos programa, fechas y precio sin compromiso. Nada
               de llamadas comerciales insistentes.
             </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Link
+                to="/partners"
+                className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
+              >
+                Formación in-company para equipos <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/partners"
+                hash="contacto"
+                className="text-sm font-semibold text-accent-foreground underline-offset-4 hover:underline"
+              >
+                Solicitar propuesta para mi centro
+              </Link>
+            </div>
           </Reveal>
           <Reveal delay={140}>
             <TrainingContactForm />
           </Reveal>
         </div>
       </div>
+    </section>
+  );
+}
+
+function PartnersBenefits() {
+  return (
+    <section id="centros" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <Reveal>
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+            <Building2 className="h-3.5 w-3.5" />
+            Centros de formación y empresas
+          </span>
+          <h2 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            ¿Formas equipos o alumnos para el PMP?
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Licencias por volumen, panel de seguimiento y el único simulador en español nativo ECO 2026.
+          </p>
+        </div>
+      </Reveal>
+
+      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {PARTNER_BENEFITS.map((b, i) => (
+          <Reveal key={b.title} delay={i * 90}>
+            <div className="group h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
+              <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary transition-colors duration-300 group-hover:bg-accent/20">
+                <b.icon className="h-5 w-5 text-foreground transition-transform duration-300 group-hover:scale-110" />
+              </div>
+              <h3 className="mt-4 text-base font-semibold">{b.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{b.description}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+
+      <Reveal delay={360}>
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Link
+            to="/partners"
+            className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
+          >
+            Ver programa de partners <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link
+            to="/partners"
+            hash="contacto"
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:bg-secondary"
+          >
+            Solicitar propuesta
+          </Link>
+        </div>
+      </Reveal>
     </section>
   );
 }
@@ -964,6 +1096,7 @@ function LandingPage() {
         <AboutUs />
         <Pricing />
         <Training />
+        <PartnersBenefits />
         <PartnersBand />
         <FAQ />
         <Newsletter />
