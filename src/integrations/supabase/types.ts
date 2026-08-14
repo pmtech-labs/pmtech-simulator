@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      _terminology_audit_backup: {
+        Row: {
+          backed_up_at: string | null
+          explanation: string | null
+          id: string | null
+          options: Json | null
+          question_number: number | null
+          stem: string | null
+        }
+        Insert: {
+          backed_up_at?: string | null
+          explanation?: string | null
+          id?: string | null
+          options?: Json | null
+          question_number?: number | null
+          stem?: string | null
+        }
+        Update: {
+          backed_up_at?: string | null
+          explanation?: string | null
+          id?: string | null
+          options?: Json | null
+          question_number?: number | null
+          stem?: string | null
+        }
+        Relationships: []
+      }
       admin_users: {
         Row: {
           created_at: string | null
