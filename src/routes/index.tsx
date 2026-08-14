@@ -958,6 +958,7 @@ function LandingPage() {
         <AboutUs />
         <Pricing />
         <Training />
+        <PartnersBand />
         <FAQ />
         <Newsletter />
         <FinalCta />
