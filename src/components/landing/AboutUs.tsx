@@ -42,14 +42,15 @@ export function AboutUs() {
             moda del momento.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-            En paralelo llevamos más de una década formando a profesionales: soy profesor del
-            Executive MBA en <strong className="text-foreground">UNIR</strong>, imparto Dirección de
-            Proyectos en la <strong className="text-foreground">Cámara de Comercio de Madrid</strong>{" "}
-            desde 2016, y también en EOI, EALDE y Cerem. Máster en Project Management por la{" "}
-            <strong className="text-foreground">George Washington University</strong>, y certificado
-            PMP® y PMO-CP® por el propio PMI, además de PSM®, CSM®, SCPO®, KMP®, ITIL®, ISO 20000 y
-            BIM®.
+            En paralelo llevamos más de una década formando a profesionales: damos clase en el
+            Executive MBA de <strong className="text-foreground">UNIR</strong> e impartimos Dirección
+            de Proyectos en la <strong className="text-foreground">Cámara de Comercio de Madrid</strong>{" "}
+            desde 2016, además de EOI, EALDE y Cerem. Entre nosotros sumamos un Máster en Project
+            Management por la <strong className="text-foreground">George Washington University</strong>{" "}
+            y certificaciones PMP® y PMO-CP® del propio PMI, junto a PSM®, CSM®, SCPO®, KMP®, ITIL®,
+            ISO 20000 y BIM®.
           </p>
+
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
             Este simulador no nace de un banco de preguntas comprado a terceros. Las preguntas salen
             de situaciones que hemos vivido dirigiendo proyectos reales y de años corrigiendo los
