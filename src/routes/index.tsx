@@ -1059,7 +1059,6 @@ function LandingPage() {
         <Pricing />
         <Training />
         <PartnersBenefits />
-        <PartnersBand />
         <FAQ />
         <Newsletter />
         <FinalCta />
