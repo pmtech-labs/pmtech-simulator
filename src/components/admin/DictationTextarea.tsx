@@ -112,13 +112,17 @@ export function DictationTextarea({
         if (result.isFinal) finalChunk += result[0].transcript;
         else interimChunk += result[0].transcript;
       }
+      let nextDraft = draftRef.current;
       if (finalChunk) {
-        const nextDraft = [draftRef.current.trim(), finalChunk.trim()].filter(Boolean).join(" ");
+        nextDraft = [draftRef.current.trim(), finalChunk.trim()].filter(Boolean).join(" ");
         draftRef.current = nextDraft;
         setDraft(nextDraft);
       }
       interimRef.current = interimChunk;
       setInterim(interimChunk);
+      // El texto visible debe ser también el valor real del formulario. Así,
+      // acciones externas como “Continuar” no pierden una sesión sin aceptar.
+      onChange(joinText(baseValueRef.current, nextDraft, interimChunk));
     };
 
     recognition.onerror = (event: unknown) => {
