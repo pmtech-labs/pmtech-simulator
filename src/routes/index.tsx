@@ -766,6 +766,12 @@ function Footer() {
               <Link to="/curso-pmp-online" className="hover:text-foreground">
                 Curso PMP online
               </Link>
+              <Link to="/partners" className="hover:text-foreground">
+                Partners y empresas
+              </Link>
+              <Link to="/glosario" className="hover:text-foreground">
+                Glosario PMP
+              </Link>
               <Link to="/pmbok-8" className="hover:text-foreground">
                 PMBOK 7 vs 8
               </Link>
