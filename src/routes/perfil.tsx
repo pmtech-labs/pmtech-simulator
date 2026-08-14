@@ -184,10 +184,10 @@ function ProfilePage() {
                       <p className="truncate text-sm font-medium">Plan gratuito</p>
                     </div>
                   </div>
-                  {user.freeFullSimUsed && (
+                  {user.freeHalfSimUsed && (
                     <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                      Ya has usado tu simulacro completo de regalo. La práctica por dominio,
-                      lección y acumulativa sigue disponible sin límite.{" "}
+                      Ya has usado tu medio examen de regalo (90 preguntas). La práctica por
+                      dominio, lección y acumulativa sigue disponible sin límite.{" "}
                       <Link
                         to="/checkout"
                         search={{ plan: "premium_6m" }}

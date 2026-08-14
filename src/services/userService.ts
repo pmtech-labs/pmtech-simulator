@@ -15,7 +15,7 @@ export interface CurrentUser {
   initials: string;
   plan: "free" | "basica_3m" | "premium_1m" | "premium_6m" | null;
   planName: string;
-  freeFullSimUsed: boolean;
+  freeHalfSimUsed: boolean;
   monthsRemaining: number;
   expiresAt: string | null;
   readiness: number;
@@ -175,7 +175,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   const [licenseRes, masteryRows, history] = await Promise.all([
     supabase
       .from("licenses")
-      .select("expires_at, status, free_full_sim_used, plans(code, name, duration_months)")
+      .select("expires_at, status, free_half_sim_used, plans(code, name, duration_months)")
       .eq("status", "active")
       .order("expires_at", { ascending: false })
       .limit(1)
@@ -187,7 +187,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   const license = licenseRes.data as
     | {
         expires_at: string;
-        free_full_sim_used: boolean | null;
+        free_half_sim_used: boolean | null;
         plans: { code: string; name: string; duration_months: number } | null;
       }
     | null;
@@ -224,7 +224,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
         : license?.plans?.name
           ? `Licencia ${license.plans.name}`
           : "Sin licencia activa",
-    freeFullSimUsed: Boolean(license?.free_full_sim_used),
+    freeHalfSimUsed: Boolean(license?.free_half_sim_used),
     monthsRemaining,
     expiresAt: license?.expires_at ? formatDate(license.expires_at) : null,
     readiness,

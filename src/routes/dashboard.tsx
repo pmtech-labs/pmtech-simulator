@@ -88,6 +88,37 @@ function StartSimCard() {
   );
 }
 
+/** Plan gratuito: el simulacro completo (180 preguntas) NUNCA está incluido, ni una vez
+ * -- no es "ya lo usaste", es "no forma parte de este plan". Distinto del medio examen,
+ * que sí es el regalo real de una sola vez. */
+function FullSimNotIncludedCard() {
+  return (
+    <div className="flex flex-col justify-between rounded-2xl border border-border bg-primary/90 p-5 text-primary-foreground">
+      <div>
+        <div className="flex items-start justify-between gap-2">
+          <Target className="h-5 w-5 text-accent" />
+          <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-bold text-accent-foreground">
+            No incluido en el plan gratuito
+          </span>
+        </div>
+        <h3 className="mt-3 text-base font-semibold">Simulacro completo</h3>
+        <p className="mt-1 text-sm text-primary-foreground/70">
+          El plan gratuito no incluye el simulacro completo (180 preguntas). Tu regalo es un
+          medio examen (90 preguntas) — la práctica por dominio, lección y acumulativa sigue
+          disponible sin límite.
+        </p>
+      </div>
+      <Link
+        to="/checkout"
+        search={{ plan: "premium_6m" }}
+        className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
+      >
+        Mejorar mi plan <ArrowRight className="h-4 w-4" />
+      </Link>
+    </div>
+  );
+}
+
 /** Medio examen: 90 preguntas / 2 h, sin bloques ni descansos. */
 function StartHalfSimCard() {
   return (
@@ -110,6 +141,34 @@ function StartHalfSimCard() {
   );
 }
 
+/** Plan gratuito, medio examen ya usado: el regalo era de una sola vez. */
+function HalfSimUsedCard() {
+  return (
+    <div className="flex flex-col justify-between rounded-2xl border border-border bg-card p-5">
+      <div>
+        <div className="flex items-start justify-between gap-2">
+          <Timer className="h-5 w-5 text-muted-foreground" />
+          <span className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-bold text-muted-foreground">
+            Ya usado — mejora tu plan
+          </span>
+        </div>
+        <h3 className="mt-3 text-base font-semibold">Medio examen</h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Ya usaste tu medio examen de regalo (90 preguntas) del plan gratuito. La práctica por
+          dominio, lección y acumulativa sigue disponible sin límite.
+        </p>
+      </div>
+      <Link
+        to="/checkout"
+        search={{ plan: "premium_6m" }}
+        className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
+      >
+        Mejorar mi plan <ArrowRight className="h-4 w-4" />
+      </Link>
+    </div>
+  );
+}
+
 function Dashboard() {
   const { data: u, isLoading } = useCurrentUser();
 
@@ -129,8 +188,10 @@ function Dashboard() {
     (a, b) => u.masteryByDomain[a.code] - u.masteryByDomain[b.code],
   )[0];
 
-  // Plan gratuito: un único simulacro completo de regalo.
-  const freeSimBlocked = u.plan === "free" && u.freeFullSimUsed;
+  // Plan gratuito: el simulacro completo NUNCA está incluido (ni una vez). El regalo real
+  // de una sola vez es el medio examen (90 preguntas), gateado por freeHalfSimUsed.
+  const isFree = u.plan === "free";
+  const halfSimBlocked = isFree && u.freeHalfSimUsed;
 
   return (
     <AppShell
@@ -179,34 +240,9 @@ function Dashboard() {
         </section>
 
         <section className="grid gap-4 md:grid-cols-3">
-          {freeSimBlocked ? (
-            <div className="flex flex-col justify-between rounded-2xl border border-border bg-primary/90 p-5 text-primary-foreground">
-              <div>
-                <div className="flex items-start justify-between gap-2">
-                  <Target className="h-5 w-5 text-accent" />
-                  <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-bold text-accent-foreground">
-                    Ya usado — mejora tu plan
-                  </span>
-                </div>
-                <h3 className="mt-3 text-base font-semibold">Simulacro completo</h3>
-                <p className="mt-1 text-sm text-primary-foreground/70">
-                  Ya usaste el simulacro completo de regalo del plan gratuito. La práctica por
-                  dominio, lección y acumulativa sigue disponible sin límite.
-                </p>
-              </div>
-              <Link
-                to="/checkout"
-                search={{ plan: "premium_6m" }}
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
-              >
-                Mejorar mi plan <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          ) : (
-            <StartSimCard />
-          )}
+          {isFree ? <FullSimNotIncludedCard /> : <StartSimCard />}
 
-          <StartHalfSimCard />
+          {halfSimBlocked ? <HalfSimUsedCard /> : <StartHalfSimCard />}
 
           <div className="rounded-2xl border border-border bg-card p-5">
             <div className="flex items-start justify-between">

@@ -226,8 +226,11 @@ export function AppShell({
   };
 
   const showResume = Boolean(saved) && pathname !== "/examen";
-  // Plan gratuito: el simulacro completo de regalo es de un solo uso.
-  const freeSimBlocked = user?.plan === "free" && user.freeFullSimUsed && !inProgress;
+  // Plan gratuito: el simulacro completo (180 preguntas) NUNCA está incluido, ni una vez --
+  // no es "ya lo usaste", es que este plan no lo incluye. El regalo real de una sola vez
+  // es el medio examen (90 preguntas), que tiene su propio flujo dedicado (StartHalfSimCard
+  // en dashboard.tsx) y no pasa por este diálogo genérico de "simulación completa".
+  const freeSimBlocked = user?.plan === "free" && !inProgress;
 
   return (
     <ExamStartContext.Provider value={openExamConfirm}>
@@ -321,14 +324,14 @@ export function AppShell({
           <DialogHeader>
             <DialogTitle>
               {freeSimBlocked
-                ? "Ya usaste tu simulacro completo de regalo"
+                ? "El simulacro completo no está en tu plan"
                 : inProgress
                   ? "Tienes una simulación en curso"
                   : "¿Iniciar simulación de examen?"}
             </DialogTitle>
             <DialogDescription>
               {freeSimBlocked
-                ? "El plan gratuito incluye un único simulacro completo. La práctica por dominio, por lección y los simulacros acumulativos siguen disponibles sin límite. Mejora tu plan para repetir simulacros de 180 preguntas."
+                ? "El plan gratuito no incluye el simulacro completo (180 preguntas). Tu regalo es un medio examen (90 preguntas) desde el panel, y la práctica por dominio, lección y acumulativa sigue disponible sin límite. Mejora tu plan para acceder a simulacros completos ilimitados."
                 : inProgress
                   ? `Dejaste sin terminar “${inProgress.label}” con ${inProgress.answered} de ${inProgress.total} preguntas respondidas. Puedes retomarla donde la dejaste o empezar una nueva desde cero.`
                   : "Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener disponibilidad antes de empezar."}

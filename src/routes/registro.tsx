@@ -132,7 +132,7 @@ function RegistroPage() {
               <p className="mt-1 text-justify text-sm text-muted-foreground">
                 {plan === "basica_3m" || plan === "premium_1m" || plan === "premium_6m"
                   ? "Regístrate para continuar con la contratación de tu licencia."
-                  : "Plan gratuito real: práctica ilimitada sin cronómetro y un simulacro completo de regalo."}
+                  : "Plan gratuito real: práctica ilimitada sin cronómetro y un medio examen de regalo (90 preguntas)."}
               </p>
 
               <form onSubmit={onSubmit} className="mt-5 space-y-3">
