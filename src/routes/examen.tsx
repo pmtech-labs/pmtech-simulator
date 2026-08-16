@@ -151,12 +151,20 @@ function ExamPage() {
           <AlertTriangle className="mx-auto h-6 w-6 text-destructive" />
           <h1 className="mt-3 text-base font-semibold">No hemos podido iniciar el examen</h1>
           <p className="mt-1 text-sm text-muted-foreground">{loadError}</p>
-          <Link
-            to="/dashboard"
-            className="mt-4 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-          >
-            Volver al panel
-          </Link>
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <Link
+              to="/dashboard"
+              className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+            >
+              Volver al panel
+            </Link>
+            <Link
+              to="/practica"
+              className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold"
+            >
+              Ir a prácticas
+            </Link>
+          </div>
         </div>
       </div>
     );
