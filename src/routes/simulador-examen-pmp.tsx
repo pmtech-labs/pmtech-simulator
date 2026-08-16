@@ -90,11 +90,11 @@ function Page() {
         {
           h2: "Modos de práctica disponibles",
           bullets: [
-            "Simulacro completo: 180 preguntas, 240 minutos, tres secciones, descansos de 10 minutos (opcionales) y feedback solo al final, como en el examen real.",
-            "Práctica por dominios: elige Personas, Proceso o Entorno de negocio y mide acierto y tiempo por dominio.",
-            "Quiz de unidad: mini-simulaciones ligadas a las 14 lecciones de la ruta de aprendizaje.",
-            "Repaso de errores: reabre exclusivamente las preguntas asociadas a tus fallos recientes.",
-            "Simulacro acumulativo: todo lo estudiado hasta la lección actual, disponible al superar el umbral de mastery.",
+            { label: "Simulacro completo", description: "180 preguntas, 240 minutos, tres secciones, descansos de 10 minutos (opcionales) y feedback solo al final, como en el examen real." },
+            { label: "Práctica por dominios", description: "elige Personas, Proceso o Entorno de negocio y mide acierto y tiempo por dominio." },
+            { label: "Quiz de unidad", description: "mini-simulaciones ligadas a las 14 lecciones de la ruta de aprendizaje." },
+            { label: "Repaso de errores", description: "reabre exclusivamente las preguntas asociadas a tus fallos recientes." },
+            { label: "Simulacro acumulativo", description: "todo lo estudiado hasta la lección actual, disponible al superar el umbral de mastery." },
           ],
         },
         {

@@ -24,7 +24,7 @@ export interface SeoComparison {
 export interface SeoSection {
   h2: string;
   paragraphs?: string[];
-  bullets?: string[];
+  bullets?: (string | { label: string; description: string })[];
   table?: { headers: string[]; rows: string[][] };
 }
 
@@ -131,12 +131,26 @@ export function SeoLandingPage({
               ))}
               {section.bullets && (
                 <ul className="mt-5 space-y-2.5">
-                  {section.bullets.map((b) => (
-                    <li key={b} className="flex items-start gap-2.5 text-[15px] leading-relaxed">
-                      <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-accent" />
-                      <span className="text-muted-foreground">{b}</span>
-                    </li>
-                  ))}
+                  {section.bullets.map((b) => {
+                    const key = typeof b === "string" ? b : b.label;
+                    const label = typeof b === "string" ? b : b.label;
+                    const description = typeof b === "string" ? undefined : b.description;
+                    return (
+                      <li key={key} className="flex items-start gap-2.5 text-[15px] leading-relaxed">
+                        <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-accent" />
+                        <span className="text-muted-foreground">
+                          {description ? (
+                            <>
+                              <strong className="font-semibold text-foreground">{label}:</strong>{" "}
+                              {description}
+                            </>
+                          ) : (
+                            label
+                          )}
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
               {section.table && (
