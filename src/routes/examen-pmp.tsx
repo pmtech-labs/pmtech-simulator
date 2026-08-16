@@ -9,16 +9,16 @@ import {
 const URL = "https://pmtech-simulator.lovable.app/examen-pmp";
 const TITLE = "Examen PMP: duración, preguntas y nota de corte 2026";
 const DESCRIPTION =
-  "Cómo es el examen PMP por dentro: 180 preguntas, 230 minutos, tres secciones con descansos, tipos de pregunta y cuál es la nota de corte real del PMI.";
+  "Cómo es el examen PMP por dentro: 180 preguntas, 240 minutos, tres secciones con descansos, tipos de pregunta y cuál es la nota de corte real del PMI.";
 
 const FAQS: SeoFaq[] = [
   {
     q: "¿Cuántas preguntas tiene el examen PMP?",
-    a: "180 preguntas, de las cuales 5 son de prueba y no puntúan. Se reparten en tres secciones de 60 preguntas con dos descansos opcionales de 10 minutos.",
+    a: "180 preguntas, de las cuales 10 son de prueba y no puntúan. Se reparten en tres secciones de 60 preguntas con dos descansos opcionales de 10 minutos.",
   },
   {
     q: "¿Cuánto dura el examen PMP?",
-    a: "230 minutos de reloj de examen, más los dos descansos de 10 minutos que no consumen tiempo de prueba. En total, unas 4 horas y 10 minutos en el centro o ante la cámara.",
+    a: "240 minutos de reloj de examen, más los dos descansos de 10 minutos que no consumen tiempo de prueba. En total, unas 4 horas y 20 minutos en el centro o ante la cámara.",
   },
   {
     q: "¿Cuál es la nota de corte del PMP?",
@@ -75,9 +75,9 @@ function Page() {
       intro="El formato del examen condiciona tu estrategia tanto como el temario. Aquí tienes la estructura exacta de las tres secciones, el reparto por dominios del ECO y qué significan realmente los niveles del informe de resultados."
       highlights={[
         "180 preguntas en tres secciones de 60, con dos descansos de 10 minutos",
-        "230 minutos de reloj: 1,28 minutos por pregunta de media",
-        "42 % Personas, 50 % Proceso, 8 % Entorno de negocio",
-        "Alrededor del 50 % del contenido es ágil o híbrido",
+        "240 minutos de reloj: 80 segundos por pregunta de media",
+        "33 % Personas, 41 % Proceso, 26 % Entorno de negocio",
+        "Alrededor del 60 % del contenido es ágil o híbrido",
       ]}
       sections={[
         {
@@ -85,11 +85,11 @@ function Page() {
           table: {
             headers: ["Bloque", "Preguntas", "Tiempo aproximado"],
             rows: [
-              ["Sección 1", "60", "~77 minutos"],
+              ["Sección 1", "60", "80 minutos"],
               ["Descanso 1 (opcional)", "—", "10 minutos"],
-              ["Sección 2", "60", "~77 minutos"],
+              ["Sección 2", "60", "80 minutos"],
               ["Descanso 2 (opcional)", "—", "10 minutos"],
-              ["Sección 3", "60", "~76 minutos"],
+              ["Sección 3", "60", "80 minutos"],
             ],
           },
           paragraphs: [
@@ -99,9 +99,9 @@ function Page() {
         {
           h2: "Reparto por dominios del ECO 2026",
           bullets: [
-            "Personas (42 %): liderazgo, gestión de conflictos, equipos de alto rendimiento, servant leadership.",
-            "Proceso (50 %): planificación, alcance, cronograma, coste, riesgos, calidad y entrega de valor.",
-            "Entorno de negocio (8 %): cumplimiento normativo, beneficios del proyecto y cambio organizativo.",
+            "Personas (33 %): liderazgo, gestión de conflictos, equipos de alto rendimiento, servant leadership.",
+            "Proceso (41 %): planificación, alcance, cronograma, coste, riesgos, calidad y entrega de valor.",
+            "Entorno de negocio (26 %): cumplimiento normativo, beneficios del proyecto, sostenibilidad e IA en la gestión de proyectos.",
           ],
         },
         {
