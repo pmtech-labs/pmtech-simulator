@@ -144,10 +144,9 @@ export const Route = createFileRoute("/")({
 
 
 const STATS = [
-  { value: "26", label: "tareas del ECO 2026 cubiertas" },
-  { value: "180", label: "preguntas por simulacro completo" },
-  { value: "3", label: "secciones cronometradas reales" },
-  { value: "8", label: "tipos de error diagnosticados" },
+  { value: "+10", label: "años preparando el examen PMP" },
+  { value: "+1000", label: "profesionales certificados" },
+  { value: "+3500", label: "preguntas en el banco" },
 ];
 
 const FEATURES = [
