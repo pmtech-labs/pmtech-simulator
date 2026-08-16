@@ -88,6 +88,40 @@ const COMPANIES = [
   "Hedima",
 ];
 
+const ADVANTAGES = [
+  {
+    icon: Calendar,
+    value: "+10",
+    label: "años preparando el examen PMP",
+  },
+  {
+    icon: Users,
+    value: "+1000",
+    label: "profesionales certificados",
+  },
+  {
+    icon: Database,
+    value: "+3500",
+    label: "preguntas en el banco",
+  },
+  {
+    icon: Target,
+    value: "26",
+    label: "tareas ECO 2026 cubiertas",
+  },
+  {
+    icon: BarChart3,
+    value: "8",
+    label: "tipos de error diagnosticados",
+  },
+  {
+    icon: BookOpen,
+    value: "3",
+    label: "dominios de desempeño evaluados",
+  },
+];
+
+
 export function SocialProof() {
   const [filter, setFilter] = useState<ResultFilter>("todos");
   const [index, setIndex] = useState(0);
