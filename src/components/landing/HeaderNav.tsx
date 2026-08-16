@@ -51,7 +51,7 @@ const GROUPS: NavGroup[] = [
 ];
 
 const DIRECT: NavItem[] = [
-  { label: "Precios", hash: "precios" },
+  { label: "Precios", to: "/requisitos-pmp" },
   { label: "Sobre nosotros", hash: "sobre-nosotros" },
 ];
 
