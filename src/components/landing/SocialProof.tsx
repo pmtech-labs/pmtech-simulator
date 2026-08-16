@@ -1,5 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
+import {
+  BarChart3,
+  BookOpen,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Database,
+  Quote,
+  Star,
+  Target,
+  Users,
+} from "lucide-react";
+
 
 type ResultFilter = "todos" | "people" | "process" | "business";
 
@@ -76,6 +88,40 @@ const COMPANIES = [
   "Hedima",
 ];
 
+const ADVANTAGES = [
+  {
+    icon: Calendar,
+    value: "+10",
+    label: "años preparando el examen PMP",
+  },
+  {
+    icon: Users,
+    value: "+1000",
+    label: "profesionales certificados",
+  },
+  {
+    icon: Database,
+    value: "+3500",
+    label: "preguntas en el banco",
+  },
+  {
+    icon: Target,
+    value: "26",
+    label: "tareas ECO 2026 cubiertas",
+  },
+  {
+    icon: BarChart3,
+    value: "8",
+    label: "tipos de error diagnosticados",
+  },
+  {
+    icon: BookOpen,
+    value: "3",
+    label: "dominios de desempeño evaluados",
+  },
+];
+
+
 export function SocialProof() {
   const [filter, setFilter] = useState<ResultFilter>("todos");
   const [index, setIndex] = useState(0);
@@ -123,8 +169,9 @@ export function SocialProof() {
         <div className="mx-auto max-w-2xl text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-accent-foreground">
             <Star className="h-3.5 w-3.5 fill-accent text-accent" />
-            Cientos de profesionales certificados
+            +1000 profesionales certificados
           </span>
+
           <h2 className="mt-5 font-display text-3xl font-bold tracking-tight sm:text-4xl">
             No es un producto nuevo sin recorrido
           </h2>
@@ -134,7 +181,26 @@ export function SocialProof() {
           </p>
         </div>
 
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {ADVANTAGES.map((a) => {
+            const Icon = a.icon;
+            return (
+              <div
+                key={a.label}
+                className="flex flex-col items-center rounded-2xl border border-border bg-card p-4 text-center shadow-lift transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className="grid h-10 w-10 place-items-center rounded-full bg-accent/10">
+                  <Icon className="h-5 w-5 text-accent" />
+                </div>
+                <p className="mt-3 font-display text-2xl font-bold tracking-tight">{a.value}</p>
+                <p className="mt-1 text-xs leading-tight text-muted-foreground">{a.label}</p>
+              </div>
+            );
+          })}
+        </div>
+
         <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+
           {FILTERS.map((f) => {
             const active = filter === f.value;
             return (
