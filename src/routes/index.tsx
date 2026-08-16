@@ -6,10 +6,8 @@ import {
   Building2,
   CheckCircle2,
   ClipboardList,
-  GraduationCap,
   Handshake,
   ListChecks,
-  Menu,
   Puzzle,
   Rocket,
   ShieldCheck,
@@ -18,7 +16,6 @@ import {
   Timer,
   TrendingUp,
   Users,
-  X,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -28,14 +25,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AuthNavStatus } from "@/components/AuthNavStatus";
 import { TryFreeButton } from "@/components/TryFreeButton";
 import { AboutUs } from "@/components/landing/AboutUs";
 import { SocialProof } from "@/components/landing/SocialProof";
 import { NewsletterSignup } from "@/components/landing/NewsletterSignup";
 import { Guarantees } from "@/components/landing/Guarantees";
 import { LeadWizard } from "@/components/landing/LeadWizard";
-import { HeaderNav, MobileNav } from "@/components/landing/HeaderNav";
+import { LandingHeader } from "@/components/landing/LandingHeader";
 import { Reveal } from "@/components/landing/Reveal";
 import heroDashboard from "@/assets/hero-dashboard.jpg";
 import diagnosticAbstract from "@/assets/diagnostic-abstract.jpg";
