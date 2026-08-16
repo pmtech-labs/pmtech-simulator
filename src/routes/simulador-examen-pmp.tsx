@@ -81,7 +81,7 @@ function Page() {
       ]}
       sections={[
         {
-          h2: "Por qué fallar sin saber por qué no sirve de nada",
+          h2: "Por qué fallar sin saber los motivos no sirve de nada",
           paragraphs: [
             "Dos candidatos pueden fallar la misma pregunta por motivos opuestos: uno no conocía la herramienta, el otro la conocía pero eligió el momento equivocado del ciclo de vida. El remedio es distinto en cada caso, y un porcentaje global no lo distingue.",
             "El motor clasifica cada respuesta incorrecta por tipo de error —secuencia, rol, conocimiento, interpretación del enunciado, sesgo predictivo/ágil, entre otros— y te muestra el patrón dominante para que estudies lo que realmente te está costando puntos.",
