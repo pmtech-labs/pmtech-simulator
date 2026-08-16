@@ -24,7 +24,7 @@ export interface SeoComparison {
 export interface SeoSection {
   h2: string;
   paragraphs?: string[];
-  bullets?: string[];
+  bullets?: (string | { label: string; description: string })[];
   table?: { headers: string[]; rows: string[][] };
 }
 
