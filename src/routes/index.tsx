@@ -6,6 +6,7 @@ import {
   Building2,
   CheckCircle2,
   ClipboardList,
+  GraduationCap,
   Handshake,
   ListChecks,
   Puzzle,
@@ -25,6 +26,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AuthNavStatus } from "@/components/AuthNavStatus";
 import { TryFreeButton } from "@/components/TryFreeButton";
 import { AboutUs } from "@/components/landing/AboutUs";
 import { SocialProof } from "@/components/landing/SocialProof";
