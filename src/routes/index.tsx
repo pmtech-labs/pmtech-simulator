@@ -1014,7 +1014,7 @@ function Newsletter() {
 function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <LandingHeader onHome />
       <main>
         <Hero />
         <ProblemSolution />
