@@ -169,8 +169,9 @@ export function SocialProof() {
         <div className="mx-auto max-w-2xl text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-accent-foreground">
             <Star className="h-3.5 w-3.5 fill-accent text-accent" />
-            Cientos de profesionales certificados
+            +1000 profesionales certificados
           </span>
+
           <h2 className="mt-5 font-display text-3xl font-bold tracking-tight sm:text-4xl">
             No es un producto nuevo sin recorrido
           </h2>
