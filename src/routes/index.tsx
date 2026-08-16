@@ -332,19 +332,20 @@ function Hero() {
 
             {/* Stats en fila horizontal */}
             <Reveal delay={300}>
-              <div className="mt-8 flex flex-wrap gap-5 sm:gap-7">
+              <div className="mt-8 flex flex-nowrap items-center justify-start gap-6 sm:gap-8 lg:gap-10">
                 {STATS.map((s) => (
                   <div key={s.label} className="flex items-center gap-2">
                     <span className="num font-display text-2xl font-bold text-hero-foreground sm:text-3xl">
                       {s.value}
                     </span>
-                    <span className="max-w-[100px] text-[11px] leading-tight text-hero-muted/90">
+                    <span className="max-w-[90px] text-[11px] leading-tight text-hero-muted/90 sm:max-w-[100px]">
                       {s.label}
                     </span>
                   </div>
                 ))}
               </div>
             </Reveal>
+
           </div>
 
           {/* Columna visual: mockup flotante nítido */}
