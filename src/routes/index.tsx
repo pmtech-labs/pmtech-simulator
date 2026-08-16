@@ -199,7 +199,14 @@ const FEATURES = [
     description:
       "180 preguntas en 4 horas con la estructura real del examen, o 90 preguntas en 2 horas con los mismos criterios de reparto — para cuando no puedes permitirte una sesión completa pero quieres presión real, no una práctica cualquiera.",
   },
+  {
+    icon: Rocket,
+    title: "Reanuda y auto-guarda tu progreso",
+    description:
+      "El simulacro se guarda automáticamente cada 10 segundos. Si cierras el navegador, vuelves a entrar y continúas exactamente donde lo dejaste, con el tiempo restante intacto.",
+  },
 ];
+
 
 const PARTNER_BENEFITS = [
   {
