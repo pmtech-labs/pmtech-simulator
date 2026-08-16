@@ -256,53 +256,6 @@ const FAQS = HOME_FAQS.map((f) => ({ id: f.id, q: f.q, a: f.a }));
 
 
 
-function Header() {
-  const [open, setOpen] = useState(false);
-  return (
-    <header className="sticky top-0 z-40 border-b border-border bg-card/90 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-3 sm:px-8 lg:px-10">
-        <div className="flex shrink-0 items-center gap-2.5 lg:mr-4">
-          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary">
-            <GraduationCap className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <div className="shrink-0 min-w-fit w-max">
-            <p className="whitespace-nowrap font-display text-sm font-semibold leading-tight">PMTech Simulator</p>
-            <p className="whitespace-nowrap text-[11px] leading-tight text-muted-foreground">ECO 2026 · PMBOK 8</p>
-          </div>
-        </div>
-
-        <div className="hidden items-center gap-6 xl:flex">
-          <HeaderNav onHome />
-
-          <div className="flex items-center gap-3">
-            <AuthNavStatus />
-            <TryFreeButton />
-          </div>
-        </div>
-
-        <button
-          className="grid h-9 w-9 place-items-center rounded-lg border border-border xl:hidden"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Abrir menú"
-        >
-          {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-        </button>
-      </div>
-
-      {open && (
-        <div className="max-h-[75vh] overflow-y-auto border-t border-border bg-card px-4 py-4 xl:hidden">
-          <MobileNav onHome onNavigate={() => setOpen(false)} />
-          <div className="mt-5 flex w-fit items-center gap-3">
-            <AuthNavStatus onClick={() => setOpen(false)} />
-            <TryFreeButton onClick={() => setOpen(false)} />
-          </div>
-        </div>
-      )}
-
-    </header>
-  );
-}
-
 function Hero() {
   return (
     <section className="relative overflow-hidden bg-primary">
