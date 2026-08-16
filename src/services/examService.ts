@@ -176,13 +176,18 @@ async function readStartExamError(error: unknown): Promise<string> {
   if (!ctx || typeof ctx.json !== "function") return generic;
   try {
     const body = (await ctx.clone().json()) as { error?: string };
-    if (ctx.status === 404 || /no hay preguntas/i.test(body?.error ?? "")) {
-      return (
-        body?.error ??
-        "No hay preguntas disponibles para estos filtros. Prueba con otro enfoque o añade más dominios."
-      );
+    const msg = body?.error?.trim();
+    if (!msg) {
+      if (ctx.status === 404) {
+        return "No hay preguntas disponibles para estos filtros. Prueba con otro enfoque o añade más dominios.";
+      }
+      return generic;
     }
-    return body?.error ?? generic;
+    // 409: el banco aún no tiene cobertura completa para una simulación oficial.
+    if (ctx.status === 409 && /cobertura/i.test(msg)) {
+      return `${msg} Mientras tanto puedes usar las prácticas parciales por dominio o lección.`;
+    }
+    return msg;
   } catch {
     return generic;
   }
