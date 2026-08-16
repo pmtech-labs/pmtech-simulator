@@ -37,7 +37,7 @@ export const PLANS = [
     price: 34.9,
     features: [
       { label: "Banco completo ECO 2026", included: true },
-      { label: "Simulaciones de 180 preguntas", included: true },
+      { label: "Simulaciones completas (180 preguntas, 4h)", included: true },
       { label: "Clusters de caso", included: true },
       { label: "Practicum completo (hotspot, gráficos)", included: false },
       { label: "Analítica por tarea ECO", included: false },
@@ -52,7 +52,7 @@ export const PLANS = [
     tagline: "Para quien está a pocos días del examen y quiere la experiencia completa ya",
     features: [
       { label: "Banco completo ECO 2026", included: true },
-      { label: "Simulaciones de 180 preguntas", included: true },
+      { label: "Simulaciones completas (180 preguntas, 4h)", included: true },
       { label: "Clusters de caso", included: true },
       { label: "Practicum completo (hotspot, gráficos)", included: true },
       { label: "Analítica por tarea ECO", included: true },
@@ -66,7 +66,7 @@ export const PLANS = [
     price: 54.9,
     features: [
       { label: "Banco completo ECO 2026", included: true },
-      { label: "Simulaciones de 180 preguntas", included: true },
+      { label: "Simulaciones completas (180 preguntas, 4h)", included: true },
       { label: "Clusters de caso", included: true },
       { label: "Practicum completo (hotspot, gráficos)", included: true },
       { label: "Analítica por tarea ECO", included: true },
