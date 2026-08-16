@@ -17,7 +17,7 @@ const GROUPS: NavGroup[] = [
     items: [
       { label: "Características", hash: "caracteristicas", description: "Qué incluye el simulador" },
       { label: "Cómo funciona", hash: "como-funciona", description: "Tu ruta de estudio paso a paso" },
-      { label: "Simulador PMP", to: "/simulador-examen-pmp", description: "Simulacros de 180 preguntas" },
+      { label: "Qué nos diferencia", to: "/simulador-examen-pmp", description: "Simulacros de 180 preguntas" },
       { label: "Garantías", hash: "garantias", description: "Compromisos y condiciones" },
       { label: "Opiniones", hash: "opiniones", description: "Qué dicen quienes ya lo usan" },
     ],
