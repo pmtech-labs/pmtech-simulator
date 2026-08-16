@@ -137,7 +137,7 @@ function Dropdown({ group, onHome }: { group: NavGroup; onHome: boolean }) {
 
 export function HeaderNav({ onHome }: { onHome: boolean }) {
   return (
-    <nav className="flex items-center gap-5 text-[13px] font-medium text-muted-foreground">
+    <nav className="flex items-center gap-7 text-[13px] font-medium text-muted-foreground">
       {GROUPS.map((g) => (
         <Dropdown key={g.label} group={g} onHome={onHome} />
       ))}
