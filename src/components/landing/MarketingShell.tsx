@@ -16,8 +16,8 @@ export function MarketingShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b border-border bg-card/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <Link to="/" className="flex shrink-0 items-center gap-2.5">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-3 sm:px-8 lg:px-10">
+          <Link to="/" className="flex shrink-0 items-center gap-2.5 lg:mr-4">
             <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary">
               <GraduationCap className="h-5 w-5 text-primary-foreground" />
             </div>
@@ -31,7 +31,7 @@ export function MarketingShell({ children }: { children: ReactNode }) {
             </div>
           </Link>
 
-          <div className="hidden items-center gap-5 xl:flex">
+          <div className="hidden items-center gap-6 xl:flex">
             <HeaderNav onHome={false} />
             <div className="flex items-center gap-3">
               <AuthNavStatus />
