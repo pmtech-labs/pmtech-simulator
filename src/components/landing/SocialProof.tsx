@@ -180,7 +180,26 @@ export function SocialProof() {
           </p>
         </div>
 
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {ADVANTAGES.map((a) => {
+            const Icon = a.icon;
+            return (
+              <div
+                key={a.label}
+                className="flex flex-col items-center rounded-2xl border border-border bg-card p-4 text-center shadow-lift transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className="grid h-10 w-10 place-items-center rounded-full bg-accent/10">
+                  <Icon className="h-5 w-5 text-accent" />
+                </div>
+                <p className="mt-3 font-display text-2xl font-bold tracking-tight">{a.value}</p>
+                <p className="mt-1 text-xs leading-tight text-muted-foreground">{a.label}</p>
+              </div>
+            );
+          })}
+        </div>
+
         <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+
           {FILTERS.map((f) => {
             const active = filter === f.value;
             return (
