@@ -47,6 +47,16 @@ const DIFERENCIADORES = [
   },
 ];
 
+// Tramos de descuento por volumen: a menor número de licencias, precio más alto
+// (89€, techo del tramo de entrada); a mayor volumen, precio más bajo (59€, el
+// "desde" real mostrado en la página) -- pero SIEMPRE por encima del precio
+// individual (Premium 6 meses, 54,90€), en todos los tramos, sin excepción.
+const PRICING_TIERS = [
+  { range: "10-49 licencias", price: "89", highlight: false },
+  { range: "50-199 licencias", price: "69", highlight: false },
+  { range: "200+ licencias", price: "59", highlight: true },
+];
+
 function PartnersPage() {
   return (
     <MarketingShell>
@@ -75,7 +85,7 @@ function PartnersPage() {
               href="#pricing"
               className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:border-accent/40"
             >
-              Ver precio de referencia
+              Ver precios
             </a>
           </div>
         </div>
@@ -119,25 +129,45 @@ function PartnersPage() {
       </section>
 
       <section id="pricing" className="border-t border-border bg-card/40">
-        <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
-          <h2 className="font-display text-2xl font-bold sm:text-3xl">Precio de referencia</h2>
+        <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6">
+          <h2 className="font-display text-2xl font-bold sm:text-3xl">Precios por volumen</h2>
           <p className="mt-3 text-sm text-muted-foreground">
-            Licencia anual por alumno. Con descuento por volumen a partir de 10 plazas —
-            cuéntanos cuántas necesitas y te preparamos una propuesta.
+            Licencias de 6 meses (misma duración que nuestra licencia Premium individual). Desde 59
+            €/licencia a partir de 200 unidades — cuéntanos cuántas necesitas y te preparamos una
+            propuesta cerrada.
           </p>
-          <div className="mx-auto mt-8 max-w-sm rounded-2xl border-2 border-accent bg-card p-8">
-            <p className="text-sm font-medium text-muted-foreground">Licencia anual · por plaza</p>
-            <p className="mt-2 flex items-baseline justify-center gap-1">
-              <span className="font-display text-5xl font-bold">89 €</span>
-              <span className="text-sm text-muted-foreground">/ año</span>
-            </p>
-            <ul className="mt-6 space-y-2.5 text-left text-sm">
+
+          <div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-3">
+            {PRICING_TIERS.map((tier) => (
+              <div
+                key={tier.range}
+                className={`rounded-2xl border bg-card p-6 text-left ${
+                  tier.highlight ? "border-2 border-accent" : "border-border"
+                }`}
+              >
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {tier.range}
+                </p>
+                <p className="mt-2 flex items-baseline gap-1">
+                  <span className="font-display text-3xl font-bold">{tier.price} €</span>
+                  <span className="text-xs text-muted-foreground">/ licencia</span>
+                </p>
+                {tier.highlight && (
+                  <p className="mt-1 text-xs font-semibold text-accent">Mejor precio</p>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="mx-auto mt-6 max-w-sm rounded-2xl border-2 border-accent bg-card p-8 text-left">
+            <p className="text-sm font-medium text-muted-foreground">Todas las licencias incluyen</p>
+            <ul className="mt-4 space-y-2.5 text-sm">
               {[
                 "Banco completo ECO 2026 / PMBOK 8",
                 "Simulacros completos de 180 preguntas",
                 "Practicum interactivo completo (hotspot, gráficos, casos)",
                 "Motor adaptativo y analítica por tarea ECO",
-                "Descuento por volumen desde 10 plazas",
+                "6 meses de acceso por licencia",
               ].map((f) => (
                 <li key={f} className="flex items-start gap-2">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
@@ -149,7 +179,7 @@ function PartnersPage() {
               href="#contacto"
               className="mt-6 block w-full rounded-lg bg-accent px-6 py-3 text-center text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
             >
-              Solicitar descuento por volumen
+              Solicitar propuesta
             </a>
           </div>
         </div>
