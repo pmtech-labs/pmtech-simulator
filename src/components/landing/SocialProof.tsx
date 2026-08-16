@@ -1,5 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
+import {
+  BarChart3,
+  BookOpen,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Database,
+  Quote,
+  Star,
+  Target,
+  Users,
+} from "lucide-react";
+
 
 type ResultFilter = "todos" | "people" | "process" | "business";
 
