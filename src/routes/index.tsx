@@ -519,7 +519,7 @@ function Pricing() {
             </p>
             <ul className="mt-6 space-y-2.5">
               {[
-                { label: "Práctica ilimitada por dominio y lección", included: true },
+                { label: "Prácticas ilimitadas por dominio y/o lección", included: true },
                 { label: "Simulacros acumulativos por unidad", included: true },
                 { label: "1 medio simulacro de regalo (90 preguntas, 2h)", included: true },
                 { label: "Practicum completo (hotspot, gráficos)", included: false },
