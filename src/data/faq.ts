@@ -67,14 +67,14 @@ export const FAQ_BLOCKS: FaqBlock[] = [
         a: "El plan gratuito te da acceso sin límite de tiempo a la práctica por dominio, por lección y acumulativa, más un medio simulacro de regalo (90 preguntas, 2 horas) para que pruebes la presión real de un examen cronometrado. Cuando quieras simulacros completos (180 preguntas) ilimitados y el resto de funciones (práctica interactiva avanzada, analítica por tarea, motor adaptativo que prioriza tus áreas más débiles en la práctica libre), puedes mejorar tu plan en cualquier momento desde tu perfil — no pierdes tu progreso ni tienes que crear una cuenta nueva.",
       },
       {
-        id: "upgrade-premium",
-        q: "¿Puedo cambiar de plan Básica a Premium más adelante?",
+        id: "upgrade-licencia",
+        q: "¿Puedo cambiar de licencia a una mayor más adelante?",
         a: "Sí, puedes hacer upgrade en cualquier momento dentro de tu periodo de licencia; solo pagas la diferencia.",
       },
       {
         id: "duracion-acceso",
         q: "¿Cuánto tiempo tengo de acceso?",
-        a: "El plan gratuito no caduca hasta que decidas mejorarlo. La Básica incluye 3 meses de acceso y la Premium 6 meses, ambos con acceso ilimitado 24/7 durante ese periodo.",
+        a: "El plan gratuito no caduca hasta que decidas mejorarlo. Las licencias de pago son de 1, 3 o 6 meses de acceso ilimitado 24/7 durante ese periodo. La única diferencia entre ellas es el número de simulaciones completas incluidas.",
       },
       {
         id: "mismas-preguntas",
