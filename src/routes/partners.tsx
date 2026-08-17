@@ -199,7 +199,7 @@ function PartnersPage() {
           {[
             { k: "180", v: "preguntas por simulacro" },
             { k: "48 h", v: "para tu propuesta" },
-            { k: "59 €", v: "desde, por licencia" },
+            { k: "59,90 €", v: "desde, por licencia" },
             { k: "100 %", v: "alineado al ECO 2026" },
           ].map((s) => (
             <div key={s.v} className="rounded-xl border border-border bg-card p-4 text-center">
