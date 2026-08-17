@@ -564,8 +564,8 @@ function Pricing() {
             <div
               className={
                 isPremium
-                  ? "relative h-full rounded-2xl border-2 border-accent bg-card p-6 shadow-panel transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_50px_-24px_var(--accent)]"
-                  : "relative h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel"
+                  ? "relative flex h-full flex-col rounded-2xl border-2 border-accent bg-card p-6 shadow-panel transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_50px_-24px_var(--accent)]"
+                  : "relative flex h-full flex-col rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel"
               }
             >
               {isPremium && (
@@ -593,7 +593,7 @@ function Pricing() {
                 </span>
               </p>
 
-              <ul className="mt-6 space-y-2.5">
+              <ul className="mb-6 mt-6 space-y-2.5">
                 {plan.features.map((f) => (
                   <li
                     key={f.label}
@@ -620,8 +620,8 @@ function Pricing() {
                 label={`Elegir ${plan.name}`}
                 className={
                   isPremium
-                    ? "mt-6 flex items-center justify-center gap-1.5 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
-                    : "mt-6 flex items-center justify-center gap-1.5 rounded-lg border border-border bg-secondary px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary/70"
+                    ? "mt-auto flex items-center justify-center gap-1.5 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
+                    : "mt-auto flex items-center justify-center gap-1.5 rounded-lg border border-border bg-secondary px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary/70"
                 }
               />
             </div>
