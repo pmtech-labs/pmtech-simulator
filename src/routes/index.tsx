@@ -517,13 +517,13 @@ function Pricing() {
 
       <div className="mx-auto mt-12 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Reveal className="h-full">
-          <div className="relative h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
+          <div className="relative flex h-full flex-col rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
             <h3 className="text-base font-semibold">Gratis</h3>
             <p className="mt-1 text-xs text-muted-foreground">Sin tarjeta · practica sin límite de tiempo</p>
             <p className="mt-4 flex items-baseline gap-1">
               <span className="num font-display text-4xl font-bold">0 €</span>
             </p>
-            <ul className="mt-6 space-y-2.5">
+            <ul className="mb-6 mt-6 space-y-2.5">
               {[
                 { label: "Prácticas ilimitadas por dominio y/o lección", included: true },
                 { label: "Simulacros acumulativos por unidad", included: true },
@@ -553,7 +553,7 @@ function Pricing() {
             </ul>
             <TryFreeButton
               size="lg"
-              className="mt-6 w-full rounded-lg border border-border bg-secondary text-accent-foreground transition-colors hover:bg-secondary/70"
+              className="mt-auto w-full rounded-lg border border-border bg-secondary text-accent-foreground transition-colors hover:bg-secondary/70"
             />
           </div>
         </Reveal>
