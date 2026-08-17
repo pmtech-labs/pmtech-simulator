@@ -79,7 +79,7 @@ export const PLANS: Plan[] = [
     durationMonths: 3,
     price: 59.9,
     regularPrice: 69.9,
-    tagline: "Para quien tiempo tiempo suficiente",
+    tagline: "Para quien tiene tiempo tiempo suficiente para prepararse",
     fullSimLimit: 4,
     features: [
       { label: "Banco completo ECO 2026", included: true },
