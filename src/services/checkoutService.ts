@@ -56,7 +56,7 @@ export const PLANS: Plan[] = [
     name: "1 mes",
     durationMonths: 1,
     price: 29.9,
-    tagline: "Para quien está a pocos días del examen y quiere la experiencia completa ya",
+    tagline: "Si estás a pocos días del examen y necesitas la experiencia completa ya",
     fullSimLimit: 5,
     features: [
       { label: "Banco completo ECO 2026", included: true },
