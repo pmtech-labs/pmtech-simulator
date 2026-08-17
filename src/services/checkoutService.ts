@@ -68,6 +68,21 @@ export const PLANS: Plan[] = [
     ],
   },
   {
+    code: "basica_3m",
+    name: "3 meses",
+    durationMonths: 3,
+    price: 39.9,
+    fullSimLimit: 15,
+    features: [
+      { label: "Banco completo ECO 2026", included: true },
+      fullSimFeature(15),
+      { label: "Clusters de caso", included: true },
+      { label: "Practicum completo (hotspot, gráficos)", included: true },
+      { label: "Analítica por tarea ECO", included: true },
+      { label: "Motor adaptativo", included: true },
+    ],
+  },
+  {
     code: "premium_1m",
     name: "1 mes",
     durationMonths: 1,
@@ -77,21 +92,6 @@ export const PLANS: Plan[] = [
     features: [
       { label: "Banco completo ECO 2026", included: true },
       fullSimFeature(5),
-      { label: "Clusters de caso", included: true },
-      { label: "Practicum completo (hotspot, gráficos)", included: true },
-      { label: "Analítica por tarea ECO", included: true },
-      { label: "Motor adaptativo", included: true },
-    ],
-  },
-  {
-    code: "basica_3m",
-    name: "3 meses",
-    durationMonths: 3,
-    price: 39.9,
-    fullSimLimit: 15,
-    features: [
-      { label: "Banco completo ECO 2026", included: true },
-      fullSimFeature(15),
       { label: "Clusters de caso", included: true },
       { label: "Practicum completo (hotspot, gráficos)", included: true },
       { label: "Analítica por tarea ECO", included: true },
