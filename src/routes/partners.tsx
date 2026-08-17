@@ -302,7 +302,7 @@ function PartnersPage() {
         <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6">
           <h2 className="font-display text-2xl font-bold sm:text-3xl">Precios por volumen</h2>
           <p className="mt-3 text-sm text-muted-foreground">
-            Licencias de 6 meses (misma duración que nuestra licencia Premium individual). Desde 59
+            Licencias de 6 meses (misma duración que nuestra licencia Premium individual). Desde 59,90
             €/licencia a partir de 200 unidades — cuéntanos cuántas necesitas y te preparamos una
             propuesta cerrada.
           </p>
