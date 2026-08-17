@@ -231,6 +231,12 @@ export function AppShell({
   // es el medio examen (90 preguntas), que tiene su propio flujo dedicado (StartHalfSimCard
   // en dashboard.tsx) y no pasa por este diálogo genérico de "simulación completa".
   const freeSimBlocked = user?.plan === "free" && !inProgress;
+  // Planes de pago con límite (1 y 3 meses): una vez agotado el cupo, mismo tratamiento
+  // que el plan gratuito bloqueado pero con mensaje distinto -- aquí sí había cupo, se
+  // consumió, y se empuja hacia el plan de 6 meses (simulacros ilimitados).
+  const paidLimitReached =
+    user?.plan !== "free" && user?.fullSimLimit != null && (user?.fullSimUsed ?? 0) >= user.fullSimLimit && !inProgress;
+  const simBlocked = freeSimBlocked || paidLimitReached;
 
   return (
     <ExamStartContext.Provider value={openExamConfirm}>
@@ -325,19 +331,23 @@ export function AppShell({
             <DialogTitle>
               {freeSimBlocked
                 ? "El simulacro completo no está en tu plan"
-                : inProgress
-                  ? "Tienes una simulación en curso"
-                  : "¿Iniciar simulación de examen?"}
+                : paidLimitReached
+                  ? "Ya usaste tus simulacros completos"
+                  : inProgress
+                    ? "Tienes una simulación en curso"
+                    : "¿Iniciar simulación de examen?"}
             </DialogTitle>
             <DialogDescription>
               {freeSimBlocked
                 ? "El plan gratuito no incluye el simulacro completo (180 preguntas). Tu regalo es un medio examen (90 preguntas) desde el panel, y la práctica por dominio, lección y acumulativa sigue disponible sin límite. Mejora tu plan para acceder a simulacros completos ilimitados."
-                : inProgress
-                  ? `Dejaste sin terminar “${inProgress.label}” con ${inProgress.answered} de ${inProgress.total} preguntas respondidas. Puedes retomarla donde la dejaste o empezar una nueva desde cero.`
-                  : "Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener disponibilidad antes de empezar."}
+                : paidLimitReached
+                  ? `Ya usaste los ${user?.fullSimLimit} simulacros completos incluidos en tu plan actual. Pasa al plan de 6 meses para simulacros ilimitados.`
+                  : inProgress
+                    ? `Dejaste sin terminar “${inProgress.label}” con ${inProgress.answered} de ${inProgress.total} preguntas respondidas. Puedes retomarla donde la dejaste o empezar una nueva desde cero.`
+                    : "Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener disponibilidad antes de empezar."}
             </DialogDescription>
           </DialogHeader>
-          {!freeSimBlocked && (
+          {!simBlocked && (
             <div className="space-y-3 rounded-lg border border-border bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground">
               <p>{FULL_SIM_SECTIONS_NOTE}</p>
               <HelpLinks onNavigate={() => setShowExamConfirm(false)} />
@@ -349,7 +359,7 @@ export function AppShell({
             <Button variant="outline" onClick={() => setShowExamConfirm(false)}>
               Cancelar
             </Button>
-            {freeSimBlocked ? (
+            {simBlocked ? (
               <Button asChild>
                 <Link to="/checkout" search={{ plan: "premium_6m" }} onClick={() => setShowExamConfirm(false)}>
                   Mejorar mi plan

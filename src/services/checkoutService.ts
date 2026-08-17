@@ -21,6 +21,12 @@ export interface Plan {
   name: string;
   durationMonths: number;
   price: number;
+  /** Precio habitual futuro, si el precio actual es "de lanzamiento" (temporal).
+   * Cuando está definido, la tarjeta de precios muestra un asterisco junto al
+   * precio y una nota al pie aclarando que es un precio de lanzamiento -- nunca
+   * se tacha un precio "anterior" que no se haya cobrado de verdad (evita el
+   * problema legal de precios de referencia falsos bajo la normativa Ómnibus). */
+  regularPrice?: number;
   tagline?: string;
   fullSimLimit: number | null;
   features: PlanFeature[];
@@ -57,10 +63,10 @@ export const PLANS: Plan[] = [
     durationMonths: 1,
     price: 29.9,
     tagline: "Para quien está a pocos días del examen y quiere la experiencia completa ya",
-    fullSimLimit: 5,
+    fullSimLimit: 2,
     features: [
       { label: "Banco completo ECO 2026", included: true },
-      fullSimFeature(5),
+      fullSimFeature(2),
       { label: "Clusters de caso", included: true },
       { label: "Practicum completo (hotspot, gráficos)", included: true },
       { label: "Analítica por tarea ECO", included: true },
@@ -71,11 +77,12 @@ export const PLANS: Plan[] = [
     code: "basica_3m",
     name: "3 meses",
     durationMonths: 3,
-    price: 39.9,
-    fullSimLimit: 15,
+    price: 59.9,
+    regularPrice: 69.9,
+    fullSimLimit: 4,
     features: [
       { label: "Banco completo ECO 2026", included: true },
-      fullSimFeature(15),
+      fullSimFeature(4),
       { label: "Clusters de caso", included: true },
       { label: "Practicum completo (hotspot, gráficos)", included: true },
       { label: "Analítica por tarea ECO", included: true },
@@ -86,7 +93,8 @@ export const PLANS: Plan[] = [
     code: "premium_6m",
     name: "6 meses",
     durationMonths: 6,
-    price: 59.9,
+    price: 89.9,
+    regularPrice: 99.9,
     fullSimLimit: null,
     features: [
       { label: "Banco completo ECO 2026", included: true },

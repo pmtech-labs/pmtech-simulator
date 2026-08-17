@@ -588,6 +588,9 @@ function Pricing() {
               <p className="mt-4 flex items-baseline gap-1">
                 <span className="num font-display text-4xl font-bold">
                   {plan.price.toFixed(2).replace(".", ",")} €
+                  {plan.regularPrice ? (
+                    <sup className="ml-0.5 text-base font-bold text-accent">*</sup>
+                  ) : null}
                 </span>
                 <span className="text-sm text-muted-foreground">
                   / {plan.durationMonths === 1 ? "1 mes" : `${plan.durationMonths} meses`}
@@ -635,6 +638,20 @@ function Pricing() {
         Precios en EUR, impuestos no incluidos. Puedes cancelar o hacer upgrade en cualquier
         momento desde tu perfil.
       </p>
+      {PLANS.some((p) => p.regularPrice) && (
+        <p className="mx-auto mt-2 max-w-lg text-center text-xs text-muted-foreground">
+          * Precio de lanzamiento.{" "}
+          {PLANS.filter((p) => p.regularPrice)
+            .map(
+              (p) =>
+                `Plan de ${p.durationMonths} meses: precio habitual ${p.regularPrice
+                  ?.toFixed(2)
+                  .replace(".", ",")} €`,
+            )
+            .join(" · ")}
+          .
+        </p>
+      )}
 
       <Reveal>
         <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-border bg-card p-6 text-center sm:p-8">

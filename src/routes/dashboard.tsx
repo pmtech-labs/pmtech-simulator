@@ -60,8 +60,10 @@ function Ring({ value }: { value: number }) {
   );
 }
 
-/** Tarjeta de inicio de simulación: abre el mismo aviso previo que el sidebar. */
-function StartSimCard() {
+/** Tarjeta de inicio de simulación: abre el mismo aviso previo que el sidebar.
+ * Muestra el contador "X de Y usados" cuando el plan tiene límite (1/3 meses);
+ * "Ilimitados" cuando no lo tiene (6 meses, fullSimLimit=null). */
+function StartSimCard({ fullSimUsed, fullSimLimit }: { fullSimUsed: number; fullSimLimit: number | null }) {
   const examPrompt = useExamStartPrompt();
   return (
     <Link
@@ -75,7 +77,12 @@ function StartSimCard() {
       className="group flex flex-col justify-between rounded-2xl border border-border bg-primary p-5 text-primary-foreground transition-transform hover:-translate-y-0.5"
     >
       <div>
-        <Target className="h-5 w-5 text-accent" />
+        <div className="flex items-start justify-between gap-2">
+          <Target className="h-5 w-5 text-accent" />
+          <span className="rounded-full bg-primary-foreground/10 px-2.5 py-1 text-[11px] font-bold text-primary-foreground/80">
+            {fullSimLimit === null ? "Ilimitados" : `${fullSimUsed} de ${fullSimLimit} usados`}
+          </span>
+        </div>
         <h3 className="mt-3 text-base font-semibold">Iniciar simulación completa</h3>
         <p className="mt-1 text-sm text-primary-foreground/70">
           180 preguntas · 240 minutos · estructura oficial con bloque de casos y 2 descansos.
@@ -85,6 +92,38 @@ function StartSimCard() {
         Comenzar <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
       </span>
     </Link>
+  );
+}
+
+/** Plan de pago con límite de simulacros completos (1 o 3 meses) ya agotado --
+ * distinto de FullSimNotIncludedCard (plan free, nunca incluido) y de
+ * HalfSimUsedCard (regalo de una sola vez): aquí sí tenía cupo, se ha
+ * consumido. El objetivo de negocio es empujar hacia el plan de 6 meses, que
+ * es donde queremos que migren todos los usuarios (simulacros ilimitados). */
+function FullSimLimitReachedCard({ fullSimLimit }: { fullSimLimit: number }) {
+  return (
+    <div className="flex flex-col justify-between rounded-2xl border border-border bg-primary/90 p-5 text-primary-foreground">
+      <div>
+        <div className="flex items-start justify-between gap-2">
+          <Target className="h-5 w-5 text-accent" />
+          <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-bold text-accent-foreground">
+            {fullSimLimit} de {fullSimLimit} usados
+          </span>
+        </div>
+        <h3 className="mt-3 text-base font-semibold">Simulacro completo</h3>
+        <p className="mt-1 text-sm text-primary-foreground/70">
+          Ya usaste los {fullSimLimit} simulacros completos incluidos en tu plan actual. Pasa al
+          plan de 6 meses para simulacros ilimitados.
+        </p>
+      </div>
+      <Link
+        to="/checkout"
+        search={{ plan: "premium_6m" }}
+        className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
+      >
+        Pasar a simulacros ilimitados <ArrowRight className="h-4 w-4" />
+      </Link>
+    </div>
   );
 }
 
@@ -192,6 +231,11 @@ function Dashboard() {
   // de una sola vez es el medio examen (90 preguntas), gateado por freeHalfSimUsed.
   const isFree = u.plan === "free";
   const halfSimBlocked = isFree && u.freeHalfSimUsed;
+  // Planes de pago con límite (1 y 3 meses, fullSimLimit=2/4): una vez agotado el cupo,
+  // se empuja hacia el plan de 6 meses (fullSimLimit=null=ilimitado), que es el plan al
+  // que queremos que migren todos los usuarios -- no por la duración, sino por tener
+  // simulacros ilimitados.
+  const fullSimLimitReached = !isFree && u.fullSimLimit !== null && u.fullSimUsed >= u.fullSimLimit;
 
   return (
     <AppShell
@@ -240,7 +284,13 @@ function Dashboard() {
         </section>
 
         <section className="grid gap-4 md:grid-cols-3">
-          {isFree ? <FullSimNotIncludedCard /> : <StartSimCard />}
+          {isFree ? (
+            <FullSimNotIncludedCard />
+          ) : fullSimLimitReached ? (
+            <FullSimLimitReachedCard fullSimLimit={u.fullSimLimit as number} />
+          ) : (
+            <StartSimCard fullSimUsed={u.fullSimUsed} fullSimLimit={u.fullSimLimit} />
+          )}
 
           {halfSimBlocked ? <HalfSimUsedCard /> : <StartHalfSimCard />}
 
