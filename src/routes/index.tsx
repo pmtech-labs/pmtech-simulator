@@ -592,9 +592,6 @@ function Pricing() {
                     <sup className="ml-0.5 text-base font-bold text-accent">*</sup>
                   ) : null}
                 </span>
-                <span className="text-sm text-muted-foreground">
-                  / {plan.durationMonths === 1 ? "1 mes" : `${plan.durationMonths} meses`}
-                </span>
               </p>
 
               <ul className="mt-6 space-y-2.5">
