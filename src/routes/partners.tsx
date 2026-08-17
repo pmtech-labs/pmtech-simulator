@@ -153,9 +153,9 @@ const FAQ_PARTNERS = [
 // "desde" real mostrado en la página) -- pero SIEMPRE por encima del precio
 // individual (Premium 6 meses, 54,90€), en todos los tramos, sin excepción.
 const PRICING_TIERS = [
-  { range: "10-49 licencias", price: "89", highlight: false },
-  { range: "50-199 licencias", price: "69", highlight: false },
-  { range: "200+ licencias", price: "59", highlight: true },
+  { range: "10-49 licencias", price: "89,90", highlight: false },
+  { range: "50-199 licencias", price: "69,90", highlight: false },
+  { range: "200+ licencias", price: "59,90", highlight: true },
 ];
 
 function PartnersPage() {
@@ -199,7 +199,7 @@ function PartnersPage() {
           {[
             { k: "180", v: "preguntas por simulacro" },
             { k: "48 h", v: "para tu propuesta" },
-            { k: "59 €", v: "desde, por licencia" },
+            { k: "59,90 €", v: "desde, por licencia" },
             { k: "100 %", v: "alineado al ECO 2026" },
           ].map((s) => (
             <div key={s.v} className="rounded-xl border border-border bg-card p-4 text-center">
@@ -302,7 +302,7 @@ function PartnersPage() {
         <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6">
           <h2 className="font-display text-2xl font-bold sm:text-3xl">Precios por volumen</h2>
           <p className="mt-3 text-sm text-muted-foreground">
-            Licencias de 6 meses (misma duración que nuestra licencia Premium individual). Desde 59
+            Licencias de 6 meses (misma duración que nuestra licencia Premium individual). Desde 59,90
             €/licencia a partir de 200 unidades — cuéntanos cuántas necesitas y te preparamos una
             propuesta cerrada.
           </p>
