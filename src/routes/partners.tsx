@@ -153,9 +153,9 @@ const FAQ_PARTNERS = [
 // "desde" real mostrado en la página) -- pero SIEMPRE por encima del precio
 // individual (Premium 6 meses, 54,90€), en todos los tramos, sin excepción.
 const PRICING_TIERS = [
-  { range: "10-49 licencias", price: "89", highlight: false },
-  { range: "50-199 licencias", price: "69", highlight: false },
-  { range: "200+ licencias", price: "59", highlight: true },
+  { range: "10-49 licencias", price: "89,90", highlight: false },
+  { range: "50-199 licencias", price: "69,90", highlight: false },
+  { range: "200+ licencias", price: "59,90", highlight: true },
 ];
 
 function PartnersPage() {
