@@ -34,7 +34,7 @@ export const PLANS = [
     code: "basica_3m" as const,
     name: "Básica",
     durationMonths: 3,
-    price: 34.9,
+    price: 39.9,
     features: [
       { label: "Banco completo ECO 2026", included: true },
       { label: "Simulaciones completas (180 preguntas, 4h)", included: true },
@@ -48,7 +48,7 @@ export const PLANS = [
     code: "premium_1m" as const,
     name: "Premium 1 mes",
     durationMonths: 1,
-    price: 24.9,
+    price: 29.9,
     tagline: "Para quien está a pocos días del examen y quiere la experiencia completa ya",
     features: [
       { label: "Banco completo ECO 2026", included: true },
@@ -63,7 +63,7 @@ export const PLANS = [
     code: "premium_6m" as const,
     name: "Premium",
     durationMonths: 6,
-    price: 54.9,
+    price: 59.9,
     features: [
       { label: "Banco completo ECO 2026", included: true },
       { label: "Simulaciones completas (180 preguntas, 4h)", included: true },
