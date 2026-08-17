@@ -85,6 +85,13 @@ function CheckoutPage() {
                 {plan.tagline && (
                   <p className="mt-1 text-xs text-muted-foreground">{plan.tagline}</p>
                 )}
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {plan.fullSimLimit === null
+                    ? "Simulaciones completas ilimitadas"
+                    : plan.fullSimLimit === 0
+                      ? "No incluye simulaciones completas"
+                      : `${plan.fullSimLimit} simulaciones completas incluidas`}
+                </p>
               </div>
               <p className="num shrink-0 font-display text-2xl font-bold">{plan.price} €</p>
             </div>
