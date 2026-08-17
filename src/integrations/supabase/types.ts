@@ -896,6 +896,7 @@ export type Database = {
           code: Database["public"]["Enums"]["plan_code"]
           currency: string | null
           duration_months: number
+          full_sim_limit: number | null
           id: string
           includes_adaptive_engine: boolean | null
           includes_analytics: boolean | null
@@ -908,6 +909,7 @@ export type Database = {
           code: Database["public"]["Enums"]["plan_code"]
           currency?: string | null
           duration_months: number
+          full_sim_limit?: number | null
           id?: string
           includes_adaptive_engine?: boolean | null
           includes_analytics?: boolean | null
@@ -920,6 +922,7 @@ export type Database = {
           code?: Database["public"]["Enums"]["plan_code"]
           currency?: string | null
           duration_months?: number
+          full_sim_limit?: number | null
           id?: string
           includes_adaptive_engine?: boolean | null
           includes_analytics?: boolean | null
