@@ -96,7 +96,7 @@ export const PLANS: Plan[] = [
     durationMonths: 6,
     price: 89.9,
     regularPrice: 99.9,
-    tagline: "Para quien necesita más tiempo\u00a0",
+    tagline: "Para quien necesita más tiempo\u00a0 o simulaciones ilimitadas",
     fullSimLimit: null,
     features: [
       { label: "Banco completo ECO 2026", included: true },
