@@ -40,9 +40,9 @@ const inputCls = "rounded-md border border-border bg-background px-2.5 py-1.5 te
 const PLAN_OPTIONS = [
   { value: "", label: "Todos los planes" },
   { value: "free", label: "Gratis" },
-  { value: "basic", label: "Básica" },
-  { value: "premium_1m", label: "Premium 1 mes" },
-  { value: "premium_6m", label: "Premium" },
+  { value: "premium_1m", label: "1 mes" },
+  { value: "basica_3m", label: "3 meses" },
+  { value: "premium_6m", label: "6 meses" },
 ];
 
 const PLAN_CHANGE_OPTIONS = PLAN_OPTIONS.filter((p) => p.value !== "");

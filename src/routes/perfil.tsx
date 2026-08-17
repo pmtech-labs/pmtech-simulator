@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Check, CreditCard, Loader2, Mail, Pencil, ShieldCheck, User, X } from "lucide-react";
+import { Check, CreditCard, FileText, Loader2, Mail, Pencil, ShieldCheck, User, X } from "lucide-react";
 import { useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
@@ -199,13 +199,26 @@ function ProfilePage() {
                   )}
                 </div>
               ) : user.expiresAt ? (
-                <div className="flex items-center gap-3 rounded-xl border border-success bg-success-soft px-3 py-2.5">
-                  <ShieldCheck className="h-4 w-4 shrink-0 text-success" />
-                  <div className="min-w-0">
-                    <p className="text-[11px] text-success">Licencia activa</p>
-                    <p className="truncate text-sm font-medium">
-                      {user.planName} · vence el {user.expiresAt}
-                    </p>
+                <div className="flex flex-col gap-3 rounded-xl border border-success bg-success-soft px-3 py-2.5">
+                  <div className="flex items-center gap-3">
+                    <ShieldCheck className="h-4 w-4 shrink-0 text-success" />
+                    <div className="min-w-0">
+                      <p className="text-[11px] text-success">Licencia activa</p>
+                      <p className="truncate text-sm font-medium">
+                        {user.planName} · vence el {user.expiresAt}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 rounded-lg border border-success/40 bg-success-soft px-3 py-2">
+                    <FileText className="h-4 w-4 shrink-0 text-success" />
+                    <div className="min-w-0">
+                      <p className="text-[11px] text-success">Simulaciones completas</p>
+                      <p className="truncate text-sm font-medium">
+                        {user.fullSimLimit === null
+                          ? `${user.fullSimUsed} usadas · ilimitadas`
+                          : `${user.fullSimUsed} de ${user.fullSimLimit} usadas`}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ) : (

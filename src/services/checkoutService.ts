@@ -11,6 +11,21 @@ export interface CheckoutResult {
   planCode: CheckoutParams["planCode"];
 }
 
+export interface PlanFeature {
+  label: string;
+  included: boolean;
+}
+
+export interface Plan {
+  code: PlanCode;
+  name: string;
+  durationMonths: number;
+  price: number;
+  tagline?: string;
+  fullSimLimit: number | null;
+  features: PlanFeature[];
+}
+
 /**
  * Punto de integración de pago aislado.
  *
@@ -29,30 +44,23 @@ export async function createCheckoutSession({ planCode }: CheckoutParams): Promi
 /** Contacto para activación manual de licencia mientras no hay cobro online. */
 export const SALES_EMAIL = "contacto@glacimonto.com";
 
-export const PLANS = [
+function fullSimFeature(limit: number | null): PlanFeature {
+  if (limit === null) return { label: "Simulaciones completas ilimitadas (180 preguntas, 4h)", included: true };
+  if (limit === 0) return { label: "Sin simulaciones completas (180 preguntas)", included: false };
+  return { label: `${limit} simulaciones completas (180 preguntas, 4h)`, included: true };
+}
+
+export const PLANS: Plan[] = [
   {
-    code: "basica_3m" as const,
-    name: "Básica",
-    durationMonths: 3,
-    price: 39.9,
-    features: [
-      { label: "Banco completo ECO 2026", included: true },
-      { label: "Simulaciones completas (180 preguntas, 4h)", included: true },
-      { label: "Clusters de caso", included: true },
-      { label: "Practicum completo (hotspot, gráficos)", included: false },
-      { label: "Analítica por tarea ECO", included: false },
-      { label: "Motor adaptativo", included: false },
-    ],
-  },
-  {
-    code: "premium_1m" as const,
-    name: "Premium 1 mes",
+    code: "premium_1m",
+    name: "1 mes",
     durationMonths: 1,
     price: 29.9,
     tagline: "Para quien está a pocos días del examen y quiere la experiencia completa ya",
+    fullSimLimit: 5,
     features: [
       { label: "Banco completo ECO 2026", included: true },
-      { label: "Simulaciones completas (180 preguntas, 4h)", included: true },
+      fullSimFeature(5),
       { label: "Clusters de caso", included: true },
       { label: "Practicum completo (hotspot, gráficos)", included: true },
       { label: "Analítica por tarea ECO", included: true },
@@ -60,13 +68,29 @@ export const PLANS = [
     ],
   },
   {
-    code: "premium_6m" as const,
-    name: "Premium",
-    durationMonths: 6,
-    price: 59.9,
+    code: "basica_3m",
+    name: "3 meses",
+    durationMonths: 3,
+    price: 39.9,
+    fullSimLimit: 15,
     features: [
       { label: "Banco completo ECO 2026", included: true },
-      { label: "Simulaciones completas (180 preguntas, 4h)", included: true },
+      fullSimFeature(15),
+      { label: "Clusters de caso", included: true },
+      { label: "Practicum completo (hotspot, gráficos)", included: true },
+      { label: "Analítica por tarea ECO", included: true },
+      { label: "Motor adaptativo", included: true },
+    ],
+  },
+  {
+    code: "premium_6m",
+    name: "6 meses",
+    durationMonths: 6,
+    price: 59.9,
+    fullSimLimit: null,
+    features: [
+      { label: "Banco completo ECO 2026", included: true },
+      fullSimFeature(null),
       { label: "Clusters de caso", included: true },
       { label: "Practicum completo (hotspot, gráficos)", included: true },
       { label: "Analítica por tarea ECO", included: true },
@@ -74,3 +98,4 @@ export const PLANS = [
     ],
   },
 ];
+
