@@ -237,8 +237,8 @@ const PARTNER_BENEFITS = [
 const STEPS = [
   {
     number: "01",
-    title: "Elige tu plan",
-    description: "Básica o Premium, según cuánta profundidad analítica necesitas.",
+    title: "Elige tu licencia",
+    description: "1, 3 o 6 meses según tu calendario de estudio. Difieren solo en simulaciones completas incluidas.",
   },
   {
     number: "02",
