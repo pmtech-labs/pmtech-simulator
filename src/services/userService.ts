@@ -16,6 +16,8 @@ export interface CurrentUser {
   plan: "free" | "basica_3m" | "premium_1m" | "premium_6m" | null;
   planName: string;
   freeHalfSimUsed: boolean;
+  fullSimLimit: number | null;
+  fullSimUsed: number;
   monthsRemaining: number;
   expiresAt: string | null;
   readiness: number;
