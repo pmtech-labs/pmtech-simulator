@@ -580,9 +580,11 @@ function Pricing() {
                 </>
               )}
               <h3 className="text-base font-semibold">{plan.name}</h3>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {plan.tagline ?? `Licencia de ${plan.durationMonths} meses`}
-              </p>
+              {plan.tagline ? (
+                <p className="mt-1 text-xs text-muted-foreground">{plan.tagline}</p>
+              ) : (
+                <p className="mt-1 text-xs text-muted-foreground">Acceso completo durante la licencia</p>
+              )}
               <p className="mt-4 flex items-baseline gap-1">
                 <span className="num font-display text-4xl font-bold">
                   {plan.price.toFixed(2).replace(".", ",")} €
@@ -598,7 +600,7 @@ function Pricing() {
                     key={f.label}
                     className={
                       f.included
-                        ? "flex items-start gap-2 text-sm"
+                        ? "flex items-start gap-2 text-sm font-semibold"
                         : "flex items-start gap-2 text-sm text-muted-foreground/50"
                     }
                   >
