@@ -194,6 +194,15 @@ async function readStartExamError(error: unknown): Promise<string> {
 }
 
 export async function startExam(params: StartExamParams): Promise<ExamSession> {
+  if (params.mode === "full_sim") {
+    const currentUser = await getCurrentUser();
+    if (currentUser?.fullSimLimit !== null && currentUser!.fullSimUsed >= currentUser!.fullSimLimit) {
+      throw new Error(
+        "Has alcanzado el límite de simulaciones completas de tu licencia. Mejora tu plan para seguir practicando.",
+      );
+    }
+  }
+
   const taskIds =
     params.taskIds ??
     (params.domains?.length ? await taskIdsForDomains(params.domains) : undefined);
