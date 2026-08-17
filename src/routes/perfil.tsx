@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Check, CreditCard, Loader2, Mail, Pencil, ShieldCheck, User, X } from "lucide-react";
+import { Check, CreditCard, FileText, Loader2, Mail, Pencil, ShieldCheck, User, X } from "lucide-react";
 import { useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
