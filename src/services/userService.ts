@@ -177,7 +177,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   const [licenseRes, masteryRows, history] = await Promise.all([
     supabase
       .from("licenses")
-      .select("expires_at, status, free_half_sim_used, plans(code, name, duration_months)")
+      .select("expires_at, status, free_half_sim_used, full_sim_limit, plans(code, name, duration_months)")
       .eq("status", "active")
       .order("expires_at", { ascending: false })
       .limit(1)
@@ -190,6 +190,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     | {
         expires_at: string;
         free_half_sim_used: boolean | null;
+        full_sim_limit: number | null;
         plans: { code: string; name: string; duration_months: number } | null;
       }
     | null;
@@ -204,6 +205,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 
   const finished = history.filter((h) => h.status !== "En curso");
   const questionsAnswered = finished.reduce((acc, h) => acc + h.questions, 0);
+  const fullSimUsed = finished.filter((h) => h.mode === "Simulación completa").length;
   const readiness = Math.round(
     masteryByDomain.people * 0.33 + masteryByDomain.process * 0.41 + masteryByDomain.business * 0.26,
   );
@@ -227,6 +229,8 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
           ? `Licencia ${license.plans.name}`
           : "Sin licencia activa",
     freeHalfSimUsed: Boolean(license?.free_half_sim_used),
+    fullSimLimit: license?.full_sim_limit ?? null,
+    fullSimUsed,
     monthsRemaining,
     expiresAt: license?.expires_at ? formatDate(license.expires_at) : null,
     readiness,
