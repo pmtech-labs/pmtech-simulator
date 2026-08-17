@@ -522,7 +522,6 @@ function Pricing() {
             <p className="mt-1 text-xs text-muted-foreground">Sin tarjeta · practica sin límite de tiempo</p>
             <p className="mt-4 flex items-baseline gap-1">
               <span className="num font-display text-4xl font-bold">0 €</span>
-              <span className="text-sm text-muted-foreground">/ siempre</span>
             </p>
             <ul className="mt-6 space-y-2.5">
               {[
