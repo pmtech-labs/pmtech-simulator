@@ -42,6 +42,7 @@ export function AboutUs() {
               LinkedIn
             </a>
           </div>
+        </div>
 
         <div>
           <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
