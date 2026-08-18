@@ -116,6 +116,8 @@ function AdminDashboard() {
         <TagDistribution />
 
 
+        <NewsletterStatsCard />
+
         <NewsletterExportCard />
 
 
