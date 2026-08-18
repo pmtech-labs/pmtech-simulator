@@ -462,13 +462,6 @@ export type Database = {
             foreignKeyName: "exam_items_question_id_fkey"
             columns: ["question_id"]
             isOneToOne: false
-            referencedRelation: "v_question_stats"
-            referencedColumns: ["question_id"]
-          },
-          {
-            foreignKeyName: "exam_items_question_id_fkey"
-            columns: ["question_id"]
-            isOneToOne: false
             referencedRelation: "v_questions_public"
             referencedColumns: ["id"]
           },
@@ -651,13 +644,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "llm_connectors"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "generation_jobs_connector_id_fkey"
-            columns: ["connector_id"]
-            isOneToOne: false
-            referencedRelation: "v_question_stats"
-            referencedColumns: ["generation_connector_id"]
           },
         ]
       }
@@ -979,13 +965,6 @@ export type Database = {
             foreignKeyName: "question_rejections_question_id_fkey"
             columns: ["question_id"]
             isOneToOne: false
-            referencedRelation: "v_question_stats"
-            referencedColumns: ["question_id"]
-          },
-          {
-            foreignKeyName: "question_rejections_question_id_fkey"
-            columns: ["question_id"]
-            isOneToOne: false
             referencedRelation: "v_questions_public"
             referencedColumns: ["id"]
           },
@@ -1052,13 +1031,6 @@ export type Database = {
             foreignKeyName: "question_reports_question_id_fkey"
             columns: ["question_id"]
             isOneToOne: false
-            referencedRelation: "v_question_stats"
-            referencedColumns: ["question_id"]
-          },
-          {
-            foreignKeyName: "question_reports_question_id_fkey"
-            columns: ["question_id"]
-            isOneToOne: false
             referencedRelation: "v_questions_public"
             referencedColumns: ["id"]
           },
@@ -1111,13 +1083,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "questions"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "question_tags_question_id_fkey"
-            columns: ["question_id"]
-            isOneToOne: false
-            referencedRelation: "v_question_stats"
-            referencedColumns: ["question_id"]
           },
           {
             foreignKeyName: "question_tags_question_id_fkey"
@@ -1417,7 +1382,7 @@ export type Database = {
       }
       v_question_stats: {
         Row: {
-          approach: Database["public"]["Enums"]["approach_type"] | null
+          approach: string | null
           cluster_id: string | null
           cluster_scenario: string | null
           correct_answer: Json | null
@@ -1427,25 +1392,21 @@ export type Database = {
           domain_name: string | null
           explanation: string | null
           focus_tags: string[] | null
-          format: Database["public"]["Enums"]["item_format"] | null
+          format: string | null
           generation_connector_id: string | null
           generation_connector_name: string | null
           generation_job_id: string | null
           generation_model_id: string | null
           generation_provider: string | null
-          item_type: Database["public"]["Enums"]["item_type"] | null
+          item_type: string | null
           latest_rejection_reason: string | null
           open_reports_count: number | null
           options: Json | null
-          performance_domain:
-            | Database["public"]["Enums"]["performance_domain_type"]
-            | null
-          process_group:
-            | Database["public"]["Enums"]["process_group_type"]
-            | null
+          performance_domain: string | null
+          process_group: string | null
           question_id: string | null
           question_number: number | null
-          status: Database["public"]["Enums"]["item_status"] | null
+          status: string | null
           stem: string | null
           success_rate_pct: number | null
           tag_codes: string[] | null
@@ -1455,36 +1416,7 @@ export type Database = {
           times_correct: number | null
           times_used_in_exams: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "questions_cluster_id_fkey"
-            columns: ["cluster_id"]
-            isOneToOne: false
-            referencedRelation: "case_clusters"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "questions_generation_job_id_fkey"
-            columns: ["generation_job_id"]
-            isOneToOne: false
-            referencedRelation: "generation_jobs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "questions_task_id_fkey"
-            columns: ["task_id"]
-            isOneToOne: false
-            referencedRelation: "eco_tasks"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "questions_task_id_fkey"
-            columns: ["task_id"]
-            isOneToOne: false
-            referencedRelation: "v_task_coverage"
-            referencedColumns: ["task_id"]
-          },
-        ]
+        Relationships: []
       }
       v_questions_public: {
         Row: {
@@ -1605,6 +1537,44 @@ export type Database = {
         }[]
       }
       expire_licenses: { Args: never; Returns: undefined }
+      get_question_stats: {
+        Args: never
+        Returns: {
+          approach: string
+          cluster_id: string
+          cluster_scenario: string
+          correct_answer: Json
+          created_at: string
+          difficulty: number
+          domain_code: string
+          domain_name: string
+          explanation: string
+          focus_tags: string[]
+          format: string
+          generation_connector_id: string
+          generation_connector_name: string
+          generation_job_id: string
+          generation_model_id: string
+          generation_provider: string
+          item_type: string
+          latest_rejection_reason: string
+          open_reports_count: number
+          options: Json
+          performance_domain: string
+          process_group: string
+          question_id: string
+          question_number: number
+          status: string
+          stem: string
+          success_rate_pct: number
+          tag_codes: string[]
+          task_id: string
+          task_title: string
+          times_answered: number
+          times_correct: number
+          times_used_in_exams: number
+        }[]
+      }
       get_untagged_ae_questions: {
         Args: { p_limit: number }
         Returns: {
