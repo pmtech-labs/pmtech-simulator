@@ -9,10 +9,10 @@ export function NewsletterSignup() {
         </div>
         <div>
           <h3 className="font-display text-base font-semibold">
-            Boletín de dirección de proyectos
+            Suscríbete a nuestro boletín semanal sobre dirección de proyectos
           </h3>
           <p className="text-xs text-muted-foreground">
-            Cada quince días, sin relleno. Puedes darte de baja cuando quieras.
+            Cada 7 días, sin relleno. Puedes darte de baja cuando quieras.
           </p>
         </div>
       </div>
