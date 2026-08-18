@@ -41,7 +41,7 @@ export function AboutUs() {
               <Linkedin className="h-4 w-4" />
               LinkedIn
             </a>
-        </div>
+          </div>
 
         <div>
           <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
