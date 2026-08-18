@@ -1,3 +1,5 @@
+import { Linkedin } from "lucide-react";
+
 const STATS = [
   { value: "24+", label: "años dirigiendo proyectos y PMOs" },
   { value: "12+", label: "años formando a profesionales" },
