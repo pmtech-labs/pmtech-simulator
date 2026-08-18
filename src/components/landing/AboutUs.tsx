@@ -31,8 +31,16 @@ export function AboutUs() {
               PMP® · PMO-CP® · PSM® · CSM®
             </p>
             <p className="mt-2 text-xs text-muted-foreground">Liderazgo académico y técnico del equipo</p>
-
-          </div>
+            <a
+              href="https://www.linkedin.com/in/isaaclopezpena/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Perfil de LinkedIn de Isaac López Pena"
+              className="mt-3 inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#0A66C2]/10 px-3 py-1.5 text-xs font-semibold text-[#0A66C2] transition-colors hover:bg-[#0A66C2]/20 sm:justify-start"
+            >
+              <Linkedin className="h-4 w-4" />
+              LinkedIn
+            </a>
         </div>
 
         <div>
