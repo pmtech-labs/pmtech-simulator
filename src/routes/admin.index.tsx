@@ -121,6 +121,9 @@ function AdminDashboard() {
 
         <NewsletterExportCard />
 
+        <NewsletterImportCard />
+
+
 
         {tasksEmpty > 0 && (
           <div className="flex items-start gap-2 rounded-lg border border-destructive/60 bg-destructive/5 p-3 text-sm">
