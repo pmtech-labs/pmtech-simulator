@@ -1,6 +1,50 @@
-import { Mail } from "lucide-react";
+import { CheckCircle2, Loader2, Mail } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+
+import { subscribeNewsletter } from "@/lib/leads.functions";
+import { trackNewsletterEvent } from "@/lib/newsletter.functions";
+
+const SUBSTACK_SUBSCRIBE_URL = "https://glacimonto.substack.com/subscribe";
 
 export function NewsletterSignup() {
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
+  const [error, setError] = useState<string | null>(null);
+  const interacted = useRef(false);
+  const viewed = useRef(false);
+
+  useEffect(() => {
+    if (viewed.current) return;
+    viewed.current = true;
+    void trackNewsletterEvent({ data: { eventType: "view" } }).catch(() => {});
+  }, []);
+
+  const handleInteraction = () => {
+    if (interacted.current) return;
+    interacted.current = true;
+    void trackNewsletterEvent({ data: { eventType: "interaction" } }).catch(() => {});
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setStatus("loading");
+    try {
+      await subscribeNewsletter({ data: { email, fullName } });
+      void trackNewsletterEvent({ data: { eventType: "subscribe" } }).catch(() => {});
+      setStatus("done");
+      window.open(
+        `${SUBSTACK_SUBSCRIBE_URL}?email=${encodeURIComponent(email.trim())}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
+    } catch {
+      setStatus("idle");
+      setError("No se ha podido completar la suscripción. Inténtalo de nuevo.");
+    }
+  };
+
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-panel">
       <div className="flex items-center gap-2.5">
@@ -17,18 +61,46 @@ export function NewsletterSignup() {
         </div>
       </div>
 
-      <div className="mt-5 w-full overflow-hidden rounded-lg">
-        <iframe
-          src="https://glacimonto.substack.com/embed?transparent=1&light=1"
-          width="100%"
-          height="320"
-          style={{ border: 0, background: "transparent" }}
-          frameBorder="0"
-          scrolling="no"
-          title="Formulario de suscripción al boletín de dirección de proyectos"
-          loading="lazy"
-        />
-      </div>
+      {status === "done" ? (
+        <div className="mt-5 flex items-start gap-2.5 rounded-lg border border-border bg-secondary/50 p-4">
+          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            ¡Listo! Te hemos añadido a la lista. Hemos abierto Substack en otra pestaña para que
+            confirmes la suscripción y recibas el boletín sin problemas.
+          </p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="mt-5 grid gap-2.5 sm:grid-cols-2">
+          <input
+            type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            onFocus={handleInteraction}
+            placeholder="Nombre (opcional)"
+            maxLength={120}
+            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+          />
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onFocus={handleInteraction}
+            placeholder="tu@email.com"
+            maxLength={255}
+            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+          />
+          <button
+            type="submit"
+            disabled={status === "loading"}
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60 sm:col-span-2"
+          >
+            {status === "loading" && <Loader2 className="h-4 w-4 animate-spin" />}
+            Suscribirme al boletín
+          </button>
+          {error && <p className="text-xs text-destructive sm:col-span-2">{error}</p>}
+        </form>
+      )}
 
       <ul className="mt-4 grid gap-1.5 text-[11px] leading-relaxed text-muted-foreground">
         <li>· Cambios del ECO 2026 y del PMBOK explicados en claro</li>
@@ -39,4 +111,3 @@ export function NewsletterSignup() {
     </div>
   );
 }
-
