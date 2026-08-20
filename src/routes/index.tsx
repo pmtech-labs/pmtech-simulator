@@ -278,9 +278,9 @@ function Hero() {
       />
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
+        <div className="grid min-w-0 items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
           {/* Columna de texto */}
-          <div className="max-w-xl lg:max-w-none">
+          <div className="min-w-0 max-w-xl lg:max-w-none">
             <Reveal>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-3 py-1 text-xs font-semibold text-hero-foreground shadow-lift backdrop-blur">
                 <Sparkles className="h-3.5 w-3.5 animate-pulse text-accent" />
@@ -332,7 +332,7 @@ function Hero() {
 
             {/* Stats en fila horizontal */}
             <Reveal delay={300}>
-              <div className="mt-8 flex flex-nowrap items-center justify-start gap-6 sm:gap-8 lg:gap-10">
+              <div className="mt-8 flex flex-wrap items-center justify-start gap-x-6 gap-y-4 sm:flex-nowrap sm:gap-8 lg:gap-10">
                 {STATS.map((s) => (
                   <div key={s.label} className="flex items-center gap-2">
                     <span className="num font-display text-2xl font-bold text-hero-foreground sm:text-3xl">
