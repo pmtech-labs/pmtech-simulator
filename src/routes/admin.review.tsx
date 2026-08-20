@@ -211,7 +211,7 @@ function ReviewPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const askRetire = (ids: string[], label: string) => {
+  const askReject = (ids: string[], label: string) => {
     setRejectReason("");
     setConfirmStep(false);
     setRejectTarget({ ids, label });
@@ -224,7 +224,7 @@ function ReviewPage() {
     onSuccess: (res) => {
       if (res?.retired) {
         toast.warning(
-          res.reason ?? res.message ?? "La pregunta ya se usó en exámenes reales: se ha retirado en lugar de borrarse.",
+          res.reason ?? res.message ?? "La pregunta ya se usó en exámenes reales: se ha excluido del banco en lugar de borrarse.",
         );
       } else {
         toast.success("Pregunta eliminada");
@@ -383,15 +383,15 @@ function ReviewPage() {
               title={
                 selected.every((id) => allRows.find((r) => r.id === id)?.status === "draft")
                   ? "Todas las seleccionadas ya están en borrador"
-                  : "Rechazar y devolver a borrador las seleccionadas"
+                  : "Retirar del catálogo y devolver a borrador las seleccionadas"
               }
             >
-              Rechazar (a borrador)
+              Retirar (a borrador)
             </BulkBtn>
             <BulkBtn
               disabled={busy || selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")}
               onClick={() =>
-                askRetire(
+                askReject(
                   selected,
                   selected
                     .map((id) => allRows.find((r) => r.id === id)?.question_number)
@@ -402,11 +402,11 @@ function ReviewPage() {
               }
               title={
                 selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")
-                  ? "Todas las seleccionadas ya están retiradas"
-                  : "Retirar las seleccionadas"
+                  ? "Todas las seleccionadas ya están rechazadas"
+                  : "Rechazar las seleccionadas"
               }
             >
-              Retirar
+              Rechazar
             </BulkBtn>
           </div>
         )}
@@ -458,7 +458,7 @@ function ReviewPage() {
                   }
                   busy={busy}
                   onStatus={(status) => changeStatus.mutate({ ids: [q.id], status })}
-                  onRetire={() => askRetire([q.id], `#${q.question_number}`)}
+                  onReject={() => askReject([q.id], `#${q.question_number}`)}
                   onDelete={() => remove.mutate(q.id)}
                 />
               ))}
@@ -485,12 +485,12 @@ function ReviewPage() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {confirmStep ? "Confirmar retirada" : `Retirar pregunta ${rejectTarget?.label ?? ""}`}
+                {confirmStep ? "Confirmar rechazo" : `Rechazar pregunta ${rejectTarget?.label ?? ""}`}
               </DialogTitle>
               <DialogDescription>
                 {confirmStep
-                  ? "Revisa antes de confirmar. Esta acción retira las preguntas del banco."
-                  : "Las preguntas no se borran, quedan retiradas del banco. Explica brevemente por qué no tienen calidad suficiente — este motivo se usará automáticamente para mejorar la generación de preguntas futuras de esta misma tarea."}
+                  ? "Revisa antes de confirmar. Esta acción rechaza las preguntas y las excluye del banco."
+                  : "Las preguntas no se borran, quedan rechazadas y excluidas del banco. Explica brevemente por qué no tienen calidad suficiente — este motivo se usará automáticamente para mejorar la generación de preguntas futuras de esta misma tarea."}
               </DialogDescription>
             </DialogHeader>
             {confirmStep ? (
@@ -540,7 +540,7 @@ function ReviewPage() {
                     });
                 }}
               >
-                {confirmStep ? "Sí, retirar definitivamente" : "Continuar"}
+                {confirmStep ? "Sí, rechazar definitivamente" : "Continuar"}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -646,7 +646,7 @@ function QuestionRow({
   checked,
   onCheck,
   onStatus,
-  onRetire,
+  onReject,
   onDelete,
   busy,
 }: {
@@ -654,7 +654,7 @@ function QuestionRow({
   checked: boolean;
   onCheck: (on: boolean) => void;
   onStatus: (status: string) => void;
-  onRetire: () => void;
+  onReject: () => void;
   onDelete: () => void;
   busy: boolean;
 }) {
@@ -748,7 +748,7 @@ function QuestionRow({
             <BulkBtn
               disabled={busy || q.status === "retired"}
               title={q.status === "retired" ? "Ya está retirada" : "Rechazar pregunta"}
-              onClick={onRetire}
+              onClick={onReject}
             >
               Rechazar
             </BulkBtn>
