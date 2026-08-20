@@ -740,17 +740,17 @@ function QuestionRow({
             </BulkBtn>
             <BulkBtn
               disabled={busy || q.status === "draft"}
-              title={q.status === "draft" ? "Ya está en borrador" : "Rechazar y devolver a borrador"}
+              title={q.status === "draft" ? "Ya está en borrador" : "Retirar y devolver a borrador"}
               onClick={() => onStatus("draft")}
             >
-              Rechazar
+              Retirar
             </BulkBtn>
             <BulkBtn
               disabled={busy || q.status === "retired"}
-              title={q.status === "retired" ? "Ya está retirada" : "Retirar pregunta"}
+              title={q.status === "retired" ? "Ya está retirada" : "Rechazar pregunta"}
               onClick={onRetire}
             >
-              Retirar
+              Rechazar
             </BulkBtn>
             <button
               disabled={busy}
