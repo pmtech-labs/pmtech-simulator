@@ -1,4 +1,4 @@
-import { CheckCircle2, Loader2, Mail } from "lucide-react";
+import { CheckCircle2, ExternalLink, Loader2, Mail } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { subscribeNewsletter } from "@/lib/leads.functions";
@@ -11,6 +11,7 @@ export function NewsletterSignup() {
   const [fullName, setFullName] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
+  const substackRef = useRef<Window | null>(null);
   const interacted = useRef(false);
   const viewed = useRef(false);
 
@@ -26,19 +27,27 @@ export function NewsletterSignup() {
     void trackNewsletterEvent({ data: { eventType: "interaction" } }).catch(() => {});
   };
 
+  const openSubstack = (emailValue: string) => {
+    const url = `${SUBSTACK_SUBSCRIBE_URL}?email=${encodeURIComponent(emailValue.trim())}`;
+    const win = window.open(url, "_blank", "noopener,noreferrer");
+    return win;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setStatus("loading");
+
+    const submittedEmail = email.trim();
+
+    // Open Substack immediately while the user gesture is still active;
+    // Safari/iOS and other strict popup blockers may block deferred window.open calls.
+    substackRef.current = openSubstack(submittedEmail);
+
     try {
       await subscribeNewsletter({ data: { email, fullName } });
       void trackNewsletterEvent({ data: { eventType: "subscribe" } }).catch(() => {});
       setStatus("done");
-      window.open(
-        `${SUBSTACK_SUBSCRIBE_URL}?email=${encodeURIComponent(email.trim())}`,
-        "_blank",
-        "noopener,noreferrer",
-      );
     } catch {
       setStatus("idle");
       setError("No se ha podido completar la suscripción. Inténtalo de nuevo.");
@@ -62,12 +71,24 @@ export function NewsletterSignup() {
       </div>
 
       {status === "done" ? (
-        <div className="mt-5 flex items-start gap-2.5 rounded-lg border border-border bg-secondary/50 p-4">
-          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            ¡Listo! Te hemos añadido a la lista. Hemos abierto Substack en otra pestaña para que
-            confirmes la suscripción y recibas el boletín sin problemas.
-          </p>
+        <div className="mt-5 grid gap-3 rounded-lg border border-border bg-secondary/50 p-4">
+          <div className="flex items-start gap-2.5">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              ¡Listo! Te hemos añadido a la lista. Si no se abrió Substack automáticamente, pulsa el
+              botón de abajo para confirmar la suscripción y recibir el boletín sin problemas.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              openSubstack(email);
+            }}
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Confirmar suscripción en Substack
+            <ExternalLink className="h-4 w-4" />
+          </button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="mt-5 grid gap-2.5 sm:grid-cols-2">
