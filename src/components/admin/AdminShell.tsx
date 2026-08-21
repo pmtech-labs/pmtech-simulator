@@ -6,6 +6,7 @@ import {
   GraduationCap,
   LayoutDashboard,
   LogOut,
+  ShieldAlert,
   Sparkles,
   Users,
 } from "lucide-react";
@@ -20,6 +21,7 @@ const ADMIN_NAV = [
   { to: "/admin/connectors", label: "Conectores LLM", icon: Boxes },
   { to: "/admin/generate", label: "Generar preguntas", icon: Sparkles },
   { to: "/admin/review", label: "Revisión del banco", icon: Database },
+  { to: "/admin/rechazadas", label: "Rechazadas y retiradas", icon: ShieldAlert },
   { to: "/admin/usuarios", label: "Usuarios", icon: Users },
   { to: "/admin/metricas", label: "Métricas", icon: BarChart3 },
 ] as const;
