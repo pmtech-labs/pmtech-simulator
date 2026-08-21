@@ -266,7 +266,7 @@ export const updateQuestionTextFn = createServerFn({ method: "POST" })
       .update({
         stem: data.stem,
         explanation: data.explanation,
-        options: nextOptions,
+        options: nextOptions as unknown as never,
       })
       .eq("id", data.id);
     if (error) throw new Error(error.message);
