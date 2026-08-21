@@ -17,7 +17,11 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
     });
     if (rpcError || !isAdmin) throw new Error("No autorizado");
 
-    const db = context.supabase;
+    // `authenticated` no tiene SELECT sobre `questions` (el banco solo se lee a
+    // través de vistas/funciones), así que tras verificar el rol admin usamos el
+    // cliente privilegiado del servidor.
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const db = supabaseAdmin;
 
     const { data: q, error } = await db
       .from("questions")
@@ -102,6 +106,8 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
     });
     if (rpcError || !isAdmin) throw new Error("No autorizado");
 
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
     // Snapshot previo: necesario para registrar el motivo del rechazo.
     let snapshots: Array<{
       id: string;
@@ -158,6 +164,8 @@ export const listReviewedOutQuestionsFn = createServerFn({ method: "POST" })
       p_user_id: context.userId,
     });
     if (rpcError || !isAdmin) throw new Error("No autorizado");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const statuses: Array<"rejected" | "retired"> =
       data.status === "all" ? ["rejected", "retired"] : [data.status];
@@ -242,7 +250,9 @@ export const updateQuestionTextFn = createServerFn({ method: "POST" })
     });
     if (rpcError || !isAdmin) throw new Error("No autorizado");
 
-    const { data: current, error: readError } = await context.supabase
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: current, error: readError } = await supabaseAdmin
       .from("questions")
       .select("options")
       .eq("id", data.id)
