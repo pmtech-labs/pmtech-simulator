@@ -57,7 +57,7 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
     }
 
     let latestRejectionReason: string | null = null;
-    if (q.status === "retired") {
+    if (q.status === "retired" || q.status === "rejected") {
       const { data: rejection } = await db
         .from("question_rejections")
         .select("reason")
@@ -67,6 +67,7 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
         .maybeSingle();
       latestRejectionReason = rejection?.reason ?? null;
     }
+
 
     return {
       ...q,
