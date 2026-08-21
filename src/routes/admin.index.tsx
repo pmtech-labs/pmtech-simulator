@@ -96,6 +96,14 @@ function AdminDashboard() {
     queryKey: ["admin-stats", "most_used"],
     queryFn: () => getStats<QuestionStatRow>("most_used_questions", 10),
   });
+  const allStatus = useQuery({
+    queryKey: ["admin-stats", "tags"],
+    queryFn: () => getStats<QuestionTagRow>("tags"),
+    select: (data) => ({
+      retired: data.filter((r) => r.status === "retired").length,
+      rejected: data.filter((r) => r.status === "rejected").length,
+    }),
+  });
 
   const rows = coverage.data ?? [];
   const totals = rows.reduce(
