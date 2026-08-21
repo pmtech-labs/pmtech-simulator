@@ -129,10 +129,16 @@ function AdminDashboard() {
   return (
     <AdminShell title="Dashboard" description="Estado del banco de preguntas y del uso de la plataforma" email={email}>
       <div className="space-y-6">
-        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <Kpi label="Borradores" value={totals.draft} />
 
           <Kpi label="Publicadas" value={totals.published} />
+          <Kpi
+            label="Retiradas y rechazadas"
+            value={(allStatus.data?.retired ?? 0) + (allStatus.data?.rejected ?? 0)}
+            subtext={`${allStatus.data?.retired ?? 0} retiradas · ${allStatus.data?.rejected ?? 0} rechazadas`}
+            href="/admin/rechazadas"
+          />
           <Kpi label="Exámenes realizados" value={totalExams} />
           <Kpi
             label="Cobertura tareas ECO"
