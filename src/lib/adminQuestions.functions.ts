@@ -117,14 +117,14 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
       stem: string;
     }> = [];
     if ((data.status === "rejected" || data.status === "retired") && data.reason) {
-      const { data: rows } = await context.supabase
+      const { data: rows } = await supabaseAdmin
         .from("questions")
         .select("id, question_number, task_id, format, stem")
         .in("id", data.ids);
       snapshots = rows ?? [];
     }
 
-    const { data: rows, error } = await context.supabase
+    const { data: rows, error } = await supabaseAdmin
       .from("questions")
       .update({ status: data.status })
       .in("id", data.ids)
@@ -134,7 +134,7 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
 
     if (snapshots.length > 0 && data.reason) {
       const reason = data.reason;
-      await context.supabase.from("question_rejections").insert(
+      await supabaseAdmin.from("question_rejections").insert(
         snapshots.map((s) => ({
           question_id: s.id,
           question_number: s.question_number,
@@ -170,7 +170,7 @@ export const listReviewedOutQuestionsFn = createServerFn({ method: "POST" })
     const statuses: Array<"rejected" | "retired"> =
       data.status === "all" ? ["rejected", "retired"] : [data.status];
 
-    const { data: rows, error } = await context.supabase
+    const { data: rows, error } = await supabaseAdmin
       .from("questions")
       .select(
         "id, question_number, stem, options, correct_answer, explanation, status, format, item_type, difficulty, task_id, updated_at",
@@ -185,14 +185,14 @@ export const listReviewedOutQuestionsFn = createServerFn({ method: "POST" })
 
     const [{ data: rejections }, { data: tasks }] = await Promise.all([
       ids.length
-        ? context.supabase
+        ? supabaseAdmin
             .from("question_rejections")
             .select("question_id, reason, rejected_at")
             .in("question_id", ids)
             .order("rejected_at", { ascending: false })
         : Promise.resolve({ data: [] as Array<{ question_id: string | null; reason: string; rejected_at: string }> }),
       taskIds.length
-        ? context.supabase
+        ? supabaseAdmin
             .from("eco_tasks")
             .select("id, title, task_number")
             .in("id", taskIds)
@@ -271,7 +271,7 @@ export const updateQuestionTextFn = createServerFn({ method: "POST" })
       return "text" in opt || !("label" in opt) ? { ...opt, text } : { ...opt, label: text };
     });
 
-    const { error } = await context.supabase
+    const { error } = await supabaseAdmin
       .from("questions")
       .update({
         stem: data.stem,
