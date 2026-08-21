@@ -50,7 +50,7 @@ export const getAdminStatsFn = createServerFn({ method: "POST" })
       const { data: rows, error } = await db
         .from("v_question_stats")
         .select("status, tag_codes")
-        .in("status", ["draft", "published"]);
+        .in("status", ["draft", "published", "retired", "rejected"]);
       if (error) throw new Error(error.message);
       return rows ?? [];
     }
