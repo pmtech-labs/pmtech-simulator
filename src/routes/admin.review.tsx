@@ -30,6 +30,7 @@ import {
 import { cn } from "@/lib/utils";
 import { buildCsv, downloadCsv } from "@/lib/export";
 import { useTagDefs } from "@/hooks/useTagDefs";
+import { QUESTION_STATUSES, approachLabel, statusLabel } from "@/lib/questionStatus";
 
 
 interface ReviewSearch {
@@ -43,7 +44,7 @@ export const Route = createFileRoute("/admin/review")({
   component: ReviewPage,
 });
 
-const STATUSES = ["draft", "published", "retired"];
+const STATUSES = QUESTION_STATUSES;
 const APPROACHES = ["predictive", "agile", "hybrid"];
 const PAGE_SIZE = 20;
 const inputCls = "rounded-md border border-border bg-background px-2.5 py-1.5 text-xs";
@@ -174,15 +175,15 @@ function ReviewPage() {
       ["Nº", "Estado", "Dominio", "Tarea", "Enfoque", "Dificultad", "Usos", "% acierto", "Enunciado", "Motivo de rechazo"],
       filteredRows.map((r) => [
         r.question_number,
-        r.status,
+        statusLabel(r.status),
         r.domain_name ?? "",
         r.task_title ?? "",
-        r.approach ?? "",
+        approachLabel(r.approach),
         r.difficulty ?? "",
         r.times_used_in_exams ?? r.times_answered ?? 0,
         r.success_rate_pct ?? "",
         r.stem,
-        r.status === "retired" ? (r.latest_rejection_reason ?? "") : "",
+        r.status === "retired" || r.status === "rejected" ? (r.latest_rejection_reason ?? "") : "",
       ]),
     );
     const stamp = new Date().toISOString().slice(0, 10);
@@ -201,7 +202,7 @@ function ReviewPage() {
     mutationFn: ({ ids, status, reason }: { ids: string[]; status: string; reason?: string }) =>
       updateQuestionsStatus(ids, status, reason),
     onSuccess: (_d, v) => {
-      toast.success(`${v.ids.length} pregunta(s) → ${v.status}`);
+      toast.success(`${v.ids.length} pregunta(s) → ${statusLabel(v.status)}`);
       setSelected([]);
       setRejectTarget(null);
       setRejectReason("");
@@ -260,7 +261,7 @@ function ReviewPage() {
                     on ? "border-primary bg-primary text-primary-foreground" : "border-border",
                   )}
                 >
-                  {s}
+                  {statusLabel(s)}
                 </button>
               );
             })}
@@ -293,7 +294,7 @@ function ReviewPage() {
             <option value="">Todos los enfoques</option>
             {APPROACHES.map((a) => (
               <option key={a} value={a}>
-                {a}
+                {approachLabel(a)}
               </option>
             ))}
           </select>
@@ -383,13 +384,24 @@ function ReviewPage() {
               title={
                 selected.every((id) => allRows.find((r) => r.id === id)?.status === "draft")
                   ? "Todas las seleccionadas ya están en borrador"
-                  : "Retirar del catálogo y devolver a borrador las seleccionadas"
+                  : "Devolver a borrador las seleccionadas"
               }
             >
-              Retirar (a borrador)
+              Volver a borrador
             </BulkBtn>
             <BulkBtn
               disabled={busy || selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")}
+              onClick={() => changeStatus.mutate({ ids: selected, status: "retired" })}
+              title={
+                selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")
+                  ? "Todas las seleccionadas ya están retiradas"
+                  : "Retirar del banco disponible para examen"
+              }
+            >
+              Retirar
+            </BulkBtn>
+            <BulkBtn
+              disabled={busy || selected.every((id) => allRows.find((r) => r.id === id)?.status === "rejected")}
               onClick={() =>
                 askReject(
                   selected,
@@ -401,7 +413,7 @@ function ReviewPage() {
                 )
               }
               title={
-                selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")
+                selected.every((id) => allRows.find((r) => r.id === id)?.status === "rejected")
                   ? "Todas las seleccionadas ya están rechazadas"
                   : "Rechazar las seleccionadas"
               }
@@ -535,7 +547,7 @@ function ReviewPage() {
                   if (rejectTarget)
                     changeStatus.mutate({
                       ids: rejectTarget.ids,
-                      status: "retired",
+                      status: "rejected",
                       reason: rejectReason.trim(),
                     });
                 }}
@@ -688,7 +700,7 @@ function QuestionRow({
             <ChevronDown className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", open && "rotate-180")} />
             <span className="line-clamp-2">{q.stem}</span>
           </button>
-          {q.status === "retired" && q.latest_rejection_reason && (
+          {q.latest_rejection_reason && (
             <p
               title={q.latest_rejection_reason}
               className="mt-1 line-clamp-2 rounded-md bg-destructive/10 px-2 py-1 text-[11px] text-destructive"
@@ -700,7 +712,7 @@ function QuestionRow({
         </td>
         <td className="px-3 py-2">
           <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
-            {q.status}
+            {statusLabel(q.status)}
           </span>
         </td>
         <td className="px-3 py-2 text-xs text-muted-foreground">
@@ -740,14 +752,25 @@ function QuestionRow({
             </BulkBtn>
             <BulkBtn
               disabled={busy || q.status === "draft"}
-              title={q.status === "draft" ? "Ya está en borrador" : "Retirar y devolver a borrador"}
+              title={q.status === "draft" ? "Ya está en borrador" : "Devolver a borrador"}
               onClick={() => onStatus("draft")}
+            >
+              Volver a borrador
+            </BulkBtn>
+            <BulkBtn
+              disabled={busy || q.status === "retired"}
+              title={
+                q.status === "retired"
+                  ? "Ya está retirada"
+                  : "Retirar del banco disponible para examen"
+              }
+              onClick={() => onStatus("retired")}
             >
               Retirar
             </BulkBtn>
             <BulkBtn
-              disabled={busy || q.status === "retired"}
-              title={q.status === "retired" ? "Ya está retirada" : "Rechazar pregunta"}
+              disabled={busy || q.status === "rejected"}
+              title={q.status === "rejected" ? "Ya está rechazada" : "Rechazar pregunta"}
               onClick={onReject}
             >
               Rechazar
@@ -770,7 +793,7 @@ function QuestionRow({
             <p className="num mb-2 text-xs font-semibold text-muted-foreground">
               Pregunta #{q.question_number}
             </p>
-            {q.status === "retired" && q.latest_rejection_reason && (
+            {q.latest_rejection_reason && (
               <div className="mb-3 rounded-md bg-muted p-3 text-sm text-muted-foreground">
                 <span className="font-medium">Motivo del rechazo: </span>
                 {q.latest_rejection_reason}
