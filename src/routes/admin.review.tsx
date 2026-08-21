@@ -501,8 +501,8 @@ function ReviewPage() {
               </DialogTitle>
               <DialogDescription>
                 {confirmStep
-                  ? "Revisa antes de confirmar. Esta acción rechaza las preguntas y las excluye del banco."
-                  : "Las preguntas no se borran, quedan rechazadas y excluidas del banco. Explica brevemente por qué no tienen calidad suficiente — este motivo se usará automáticamente para mejorar la generación de preguntas futuras de esta misma tarea."}
+                  ? "Revisa antes de confirmar. Las preguntas quedarán marcadas como rechazadas y no pasarán a publicadas."
+                  : "Las preguntas no se borran: quedan rechazadas con tu comentario, visible en «Rechazadas y retiradas». Explica brevemente por qué no tienen calidad suficiente — este motivo se usará automáticamente para mejorar la generación de preguntas futuras de esta misma tarea."}
               </DialogDescription>
             </DialogHeader>
             {confirmStep ? (
