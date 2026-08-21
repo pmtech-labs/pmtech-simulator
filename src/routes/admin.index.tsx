@@ -38,12 +38,25 @@ const DOMAIN_LABEL: Record<string, string> = {
   business_environment: "Entorno de negocio",
 };
 
-function Kpi({ label, value, tone }: { label: string; value: string | number; tone?: "danger" | "ok" }) {
-  return (
+function Kpi({
+  label,
+  value,
+  tone,
+  href,
+  subtext,
+}: {
+  label: string;
+  value: string | number;
+  tone?: "danger" | "ok";
+  href?: string;
+  subtext?: string;
+}) {
+  const content = (
     <div
       className={cn(
         "rounded-lg border bg-card p-3",
         tone === "danger" ? "border-destructive/60" : "border-border",
+        href && "cursor-pointer hover:border-primary/60 transition-colors",
       )}
     >
       <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{label}</p>
@@ -56,8 +69,12 @@ function Kpi({ label, value, tone }: { label: string; value: string | number; to
       >
         {value}
       </p>
+      {subtext && <p className="mt-1 text-[11px] text-muted-foreground">{subtext}</p>}
     </div>
   );
+
+  if (href) return <a href={href}>{content}</a>;
+  return content;
 }
 
 function AdminDashboard() {
@@ -78,6 +95,14 @@ function AdminDashboard() {
   const mostUsed = useQuery({
     queryKey: ["admin-stats", "most_used"],
     queryFn: () => getStats<QuestionStatRow>("most_used_questions", 10),
+  });
+  const allStatus = useQuery({
+    queryKey: ["admin-stats", "tags"],
+    queryFn: () => getStats<QuestionTagRow>("tags"),
+    select: (data) => ({
+      retired: data.filter((r) => r.status === "retired").length,
+      rejected: data.filter((r) => r.status === "rejected").length,
+    }),
   });
 
   const rows = coverage.data ?? [];
@@ -104,10 +129,16 @@ function AdminDashboard() {
   return (
     <AdminShell title="Dashboard" description="Estado del banco de preguntas y del uso de la plataforma" email={email}>
       <div className="space-y-6">
-        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <Kpi label="Borradores" value={totals.draft} />
 
           <Kpi label="Publicadas" value={totals.published} />
+          <Kpi
+            label="Retiradas y rechazadas"
+            value={(allStatus.data?.retired ?? 0) + (allStatus.data?.rejected ?? 0)}
+            subtext={`${allStatus.data?.retired ?? 0} retiradas · ${allStatus.data?.rejected ?? 0} rechazadas`}
+            href="/admin/rechazadas"
+          />
           <Kpi label="Exámenes realizados" value={totalExams} />
           <Kpi
             label="Cobertura tareas ECO"
