@@ -11,6 +11,7 @@ import {
 import { getAdminQuestionFn } from "@/lib/adminQuestions.functions";
 import { useTagDefs } from "@/hooks/useTagDefs";
 import { cn } from "@/lib/utils";
+import { statusLabel } from "@/lib/questionStatus";
 
 
 interface Props {
@@ -57,9 +58,9 @@ export function QuestionDetailDialog({ questionId, onOpenChange }: Props) {
 
         {q && (
           <div className="space-y-4 text-sm">
-            {q.status === "retired" && q.latest_rejection_reason && (
+            {q.latest_rejection_reason && (
               <div className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
-                <span className="font-medium">Motivo del rechazo: </span>
+                <span className="font-medium">Comentario del revisor: </span>
                 {q.latest_rejection_reason}
               </div>
             )}
@@ -114,7 +115,7 @@ export function QuestionDetailDialog({ questionId, onOpenChange }: Props) {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              Estado: {q.status} · Dificultad: {q.difficulty ?? "—"}
+              Estado: {statusLabel(q.status)} · Dificultad: {q.difficulty ?? "—"}
               {" "}· Respondida {q.times_answered ?? 0} veces ({q.times_correct ?? 0} aciertos)
             </p>
 

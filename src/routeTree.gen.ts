@@ -46,6 +46,7 @@ import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
 import { Route as AdminCurriculumRouteImport } from './routes/admin.curriculum'
 import { Route as AdminGenerateRouteImport } from './routes/admin.generate'
 import { Route as AdminMetricasRouteImport } from './routes/admin.metricas'
+import { Route as AdminRechazadasRouteImport } from './routes/admin.rechazadas'
 import { Route as AdminReviewRouteImport } from './routes/admin.review'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 
@@ -234,6 +235,11 @@ const AdminMetricasRoute = AdminMetricasRouteImport.update({
   path: '/metricas',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminRechazadasRoute = AdminRechazadasRouteImport.update({
+  id: '/rechazadas',
+  path: '/rechazadas',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminReviewRoute = AdminReviewRouteImport.update({
   id: '/review',
   path: '/review',
@@ -282,6 +288,7 @@ export interface FileRoutesByFullPath {
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
   '/admin/metricas': typeof AdminMetricasRoute
+  '/admin/rechazadas': typeof AdminRechazadasRoute
   '/admin/review': typeof AdminReviewRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/admin/': typeof AdminIndexRoute
@@ -322,6 +329,7 @@ export interface FileRoutesByTo {
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
   '/admin/metricas': typeof AdminMetricasRoute
+  '/admin/rechazadas': typeof AdminRechazadasRoute
   '/admin/review': typeof AdminReviewRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/admin': typeof AdminIndexRoute
@@ -364,6 +372,7 @@ export interface FileRoutesById {
   '/admin/curriculum': typeof AdminCurriculumRoute
   '/admin/generate': typeof AdminGenerateRoute
   '/admin/metricas': typeof AdminMetricasRoute
+  '/admin/rechazadas': typeof AdminRechazadasRoute
   '/admin/review': typeof AdminReviewRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/admin/': typeof AdminIndexRoute
@@ -407,6 +416,7 @@ export interface FileRouteTypes {
     | '/admin/curriculum'
     | '/admin/generate'
     | '/admin/metricas'
+    | '/admin/rechazadas'
     | '/admin/review'
     | '/admin/usuarios'
     | '/admin/'
@@ -447,6 +457,7 @@ export interface FileRouteTypes {
     | '/admin/curriculum'
     | '/admin/generate'
     | '/admin/metricas'
+    | '/admin/rechazadas'
     | '/admin/review'
     | '/admin/usuarios'
     | '/admin'
@@ -488,6 +499,7 @@ export interface FileRouteTypes {
     | '/admin/curriculum'
     | '/admin/generate'
     | '/admin/metricas'
+    | '/admin/rechazadas'
     | '/admin/review'
     | '/admin/usuarios'
     | '/admin/'
@@ -789,6 +801,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMetricasRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/rechazadas': {
+      id: '/admin/rechazadas'
+      path: '/rechazadas'
+      fullPath: '/admin/rechazadas'
+      preLoaderRoute: typeof AdminRechazadasRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/review': {
       id: '/admin/review'
       path: '/review'
@@ -811,6 +830,7 @@ interface AdminRouteChildren {
   AdminCurriculumRoute: typeof AdminCurriculumRoute
   AdminGenerateRoute: typeof AdminGenerateRoute
   AdminMetricasRoute: typeof AdminMetricasRoute
+  AdminRechazadasRoute: typeof AdminRechazadasRoute
   AdminReviewRoute: typeof AdminReviewRoute
   AdminUsuariosRoute: typeof AdminUsuariosRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -821,6 +841,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCurriculumRoute: AdminCurriculumRoute,
   AdminGenerateRoute: AdminGenerateRoute,
   AdminMetricasRoute: AdminMetricasRoute,
+  AdminRechazadasRoute: AdminRechazadasRoute,
   AdminReviewRoute: AdminReviewRoute,
   AdminUsuariosRoute: AdminUsuariosRoute,
   AdminIndexRoute: AdminIndexRoute,

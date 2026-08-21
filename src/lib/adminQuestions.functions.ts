@@ -57,7 +57,7 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
     }
 
     let latestRejectionReason: string | null = null;
-    if (q.status === "retired") {
+    if (q.status === "retired" || q.status === "rejected") {
       const { data: rejection } = await db
         .from("question_rejections")
         .select("reason")
@@ -67,6 +67,7 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
         .maybeSingle();
       latestRejectionReason = rejection?.reason ?? null;
     }
+
 
     return {
       ...q,
@@ -80,8 +81,9 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
   });
 
 /**
- * Cambia el estado de una o varias preguntas (borrador ↔ publicada ↔ retirada)
- * desde el panel de administración, validando el rol admin con la sesión.
+ * Cambia el estado de una o varias preguntas (borrador ↔ publicada ↔ rechazada
+ * ↔ retirada) desde el panel de administración, validando el rol admin.
+ * Cuando el estado es `rejected` se guarda el motivo del revisor.
  */
 export const setQuestionsStatusFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -89,7 +91,7 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
     z
       .object({
         ids: z.array(z.string().uuid()).min(1),
-        status: z.enum(["draft", "published", "retired"]),
+        status: z.enum(["draft", "published", "retired", "rejected"]),
         reason: z.string().trim().min(1).max(2000).optional(),
       })
       .parse(input),
@@ -108,7 +110,7 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
       format: string;
       stem: string;
     }> = [];
-    if (data.status === "retired" && data.reason) {
+    if ((data.status === "rejected" || data.status === "retired") && data.reason) {
       const { data: rows } = await context.supabase
         .from("questions")
         .select("id, question_number, task_id, format, stem")
@@ -141,3 +143,134 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
 
     return { updated: rows?.length ?? 0 };
   });
+
+/**
+ * Lista las preguntas rechazadas o retiradas junto al comentario del revisor,
+ * para poder corregir erratas de texto sin salir del panel.
+ */
+export const listReviewedOutQuestionsFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { status: string }) =>
+    z.object({ status: z.enum(["rejected", "retired", "all"]) }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin, error: rpcError } = await context.supabase.rpc("is_admin", {
+      p_user_id: context.userId,
+    });
+    if (rpcError || !isAdmin) throw new Error("No autorizado");
+
+    const statuses: Array<"rejected" | "retired"> =
+      data.status === "all" ? ["rejected", "retired"] : [data.status];
+
+    const { data: rows, error } = await context.supabase
+      .from("questions")
+      .select(
+        "id, question_number, stem, options, correct_answer, explanation, status, format, item_type, difficulty, task_id, updated_at",
+      )
+      .in("status", statuses)
+      .order("question_number", { ascending: true })
+      .limit(2000);
+    if (error) throw new Error(error.message);
+
+    const ids = (rows ?? []).map((r) => r.id);
+    const taskIds = Array.from(new Set((rows ?? []).map((r) => r.task_id)));
+
+    const [{ data: rejections }, { data: tasks }] = await Promise.all([
+      ids.length
+        ? context.supabase
+            .from("question_rejections")
+            .select("question_id, reason, rejected_at")
+            .in("question_id", ids)
+            .order("rejected_at", { ascending: false })
+        : Promise.resolve({ data: [] as Array<{ question_id: string | null; reason: string; rejected_at: string }> }),
+      taskIds.length
+        ? context.supabase
+            .from("eco_tasks")
+            .select("id, title, task_number")
+            .in("id", taskIds)
+        : Promise.resolve({ data: [] as Array<{ id: string; title: string; task_number: number }> }),
+    ]);
+
+    const reasonById = new Map<string, { reason: string; rejected_at: string }>();
+    for (const r of rejections ?? []) {
+      if (r.question_id && !reasonById.has(r.question_id)) {
+        reasonById.set(r.question_id, { reason: r.reason, rejected_at: r.rejected_at });
+      }
+    }
+    const taskById = new Map((tasks ?? []).map((t) => [t.id, t]));
+
+    return (rows ?? []).map((r) => {
+      const task = taskById.get(r.task_id);
+      const rejection = reasonById.get(r.id);
+      return {
+        ...r,
+        task_title: task ? `${task.task_number}. ${task.title}` : null,
+        latest_rejection_reason: rejection?.reason ?? null,
+        latest_rejection_at: rejection?.rejected_at ?? null,
+      };
+    });
+  });
+
+/**
+ * Corrige los textos de una pregunta (enunciado, opciones y explicación) sin
+ * alterar su estructura: los identificadores de opción y la respuesta correcta
+ * se mantienen intactos.
+ */
+export const updateQuestionTextFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (input: {
+      id: string;
+      stem: string;
+      explanation: string;
+      options: Array<{ id: string; text: string }>;
+    }) =>
+      z
+        .object({
+          id: z.string().uuid(),
+          stem: z.string().trim().min(1).max(6000),
+          explanation: z.string().trim().min(1).max(6000),
+          options: z
+            .array(z.object({ id: z.string().min(1), text: z.string().trim().min(1).max(2000) }))
+            .max(20),
+        })
+        .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin, error: rpcError } = await context.supabase.rpc("is_admin", {
+      p_user_id: context.userId,
+    });
+    if (rpcError || !isAdmin) throw new Error("No autorizado");
+
+    const { data: current, error: readError } = await context.supabase
+      .from("questions")
+      .select("options")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (readError) throw new Error(readError.message);
+    if (!current) throw new Error("Pregunta no encontrada");
+
+    const currentOptions = Array.isArray(current.options)
+      ? (current.options as Array<Record<string, unknown>>)
+      : [];
+    const textById = new Map(data.options.map((o) => [o.id, o.text]));
+    const nextOptions = currentOptions.map((opt, i) => {
+      const id = String(opt.id ?? opt.key ?? String.fromCharCode(65 + i));
+      const text = textById.get(id);
+      if (text === undefined) return opt;
+      return "text" in opt || !("label" in opt) ? { ...opt, text } : { ...opt, label: text };
+    });
+
+    const { error } = await context.supabase
+      .from("questions")
+      .update({
+        stem: data.stem,
+        explanation: data.explanation,
+        options: nextOptions as unknown as never,
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+
+    return { ok: true };
+  });
+
