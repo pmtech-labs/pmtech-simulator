@@ -108,6 +108,32 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+    // Los casos (case clusters) son indivisibles: si alguna de las preguntas
+    // enviadas pertenece a un caso, la acción se aplica a las 5 preguntas.
+    const { data: sent } = await supabaseAdmin
+      .from("questions")
+      .select("id, cluster_id")
+      .in("id", data.ids);
+
+    const clusterIds = Array.from(
+      new Set((sent ?? []).map((r) => r.cluster_id).filter((c): c is string => Boolean(c))),
+    );
+
+    const idSet = new Set(data.ids);
+    const cascadedClusters: Array<{ cluster_id: string; question_ids: string[] }> = [];
+    if (clusterIds.length > 0) {
+      const { data: siblings } = await supabaseAdmin
+        .from("questions")
+        .select("id, cluster_id")
+        .in("cluster_id", clusterIds);
+      for (const cid of clusterIds) {
+        const ids = (siblings ?? []).filter((s) => s.cluster_id === cid).map((s) => s.id);
+        ids.forEach((id) => idSet.add(id));
+        cascadedClusters.push({ cluster_id: cid, question_ids: ids });
+      }
+    }
+    const targetIds = Array.from(idSet);
+
     // Snapshot previo: necesario para registrar el motivo del rechazo.
     let snapshots: Array<{
       id: string;
@@ -120,14 +146,14 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
       const { data: rows } = await supabaseAdmin
         .from("questions")
         .select("id, question_number, task_id, format, stem")
-        .in("id", data.ids);
+        .in("id", targetIds);
       snapshots = rows ?? [];
     }
 
     const { data: rows, error } = await supabaseAdmin
       .from("questions")
       .update({ status: data.status })
-      .in("id", data.ids)
+      .in("id", targetIds)
       .select("id");
 
     if (error) throw new Error(error.message);
@@ -147,8 +173,53 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
       );
     }
 
-    return { updated: rows?.length ?? 0 };
+    return {
+      updated: rows?.length ?? 0,
+      cascaded: cascadedClusters.length > 0,
+      cascaded_clusters: cascadedClusters,
+    };
   });
+
+/**
+ * Devuelve las preguntas de un caso (case cluster) ordenadas por número, junto
+ * con el escenario compartido, para poder repasarlas antes de confirmar una
+ * acción que afecta al caso completo.
+ */
+export const listClusterQuestionsFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { cluster_id: string }) =>
+    z.object({ cluster_id: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin, error: rpcError } = await context.supabase.rpc("is_admin", {
+      p_user_id: context.userId,
+    });
+    if (rpcError || !isAdmin) throw new Error("No autorizado");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const [{ data: rows, error }, { data: cluster }] = await Promise.all([
+      supabaseAdmin
+        .from("questions")
+        .select("id, question_number, stem, status, cluster_id")
+        .eq("cluster_id", data.cluster_id)
+        .order("question_number", { ascending: true }),
+      supabaseAdmin
+        .from("case_clusters")
+        .select("title, scenario_text")
+        .eq("id", data.cluster_id)
+        .maybeSingle(),
+    ]);
+    if (error) throw new Error(error.message);
+
+    return {
+      cluster_id: data.cluster_id,
+      cluster_title: cluster?.title ?? null,
+      cluster_scenario: cluster?.scenario_text ?? null,
+      questions: rows ?? [],
+    };
+  });
+
 
 /**
  * Lista las preguntas rechazadas o retiradas junto al comentario del revisor,
