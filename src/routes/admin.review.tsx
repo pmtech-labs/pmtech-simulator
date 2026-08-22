@@ -17,6 +17,11 @@ import {
 } from "@/components/ui/dialog";
 
 import { DictationTextarea } from "@/components/admin/DictationTextarea";
+import {
+  ClusterActionDialog,
+  statusActionLabel,
+  type ClusterActionTarget,
+} from "@/components/admin/ClusterActionDialog";
 import { getAdminQuestionFn } from "@/lib/adminQuestions.functions";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import {
@@ -406,7 +411,7 @@ function ReviewPage() {
             <span className="font-semibold">{selected.length} seleccionadas</span>
             <BulkBtn
               disabled={busy || selected.every((id) => allRows.find((r) => r.id === id)?.status === "published")}
-              onClick={() => changeStatus.mutate({ ids: selected, status: "published" })}
+              onClick={() => applyStatus(selected, "published")}
               title={
                 selected.every((id) => allRows.find((r) => r.id === id)?.status === "published")
                   ? "Todas las seleccionadas ya están publicadas"
@@ -417,7 +422,7 @@ function ReviewPage() {
             </BulkBtn>
             <BulkBtn
               disabled={busy || selected.every((id) => allRows.find((r) => r.id === id)?.status === "draft")}
-              onClick={() => changeStatus.mutate({ ids: selected, status: "draft" })}
+              onClick={() => applyStatus(selected, "draft")}
               title={
                 selected.every((id) => allRows.find((r) => r.id === id)?.status === "draft")
                   ? "Todas las seleccionadas ya están en borrador"
@@ -428,7 +433,7 @@ function ReviewPage() {
             </BulkBtn>
             <BulkBtn
               disabled={busy || selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")}
-              onClick={() => changeStatus.mutate({ ids: selected, status: "retired" })}
+              onClick={() => applyStatus(selected, "retired")}
               title={
                 selected.every((id) => allRows.find((r) => r.id === id)?.status === "retired")
                   ? "Todas las seleccionadas ya están retiradas"
@@ -506,7 +511,7 @@ function ReviewPage() {
                     setSelected((p) => (on ? [...p, q.id] : p.filter((id) => id !== q.id)))
                   }
                   busy={busy}
-                  onStatus={(status) => changeStatus.mutate({ ids: [q.id], status })}
+                  onStatus={(status) => applyStatus([q.id], status)}
                   onReject={() => askReject([q.id], `#${q.question_number}`)}
                   onDelete={() => remove.mutate(q.id)}
                 />
@@ -582,11 +587,7 @@ function ReviewPage() {
                     return;
                   }
                   if (rejectTarget)
-                    changeStatus.mutate({
-                      ids: rejectTarget.ids,
-                      status: "rejected",
-                      reason: rejectReason.trim(),
-                    });
+                    applyStatus(rejectTarget.ids, "rejected", rejectReason.trim());
                 }}
               >
                 {confirmStep ? "Sí, rechazar definitivamente" : "Continuar"}
@@ -594,6 +595,20 @@ function ReviewPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        <ClusterActionDialog
+          target={clusterTarget}
+          busy={changeStatus.isPending}
+          onCancel={() => setClusterTarget(null)}
+          onConfirm={() => {
+            if (!clusterTarget) return;
+            changeStatus.mutate({
+              ids: clusterTarget.ids,
+              status: clusterTarget.status,
+              reason: clusterTarget.reason,
+            });
+          }}
+        />
 
       </div>
     </AdminShell>
