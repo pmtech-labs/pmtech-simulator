@@ -197,26 +197,63 @@ function ReviewPage() {
   const [rejectTarget, setRejectTarget] = useState<{ ids: string[]; label: string } | null>(null);
   const [rejectReason, setRejectReason] = useState("");
   const [confirmStep, setConfirmStep] = useState(false);
+  const [clusterTarget, setClusterTarget] = useState<ClusterActionTarget | null>(null);
 
   const changeStatus = useMutation({
     mutationFn: ({ ids, status, reason }: { ids: string[]; status: string; reason?: string }) =>
       updateQuestionsStatus(ids, status, reason),
-    onSuccess: (_d, v) => {
-      toast.success(`${v.ids.length} pregunta(s) → ${statusLabel(v.status)}`);
+    onSuccess: (res, v) => {
+      const cascaded = (res as { cascaded?: boolean; cascaded_clusters?: Array<{ question_ids: string[] }> } | undefined);
+      if (cascaded?.cascaded) {
+        const clusters = cascaded.cascaded_clusters ?? [];
+        const count = clusters.reduce((acc, c) => acc + c.question_ids.length, 0);
+        toast.success(
+          clusters.length > 1
+            ? `Se han ${statusActionLabel(v.status)} las ${count} preguntas de ${clusters.length} casos.`
+            : `Se han ${statusActionLabel(v.status)} las ${count || 5} preguntas del caso.`,
+        );
+      } else {
+        toast.success(`${v.ids.length} pregunta(s) → ${statusLabel(v.status)}`);
+      }
       setSelected([]);
       setRejectTarget(null);
       setRejectReason("");
       setConfirmStep(false);
+      setClusterTarget(null);
       qc.invalidateQueries({ queryKey: ["admin-questions"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  /** Casos (cluster_id) implicados por un conjunto de preguntas. */
+  const clustersOf = (ids: string[]) =>
+    Array.from(
+      new Set(
+        ids
+          .map((id) => allRows.find((r) => r.id === id)?.cluster_id)
+          .filter((c): c is string => Boolean(c)),
+      ),
+    );
+
+  /**
+   * Ejecuta la acción; si alguna pregunta pertenece a un caso, primero pide
+   * confirmación mostrando las 5 preguntas afectadas.
+   */
+  const applyStatus = (ids: string[], status: string, reason?: string) => {
+    const clusterIds = clustersOf(ids);
+    if (clusterIds.length > 0) {
+      setClusterTarget({ ids, clusterIds, status, reason });
+      return;
+    }
+    changeStatus.mutate({ ids, status, reason });
+  };
 
   const askReject = (ids: string[], label: string) => {
     setRejectReason("");
     setConfirmStep(false);
     setRejectTarget({ ids, label });
   };
+
 
 
 
