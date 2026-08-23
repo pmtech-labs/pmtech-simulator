@@ -23,9 +23,16 @@ import {
   listEcoDomains,
   listEcoTasks,
   listGenerationJobs,
+  type CreateJobInput,
   type EcoTask,
   type JobResult,
 } from "@/services/adminService";
+import { useTagDefs } from "@/hooks/useTagDefs";
+import {
+  approachWeightsFromTargets,
+  describeApproachSplit,
+  splitApproachCounts,
+} from "@/lib/approachMix";
 import { cn } from "@/lib/utils";
 
 
