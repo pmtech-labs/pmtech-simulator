@@ -14,6 +14,14 @@ export function useTagDefs() {
   const labelOf = (code: string) => defs.find((d) => d.code === code)?.label ?? code;
   const typeLabelOf = (code: string) =>
     defs.find((d) => d.code === code)?.tag_type_label ?? tagTypeOf(code);
+  /** % objetivo almacenado en BD (undefined si la etiqueta no tiene objetivo). */
+  const targetOf = (code: string) => {
+    const pct = defs.find((d) => d.code === code)?.target_pct;
+    return pct === null || pct === undefined ? undefined : Number(pct);
+  };
+  const targets: Record<string, number | null> = Object.fromEntries(
+    defs.map((d) => [d.code, d.target_pct === null || d.target_pct === undefined ? null : Number(d.target_pct)]),
+  );
 
-  return { defs, labelOf, typeLabelOf, isPending: query.isPending };
+  return { defs, labelOf, typeLabelOf, targetOf, targets, isPending: query.isPending };
 }
