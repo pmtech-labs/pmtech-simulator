@@ -282,6 +282,12 @@ function GeneratePage() {
                 </option>
               ))}
             </select>
+            {approach === "mixed" && mixedSplit.length > 0 && (
+              <span className="block text-[11px] text-muted-foreground">
+                Reparto según % objetivo en BD: {describeApproachSplit(mixedSplit)} (ágil e híbrido al 50/50
+                dentro del {approachWeights.agile + approachWeights.hybrid}%).
+              </span>
+            )}
           </label>
 
           <label className="space-y-1.5">
