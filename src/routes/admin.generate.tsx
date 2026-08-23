@@ -51,7 +51,7 @@ const FORMATS = [
 ];
 
 const APPROACHES = [
-  { value: "mixed", label: "Mezcla automática (predictive/agile/hybrid)" },
+  { value: "mixed", label: "Mezcla automática (según % objetivo)" },
   { value: "predictive", label: "Predictivo" },
   { value: "agile", label: "Ágil" },
   { value: "hybrid", label: "Híbrido" },
@@ -98,8 +98,8 @@ function GeneratePage() {
   const [taskIds, setTaskIds] = useState<string[]>([]);
   const [approach, setApproach] = useState("mixed");
   const [format, setFormat] = useState("mixed");
-  const [difMin, setDifMin] = useState(2);
-  const [difMax, setDifMax] = useState(4);
+  const [difMin, setDifMin] = useState(3);
+  const [difMax, setDifMax] = useState(5);
   const [count, setCount] = useState(10);
   const [tags, setTags] = useState<string[]>([]);
   const [result, setResult] = useState<JobResult | null>(null);
