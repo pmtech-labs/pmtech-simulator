@@ -95,6 +95,7 @@ function sortTasks(list: EcoTask[], domainOrder: Map<string, number>) {
 function GeneratePage() {
   const email = useAdminEmail();
   const qc = useQueryClient();
+  const { targets: tagTargets } = useTagDefs();
 
   const connectors = useQuery({ queryKey: ["admin-connectors", 1], queryFn: () => listConnectors(1, 100) });
   const domains = useQuery({ queryKey: ["eco-domains"], queryFn: listEcoDomains });
