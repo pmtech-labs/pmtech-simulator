@@ -12,6 +12,8 @@ export interface TagDef {
   label: string;
   exclusive: boolean;
   sort_order: number;
+  /** % objetivo de representación de la etiqueta (examen y banco publicado). */
+  target_pct: number | null;
 }
 
 let cached: TagDef[] | null = null;
@@ -24,7 +26,7 @@ export async function getTagDefs(): Promise<TagDef[]> {
   inflight = (async () => {
     const { data, error } = await supabase
       .from("question_tag_defs")
-      .select("code, tag_type, tag_type_label, label, exclusive, sort_order")
+      .select("code, tag_type, tag_type_label, label, exclusive, sort_order, target_pct")
       .order("tag_type")
       .order("sort_order");
     if (error) {
