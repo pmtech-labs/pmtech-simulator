@@ -1,6 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChevronDown, Info, Loader2, Network, Sparkles } from "lucide-react";
+import {
+  ChevronDown,
+  Gauge,
+  Info,
+  Link2,
+  Loader2,
+  MousePointerClick,
+  Network,
+  Sparkles,
+  TrendingUp,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
