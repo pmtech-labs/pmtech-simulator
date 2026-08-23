@@ -132,11 +132,44 @@ function GeneratePage() {
     queryFn: () => listGenerationJobs(page, PAGE_SIZE),
   });
 
+  // Reparto objetivo del enfoque leído de BD (CIPR / CIAH, con CIAH al 50/50).
+  const approachWeights = useMemo(() => approachWeightsFromTargets(tagTargets), [tagTargets]);
+  const mixedSplit = useMemo(
+    () => (approach === "mixed" ? splitApproachCounts(count, approachWeights) : []),
+    [approach, count, approachWeights],
+  );
+
   const generate = useMutation({
-    mutationFn: createGenerationJob,
+    mutationFn: async (input: CreateJobInput) => {
+      // En mezcla automática no delegamos en el azar del backend: lanzamos un lote
+      // por enfoque con el número de preguntas que marcan los % objetivo.
+      if (input.approach !== "mixed") return createGenerationJob(input);
+
+      const split = splitApproachCounts(input.count_requested, approachWeights);
+      if (split.length === 0) return createGenerationJob(input);
+
+      const results: JobResult[] = [];
+      for (const part of split) {
+        results.push(
+          await createGenerationJob({ ...input, approach: part.approach, count_requested: part.count }),
+        );
+      }
+      const merged: JobResult = {
+        ...(results[results.length - 1] ?? {}),
+        count_generated: results.reduce((acc, r) => acc + (r.count_generated ?? 0), 0),
+        count_failed: results.reduce((acc, r) => acc + (r.count_failed ?? 0), 0),
+        status: results.every((r) => r.status === "completed" || !r.status) ? "completed" : "partial",
+        error_message: results.map((r) => r.error_message).filter(Boolean).join(" · ") || null,
+      };
+      return merged;
+    },
     onSuccess: (data) => {
       setResult(data);
-      toast.success("Job completado");
+      toast.success(
+        approach === "mixed" && mixedSplit.length > 0
+          ? `Lotes completados (${describeApproachSplit(mixedSplit)})`
+          : "Job completado",
+      );
       qc.invalidateQueries({ queryKey: ["admin-jobs"] });
     },
     onError: (e: Error) => toast.error(e.message),
