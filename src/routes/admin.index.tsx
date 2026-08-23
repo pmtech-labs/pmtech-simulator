@@ -18,7 +18,7 @@ import {
   type TaskCoverageRow,
 } from "@/services/adminService";
 import { useTagDefs } from "@/hooks/useTagDefs";
-import { TAG_TARGET_PCT, deviationTone } from "@/lib/tagTargets";
+import { deviationTone } from "@/lib/tagTargets";
 import { cn } from "@/lib/utils";
 
 
@@ -232,8 +232,10 @@ function TagBar({
   count: number;
   total: number;
 }) {
+  const { targetOf } = useTagDefs();
   const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-  const target = TAG_TARGET_PCT[code];
+  // Objetivo por etiqueta almacenado en BD (question_tag_defs.target_pct).
+  const target = targetOf(code);
   const diff = target === undefined ? null : pct - target;
   const tone = diff === null ? null : deviationTone(diff);
 

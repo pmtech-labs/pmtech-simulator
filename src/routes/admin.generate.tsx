@@ -23,9 +23,16 @@ import {
   listEcoDomains,
   listEcoTasks,
   listGenerationJobs,
+  type CreateJobInput,
   type EcoTask,
   type JobResult,
 } from "@/services/adminService";
+import { useTagDefs } from "@/hooks/useTagDefs";
+import {
+  approachWeightsFromTargets,
+  describeApproachSplit,
+  splitApproachCounts,
+} from "@/lib/approachMix";
 import { cn } from "@/lib/utils";
 
 
@@ -51,7 +58,7 @@ const FORMATS = [
 ];
 
 const APPROACHES = [
-  { value: "mixed", label: "Mezcla automática (predictive/agile/hybrid)" },
+  { value: "mixed", label: "Mezcla automática (según % objetivo)" },
   { value: "predictive", label: "Predictivo" },
   { value: "agile", label: "Ágil" },
   { value: "hybrid", label: "Híbrido" },
@@ -88,6 +95,7 @@ function sortTasks(list: EcoTask[], domainOrder: Map<string, number>) {
 function GeneratePage() {
   const email = useAdminEmail();
   const qc = useQueryClient();
+  const { targets: tagTargets } = useTagDefs();
 
   const connectors = useQuery({ queryKey: ["admin-connectors", 1], queryFn: () => listConnectors(1, 100) });
   const domains = useQuery({ queryKey: ["eco-domains"], queryFn: listEcoDomains });
@@ -98,8 +106,8 @@ function GeneratePage() {
   const [taskIds, setTaskIds] = useState<string[]>([]);
   const [approach, setApproach] = useState("mixed");
   const [format, setFormat] = useState("mixed");
-  const [difMin, setDifMin] = useState(2);
-  const [difMax, setDifMax] = useState(4);
+  const [difMin, setDifMin] = useState(3);
+  const [difMax, setDifMax] = useState(5);
   const [count, setCount] = useState(10);
   const [tags, setTags] = useState<string[]>([]);
   const [result, setResult] = useState<JobResult | null>(null);
@@ -132,11 +140,44 @@ function GeneratePage() {
     queryFn: () => listGenerationJobs(page, PAGE_SIZE),
   });
 
+  // Reparto objetivo del enfoque leído de BD (CIPR / CIAH, con CIAH al 50/50).
+  const approachWeights = useMemo(() => approachWeightsFromTargets(tagTargets), [tagTargets]);
+  const mixedSplit = useMemo(
+    () => (approach === "mixed" ? splitApproachCounts(count, approachWeights) : []),
+    [approach, count, approachWeights],
+  );
+
   const generate = useMutation({
-    mutationFn: createGenerationJob,
+    mutationFn: async (input: CreateJobInput) => {
+      // En mezcla automática no delegamos en el azar del backend: lanzamos un lote
+      // por enfoque con el número de preguntas que marcan los % objetivo.
+      if (input.approach !== "mixed") return createGenerationJob(input);
+
+      const split = splitApproachCounts(input.count_requested, approachWeights);
+      if (split.length === 0) return createGenerationJob(input);
+
+      const results: JobResult[] = [];
+      for (const part of split) {
+        results.push(
+          await createGenerationJob({ ...input, approach: part.approach, count_requested: part.count }),
+        );
+      }
+      const merged: JobResult = {
+        ...(results[results.length - 1] ?? {}),
+        count_generated: results.reduce((acc, r) => acc + (r.count_generated ?? 0), 0),
+        count_failed: results.reduce((acc, r) => acc + (r.count_failed ?? 0), 0),
+        status: results.every((r) => r.status === "completed" || !r.status) ? "completed" : "partial",
+        error_message: results.map((r) => r.error_message).filter(Boolean).join(" · ") || null,
+      };
+      return merged;
+    },
     onSuccess: (data) => {
       setResult(data);
-      toast.success("Job completado");
+      toast.success(
+        approach === "mixed" && mixedSplit.length > 0
+          ? `Lotes completados (${describeApproachSplit(mixedSplit)})`
+          : "Job completado",
+      );
       qc.invalidateQueries({ queryKey: ["admin-jobs"] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -241,6 +282,12 @@ function GeneratePage() {
                 </option>
               ))}
             </select>
+            {approach === "mixed" && mixedSplit.length > 0 && (
+              <span className="block text-[11px] text-muted-foreground">
+                Reparto según % objetivo en BD: {describeApproachSplit(mixedSplit)} (ágil e híbrido al 50/50
+                dentro del {approachWeights.agile + approachWeights.hybrid}%).
+              </span>
+            )}
           </label>
 
           <label className="space-y-1.5">
