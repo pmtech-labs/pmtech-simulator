@@ -23,16 +23,21 @@ export const Route = createFileRoute("/admin/generate")({
   component: GeneratePage,
 });
 
+// Este generador (admin_generation_jobs) SOLO produce contenido correcto para
+// mc_single/mc_multi (opción única/múltiple con distractores A-D/A-E). Los formatos
+// interactivos (matching, enhanced_matching, hotspot, graphic_based) requieren
+// generadores especializados con su propia lógica de construcción del payload
+// (admin_generate_matching_question, admin_generate_hotspot_question,
+// generate_earned_value_question, generate_network_diagram_question,
+// generate_dashboard_tension_question) -- este formulario nunca los invoca, así que
+// listarlos aquí producía preguntas silenciosamente rotas (sin practicum_payload)
+// si alguien los seleccionaba. Retirados del desplegable (ago 2026) hasta que este
+// formulario tenga un flujo real para cada uno (ver NetworkDiagramGenerator más abajo
+// como ejemplo del patrón correcto: sección dedicada que llama al generador correcto).
 const FORMATS = [
-  { value: "mixed", label: "Mezcla automática (mc_single/mc_multi/pulldown)", stable: true },
+  { value: "mixed", label: "Mezcla automática", stable: true },
   { value: "mc_single", label: "Opción única (mc_single)", stable: true },
   { value: "mc_multi", label: "Opción múltiple (mc_multi)", stable: true },
-  { value: "matching", label: "Emparejamiento (matching)", stable: false },
-  { value: "enhanced_matching", label: "Emparejamiento mejorado (con gráficos)", stable: false },
-  { value: "enhanced_matching", label: "Emparejamiento avanzado", stable: false },
-  { value: "graphic_based", label: "Basada en gráfico", stable: false },
-  { value: "hotspot", label: "Hotspot", stable: false },
-  { value: "pulldown", label: "Desplegables (pulldown)", stable: false },
 ];
 
 const APPROACHES = [
