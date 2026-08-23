@@ -1,6 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChevronDown, Info, Loader2, Network, Sparkles } from "lucide-react";
+import {
+  ChevronDown,
+  Gauge,
+  Info,
+  Link2,
+  Loader2,
+  MousePointerClick,
+  Network,
+  Sparkles,
+  TrendingUp,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -331,6 +341,61 @@ function GeneratePage() {
 
         <NetworkDiagramGenerator domains={domains.data ?? []} tasks={tasks.data ?? []} />
 
+        <LlmGeneratorSection
+          icon={<Link2 className="h-4 w-4" />}
+          title="Emparejamiento"
+          description="Genera preguntas de emparejamiento término-definición. La IA solo aporta el texto de los pares; el código construye el emparejamiento y baraja las opciones."
+          functionName="admin_generate_matching_question"
+          buttonLabel="Generar preguntas de emparejamiento"
+          connectors={activeConnectors}
+          domains={domains.data ?? []}
+          tasks={tasks.data ?? []}
+          optional={{
+            label: "Pares por pregunta",
+            paramKey: "pairs_per_question",
+            numeric: true,
+            options: [
+              { value: "", label: "Automático (4–6)" },
+              { value: "4", label: "4 pares" },
+              { value: "5", label: "5 pares" },
+              { value: "6", label: "6 pares" },
+            ],
+          }}
+        />
+
+        <LlmGeneratorSection
+          icon={<MousePointerClick className="h-4 w-4" />}
+          title="Hotspot"
+          description="Genera preguntas de tipo «señala y haz clic» sobre una plantilla de diagrama ya verificada. La IA solo aporta el escenario y las etiquetas de las zonas."
+          functionName="admin_generate_hotspot_question"
+          buttonLabel="Generar preguntas de hotspot"
+          connectors={activeConnectors}
+          domains={domains.data ?? []}
+          tasks={tasks.data ?? []}
+          optional={{
+            label: "Plantilla de diagrama",
+            paramKey: "template",
+            options: [
+              { value: "", label: "Automático (alterna)" },
+              { value: "grid_2x2", label: "Rejilla 2x2" },
+              { value: "timeline_5", label: "Línea temporal (5 etapas)" },
+            ],
+          }}
+        />
+
+        <EarnedValueGenerator domains={domains.data ?? []} tasks={tasks.data ?? []} />
+
+        <LlmGeneratorSection
+          icon={<Gauge className="h-4 w-4" />}
+          title="Dashboard con tensión"
+          description="Genera preguntas tipo panel con dos métricas en tensión (una mejora, otra empeora). La IA aporta el escenario y los rangos numéricos; el código construye la serie real y dibuja el gráfico."
+          functionName="generate_dashboard_tension_question"
+          buttonLabel="Generar preguntas de dashboard con tensión"
+          connectors={activeConnectors}
+          domains={domains.data ?? []}
+          tasks={tasks.data ?? []}
+        />
+
         {result && (
 
           <div className="rounded-lg border border-border bg-card p-4 text-sm">
@@ -511,6 +576,344 @@ function NetworkDiagramGenerator({
           </p>
         )}
       </div>
+    </section>
+  );
+}
+
+type EcoDomain = { id: string; name: string; sort_order: number };
+
+/** Generación determinista (sin IA) de preguntas de valor ganado (EVM). */
+function EarnedValueGenerator({ domains, tasks }: { domains: EcoDomain[]; tasks: EcoTask[] }) {
+  const qc = useQueryClient();
+  const [domainId, setDomainId] = useState("");
+  const [taskId, setTaskId] = useState("");
+  const [count, setCount] = useState(5);
+  const [result, setResult] = useState<{ generated: number; requested: number } | null>(null);
+
+  const domainOrder = useMemo(() => new Map(domains.map((d) => [d.id, d.sort_order])), [domains]);
+  const domainTasks = useMemo(
+    () => sortTasks(tasks.filter((t) => !domainId || t.domain_id === domainId), domainOrder),
+    [tasks, domainId, domainOrder],
+  );
+
+  const run = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.functions.invoke("generate_earned_value_question", {
+        method: "POST",
+        body: { task_id: taskId, count },
+      });
+      if (error) throw new Error("No hemos podido generar las preguntas. Inténtalo de nuevo.");
+      return data as { generated: number; requested: number; question_ids: string[] };
+    },
+    onSuccess: (data) => {
+      setResult({ generated: data.generated ?? 0, requested: data.requested ?? count });
+      toast.success(`${data.generated ?? 0} de ${data.requested ?? count} generadas`);
+      qc.invalidateQueries({ queryKey: ["admin-jobs"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  return (
+    <section className="space-y-3 rounded-lg border border-border bg-card p-4">
+      <div className="space-y-1">
+        <h2 className="flex items-center gap-2 text-sm font-semibold">
+          <TrendingUp className="h-4 w-4" /> Valor ganado (EVM)
+        </h2>
+        <p className="text-xs text-muted-foreground">
+          Generación determinista por código, sin modelos de IA: la serie PV/EV/AC y la clasificación del
+          resultado se calculan con aritmética exacta. Aparecerán como «Manual» en la cola de revisión.
+        </p>
+      </div>
+
+      <div className="grid gap-3 lg:grid-cols-3">
+        <label className="space-y-1.5">
+          <span className="text-xs font-medium text-muted-foreground">Dominio ECO</span>
+          <select
+            value={domainId}
+            onChange={(e) => {
+              setDomainId(e.target.value);
+              setTaskId("");
+            }}
+            className={inputCls}
+          >
+            <option value="">Todos los dominios</option>
+            {domains.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="space-y-1.5">
+          <span className="text-xs font-medium text-muted-foreground">Tarea ECO</span>
+          <select value={taskId} onChange={(e) => setTaskId(e.target.value)} className={inputCls}>
+            <option value="">Selecciona…</option>
+            {domainTasks.map((t) => (
+              <option key={t.id} value={t.id}>
+                {taskCode(t, domainOrder)} {t.title}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="space-y-1.5">
+          <span className="text-xs font-medium text-muted-foreground">Nº de preguntas (1–50)</span>
+          <input
+            type="number"
+            min={1}
+            max={50}
+            value={count}
+            onChange={(e) => setCount(Number(e.target.value))}
+            className={inputCls}
+          />
+        </label>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          disabled={run.isPending}
+          onClick={() => {
+            if (!taskId) return toast.error("Selecciona una tarea ECO.");
+            if (count < 1 || count > 50) return toast.error("El número debe estar entre 1 y 50.");
+            setResult(null);
+            run.mutate();
+          }}
+          className="inline-flex items-center gap-2 rounded-md border border-primary px-4 py-2 text-sm font-semibold text-primary disabled:opacity-60"
+        >
+          {run.isPending ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" /> Generando…
+            </>
+          ) : (
+            <>
+              <TrendingUp className="h-4 w-4" /> Generar preguntas de valor ganado
+            </>
+          )}
+        </button>
+        {result && (
+          <p className="text-sm">
+            <span className="num font-semibold">
+              {result.generated} de {result.requested}
+            </span>{" "}
+            generadas ·{" "}
+            <Link to="/admin/review" className="underline">
+              Ir a la cola de revisión
+            </Link>
+          </p>
+        )}
+      </div>
+    </section>
+  );
+}
+
+type OptionalField = {
+  label: string;
+  paramKey: string;
+  numeric?: boolean;
+  options: { value: string; label: string }[];
+};
+
+/**
+ * Sección genérica para los generadores asistidos por IA que comparten contrato:
+ * body { connector_id, task_ids, count_requested, [param opcional] } y respuesta
+ * { generated, failed, errors }.
+ */
+function LlmGeneratorSection({
+  icon,
+  title,
+  description,
+  functionName,
+  buttonLabel,
+  connectors,
+  domains,
+  tasks,
+  optional,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  functionName: string;
+  buttonLabel: string;
+  connectors: import("@/services/adminService").LlmConnector[];
+  domains: EcoDomain[];
+  tasks: EcoTask[];
+  optional?: OptionalField;
+}) {
+  const qc = useQueryClient();
+  const [connectorId, setConnectorId] = useState("");
+  const [domainId, setDomainId] = useState("");
+  const [taskIds, setTaskIds] = useState<string[]>([]);
+  const [count, setCount] = useState(5);
+  const [optValue, setOptValue] = useState("");
+  const [result, setResult] = useState<{ generated: number; failed: number; errors?: string[] } | null>(null);
+
+  useEffect(() => {
+    if (connectorId) return;
+    const preferred = connectors.find((c) => c.is_default) ?? connectors[0];
+    if (preferred) setConnectorId(preferred.id);
+  }, [connectors, connectorId]);
+
+  const domainOrder = useMemo(() => new Map(domains.map((d) => [d.id, d.sort_order])), [domains]);
+  const domainTasks = useMemo(
+    () => sortTasks(tasks.filter((t) => !domainId || t.domain_id === domainId), domainOrder),
+    [tasks, domainId, domainOrder],
+  );
+
+  const run = useMutation({
+    mutationFn: async () => {
+      const body: Record<string, unknown> = {
+        connector_id: connectorId,
+        task_ids: taskIds,
+        count_requested: count,
+      };
+      if (optional && optValue) {
+        body[optional.paramKey] = optional.numeric ? Number(optValue) : optValue;
+      }
+      const { data, error } = await supabase.functions.invoke(functionName, { method: "POST", body });
+      if (error) throw new Error("No hemos podido generar las preguntas. Inténtalo de nuevo.");
+      return data as { generated: number; failed: number; errors?: string[] };
+    },
+    onSuccess: (data) => {
+      setResult({ generated: data.generated ?? 0, failed: data.failed ?? 0, errors: data.errors });
+      toast.success(`${data.generated ?? 0} generadas · ${data.failed ?? 0} fallidas`);
+      qc.invalidateQueries({ queryKey: ["admin-jobs"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  return (
+    <section className="space-y-3 rounded-lg border border-border bg-card p-4">
+      <div className="space-y-1">
+        <h2 className="flex items-center gap-2 text-sm font-semibold">
+          {icon} {title}
+        </h2>
+        <p className="text-xs text-muted-foreground">{description}</p>
+      </div>
+
+      <div className="grid gap-3 lg:grid-cols-3">
+        <label className="space-y-1.5">
+          <span className="text-xs font-medium text-muted-foreground">Conector LLM (solo activos)</span>
+          <select value={connectorId} onChange={(e) => setConnectorId(e.target.value)} className={inputCls}>
+            <option value="">Selecciona…</option>
+            {connectors.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name} · {c.model_id}
+                {c.is_default ? " · predeterminado" : ""}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="space-y-1.5">
+          <span className="text-xs font-medium text-muted-foreground">Dominio ECO</span>
+          <select
+            value={domainId}
+            onChange={(e) => {
+              setDomainId(e.target.value);
+              setTaskIds([]);
+            }}
+            className={inputCls}
+          >
+            <option value="">Todos los dominios</option>
+            {domains.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="space-y-1.5">
+          <span className="text-xs font-medium text-muted-foreground">Nº de preguntas (1–50)</span>
+          <input
+            type="number"
+            min={1}
+            max={50}
+            value={count}
+            onChange={(e) => setCount(Number(e.target.value))}
+            className={inputCls}
+          />
+        </label>
+
+        {optional && (
+          <label className="space-y-1.5">
+            <span className="text-xs font-medium text-muted-foreground">{optional.label} (opcional)</span>
+            <select value={optValue} onChange={(e) => setOptValue(e.target.value)} className={inputCls}>
+              {optional.options.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+      </div>
+
+      <div className="space-y-1.5">
+        <span className="text-xs font-medium text-muted-foreground">
+          Tareas ECO objetivo ({taskIds.length} seleccionadas)
+        </span>
+        <div className="max-h-40 space-y-1 overflow-y-auto rounded-md border border-border p-2">
+          {domainTasks.map((t) => (
+            <label key={t.id} className="flex items-start gap-2 rounded px-1 py-0.5 text-sm hover:bg-muted">
+              <input
+                type="checkbox"
+                className="mt-1"
+                checked={taskIds.includes(t.id)}
+                onChange={(e) =>
+                  setTaskIds((prev) => (e.target.checked ? [...prev, t.id] : prev.filter((id) => id !== t.id)))
+                }
+              />
+              <span>
+                <span className="num text-muted-foreground">{taskCode(t, domainOrder)}</span> {t.title}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          disabled={run.isPending}
+          onClick={() => {
+            if (!connectorId) return toast.error("Selecciona un conector LLM activo.");
+            if (taskIds.length === 0) return toast.error("Selecciona al menos una tarea ECO.");
+            if (count < 1 || count > 50) return toast.error("El número debe estar entre 1 y 50.");
+            setResult(null);
+            run.mutate();
+          }}
+          className="inline-flex items-center gap-2 rounded-md border border-primary px-4 py-2 text-sm font-semibold text-primary disabled:opacity-60"
+        >
+          {run.isPending ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" /> Generando…
+            </>
+          ) : (
+            <>
+              {icon} {buttonLabel}
+            </>
+          )}
+        </button>
+        {result && (
+          <p className="text-sm">
+            <span className="num font-semibold">{result.generated}</span> generadas ·{" "}
+            <span className="num font-semibold">{result.failed}</span> fallidas ·{" "}
+            <Link to="/admin/review" className="underline">
+              Ir a la cola de revisión
+            </Link>
+          </p>
+        )}
+      </div>
+      {result?.errors?.length ? (
+        <ul className="list-disc space-y-0.5 pl-5 text-xs text-destructive">
+          {result.errors.slice(0, 5).map((err, i) => (
+            <li key={i}>{err}</li>
+          ))}
+        </ul>
+      ) : null}
     </section>
   );
 }
