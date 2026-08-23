@@ -331,6 +331,61 @@ function GeneratePage() {
 
         <NetworkDiagramGenerator domains={domains.data ?? []} tasks={tasks.data ?? []} />
 
+        <LlmGeneratorSection
+          icon={<Link2 className="h-4 w-4" />}
+          title="Emparejamiento"
+          description="Genera preguntas de emparejamiento término-definición. La IA solo aporta el texto de los pares; el código construye el emparejamiento y baraja las opciones."
+          functionName="admin_generate_matching_question"
+          buttonLabel="Generar preguntas de emparejamiento"
+          connectors={activeConnectors}
+          domains={domains.data ?? []}
+          tasks={tasks.data ?? []}
+          optional={{
+            label: "Pares por pregunta",
+            paramKey: "pairs_per_question",
+            numeric: true,
+            options: [
+              { value: "", label: "Automático (4–6)" },
+              { value: "4", label: "4 pares" },
+              { value: "5", label: "5 pares" },
+              { value: "6", label: "6 pares" },
+            ],
+          }}
+        />
+
+        <LlmGeneratorSection
+          icon={<MousePointerClick className="h-4 w-4" />}
+          title="Hotspot"
+          description="Genera preguntas de tipo «señala y haz clic» sobre una plantilla de diagrama ya verificada. La IA solo aporta el escenario y las etiquetas de las zonas."
+          functionName="admin_generate_hotspot_question"
+          buttonLabel="Generar preguntas de hotspot"
+          connectors={activeConnectors}
+          domains={domains.data ?? []}
+          tasks={tasks.data ?? []}
+          optional={{
+            label: "Plantilla de diagrama",
+            paramKey: "template",
+            options: [
+              { value: "", label: "Automático (alterna)" },
+              { value: "grid_2x2", label: "Rejilla 2x2" },
+              { value: "timeline_5", label: "Línea temporal (5 etapas)" },
+            ],
+          }}
+        />
+
+        <EarnedValueGenerator domains={domains.data ?? []} tasks={tasks.data ?? []} />
+
+        <LlmGeneratorSection
+          icon={<Gauge className="h-4 w-4" />}
+          title="Dashboard con tensión"
+          description="Genera preguntas tipo panel con dos métricas en tensión (una mejora, otra empeora). La IA aporta el escenario y los rangos numéricos; el código construye la serie real y dibuja el gráfico."
+          functionName="generate_dashboard_tension_question"
+          buttonLabel="Generar preguntas de dashboard con tensión"
+          connectors={activeConnectors}
+          domains={domains.data ?? []}
+          tasks={tasks.data ?? []}
+        />
+
         {result && (
 
           <div className="rounded-lg border border-border bg-card p-4 text-sm">
