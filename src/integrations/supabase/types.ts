@@ -1065,6 +1065,7 @@ export type Database = {
           sort_order: number
           tag_type: string
           tag_type_label: string
+          target_pct: number | null
         }
         Insert: {
           code: string
@@ -1073,6 +1074,7 @@ export type Database = {
           sort_order: number
           tag_type: string
           tag_type_label: string
+          target_pct?: number | null
         }
         Update: {
           code?: string
@@ -1081,6 +1083,7 @@ export type Database = {
           sort_order?: number
           tag_type?: string
           tag_type_label?: string
+          target_pct?: number | null
         }
         Relationships: []
       }
