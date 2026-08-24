@@ -536,6 +536,26 @@ function GeneratePage() {
         />
 
         <LlmGeneratorSection
+          icon={<Network className="h-4 w-4" />}
+          title="Emparejamiento con diagrama"
+          description="Genera preguntas de emparejamiento con un pequeño diagrama junto a cada término (estructuras organizativas: funcional, matricial débil/equilibrada/fuerte, proyectizada, compuesta). El código elige qué estructuras entran y dibuja los diagramas; la IA solo escribe las definiciones distintivas."
+          functionName="admin_generate_enhanced_matching_question"
+          buttonLabel="Generar preguntas de emparejamiento con diagrama"
+          shared={shared}
+          optional={{
+            label: "Pares por pregunta",
+            paramKey: "pairs_per_question",
+            numeric: true,
+            options: [
+              { value: "", label: "Automático (4–6)" },
+              { value: "4", label: "4 pares" },
+              { value: "5", label: "5 pares" },
+              { value: "6", label: "6 pares (todas las estructuras)" },
+            ],
+          }}
+        />
+
+        <LlmGeneratorSection
           icon={<MousePointerClick className="h-4 w-4" />}
           title="Hotspot"
           description="Genera preguntas de tipo «señala y haz clic» sobre una plantilla de diagrama ya verificada. La IA solo aporta el escenario y las etiquetas de las zonas."
