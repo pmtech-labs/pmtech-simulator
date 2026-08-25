@@ -26,11 +26,13 @@ import { getAdminQuestionFn } from "@/lib/adminQuestions.functions";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import {
   deleteQuestion,
+  listConnectors,
   listEcoDomains,
   listEcoTasks,
   listQuestions,
   updateQuestionsStatus,
   type AdminQuestion,
+  type LlmConnector,
 } from "@/services/adminService";
 import { cn } from "@/lib/utils";
 import { buildCsv, downloadCsv } from "@/lib/export";
@@ -125,11 +127,47 @@ function ReviewPage() {
   });
 
   const allRows = questions.data?.rows ?? [];
+
+  // El desplegable de modelo debe reflejar los conectores REALES configurados en
+  // /admin/connectors (ago 2026, corrección de un hallazgo real del PO: antes solo
+  // mostraba los model_id que YA aparecían en las preguntas cargadas, así que un
+  // conector recién creado -- o simplemente uno que aún no se hubiera usado para
+  // generar nada -- nunca aparecía en el filtro, aunque existiera en Conectores).
+  const connectorsQuery = useQuery({
+    queryKey: ["admin-connectors-for-filter"],
+    queryFn: () => listConnectors(1, 50),
+  });
+  const connectorList: LlmConnector[] = connectorsQuery.data?.rows ?? [];
+
   const modelOptions = useMemo(() => {
-    const set = new Set<string>();
-    for (const r of allRows) set.add(r.generation_model_id ?? "__manual__");
-    return Array.from(set).sort();
-  }, [allRows]);
+    // Base: un option por cada model_id distinto entre los conectores configurados
+    // (agrupando por si dos conectores compartieran el mismo model_id), con una
+    // etiqueta legible "Nombre · model_id".
+    const byModelId = new Map<string, string>();
+    for (const c of connectorList) {
+      if (!byModelId.has(c.model_id)) byModelId.set(c.model_id, `${c.name} · ${c.model_id}`);
+    }
+
+    // Además, se conservan como opción cualquier model_id que aparezca en preguntas
+    // ya generadas pero que YA NO tenga un conector activo que lo respalde (ej. el
+    // conector se borró o se renombró el modelo después de generar) -- así nunca se
+    // pierde la capacidad de filtrar contenido histórico.
+    const historicalIds = new Set<string>();
+    for (const r of allRows) {
+      const id = r.generation_model_id;
+      if (id) historicalIds.add(id);
+    }
+    for (const id of historicalIds) {
+      if (!byModelId.has(id)) byModelId.set(id, `${id} (histórico, sin conector activo)`);
+    }
+
+    return [
+      { value: "__manual__", label: "Manual" },
+      ...Array.from(byModelId.entries())
+        .sort((a, b) => a[1].localeCompare(b[1]))
+        .map(([value, label]) => ({ value, label })),
+    ];
+  }, [connectorList, allRows]);
 
   /** Todas las preguntas que cumplen filtros de cliente + ordenación (sin paginar). */
   const filteredRows = useMemo(() => {
@@ -389,8 +427,8 @@ function ReviewPage() {
           <select value={model} onChange={(e) => { setModel(e.target.value); setPage(1); }} className={inputCls}>
             <option value="">Todos los modelos</option>
             {modelOptions.map((m) => (
-              <option key={m} value={m}>
-                {m === "__manual__" ? "Manual" : m}
+              <option key={m.value} value={m.value}>
+                {m.label}
               </option>
             ))}
           </select>
