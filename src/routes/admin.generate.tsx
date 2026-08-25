@@ -589,6 +589,7 @@ function GeneratePage() {
           functionName="generate_dashboard_tension_question"
           buttonLabel="Generar preguntas de dashboard con tensión"
           shared={shared}
+          maxCount={7}
         />
 
         {result && (
@@ -776,6 +777,7 @@ function LlmGeneratorSection({
   buttonLabel,
   shared,
   optional,
+  maxCount = 50,
 }: {
   icon: React.ReactNode;
   title: string;
@@ -784,6 +786,12 @@ function LlmGeneratorSection({
   buttonLabel: string;
   shared: SharedFilters;
   optional?: OptionalField;
+  /** Límite máximo de preguntas por lote para ESTE motor concreto. Por defecto 50
+   * (igual que el resto de motores especializados). El campo "Nº de preguntas" es
+   * compartido entre todas las tarjetas -- este límite se valida solo al pulsar el
+   * botón de ESTA tarjeta, así que un valor alto pensado para otro motor no rompe
+   * nada hasta que se intenta generar con este. */
+  maxCount?: number;
 }) {
   const qc = useQueryClient();
   const [optValue, setOptValue] = useState("");
@@ -821,6 +829,12 @@ function LlmGeneratorSection({
           {icon} {title}
         </h2>
         <p className="text-xs text-muted-foreground">{description}</p>
+        {maxCount < 50 && (
+          <p className="text-xs font-medium text-amber-600">
+            Este motor admite como máximo {maxCount} preguntas por lote (con el reintento automático activo, lotes
+            mayores pueden agotar el tiempo de ejecución de la función). Genera en varias tandas si necesitas más.
+          </p>
+        )}
         <SharedSummary shared={shared} withDifficulty />
       </div>
 
@@ -842,7 +856,7 @@ function LlmGeneratorSection({
           type="button"
           disabled={run.isPending}
           onClick={() => {
-            if (!validateShared(shared, { requiresLlm: true, max: 50 })) return;
+            if (!validateShared(shared, { requiresLlm: true, max: maxCount })) return;
             setResult(null);
             run.mutate();
           }}
