@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Pencil, Save, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { AdminShell } from "@/components/admin/AdminShell";
+import { AdminShell, Pager } from "@/components/admin/AdminShell";
 import { Button } from "@/components/ui/button";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import {
@@ -14,6 +14,9 @@ import {
 import { formatLabel, statusLabel } from "@/lib/questionStatus";
 import { updateQuestionsStatus } from "@/services/adminService";
 import { cn } from "@/lib/utils";
+
+const PAGE_SIZES = [5, 10, 20] as const;
+type PageSize = (typeof PAGE_SIZES)[number];
 
 type Filter = "rejected" | "retired" | "all";
 
@@ -54,6 +57,8 @@ function RejectedPage() {
   const email = useAdminEmail();
   const qc = useQueryClient();
   const [filter, setFilter] = useState<Filter>("rejected");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState<PageSize>(5);
 
   const rows = useQuery({
     queryKey: ["admin-reviewed-out", filter],
@@ -61,6 +66,16 @@ function RejectedPage() {
   });
 
   const list = (rows.data ?? []) as ReviewedRow[];
+
+  // Reset to first page when filter or page size changes
+  useEffect(() => {
+    setPage(1);
+  }, [filter, pageSize]);
+
+  const total = list.length;
+  const lastPage = Math.max(1, Math.ceil(total / pageSize));
+  const currentPage = Math.min(page, lastPage);
+  const pagedList = list.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const restore = useMutation({
     mutationFn: (id: string) => updateQuestionsStatus([id], "draft"),
@@ -101,7 +116,7 @@ function RejectedPage() {
             </button>
           ))}
           <span className="ml-auto text-xs text-muted-foreground">
-            {list.length} pregunta(s)
+            {total} pregunta(s)
           </span>
         </div>
 
@@ -109,13 +124,13 @@ function RejectedPage() {
           <p className="text-sm text-destructive">{(rows.error as Error).message}</p>
         ) : rows.isPending ? (
           <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-        ) : list.length === 0 ? (
+        ) : total === 0 ? (
           <p className="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground">
             No hay preguntas en este estado.
           </p>
         ) : (
           <div className="space-y-3">
-            {list.map((q) => (
+            {pagedList.map((q) => (
               <ReviewedCard
                 key={q.id}
                 q={q}
@@ -123,6 +138,24 @@ function RejectedPage() {
                 restoring={restore.isPending}
               />
             ))}
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Mostrar</span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value) as PageSize)}
+                  className="rounded-md border border-border bg-background px-2 py-1 text-xs"
+                >
+                  {PAGE_SIZES.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+                <span>por página</span>
+              </div>
+              <Pager page={currentPage} pageSize={pageSize} total={total} onPage={setPage} />
+            </div>
           </div>
         )}
       </div>

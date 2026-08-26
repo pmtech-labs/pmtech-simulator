@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.15"
+    PostgrestVersion: "14.17"
   }
   public: {
     Tables: {
@@ -1129,6 +1129,9 @@ export type Database = {
           approach: Database["public"]["Enums"]["approach_type"]
           cluster_id: string | null
           correct_answer: Json
+          correction_count: number
+          correction_notes: string | null
+          correction_status: string | null
           created_at: string | null
           created_by: string | null
           difficulty: number | null
@@ -1162,6 +1165,9 @@ export type Database = {
           approach: Database["public"]["Enums"]["approach_type"]
           cluster_id?: string | null
           correct_answer: Json
+          correction_count?: number
+          correction_notes?: string | null
+          correction_status?: string | null
           created_at?: string | null
           created_by?: string | null
           difficulty?: number | null
@@ -1195,6 +1201,9 @@ export type Database = {
           approach?: Database["public"]["Enums"]["approach_type"]
           cluster_id?: string | null
           correct_answer?: Json
+          correction_count?: number
+          correction_notes?: string | null
+          correction_status?: string | null
           created_at?: string | null
           created_by?: string | null
           difficulty?: number | null
@@ -1410,6 +1419,9 @@ export type Database = {
           cluster_id: string | null
           cluster_scenario: string | null
           correct_answer: Json | null
+          correction_count: number | null
+          correction_notes: string | null
+          correction_status: string | null
           created_at: string | null
           difficulty: number | null
           domain_code: string | null
@@ -1568,6 +1580,9 @@ export type Database = {
           cluster_id: string
           cluster_scenario: string
           correct_answer: Json
+          correction_count: number
+          correction_notes: string
+          correction_status: string
           created_at: string
           difficulty: number
           domain_code: string
