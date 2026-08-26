@@ -68,9 +68,9 @@ function RejectedPage() {
   const list = (rows.data ?? []) as ReviewedRow[];
 
   // Reset to first page when filter or page size changes
-  useState(() => {
+  useEffect(() => {
     setPage(1);
-  });
+  }, [filter, pageSize]);
 
   const total = list.length;
   const lastPage = Math.max(1, Math.ceil(total / pageSize));
