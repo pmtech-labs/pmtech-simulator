@@ -79,6 +79,12 @@ export interface AdminQuestion {
   focus_tags?: string[] | null;
   /** Fuente de verdad: todos los códigos de etiqueta (DO/CI/AE/DD/FO/NT). */
   tag_codes?: string[] | null;
+  /** Nº de veces que se ha corregido esta pregunta tras rechazo (0 = nunca corregida). */
+  correction_count?: number | null;
+  /** 'corrected' = se aplicó una corrección y espera pasar a borrador; 'unfixable' = sin corrección posible, queda rechazada definitivamente. */
+  correction_status?: "corrected" | "unfixable" | null;
+  /** Descripción de qué se cambió en la última corrección aplicada. */
+  correction_notes?: string | null;
 }
 
 

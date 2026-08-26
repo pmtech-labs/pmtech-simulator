@@ -45,6 +45,9 @@ interface ReviewedRow {
   task_title: string | null;
   latest_rejection_reason: string | null;
   latest_rejection_at: string | null;
+  correction_count: number | null;
+  correction_status: "corrected" | "unfixable" | null;
+  correction_notes: string | null;
 }
 
 function RejectedPage() {
@@ -190,6 +193,16 @@ function ReviewedCard({
         >
           {statusLabel(q.status)}
         </span>
+        {q.correction_status === "corrected" && (
+          <span className="rounded-md bg-success-soft px-2 py-0.5 text-xs font-semibold text-success">
+            Corrección {q.correction_count ?? 1}
+          </span>
+        )}
+        {q.correction_status === "unfixable" && (
+          <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
+            Sin corrección posible
+          </span>
+        )}
         <span className="text-xs text-muted-foreground">
           {q.task_title ?? "—"} · {formatLabel(q.format)}
         </span>
@@ -229,6 +242,15 @@ function ReviewedCard({
               : ""}
           </p>
           <p className="mt-1 whitespace-pre-line">{q.latest_rejection_reason}</p>
+        </div>
+      )}
+
+      {q.correction_notes && (
+        <div className="mt-2 rounded-md border border-success/30 bg-success-soft p-3 text-sm">
+          <p className="text-[11px] font-semibold uppercase text-success">
+            Qué se corrigió
+          </p>
+          <p className="mt-1 whitespace-pre-line">{q.correction_notes}</p>
         </div>
       )}
 
