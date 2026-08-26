@@ -4,7 +4,7 @@ import { Loader2, Pencil, Save, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { AdminShell } from "@/components/admin/AdminShell";
+import { AdminShell, Pager } from "@/components/admin/AdminShell";
 import { Button } from "@/components/ui/button";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import {
@@ -14,6 +14,9 @@ import {
 import { formatLabel, statusLabel } from "@/lib/questionStatus";
 import { updateQuestionsStatus } from "@/services/adminService";
 import { cn } from "@/lib/utils";
+
+const PAGE_SIZES = [5, 10, 20] as const;
+type PageSize = (typeof PAGE_SIZES)[number];
 
 type Filter = "rejected" | "retired" | "all";
 
