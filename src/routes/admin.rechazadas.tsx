@@ -57,6 +57,8 @@ function RejectedPage() {
   const email = useAdminEmail();
   const qc = useQueryClient();
   const [filter, setFilter] = useState<Filter>("rejected");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState<PageSize>(5);
 
   const rows = useQuery({
     queryKey: ["admin-reviewed-out", filter],
@@ -64,6 +66,16 @@ function RejectedPage() {
   });
 
   const list = (rows.data ?? []) as ReviewedRow[];
+
+  // Reset to first page when filter or page size changes
+  useState(() => {
+    setPage(1);
+  });
+
+  const total = list.length;
+  const lastPage = Math.max(1, Math.ceil(total / pageSize));
+  const currentPage = Math.min(page, lastPage);
+  const pagedList = list.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const restore = useMutation({
     mutationFn: (id: string) => updateQuestionsStatus([id], "draft"),
