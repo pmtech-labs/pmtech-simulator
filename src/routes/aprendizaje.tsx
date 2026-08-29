@@ -30,13 +30,13 @@ import {
 export const Route = createFileRoute("/aprendizaje")({
   head: () => ({
     meta: [
-      { title: "Ruta de aprendizaje PMTech · Temario propio mapeado al ECO 2026" },
+      { title: "Ruta de aprendizaje Top PM Simulator · Temario propio mapeado al ECO 2026" },
       {
         name: "description",
         content:
           "Nuestro temario propio, organizado en 14 lecciones mapeadas a las 26 tareas del ECO 2026, con tu dominio por unidad y práctica dirigida por lección o simulacro acumulativo.",
       },
-      { property: "og:title", content: "Ruta de aprendizaje PMTech" },
+      { property: "og:title", content: "Ruta de aprendizaje Top PM Simulator" },
       {
         property: "og:description",
         content: "Temario propio mapeado a las 26 tareas del ECO 2026, con progreso por lección.",
@@ -286,7 +286,7 @@ function LearningPathPage() {
 
   return (
     <AppShell
-      title="Ruta de aprendizaje PMTech"
+      title="Ruta de aprendizaje Top PM Simulator"
       subtitle="Nuestro temario propio, organizado para que practiques con progresión — cada lección está mapeada a tareas reales del ECO 2026"
     >
       <div className="mx-auto max-w-3xl space-y-6">

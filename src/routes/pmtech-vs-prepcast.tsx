@@ -7,9 +7,9 @@ import {
 } from "@/components/landing/SeoLandingPage";
 
 const URL = "https://pmtech-simulator.lovable.app/pmtech-vs-prepcast";
-const TITLE = "PMTech Simulator vs PrepCast: comparativa en español 2026";
+const TITLE = "Top PM Simulator vs PrepCast: comparativa en español 2026";
 const DESCRIPTION =
-  "PMTech Simulator frente al PM Exam Simulator de PrepCast: idioma, banco de preguntas, informes, diagnóstico de errores y qué opción encaja mejor con tu preparación PMP.";
+  "Top PM Simulator frente al PM Exam Simulator de PrepCast: idioma, banco de preguntas, informes, diagnóstico de errores y qué opción encaja mejor con tu preparación PMP.";
 
 const FAQS: SeoFaq[] = [
   {
@@ -21,7 +21,7 @@ const FAQS: SeoFaq[] = [
     a: "Entre 1.500 y 2.000 preguntas revisadas con criterio. Un banco de 2.280 preguntas no vale más que uno menor si no analizas cada fallo: lo que mueve la nota es corregir el patrón de error, no acumular intentos.",
   },
   {
-    q: "¿Qué aporta PMTech que no aporte PrepCast?",
+    q: "¿Qué aporta Top PM Simulator que no aporte PrepCast?",
     a: "La clasificación de cada error en ocho patrones de razonamiento, el mastery por cada una de las 26 tareas del ECO 2026 y una ruta de 14 lecciones con simulacros acumulativos, todo en español.",
   },
   {
@@ -29,7 +29,7 @@ const FAQS: SeoFaq[] = [
     a: "Solo si tu examen será en inglés y te sobra presupuesto. Para la mayoría de candidatos en España y LATAM, un simulador en su idioma con buen diagnóstico rinde más por euro invertido.",
   },
   {
-    q: "¿Las explicaciones de PMTech son tan detalladas?",
+    q: "¿Las explicaciones de Top PM Simulator son tan detalladas?",
     a: "Cada pregunta incluye explicación de la opción correcta y de por qué falla cada distractor, con referencia al dominio y a la tarea del ECO implicada.",
   },
 ];
@@ -58,7 +58,7 @@ export const Route = createFileRoute("/pmtech-vs-prepcast")({
             title: TITLE,
             description: DESCRIPTION,
             faqs: FAQS,
-            breadcrumbName: "PMTech Simulator vs PrepCast",
+            breadcrumbName: "Top PM Simulator vs PrepCast",
           }),
         ),
       },
@@ -71,8 +71,8 @@ function Page() {
   return (
     <SeoLandingPage
       eyebrow="Comparativa"
-      h1="PMTech Simulator vs PrepCast: qué simulador PMP te hace aprobar antes"
-      intro="PrepCast es una referencia veterana en simuladores PMP, pero solo en inglés. PMTech Simulator apuesta por el español neutro y por explicarte el motivo exacto de cada fallo. Aquí tienes las diferencias reales."
+      h1="Top PM Simulator vs PrepCast: qué simulador PMP te hace aprobar antes"
+      intro="PrepCast es una referencia veterana en simuladores PMP, pero solo en inglés. Top PM Simulator apuesta por el español neutro y por explicarte el motivo exacto de cada fallo. Aquí tienes las diferencias reales."
       highlights={[
         "Español neutro nativo frente a banco íntegro en inglés",
         "Diagnóstico por tipo de error frente a informes de puntuación",
@@ -81,7 +81,7 @@ function Page() {
       ]}
       comparison={{
         title: "Comparativa interactiva por área",
-        ourName: "PMTech Simulator",
+        ourName: "Top PM Simulator",
         competitorName: "PrepCast",
         rows: [
           {
@@ -114,7 +114,7 @@ function Page() {
             ours: { verdict: "yes", label: "8 patrones + distractores A-D" },
             theirs: { verdict: "partial", label: "Explicaciones por dominio" },
             detail:
-              "Además de explicar la respuesta correcta, PMTech clasifica el motivo del fallo y analiza qué distractores eliges con más frecuencia y qué revela eso de tu razonamiento.",
+              "Además de explicar la respuesta correcta, Top PM Simulator clasifica el motivo del fallo y analiza qué distractores eliges con más frecuencia y qué revela eso de tu razonamiento.",
           },
           {
             feature: "Granularidad del progreso",
@@ -130,7 +130,7 @@ function Page() {
             ours: { verdict: "yes", label: "14 lecciones con desbloqueo" },
             theirs: { verdict: "no", label: "Preparación libre" },
             detail:
-              "PrepCast plantea preparación libre por exámenes. PMTech ordena el camino en 14 lecciones que se desbloquean por mastery y cierran con simulacros acumulativos.",
+              "PrepCast plantea preparación libre por exámenes. Top PM Simulator ordena el camino en 14 lecciones que se desbloquean por mastery y cierran con simulacros acumulativos.",
           },
           {
             feature: "Simulacro con formato oficial",
@@ -138,7 +138,7 @@ function Page() {
             ours: { verdict: "yes", label: "180 preguntas, 3 secciones" },
             theirs: { verdict: "yes", label: "Exámenes cronometrados" },
             detail:
-              "Los dos ofrecen examen completo cronometrado. PMTech añade los descansos de 10 minutos y el bloqueo de secciones cerradas para replicar la fatiga real.",
+              "Los dos ofrecen examen completo cronometrado. Top PM Simulator añade los descansos de 10 minutos y el bloqueo de secciones cerradas para replicar la fatiga real.",
           },
           {
             feature: "Aviso de preguntas repetidas",
@@ -154,7 +154,7 @@ function Page() {
             ours: { verdict: "partial", label: "Simulador + ruta de estudio" },
             theirs: { verdict: "yes", label: "Curso, podcast y materiales" },
             detail:
-              "PrepCast ofrece un ecosistema completo en inglés (curso de 35 horas, podcast, libros). PMTech se concentra en simulación y diagnóstico en español.",
+              "PrepCast ofrece un ecosistema completo en inglés (curso de 35 horas, podcast, libros). Top PM Simulator se concentra en simulación y diagnóstico en español.",
           },
         ],
       }}
@@ -169,7 +169,7 @@ function Page() {
           ],
         },
         {
-          h2: "Dónde gana PMTech Simulator",
+          h2: "Dónde gana Top PM Simulator",
           bullets: [
             "Preguntas situacionales escritas en español neutro, sin traducción automática que altere el matiz decisivo.",
             "Clasificación de cada error en ocho patrones de razonamiento con plan de estudio priorizado por impacto.",
@@ -188,7 +188,7 @@ function Page() {
         {
           h2: "Aviso de independencia",
           paragraphs: [
-            "PMTech Simulator es un producto independiente y no está afiliado, avalado ni patrocinado por el Project Management Institute ni por OSP International LLC (PrepCast). PMP y PMBOK son marcas registradas del PMI; PrepCast es marca de su titular. Los datos de esta comparativa proceden de información pública y pueden cambiar.",
+            "Top PM Simulator es un producto independiente y no está afiliado, avalado ni patrocinado por el Project Management Institute ni por OSP International LLC (PrepCast). PMP y PMBOK son marcas registradas del PMI; PrepCast es marca de su titular. Los datos de esta comparativa proceden de información pública y pueden cambiar.",
           ],
         },
       ]}
@@ -196,7 +196,7 @@ function Page() {
       related={[
         {
           to: "/pmtech-vs-pmi-study-hall",
-          label: "PMTech Simulator vs PMI Study Hall",
+          label: "Top PM Simulator vs PMI Study Hall",
           description: "Comparativa con el simulador oficial del PMI.",
         },
         {

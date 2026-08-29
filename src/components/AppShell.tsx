@@ -5,7 +5,6 @@ import {
   BookOpen,
   Dumbbell,
 
-  GraduationCap,
   History,
   LayoutDashboard,
   Menu,
@@ -18,6 +17,7 @@ import {
 } from "lucide-react";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
+import bearLogo from "@/assets/glacimonto-bear.png.asset.json";
 import { useCurrentUser } from "@/hooks/useCandidateData";
 import { signOutCandidate } from "@/services/authService";
 import { clearExamProgress, describeProgress, loadExamProgress } from "@/lib/examResume";
@@ -122,12 +122,13 @@ function SidebarInner({
   return (
     <div className="flex h-full flex-col gap-6 bg-sidebar p-4">
       <div className="flex items-center gap-2.5 px-1">
-        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-sidebar-primary">
-          <GraduationCap className="h-5 w-5 text-sidebar-primary-foreground" />
+        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-white p-1">
+          <img src={bearLogo.url} alt="Top PM Simulator" className="h-full w-full object-contain" />
         </div>
+
         <div className="min-w-0">
           <p className="truncate font-display text-sm font-semibold text-sidebar-accent-foreground">
-            PMTech Simulator
+            Top PM Simulator
           </p>
           <p className="truncate text-[11px] text-sidebar-foreground/60">ECO 2026 · PMBOK 8</p>
         </div>
@@ -319,7 +320,7 @@ export function AppShell({
           <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">{children}</main>
 
           <footer className="border-t border-border px-4 py-4 text-[11px] leading-relaxed text-muted-foreground sm:px-6 lg:px-8">
-            PMTech Simulator es un producto independiente. No está afiliado, avalado ni patrocinado
+            Top PM Simulator es un producto independiente. No está afiliado, avalado ni patrocinado
             por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas registradas del PMI.
           </footer>
         </div>

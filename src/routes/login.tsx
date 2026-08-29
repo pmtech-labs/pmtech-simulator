@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { GraduationCap, Loader2, LogIn } from "lucide-react";
+import { Loader2, LogIn } from "lucide-react";
 import { useEffect, useState } from "react";
+import bearLogo from "@/assets/glacimonto-bear.png.asset.json";
 
 import { useAuth } from "@/hooks/useAuth";
 import { signInCandidate } from "@/services/authService";
@@ -68,10 +69,10 @@ function LoginPage() {
     <div className="grid min-h-screen place-items-center bg-background px-4 py-10">
       <div className="w-full max-w-sm">
         <Link to="/" className="mb-6 flex items-center justify-center gap-2">
-          <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary">
-            <GraduationCap className="h-5 w-5 text-primary-foreground" />
+          <div className="grid h-9 w-9 place-items-center rounded-lg bg-white p-1">
+            <img src={bearLogo.url} alt="Top PM Simulator" className="h-full w-full object-contain" />
           </div>
-          <span className="font-display text-base font-semibold">PMTech Simulator</span>
+          <span className="font-display text-base font-semibold">Top PM Simulator</span>
         </Link>
 
         <div className="rounded-2xl border border-border bg-card p-6">

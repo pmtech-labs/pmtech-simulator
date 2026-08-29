@@ -12,13 +12,13 @@ const PAGE_URL = `${SITE_URL}/faq`;
 export const Route = createFileRoute("/faq")({
   head: () => ({
     meta: [
-      { title: "Preguntas frecuentes — PMTech Simulator" },
+      { title: "Preguntas frecuentes — Top PM Simulator" },
       {
         name: "description",
         content:
           "Resolvemos 15 dudas sobre el simulador PMP (ECO 2026, explicaciones y tipos de error), sobre planes y pagos (plan gratuito, upgrades y duración) y sobre la certificación PMP y el diploma de logro.",
       },
-      { property: "og:title", content: "Preguntas frecuentes — PMTech Simulator" },
+      { property: "og:title", content: "Preguntas frecuentes — Top PM Simulator" },
       {
         property: "og:description",
         content:
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/faq")({
       { property: "og:url", content: PAGE_URL },
       { property: "og:locale", content: "es_ES" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Preguntas frecuentes — PMTech Simulator" },
+      { name: "twitter:title", content: "Preguntas frecuentes — Top PM Simulator" },
       {
         name: "twitter:description",
         content: "Simulador, planes y certificación PMP: 15 preguntas frecuentes respondidas.",

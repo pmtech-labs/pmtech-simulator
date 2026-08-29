@@ -12,13 +12,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/glosario")({
   head: () => ({
     meta: [
-      { title: "Glosario PMP: términos clave del examen · PMTech" },
+      { title: "Glosario PMP: términos clave del examen · Top PM Simulator" },
       {
         name: "description",
         content:
           "Glosario PMP con definiciones propias y claras de los términos predictivos, ágiles y generales que necesitas para el examen ECO 2026.",
       },
-      { property: "og:title", content: "Glosario PMP · PMTech Simulator" },
+      { property: "og:title", content: "Glosario PMP · Top PM Simulator" },
       {
         property: "og:description",
         content: "Definiciones breves y en español de los términos clave del examen PMP, filtrables por enfoque.",
@@ -91,7 +91,7 @@ function GlossaryPage() {
       <header className="space-y-2">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <BookMarked className="h-4 w-4" />
-          <span>Recursos PMTech</span>
+          <span>Recursos Top PM Simulator</span>
         </div>
         <p className="text-sm text-muted-foreground">
           Definiciones breves y en palabras propias de los términos que más aparecen en el examen PMP

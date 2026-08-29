@@ -7,9 +7,9 @@ import {
 } from "@/components/landing/SeoLandingPage";
 
 const URL = "https://pmtech-simulator.lovable.app/pmtech-vs-pmi-study-hall";
-const TITLE = "PMTech Simulator vs PMI Study Hall: comparativa 2026";
+const TITLE = "Top PM Simulator vs PMI Study Hall: comparativa 2026";
 const DESCRIPTION =
-  "Comparativa honesta entre PMTech Simulator y PMI Study Hall: idioma, precio, número de preguntas, diagnóstico de errores y a qué candidato le conviene cada uno.";
+  "Comparativa honesta entre Top PM Simulator y PMI Study Hall: idioma, precio, número de preguntas, diagnóstico de errores y a qué candidato le conviene cada uno.";
 
 const FAQS: SeoFaq[] = [
   {
@@ -18,15 +18,15 @@ const FAQS: SeoFaq[] = [
   },
   {
     q: "¿Cuál se parece más al examen real?",
-    a: "Study Hall tiene la ventaja de venir del PMI, que es quien escribe el examen. PMTech Simulator replica el formato oficial (180 preguntas, tres secciones cronometradas, descansos de 10 minutos) y añade diagnóstico por tipo de error, que Study Hall no ofrece.",
+    a: "Study Hall tiene la ventaja de venir del PMI, que es quien escribe el examen. Top PM Simulator replica el formato oficial (180 preguntas, tres secciones cronometradas, descansos de 10 minutos) y añade diagnóstico por tipo de error, que Study Hall no ofrece.",
   },
   {
     q: "¿Puedo usar los dos a la vez?",
-    a: "Sí, y es una combinación razonable si dominas el inglés: PMTech Simulator para entender por qué fallas y corregir el patrón, Study Hall para calibrar el estilo de redacción del PMI en las últimas semanas.",
+    a: "Sí, y es una combinación razonable si dominas el inglés: Top PM Simulator para entender por qué fallas y corregir el patrón, Study Hall para calibrar el estilo de redacción del PMI en las últimas semanas.",
   },
   {
     q: "¿Cuál es más barato?",
-    a: "Study Hall se vende por suscripción trimestral en dólares y su precio varía según seas miembro del PMI. PMTech Simulator tiene un plan gratuito de diagnóstico y planes de pago en euros; consulta la página de precios para el importe vigente.",
+    a: "Study Hall se vende por suscripción trimestral en dólares y su precio varía según seas miembro del PMI. Top PM Simulator tiene un plan gratuito de diagnóstico y planes de pago en euros; consulta la página de precios para el importe vigente.",
   },
   {
     q: "¿Study Hall es obligatorio para aprobar el PMP?",
@@ -58,7 +58,7 @@ export const Route = createFileRoute("/pmtech-vs-pmi-study-hall")({
             title: TITLE,
             description: DESCRIPTION,
             faqs: FAQS,
-            breadcrumbName: "PMTech Simulator vs PMI Study Hall",
+            breadcrumbName: "Top PM Simulator vs PMI Study Hall",
           }),
         ),
       },
@@ -71,8 +71,8 @@ function Page() {
   return (
     <SeoLandingPage
       eyebrow="Comparativa"
-      h1="PMTech Simulator vs PMI Study Hall: cuál te conviene según tu perfil"
-      intro="Study Hall es el simulador oficial del PMI y está en inglés. PMTech Simulator está escrito en español neutro y diagnostica el motivo de cada fallo. Esta comparativa explica en qué gana cada uno sin marketing."
+      h1="Top PM Simulator vs PMI Study Hall: cuál te conviene según tu perfil"
+      intro="Study Hall es el simulador oficial del PMI y está en inglés. Top PM Simulator está escrito en español neutro y diagnostica el motivo de cada fallo. Esta comparativa explica en qué gana cada uno sin marketing."
       highlights={[
         "Idioma: español neutro nativo frente a inglés del PMI",
         "Diagnóstico por tipo de error frente a puntuación por dominio",
@@ -81,7 +81,7 @@ function Page() {
       ]}
       comparison={{
         title: "Comparativa interactiva por área",
-        ourName: "PMTech Simulator",
+        ourName: "Top PM Simulator",
         competitorName: "PMI Study Hall",
         rows: [
           {
@@ -90,7 +90,7 @@ function Page() {
             ours: { verdict: "yes", label: "Español neutro nativo" },
             theirs: { verdict: "no", label: "Solo inglés" },
             detail:
-              "PMTech redacta cada escenario directamente en español neutro, cuidando el matiz que decide la respuesta. Study Hall solo existe en inglés; el traductor del navegador altera precisamente esos matices situacionales.",
+              "Top PM Simulator redacta cada escenario directamente en español neutro, cuidando el matiz que decide la respuesta. Study Hall solo existe en inglés; el traductor del navegador altera precisamente esos matices situacionales.",
           },
           {
             feature: "Origen del contenido",
@@ -98,7 +98,7 @@ function Page() {
             ours: { verdict: "partial", label: "Formadores PMP independientes" },
             theirs: { verdict: "yes", label: "Project Management Institute" },
             detail:
-              "Study Hall lo publica el propio PMI, la organización que escribe el examen, así que su estilo de enunciado es el más fiel posible. PMTech lo elabora un equipo independiente de formadores certificados PMP, alineado con el ECO 2026.",
+              "Study Hall lo publica el propio PMI, la organización que escribe el examen, así que su estilo de enunciado es el más fiel posible. Top PM Simulator lo elabora un equipo independiente de formadores certificados PMP, alineado con el ECO 2026.",
           },
           {
             feature: "Exportación de resultados",
@@ -122,7 +122,7 @@ function Page() {
             ours: { verdict: "yes", label: "Mastery por las 26 tareas ECO" },
             theirs: { verdict: "partial", label: "Por dominio" },
             detail:
-              "Saber que fallas en 'Proceso' no dice qué estudiar. PMTech mide el dominio de cada una de las 26 tareas del ECO 2026 y prioriza las que más te penalizan.",
+              "Saber que fallas en 'Proceso' no dice qué estudiar. Top PM Simulator mide el dominio de cada una de las 26 tareas del ECO 2026 y prioriza las que más te penalizan.",
           },
           {
             feature: "Ruta de estudio guiada",
@@ -138,7 +138,7 @@ function Page() {
             ours: { verdict: "yes", label: "180 preguntas, 3 secciones" },
             theirs: { verdict: "yes", label: "Exámenes completos" },
             detail:
-              "Ambos replican el examen completo. PMTech reproduce además los dos descansos de 10 minutos y bloquea las secciones ya cerradas, igual que el examen real.",
+              "Ambos replican el examen completo. Top PM Simulator reproduce además los dos descansos de 10 minutos y bloquea las secciones ya cerradas, igual que el examen real.",
           },
           {
             feature: "Aviso de preguntas repetidas",
@@ -146,7 +146,7 @@ function Page() {
             ours: { verdict: "yes", label: "Alerta si supera el 30 %" },
             theirs: { verdict: "no", label: "No disponible" },
             detail:
-              "Si más del 30 % del simulacro ya lo habías visto, PMTech lo avisa en el resultado para que la nota no te dé una falsa sensación de preparación.",
+              "Si más del 30 % del simulacro ya lo habías visto, Top PM Simulator lo avisa en el resultado para que la nota no te dé una falsa sensación de preparación.",
           },
           {
             feature: "Prueba sin pagar",
@@ -169,7 +169,7 @@ function Page() {
           ],
         },
         {
-          h2: "Dónde gana PMTech Simulator",
+          h2: "Dónde gana Top PM Simulator",
           bullets: [
             "Contenido escrito en español neutro desde cero: no hay pérdida de matiz por traducción automática.",
             "Cada fallo se clasifica por tipo de error —secuencia, rol, conocimiento, interpretación del enunciado, sesgo predictivo/ágil— y alimenta un plan de estudio priorizado.",
@@ -181,16 +181,16 @@ function Page() {
         {
           h2: "Qué elegir según tu caso",
           bullets: [
-            "Inglés técnico cómodo y examen en inglés: empieza por Study Hall y usa PMTech para diagnosticar por qué fallas.",
-            "Vas a examinarte en español o el inglés te ralentiza: PMTech Simulator como base y Study Hall opcional al final.",
-            "Presupuesto ajustado: arranca con el diagnóstico gratuito de PMTech y decide después dónde invertir.",
+            "Inglés técnico cómodo y examen en inglés: empieza por Study Hall y usa Top PM Simulator para diagnosticar por qué fallas.",
+            "Vas a examinarte en español o el inglés te ralentiza: Top PM Simulator como base y Study Hall opcional al final.",
+            "Presupuesto ajustado: arranca con el diagnóstico gratuito de Top PM Simulator y decide después dónde invertir.",
             "Ya suspendiste una vez: prioriza el diagnóstico por tipo de error; repetir preguntas sin corregir el patrón rara vez cambia el resultado.",
           ],
         },
         {
           h2: "Aviso de independencia",
           paragraphs: [
-            "PMTech Simulator es un producto independiente y no está afiliado, avalado ni patrocinado por el Project Management Institute. PMP, PMBOK y PMI Study Hall son marcas registradas de sus respectivos titulares. La información de esta comparativa se basa en las características públicas de ambos productos y puede cambiar; verifica siempre los datos oficiales antes de comprar.",
+            "Top PM Simulator es un producto independiente y no está afiliado, avalado ni patrocinado por el Project Management Institute. PMP, PMBOK y PMI Study Hall son marcas registradas de sus respectivos titulares. La información de esta comparativa se basa en las características públicas de ambos productos y puede cambiar; verifica siempre los datos oficiales antes de comprar.",
           ],
         },
       ]}
@@ -198,7 +198,7 @@ function Page() {
       related={[
         {
           to: "/pmtech-vs-prepcast",
-          label: "PMTech Simulator vs PrepCast",
+          label: "Top PM Simulator vs PrepCast",
           description: "La otra comparativa clásica entre simuladores PMP.",
         },
         {

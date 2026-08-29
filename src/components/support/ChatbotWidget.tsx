@@ -74,7 +74,7 @@ export function ChatbotWidget() {
         <div className="fixed bottom-20 right-4 z-50 flex h-[min(70vh,32rem)] w-[min(92vw,22rem)] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-panel sm:right-6">
           <div className="flex items-center justify-between border-b border-border bg-primary px-4 py-3 text-primary-foreground">
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold">Asistente PMTech</p>
+              <p className="truncate text-sm font-semibold">Asistente Top PM Simulator</p>
               <p className="truncate text-[11px] opacity-80">Dudas de planes, cuenta y simulacro</p>
             </div>
             <div className="flex shrink-0 items-center gap-3">

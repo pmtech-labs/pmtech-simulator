@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { GraduationCap, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
+import bearLogo from "@/assets/glacimonto-bear.png.asset.json";
 import { AuthNavStatus } from "@/components/AuthNavStatus";
 import { TryFreeButton } from "@/components/TryFreeButton";
 import { HeaderNav, MobileNav } from "@/components/landing/HeaderNav";
@@ -16,18 +17,23 @@ export function LandingHeader({ onHome = false }: { onHome?: boolean }) {
     <header className="sticky top-0 z-40 border-b border-border bg-card/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-3 sm:px-8 lg:px-10">
         <Link to="/" className="flex shrink-0 items-center gap-2.5 lg:mr-4">
-          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary">
-            <GraduationCap className="h-5 w-5 text-primary-foreground" />
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-white p-1">
+            <img
+              src={bearLogo.url}
+              alt="Top PM Simulator"
+              className="h-full w-full object-contain"
+            />
           </div>
           <div className="shrink-0 min-w-fit w-max">
             <p className="whitespace-nowrap font-display text-sm font-semibold leading-tight">
-              PMTech Simulator
+              Top PM Simulator
             </p>
             <p className="whitespace-nowrap text-[11px] leading-tight text-muted-foreground">
               ECO 2026 · PMBOK 8
             </p>
           </div>
         </Link>
+
 
         <div className="hidden items-center gap-6 xl:flex">
           <HeaderNav onHome={onHome} />

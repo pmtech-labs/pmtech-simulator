@@ -26,6 +26,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import bearLogo from "@/assets/glacimonto-bear.png.asset.json";
 import { AuthNavStatus } from "@/components/AuthNavStatus";
 import { TryFreeButton } from "@/components/TryFreeButton";
 import { AboutUs } from "@/components/landing/AboutUs";
@@ -88,7 +89,7 @@ export const Route = createFileRoute("/")({
           "@graph": [
             {
               "@type": "Organization",
-              name: "PMTech Simulator",
+              name: "Top PM Simulator",
               url: SITE_URL,
               description:
                 "Simulador de examen PMP y formación en dirección de proyectos en español, calibrado al ECO 2026.",
@@ -110,7 +111,7 @@ export const Route = createFileRoute("/")({
 
             {
               "@type": "WebSite",
-              name: "PMTech Simulator",
+              name: "Top PM Simulator",
               url: SITE_URL,
               inLanguage: "es",
             },
@@ -121,7 +122,7 @@ export const Route = createFileRoute("/")({
                 "Formación oficial de 35 horas de contacto para cumplir el requisito de PMI y preparar el examen PMP según el ECO 2026.",
               provider: {
                 "@type": "Organization",
-                name: "PMTech Simulator",
+                name: "Top PM Simulator",
                 url: SITE_URL,
               },
               inLanguage: "es",
@@ -748,10 +749,15 @@ function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary">
-              <GraduationCap className="h-4 w-4 text-primary-foreground" />
+            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white p-1">
+              <img
+                src={bearLogo.url}
+                alt="Top PM Simulator"
+                className="h-full w-full object-contain"
+              />
             </div>
-            <p className="font-display text-sm font-semibold">PMTech Simulator</p>
+
+            <p className="font-display text-sm font-semibold">Top PM Simulator</p>
           </div>
           <div className="flex flex-col items-center gap-4 sm:items-end">
             <div className="flex items-center gap-3">
@@ -836,7 +842,7 @@ function Footer() {
           </div>
         </div>
         <p className="mt-8 text-center text-[11px] leading-relaxed text-muted-foreground">
-          PMTech Simulator es un producto independiente. No está afiliado, avalado ni
+          Top PM Simulator es un producto independiente. No está afiliado, avalado ni
           patrocinado por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas
           registradas del PMI.
         </p>

@@ -18,7 +18,7 @@ export const FAQ_BLOCKS: FaqBlock[] = [
       {
         id: "afiliado-pmi",
         q: "¿Está afiliado o avalado por PMI?",
-        a: "No. PMTech Simulator es un producto independiente, no afiliado ni respaldado por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas registradas de PMI.",
+        a: "No. Top PM Simulator es un producto independiente, no afiliado ni respaldado por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas registradas de PMI.",
       },
       {
         id: "garantia-aprobado",
@@ -95,7 +95,7 @@ export const FAQ_BLOCKS: FaqBlock[] = [
       {
         id: "diploma",
         q: "¿Recibo algún diploma o certificado?",
-        a: "Sí. Al completar un simulacro completo con un buen desempeño, se emite automáticamente un diploma de logro con tu resultado por dominio. Una aclaración importante: PMI no publica una nota de corte oficial para el examen PMP (usa bandas de desempeño por dominio, no un porcentaje público) — el diploma reconoce tu desempeño según un criterio de referencia propio de PMTech Simulator, no una nota de aprobado oficial de PMI.",
+        a: "Sí. Al completar un simulacro completo con un buen desempeño, se emite automáticamente un diploma de logro con tu resultado por dominio. Una aclaración importante: PMI no publica una nota de corte oficial para el examen PMP (usa bandas de desempeño por dominio, no un porcentaje público) — el diploma reconoce tu desempeño según un criterio de referencia propio de Top PM Simulator, no una nota de aprobado oficial de PMI.",
       },
       {
         id: "otros-materiales",
