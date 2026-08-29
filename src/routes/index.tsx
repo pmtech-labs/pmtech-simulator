@@ -46,7 +46,8 @@ import { PLANS } from "@/services/checkoutService";
 import { HOME_FAQS } from "@/data/faq";
 
 
-const SITE_URL = "https://pmtech-simulator.lovable.app";
+const SITE_URL = "https://toppmsimulator.glacimonto.com";
+const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -72,7 +73,13 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: SITE_URL },
       { property: "og:locale", content: "es_ES" },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Top PM Simulator, por Glacimonto" },
+      { property: "og:site_name", content: "Top PM Simulator" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: OG_IMAGE },
       { name: "twitter:title", content: "Simulador PMP en español · ECO 2026" },
       {
         name: "twitter:description",

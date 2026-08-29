@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/glosario")({
   head: () => ({
     meta: [
+      { property: "og:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
+      { name: "twitter:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
       { title: "Glosario PMP: términos clave del examen · Top PM Simulator" },
       {
         name: "description",

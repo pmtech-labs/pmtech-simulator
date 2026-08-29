@@ -23,6 +23,8 @@ import { sendPartnerContact } from "@/services/partnerContactService";
 export const Route = createFileRoute("/partners")({
   head: () => ({
     meta: [
+      { property: "og:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
+      { name: "twitter:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
       { title: "Partners · Simulador PMP para centros de formación y empresas" },
       {
         name: "description",

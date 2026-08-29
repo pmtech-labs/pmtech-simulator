@@ -12,6 +12,8 @@ const PAGE_URL = `${SITE_URL}/faq`;
 export const Route = createFileRoute("/faq")({
   head: () => ({
     meta: [
+      { property: "og:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
+      { name: "twitter:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
       { title: "Preguntas frecuentes — Top PM Simulator" },
       {
         name: "description",
