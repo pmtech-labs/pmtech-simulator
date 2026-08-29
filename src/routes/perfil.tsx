@@ -270,21 +270,26 @@ function ProfilePage() {
 
         <section>
           <h2 className="text-base font-semibold">Planes disponibles</h2>
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <p className="mt-1 text-xs text-muted-foreground">
+            Los mismos planes y precios que en la web. Cambia de plan cuando quieras.
+          </p>
+          <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {PLANS.map((p) => {
               const active = p.code === user.plan;
               return (
                 <div
                   key={p.code}
                   className={cn(
-                    "rounded-2xl border bg-card p-5",
+                    "flex flex-col rounded-2xl border bg-card p-5",
                     active ? "border-accent shadow-panel" : "border-border",
                   )}
                 >
                   <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                     <div className="min-w-0">
-                      <p className="truncate text-base font-semibold">Licencia {p.name}</p>
-                      <p className="text-xs text-muted-foreground">{p.durationMonths} meses de acceso</p>
+                      <p className="truncate text-base font-semibold">{p.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {p.tagline ?? "Acceso completo durante la licencia"}
+                      </p>
                     </div>
                     {active && (
                       <span className="shrink-0 rounded-full bg-warning-soft px-2.5 py-1 text-[11px] font-semibold text-accent-foreground">
@@ -293,7 +298,10 @@ function ProfilePage() {
                     )}
                   </div>
                   <p className="num mt-3 font-display text-3xl font-bold">
-                    {p.price} € <span className="text-sm font-normal text-muted-foreground">IVA incl.</span>
+                    {p.price.toFixed(2).replace(".", ",")} €
+                    {p.regularPrice ? (
+                      <sup className="ml-0.5 text-base font-bold text-accent-foreground">*</sup>
+                    ) : null}
                   </p>
                   <ul className="mt-4 space-y-2">
                     {p.features.map((f) => (
