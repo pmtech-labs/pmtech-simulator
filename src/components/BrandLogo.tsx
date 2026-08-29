@@ -4,6 +4,40 @@ import markColor from "@/assets/brand-mark-color.png.asset.json";
 import markWhite from "@/assets/brand-mark-white.png.asset.json";
 import horizontalColor from "@/assets/brand-horizontal-color.png.asset.json";
 import horizontalWhite from "@/assets/brand-horizontal-white.png.asset.json";
+import verticalColor from "@/assets/glacimonto-logo.png.asset.json";
+import verticalWhite from "@/assets/brand-logo-white.png.asset.json";
+
+/**
+ * Logo vertical/cuadrado (oso + GLACIMONTO + TOP PM SIMULATOR apilados).
+ * Pensado para el footer, donde hay más espacio vertical que horizontal.
+ */
+export function BrandVertical({
+  tone = "auto",
+  className,
+}: {
+  tone?: BrandTone;
+  className?: string;
+}) {
+  const base = "h-full w-auto object-contain";
+  return (
+    <span className={cn("inline-block shrink-0", className)}>
+      {tone !== "onDark" && (
+        <img
+          src={verticalColor.url}
+          alt="Top PM Simulator, por Glacimonto"
+          className={cn(base, tone === "auto" && "dark:hidden")}
+        />
+      )}
+      {tone !== "onLight" && (
+        <img
+          src={verticalWhite.url}
+          alt="Top PM Simulator, por Glacimonto"
+          className={cn(base, tone === "auto" && "hidden dark:block")}
+        />
+      )}
+    </span>
+  );
+}
 
 /**
  * Logo horizontal completo (oso + GLACIMONTO + TOP PM SIMULATOR).
