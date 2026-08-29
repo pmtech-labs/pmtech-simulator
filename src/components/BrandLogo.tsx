@@ -64,10 +64,10 @@ export function BrandLockup({
   return (
     <span className={cn("flex items-center gap-2.5", className)}>
       <BrandMark tone={tone} className={markSize} />
-      <span className="min-w-0">
+      <span className="min-w-fit">
         <span
           className={cn(
-            "block truncate font-display font-semibold leading-tight",
+            "block whitespace-nowrap font-display font-semibold leading-tight",
             titleSize,
             tone === "onDark" && "text-hero-foreground",
           )}
@@ -75,7 +75,7 @@ export function BrandLockup({
           Top PM Simulator
         </span>
         {subtitle && (
-          <span className={cn("block truncate text-[11px] leading-tight", muted)}>
+          <span className={cn("block whitespace-nowrap text-[11px] leading-tight", muted)}>
             {subtitle}
           </span>
         )}
