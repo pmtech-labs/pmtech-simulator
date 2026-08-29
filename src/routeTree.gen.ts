@@ -28,8 +28,6 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as Pmbok8RouteImport } from './routes/pmbok-8'
-import { Route as PmtechVsPmiStudyHallRouteImport } from './routes/pmtech-vs-pmi-study-hall'
-import { Route as PmtechVsPrepcastRouteImport } from './routes/pmtech-vs-prepcast'
 import { Route as PoliticaDeCookiesRouteImport } from './routes/politica-de-cookies'
 import { Route as PoliticaDePrivacidadRouteImport } from './routes/politica-de-privacidad'
 import { Route as PracticaRouteImport } from './routes/practica'
@@ -40,6 +38,8 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SimuladorExamenPmpRouteImport } from './routes/simulador-examen-pmp'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TerminosYCondicionesRouteImport } from './routes/terminos-y-condiciones'
+import { Route as TopPmSimulatorVsPmiStudyHallRouteImport } from './routes/top-pm-simulator-vs-pmi-study-hall'
+import { Route as TopPmSimulatorVsPrepcastRouteImport } from './routes/top-pm-simulator-vs-prepcast'
 import { Route as TutorialExamenRouteImport } from './routes/tutorial-examen'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
@@ -145,16 +145,6 @@ const Pmbok8Route = Pmbok8RouteImport.update({
   path: '/pmbok-8',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PmtechVsPmiStudyHallRoute = PmtechVsPmiStudyHallRouteImport.update({
-  id: '/pmtech-vs-pmi-study-hall',
-  path: '/pmtech-vs-pmi-study-hall',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PmtechVsPrepcastRoute = PmtechVsPrepcastRouteImport.update({
-  id: '/pmtech-vs-prepcast',
-  path: '/pmtech-vs-prepcast',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PoliticaDeCookiesRoute = PoliticaDeCookiesRouteImport.update({
   id: '/politica-de-cookies',
   path: '/politica-de-cookies',
@@ -205,6 +195,18 @@ const TerminosYCondicionesRoute = TerminosYCondicionesRouteImport.update({
   path: '/terminos-y-condiciones',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TopPmSimulatorVsPmiStudyHallRoute =
+  TopPmSimulatorVsPmiStudyHallRouteImport.update({
+    id: '/top-pm-simulator-vs-pmi-study-hall',
+    path: '/top-pm-simulator-vs-pmi-study-hall',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TopPmSimulatorVsPrepcastRoute =
+  TopPmSimulatorVsPrepcastRouteImport.update({
+    id: '/top-pm-simulator-vs-prepcast',
+    path: '/top-pm-simulator-vs-prepcast',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const TutorialExamenRoute = TutorialExamenRouteImport.update({
   id: '/tutorial-examen',
   path: '/tutorial-examen',
@@ -271,8 +273,6 @@ export interface FileRoutesByFullPath {
   '/partners': typeof PartnersRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
-  '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
-  '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
   '/politica-de-cookies': typeof PoliticaDeCookiesRoute
   '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/practica': typeof PracticaRoute
@@ -283,6 +283,8 @@ export interface FileRoutesByFullPath {
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
+  '/top-pm-simulator-vs-pmi-study-hall': typeof TopPmSimulatorVsPmiStudyHallRoute
+  '/top-pm-simulator-vs-prepcast': typeof TopPmSimulatorVsPrepcastRoute
   '/tutorial-examen': typeof TutorialExamenRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
@@ -312,8 +314,6 @@ export interface FileRoutesByTo {
   '/partners': typeof PartnersRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
-  '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
-  '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
   '/politica-de-cookies': typeof PoliticaDeCookiesRoute
   '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/practica': typeof PracticaRoute
@@ -324,6 +324,8 @@ export interface FileRoutesByTo {
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
+  '/top-pm-simulator-vs-pmi-study-hall': typeof TopPmSimulatorVsPmiStudyHallRoute
+  '/top-pm-simulator-vs-prepcast': typeof TopPmSimulatorVsPrepcastRoute
   '/tutorial-examen': typeof TutorialExamenRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
@@ -355,8 +357,6 @@ export interface FileRoutesById {
   '/partners': typeof PartnersRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
-  '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
-  '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
   '/politica-de-cookies': typeof PoliticaDeCookiesRoute
   '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/practica': typeof PracticaRoute
@@ -367,6 +367,8 @@ export interface FileRoutesById {
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
+  '/top-pm-simulator-vs-pmi-study-hall': typeof TopPmSimulatorVsPmiStudyHallRoute
+  '/top-pm-simulator-vs-prepcast': typeof TopPmSimulatorVsPrepcastRoute
   '/tutorial-examen': typeof TutorialExamenRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
@@ -399,8 +401,6 @@ export interface FileRouteTypes {
     | '/partners'
     | '/perfil'
     | '/pmbok-8'
-    | '/pmtech-vs-pmi-study-hall'
-    | '/pmtech-vs-prepcast'
     | '/politica-de-cookies'
     | '/politica-de-privacidad'
     | '/practica'
@@ -411,6 +411,8 @@ export interface FileRouteTypes {
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/terminos-y-condiciones'
+    | '/top-pm-simulator-vs-pmi-study-hall'
+    | '/top-pm-simulator-vs-prepcast'
     | '/tutorial-examen'
     | '/admin/connectors'
     | '/admin/curriculum'
@@ -440,8 +442,6 @@ export interface FileRouteTypes {
     | '/partners'
     | '/perfil'
     | '/pmbok-8'
-    | '/pmtech-vs-pmi-study-hall'
-    | '/pmtech-vs-prepcast'
     | '/politica-de-cookies'
     | '/politica-de-privacidad'
     | '/practica'
@@ -452,6 +452,8 @@ export interface FileRouteTypes {
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/terminos-y-condiciones'
+    | '/top-pm-simulator-vs-pmi-study-hall'
+    | '/top-pm-simulator-vs-prepcast'
     | '/tutorial-examen'
     | '/admin/connectors'
     | '/admin/curriculum'
@@ -482,8 +484,6 @@ export interface FileRouteTypes {
     | '/partners'
     | '/perfil'
     | '/pmbok-8'
-    | '/pmtech-vs-pmi-study-hall'
-    | '/pmtech-vs-prepcast'
     | '/politica-de-cookies'
     | '/politica-de-privacidad'
     | '/practica'
@@ -494,6 +494,8 @@ export interface FileRouteTypes {
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/terminos-y-condiciones'
+    | '/top-pm-simulator-vs-pmi-study-hall'
+    | '/top-pm-simulator-vs-prepcast'
     | '/tutorial-examen'
     | '/admin/connectors'
     | '/admin/curriculum'
@@ -525,8 +527,6 @@ export interface RootRouteChildren {
   PartnersRoute: typeof PartnersRoute
   PerfilRoute: typeof PerfilRoute
   Pmbok8Route: typeof Pmbok8Route
-  PmtechVsPmiStudyHallRoute: typeof PmtechVsPmiStudyHallRoute
-  PmtechVsPrepcastRoute: typeof PmtechVsPrepcastRoute
   PoliticaDeCookiesRoute: typeof PoliticaDeCookiesRoute
   PoliticaDePrivacidadRoute: typeof PoliticaDePrivacidadRoute
   PracticaRoute: typeof PracticaRoute
@@ -537,6 +537,8 @@ export interface RootRouteChildren {
   SimuladorExamenPmpRoute: typeof SimuladorExamenPmpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TerminosYCondicionesRoute: typeof TerminosYCondicionesRoute
+  TopPmSimulatorVsPmiStudyHallRoute: typeof TopPmSimulatorVsPmiStudyHallRoute
+  TopPmSimulatorVsPrepcastRoute: typeof TopPmSimulatorVsPrepcastRoute
   TutorialExamenRoute: typeof TutorialExamenRoute
 }
 
@@ -675,20 +677,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Pmbok8RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pmtech-vs-pmi-study-hall': {
-      id: '/pmtech-vs-pmi-study-hall'
-      path: '/pmtech-vs-pmi-study-hall'
-      fullPath: '/pmtech-vs-pmi-study-hall'
-      preLoaderRoute: typeof PmtechVsPmiStudyHallRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pmtech-vs-prepcast': {
-      id: '/pmtech-vs-prepcast'
-      path: '/pmtech-vs-prepcast'
-      fullPath: '/pmtech-vs-prepcast'
-      preLoaderRoute: typeof PmtechVsPrepcastRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/politica-de-cookies': {
       id: '/politica-de-cookies'
       path: '/politica-de-cookies'
@@ -757,6 +745,20 @@ declare module '@tanstack/react-router' {
       path: '/terminos-y-condiciones'
       fullPath: '/terminos-y-condiciones'
       preLoaderRoute: typeof TerminosYCondicionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/top-pm-simulator-vs-pmi-study-hall': {
+      id: '/top-pm-simulator-vs-pmi-study-hall'
+      path: '/top-pm-simulator-vs-pmi-study-hall'
+      fullPath: '/top-pm-simulator-vs-pmi-study-hall'
+      preLoaderRoute: typeof TopPmSimulatorVsPmiStudyHallRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/top-pm-simulator-vs-prepcast': {
+      id: '/top-pm-simulator-vs-prepcast'
+      path: '/top-pm-simulator-vs-prepcast'
+      fullPath: '/top-pm-simulator-vs-prepcast'
+      preLoaderRoute: typeof TopPmSimulatorVsPrepcastRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tutorial-examen': {
@@ -869,8 +871,6 @@ const rootRouteChildren: RootRouteChildren = {
   PartnersRoute: PartnersRoute,
   PerfilRoute: PerfilRoute,
   Pmbok8Route: Pmbok8Route,
-  PmtechVsPmiStudyHallRoute: PmtechVsPmiStudyHallRoute,
-  PmtechVsPrepcastRoute: PmtechVsPrepcastRoute,
   PoliticaDeCookiesRoute: PoliticaDeCookiesRoute,
   PoliticaDePrivacidadRoute: PoliticaDePrivacidadRoute,
   PracticaRoute: PracticaRoute,
@@ -881,6 +881,8 @@ const rootRouteChildren: RootRouteChildren = {
   SimuladorExamenPmpRoute: SimuladorExamenPmpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TerminosYCondicionesRoute: TerminosYCondicionesRoute,
+  TopPmSimulatorVsPmiStudyHallRoute: TopPmSimulatorVsPmiStudyHallRoute,
+  TopPmSimulatorVsPrepcastRoute: TopPmSimulatorVsPrepcastRoute,
   TutorialExamenRoute: TutorialExamenRoute,
 }
 export const routeTree = rootRouteImport
