@@ -28,6 +28,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as Pmbok8RouteImport } from './routes/pmbok-8'
+import { Route as PmtechVsPmiStudyHallRouteImport } from './routes/pmtech-vs-pmi-study-hall'
 import { Route as PmtechVsPrepcastRouteImport } from './routes/pmtech-vs-prepcast'
 import { Route as PoliticaDeCookiesRouteImport } from './routes/politica-de-cookies'
 import { Route as PoliticaDePrivacidadRouteImport } from './routes/politica-de-privacidad'
@@ -144,6 +145,11 @@ const PerfilRoute = PerfilRouteImport.update({
 const Pmbok8Route = Pmbok8RouteImport.update({
   id: '/pmbok-8',
   path: '/pmbok-8',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PmtechVsPmiStudyHallRoute = PmtechVsPmiStudyHallRouteImport.update({
+  id: '/pmtech-vs-pmi-study-hall',
+  path: '/pmtech-vs-pmi-study-hall',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PmtechVsPrepcastRoute = PmtechVsPrepcastRouteImport.update({
@@ -279,6 +285,7 @@ export interface FileRoutesByFullPath {
   '/partners': typeof PartnersRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
+  '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
   '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
   '/politica-de-cookies': typeof PoliticaDeCookiesRoute
   '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
@@ -321,6 +328,7 @@ export interface FileRoutesByTo {
   '/partners': typeof PartnersRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
+  '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
   '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
   '/politica-de-cookies': typeof PoliticaDeCookiesRoute
   '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
@@ -365,6 +373,7 @@ export interface FileRoutesById {
   '/partners': typeof PartnersRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
+  '/pmtech-vs-pmi-study-hall': typeof PmtechVsPmiStudyHallRoute
   '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
   '/politica-de-cookies': typeof PoliticaDeCookiesRoute
   '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
@@ -410,6 +419,7 @@ export interface FileRouteTypes {
     | '/partners'
     | '/perfil'
     | '/pmbok-8'
+    | '/pmtech-vs-pmi-study-hall'
     | '/pmtech-vs-prepcast'
     | '/politica-de-cookies'
     | '/politica-de-privacidad'
@@ -452,6 +462,7 @@ export interface FileRouteTypes {
     | '/partners'
     | '/perfil'
     | '/pmbok-8'
+    | '/pmtech-vs-pmi-study-hall'
     | '/pmtech-vs-prepcast'
     | '/politica-de-cookies'
     | '/politica-de-privacidad'
@@ -495,6 +506,7 @@ export interface FileRouteTypes {
     | '/partners'
     | '/perfil'
     | '/pmbok-8'
+    | '/pmtech-vs-pmi-study-hall'
     | '/pmtech-vs-prepcast'
     | '/politica-de-cookies'
     | '/politica-de-privacidad'
@@ -539,6 +551,7 @@ export interface RootRouteChildren {
   PartnersRoute: typeof PartnersRoute
   PerfilRoute: typeof PerfilRoute
   Pmbok8Route: typeof Pmbok8Route
+  PmtechVsPmiStudyHallRoute: typeof PmtechVsPmiStudyHallRoute
   PmtechVsPrepcastRoute: typeof PmtechVsPrepcastRoute
   PoliticaDeCookiesRoute: typeof PoliticaDeCookiesRoute
   PoliticaDePrivacidadRoute: typeof PoliticaDePrivacidadRoute
@@ -688,6 +701,13 @@ declare module '@tanstack/react-router' {
       path: '/pmbok-8'
       fullPath: '/pmbok-8'
       preLoaderRoute: typeof Pmbok8RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pmtech-vs-pmi-study-hall': {
+      id: '/pmtech-vs-pmi-study-hall'
+      path: '/pmtech-vs-pmi-study-hall'
+      fullPath: '/pmtech-vs-pmi-study-hall'
+      preLoaderRoute: typeof PmtechVsPmiStudyHallRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pmtech-vs-prepcast': {
@@ -891,6 +911,7 @@ const rootRouteChildren: RootRouteChildren = {
   PartnersRoute: PartnersRoute,
   PerfilRoute: PerfilRoute,
   Pmbok8Route: Pmbok8Route,
+  PmtechVsPmiStudyHallRoute: PmtechVsPmiStudyHallRoute,
   PmtechVsPrepcastRoute: PmtechVsPrepcastRoute,
   PoliticaDeCookiesRoute: PoliticaDeCookiesRoute,
   PoliticaDePrivacidadRoute: PoliticaDePrivacidadRoute,
