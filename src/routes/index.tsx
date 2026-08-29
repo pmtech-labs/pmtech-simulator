@@ -776,7 +776,7 @@ function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex shrink-0 flex-col items-center gap-1 sm:items-start">
-            <BrandHorizontal className="h-11 w-auto" />
+            <BrandVertical className="h-20 w-auto sm:h-24" />
             <p className="text-xs text-muted-foreground">
               Preparación PMP® para España y LATAM · ECO 2026
             </p>
