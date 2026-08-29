@@ -18,7 +18,7 @@ export function BrandMark({
   tone?: BrandTone;
   className?: string;
 }) {
-  const base = "h-full w-full object-contain";
+  const base = "h-full w-auto object-contain";
   return (
     <span className={cn("inline-block shrink-0", className)}>
       {tone !== "onDark" && (
