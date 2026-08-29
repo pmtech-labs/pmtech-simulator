@@ -6,7 +6,7 @@ import { ChatbotWidget } from "@/components/support/ChatbotWidget";
 import { MarketingShell } from "@/components/landing/MarketingShell";
 import { FAQ_ALL, FAQ_BLOCKS } from "@/data/faq";
 
-const SITE_URL = "https://pmtech-simulator.lovable.app";
+const SITE_URL = "https://toppmsimulator.glacimonto.com";
 const PAGE_URL = `${SITE_URL}/faq`;
 
 export const Route = createFileRoute("/faq")({

@@ -6,7 +6,7 @@ import {
   type SeoFaq,
 } from "@/components/landing/SeoLandingPage";
 
-const URL = "https://pmtech-simulator.lovable.app/pmbok-8";
+const URL = "https://toppmsimulator.glacimonto.com/pmbok-8";
 const TITLE = "PMBOK 7 vs PMBOK 8: qué estudiar para el examen PMP";
 const DESCRIPTION =
   "Diferencias entre PMBOK 7 y PMBOK 8, qué papel juega el ECO en el examen PMP y qué material conviene estudiar realmente para aprobar en 2026.";

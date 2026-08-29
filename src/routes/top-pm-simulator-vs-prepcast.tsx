@@ -6,7 +6,7 @@ import {
   type SeoFaq,
 } from "@/components/landing/SeoLandingPage";
 
-const URL = "https://pmtech-simulator.lovable.app/pmtech-vs-prepcast";
+const URL = "https://toppmsimulator.glacimonto.com/top-pm-simulator-vs-prepcast";
 const TITLE = "Top PM Simulator vs PrepCast: comparativa en español 2026";
 const DESCRIPTION =
   "Top PM Simulator frente al PM Exam Simulator de PrepCast: idioma, banco de preguntas, informes, diagnóstico de errores y qué opción encaja mejor con tu preparación PMP.";
@@ -34,7 +34,7 @@ const FAQS: SeoFaq[] = [
   },
 ];
 
-export const Route = createFileRoute("/pmtech-vs-prepcast")({
+export const Route = createFileRoute("/top-pm-simulator-vs-prepcast")({
   head: () => ({
     meta: [
       { property: "og:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
@@ -197,7 +197,7 @@ function Page() {
       faqs={FAQS}
       related={[
         {
-          to: "/pmtech-vs-pmi-study-hall",
+          to: "/top-pm-simulator-vs-pmi-study-hall",
           label: "Top PM Simulator vs PMI Study Hall",
           description: "Comparativa con el simulador oficial del PMI.",
         },
