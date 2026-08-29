@@ -303,7 +303,7 @@ function ProfilePage() {
                       <sup className="ml-0.5 text-base font-bold text-accent-foreground">*</sup>
                     ) : null}
                   </p>
-                  <ul className="mt-4 space-y-2">
+                  <ul className="mt-4 flex-1 space-y-2">
                     {p.features.map((f) => (
                       <li
                         key={f.label}
@@ -343,7 +343,10 @@ function ProfilePage() {
               );
             })}
           </div>
-          <p className="mt-4 rounded-lg border border-border bg-muted/60 p-3 text-xs leading-relaxed text-muted-foreground">
+          <p className="mt-3 text-xs text-muted-foreground">
+            * Precio de lanzamiento. Precios en EUR, impuestos no incluidos.
+          </p>
+          <p className="mt-3 rounded-lg border border-border bg-muted/60 p-3 text-xs leading-relaxed text-muted-foreground">
             El cobro online todavía no está activo: al continuar verás el resumen del plan y cómo
             activar tu licencia con nuestro equipo.
           </p>
