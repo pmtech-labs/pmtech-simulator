@@ -426,7 +426,7 @@ function ProblemSolution() {
             <figure className="group overflow-hidden rounded-3xl border border-border shadow-panel">
               <img
                 src={diagnosticAbstract}
-                alt="Representación del árbol de decisión del razonamiento PMP con la ruta correcta destacada"
+                alt="Panel Mi progreso del simulador: dominio por área ECO, evolución del nivel de preparación y dominio por tarea ECO"
                 loading="lazy"
                 width={1200}
                 height={912}
