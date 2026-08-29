@@ -121,15 +121,8 @@ function SidebarInner({
   const { data: user } = useCurrentUser();
   return (
     <div className="flex h-full flex-col gap-6 bg-sidebar p-4">
-      <div className="flex items-center gap-2.5 px-1">
-        <BrandMark tone="onDark" className="h-9 w-auto" />
-
-        <div className="min-w-0">
-          <p className="truncate font-display text-sm font-semibold text-sidebar-accent-foreground">
-            Top PM Simulator
-          </p>
-          <p className="truncate text-[11px] text-sidebar-foreground/60">por Glacimonto</p>
-        </div>
+      <div className="flex items-center px-1">
+        <BrandHorizontal tone="onDark" className="h-9 w-auto" />
       </div>
 
 
