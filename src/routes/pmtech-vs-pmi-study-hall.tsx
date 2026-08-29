@@ -37,6 +37,8 @@ const FAQS: SeoFaq[] = [
 export const Route = createFileRoute("/pmtech-vs-pmi-study-hall")({
   head: () => ({
     meta: [
+      { property: "og:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
+      { name: "twitter:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
