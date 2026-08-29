@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-import bearLogo from "@/assets/glacimonto-bear.png.asset.json";
+import { BrandMark } from "@/components/BrandLogo";
 import { useCurrentUser } from "@/hooks/useCandidateData";
 import { signOutCandidate } from "@/services/authService";
 import { clearExamProgress, describeProgress, loadExamProgress } from "@/lib/examResume";
