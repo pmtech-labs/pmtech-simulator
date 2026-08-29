@@ -6,7 +6,7 @@ import {
   type SeoFaq,
 } from "@/components/landing/SeoLandingPage";
 
-const URL = "https://pmtech-simulator.lovable.app/examen-pmp";
+const URL = "https://toppmsimulator.glacimonto.com/examen-pmp";
 const TITLE = "Examen PMP: duración, preguntas y nota de corte 2026";
 const DESCRIPTION =
   "Cómo es el examen PMP por dentro: 180 preguntas, 240 minutos, tres secciones con descansos, tipos de pregunta y cuál es la nota de corte real del PMI.";

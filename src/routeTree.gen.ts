@@ -40,6 +40,8 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SimuladorExamenPmpRouteImport } from './routes/simulador-examen-pmp'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TerminosYCondicionesRouteImport } from './routes/terminos-y-condiciones'
+import { Route as TopPmSimulatorVsPmiStudyHallRouteImport } from './routes/top-pm-simulator-vs-pmi-study-hall'
+import { Route as TopPmSimulatorVsPrepcastRouteImport } from './routes/top-pm-simulator-vs-prepcast'
 import { Route as TutorialExamenRouteImport } from './routes/tutorial-examen'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminConnectorsRouteImport } from './routes/admin.connectors'
@@ -205,6 +207,18 @@ const TerminosYCondicionesRoute = TerminosYCondicionesRouteImport.update({
   path: '/terminos-y-condiciones',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TopPmSimulatorVsPmiStudyHallRoute =
+  TopPmSimulatorVsPmiStudyHallRouteImport.update({
+    id: '/top-pm-simulator-vs-pmi-study-hall',
+    path: '/top-pm-simulator-vs-pmi-study-hall',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TopPmSimulatorVsPrepcastRoute =
+  TopPmSimulatorVsPrepcastRouteImport.update({
+    id: '/top-pm-simulator-vs-prepcast',
+    path: '/top-pm-simulator-vs-prepcast',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const TutorialExamenRoute = TutorialExamenRouteImport.update({
   id: '/tutorial-examen',
   path: '/tutorial-examen',
@@ -283,6 +297,8 @@ export interface FileRoutesByFullPath {
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
+  '/top-pm-simulator-vs-pmi-study-hall': typeof TopPmSimulatorVsPmiStudyHallRoute
+  '/top-pm-simulator-vs-prepcast': typeof TopPmSimulatorVsPrepcastRoute
   '/tutorial-examen': typeof TutorialExamenRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
@@ -324,6 +340,8 @@ export interface FileRoutesByTo {
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
+  '/top-pm-simulator-vs-pmi-study-hall': typeof TopPmSimulatorVsPmiStudyHallRoute
+  '/top-pm-simulator-vs-prepcast': typeof TopPmSimulatorVsPrepcastRoute
   '/tutorial-examen': typeof TutorialExamenRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
@@ -367,6 +385,8 @@ export interface FileRoutesById {
   '/simulador-examen-pmp': typeof SimuladorExamenPmpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
+  '/top-pm-simulator-vs-pmi-study-hall': typeof TopPmSimulatorVsPmiStudyHallRoute
+  '/top-pm-simulator-vs-prepcast': typeof TopPmSimulatorVsPrepcastRoute
   '/tutorial-examen': typeof TutorialExamenRoute
   '/admin/connectors': typeof AdminConnectorsRoute
   '/admin/curriculum': typeof AdminCurriculumRoute
@@ -411,6 +431,8 @@ export interface FileRouteTypes {
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/terminos-y-condiciones'
+    | '/top-pm-simulator-vs-pmi-study-hall'
+    | '/top-pm-simulator-vs-prepcast'
     | '/tutorial-examen'
     | '/admin/connectors'
     | '/admin/curriculum'
@@ -452,6 +474,8 @@ export interface FileRouteTypes {
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/terminos-y-condiciones'
+    | '/top-pm-simulator-vs-pmi-study-hall'
+    | '/top-pm-simulator-vs-prepcast'
     | '/tutorial-examen'
     | '/admin/connectors'
     | '/admin/curriculum'
@@ -494,6 +518,8 @@ export interface FileRouteTypes {
     | '/simulador-examen-pmp'
     | '/sitemap.xml'
     | '/terminos-y-condiciones'
+    | '/top-pm-simulator-vs-pmi-study-hall'
+    | '/top-pm-simulator-vs-prepcast'
     | '/tutorial-examen'
     | '/admin/connectors'
     | '/admin/curriculum'
@@ -537,6 +563,8 @@ export interface RootRouteChildren {
   SimuladorExamenPmpRoute: typeof SimuladorExamenPmpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TerminosYCondicionesRoute: typeof TerminosYCondicionesRoute
+  TopPmSimulatorVsPmiStudyHallRoute: typeof TopPmSimulatorVsPmiStudyHallRoute
+  TopPmSimulatorVsPrepcastRoute: typeof TopPmSimulatorVsPrepcastRoute
   TutorialExamenRoute: typeof TutorialExamenRoute
 }
 
@@ -759,6 +787,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TerminosYCondicionesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/top-pm-simulator-vs-pmi-study-hall': {
+      id: '/top-pm-simulator-vs-pmi-study-hall'
+      path: '/top-pm-simulator-vs-pmi-study-hall'
+      fullPath: '/top-pm-simulator-vs-pmi-study-hall'
+      preLoaderRoute: typeof TopPmSimulatorVsPmiStudyHallRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/top-pm-simulator-vs-prepcast': {
+      id: '/top-pm-simulator-vs-prepcast'
+      path: '/top-pm-simulator-vs-prepcast'
+      fullPath: '/top-pm-simulator-vs-prepcast'
+      preLoaderRoute: typeof TopPmSimulatorVsPrepcastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tutorial-examen': {
       id: '/tutorial-examen'
       path: '/tutorial-examen'
@@ -881,6 +923,8 @@ const rootRouteChildren: RootRouteChildren = {
   SimuladorExamenPmpRoute: SimuladorExamenPmpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TerminosYCondicionesRoute: TerminosYCondicionesRoute,
+  TopPmSimulatorVsPmiStudyHallRoute: TopPmSimulatorVsPmiStudyHallRoute,
+  TopPmSimulatorVsPrepcastRoute: TopPmSimulatorVsPrepcastRoute,
   TutorialExamenRoute: TutorialExamenRoute,
 }
 export const routeTree = rootRouteImport

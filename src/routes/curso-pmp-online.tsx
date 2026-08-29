@@ -6,7 +6,7 @@ import {
   type SeoFaq,
 } from "@/components/landing/SeoLandingPage";
 
-const URL = "https://pmtech-simulator.lovable.app/curso-pmp-online";
+const URL = "https://toppmsimulator.glacimonto.com/curso-pmp-online";
 const TITLE = "Curso PMP online en español · 35 horas para el PMI";
 const DESCRIPTION =
   "Curso PMP online en español de 35 horas de contacto que cubre el requisito del PMI, alineado al ECO 2026, con simulador incluido y diagnóstico de errores.";
@@ -66,7 +66,7 @@ export const Route = createFileRoute("/curso-pmp-online")({
               provider: {
                 "@type": "Organization",
                 name: "Top PM Simulator",
-                url: "https://pmtech-simulator.lovable.app",
+                url: "https://toppmsimulator.glacimonto.com",
               },
             },
             {
@@ -84,7 +84,7 @@ export const Route = createFileRoute("/curso-pmp-online")({
                   "@type": "ListItem",
                   position: 1,
                   name: "Inicio",
-                  item: "https://pmtech-simulator.lovable.app",
+                  item: "https://toppmsimulator.glacimonto.com",
                 },
                 { "@type": "ListItem", position: 2, name: "Curso PMP online", item: URL },
               ],

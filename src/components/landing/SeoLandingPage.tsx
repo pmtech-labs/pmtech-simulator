@@ -272,7 +272,7 @@ export function buildSeoLandingJsonLd({
             "@type": "ListItem",
             position: 1,
             name: "Inicio",
-            item: "https://pmtech-simulator.lovable.app",
+            item: "https://toppmsimulator.glacimonto.com",
           },
           { "@type": "ListItem", position: 2, name: breadcrumbName, item: url },
         ],

@@ -37,8 +37,8 @@ const GROUPS: NavGroup[] = [
   {
     label: "Comparativas",
     items: [
-      { label: "vs PMI Study Hall", to: "/pmtech-vs-pmi-study-hall" },
-      { label: "vs PrepCast", to: "/pmtech-vs-prepcast" },
+      { label: "vs PMI Study Hall", to: "/top-pm-simulator-vs-pmi-study-hall" },
+      { label: "vs PrepCast", to: "/top-pm-simulator-vs-prepcast" },
     ],
   },
   {

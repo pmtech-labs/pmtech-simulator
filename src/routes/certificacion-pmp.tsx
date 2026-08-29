@@ -6,7 +6,7 @@ import {
   type SeoFaq,
 } from "@/components/landing/SeoLandingPage";
 
-const URL = "https://pmtech-simulator.lovable.app/certificacion-pmp";
+const URL = "https://toppmsimulator.glacimonto.com/certificacion-pmp";
 const TITLE = "Certificación PMP 2026: guía completa en español";
 const DESCRIPTION =
   "Qué es la certificación PMP, requisitos, precio, temario del ECO 2026 y cómo prepararla en español paso a paso, con simulacros y diagnóstico de errores.";

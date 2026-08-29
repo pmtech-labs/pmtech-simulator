@@ -6,7 +6,7 @@ import {
   type SeoFaq,
 } from "@/components/landing/SeoLandingPage";
 
-const URL = "https://pmtech-simulator.lovable.app/requisitos-pmp";
+const URL = "https://toppmsimulator.glacimonto.com/requisitos-pmp";
 const TITLE = "Requisitos PMP y precio del examen en 2026";
 const DESCRIPTION =
   "Requisitos de experiencia y formación para el PMP, cómo rellenar la solicitud, qué pasa si te auditan y cuánto cuesta el examen en euros y dólares.";

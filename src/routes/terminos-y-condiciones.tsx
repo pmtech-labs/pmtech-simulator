@@ -3,7 +3,7 @@ import { FileText } from "lucide-react";
 
 import { MarketingShell } from "@/components/landing/MarketingShell";
 
-const SITE_URL = "https://pmtech-simulator.lovable.app";
+const SITE_URL = "https://toppmsimulator.glacimonto.com";
 const PAGE_URL = `${SITE_URL}/terminos-y-condiciones`;
 
 export const Route = createFileRoute("/terminos-y-condiciones")({

@@ -6,7 +6,7 @@ import {
   type SeoFaq,
 } from "@/components/landing/SeoLandingPage";
 
-const URL = "https://pmtech-simulator.lovable.app/simulador-examen-pmp";
+const URL = "https://toppmsimulator.glacimonto.com/simulador-examen-pmp";
 const TITLE = "Simulador de examen PMP en español · Preguntas ECO 2026";
 const DESCRIPTION =
   "Simulador PMP en español con preguntas situacionales tipo examen, simulacro completo de 180 preguntas, diagnóstico por tipo de error y mastery por tarea del ECO.";
