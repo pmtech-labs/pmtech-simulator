@@ -93,7 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "theme-color", content: "#0F172A" },
+      { name: "theme-color", content: "#004aac" },
       { name: "application-name", content: "Top PM Simulator" },
       { name: "apple-mobile-web-app-title", content: "Top PM Simulator" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
