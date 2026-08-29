@@ -71,7 +71,7 @@ function LoginPage() {
           <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary">
             <GraduationCap className="h-5 w-5 text-primary-foreground" />
           </div>
-          <span className="font-display text-base font-semibold">PMTech Simulator</span>
+          <span className="font-display text-base font-semibold">Top PM Simulator</span>
         </Link>
 
         <div className="rounded-2xl border border-border bg-card p-6">

@@ -127,7 +127,7 @@ function SidebarInner({
         </div>
         <div className="min-w-0">
           <p className="truncate font-display text-sm font-semibold text-sidebar-accent-foreground">
-            PMTech Simulator
+            Top PM Simulator
           </p>
           <p className="truncate text-[11px] text-sidebar-foreground/60">ECO 2026 · PMBOK 8</p>
         </div>
@@ -319,7 +319,7 @@ export function AppShell({
           <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">{children}</main>
 
           <footer className="border-t border-border px-4 py-4 text-[11px] leading-relaxed text-muted-foreground sm:px-6 lg:px-8">
-            PMTech Simulator es un producto independiente. No está afiliado, avalado ni patrocinado
+            Top PM Simulator es un producto independiente. No está afiliado, avalado ni patrocinado
             por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas registradas del PMI.
           </footer>
         </div>

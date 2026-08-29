@@ -262,8 +262,8 @@ export function buildSeoLandingJsonLd({
         description,
         inLanguage: "es",
         mainEntityOfPage: url,
-        author: { "@type": "Organization", name: "PMTech Simulator" },
-        publisher: { "@type": "Organization", name: "PMTech Simulator" },
+        author: { "@type": "Organization", name: "Top PM Simulator" },
+        publisher: { "@type": "Organization", name: "Top PM Simulator" },
       },
       {
         "@type": "BreadcrumbList",

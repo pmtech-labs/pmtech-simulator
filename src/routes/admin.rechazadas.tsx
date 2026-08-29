@@ -24,7 +24,7 @@ export const Route = createFileRoute("/admin/rechazadas")({
   component: RejectedPage,
   head: () => ({
     meta: [
-      { title: "Preguntas rechazadas y retiradas | Admin PMTech" },
+      { title: "Preguntas rechazadas y retiradas | Admin Top PM Simulator" },
       {
         name: "description",
         content:

@@ -7,13 +7,13 @@ import { RequireAuth } from "@/components/auth/RequireAuth";
 export const Route = createFileRoute("/instrucciones")({
   head: () => ({
     meta: [
-      { title: "Instrucciones de uso · PMTech Simulator PMP" },
+      { title: "Instrucciones de uso · Top PM Simulator PMP" },
       {
         name: "description",
         content:
-          "Cómo aprovechar el simulador PMP de PMTech: plan de estudio recomendado, uso del contenido de tu licencia y cómo reportar problemas en una pregunta.",
+          "Cómo aprovechar el simulador PMP de Top PM Simulator: plan de estudio recomendado, uso del contenido de tu licencia y cómo reportar problemas en una pregunta.",
       },
-      { property: "og:title", content: "Instrucciones de uso · PMTech Simulator" },
+      { property: "og:title", content: "Instrucciones de uso · Top PM Simulator" },
       {
         property: "og:description",
         content: "Plan de estudio recomendado y normas de uso del simulador PMP calibrado al ECO 2026.",
@@ -40,7 +40,7 @@ function InstructionsPage() {
         <section className="rounded-2xl border border-border bg-card p-6">
           <div className="flex items-center gap-2">
             <BookOpen className="h-4 w-4 text-muted-foreground" />
-            <h2 className="font-display text-xl font-bold">Bienvenido a PMTech Simulator</h2>
+            <h2 className="font-display text-xl font-bold">Bienvenido a Top PM Simulator</h2>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
             Aquí vas a practicar con preguntas situacionales en español para preparar tu examen
@@ -51,7 +51,7 @@ function InstructionsPage() {
           <ol className="mt-3 space-y-3 text-sm leading-relaxed">
             {[
               "Lee la Guía del PMBOK® (8ª edición) y la guía práctica ágil de PMI.",
-              "Recorre tu Ruta de Aprendizaje PMTech, lección a lección, practicando cada una.",
+              "Recorre tu Ruta de Aprendizaje Top PM Simulator, lección a lección, practicando cada una.",
               "Resuelve exámenes por dominio (Personas / Proceso / Entorno de Negocio) para reforzar tus puntos débiles según tu diagnóstico de errores.",
               "Haz un simulacro completo en condiciones reales (180 preguntas, 240 minutos, 3 secciones) para acostumbrarte al formato real del examen.",
               "Repite práctica dirigida a los tipos de error que más se repiten en tu historial.",

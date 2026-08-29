@@ -9,16 +9,16 @@ const PAGE_URL = `${SITE_URL}/politica-de-cookies`;
 export const Route = createFileRoute("/politica-de-cookies")({
   head: () => ({
     meta: [
-      { title: "Política de cookies — PMTech Simulator" },
+      { title: "Política de cookies — Top PM Simulator" },
       {
         name: "description",
         content:
-          "Información sobre las cookies y tecnologías similares que usamos en PMTech Simulator: tipos, finalidad y cómo gestionarlas.",
+          "Información sobre las cookies y tecnologías similares que usamos en Top PM Simulator: tipos, finalidad y cómo gestionarlas.",
       },
-      { property: "og:title", content: "Política de cookies — PMTech Simulator" },
+      { property: "og:title", content: "Política de cookies — Top PM Simulator" },
       {
         property: "og:description",
-        content: "Qué cookies usamos en PMTech Simulator y cómo gestionar tus preferencias.",
+        content: "Qué cookies usamos en Top PM Simulator y cómo gestionar tus preferencias.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: PAGE_URL },

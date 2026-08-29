@@ -9,16 +9,16 @@ const PAGE_URL = `${SITE_URL}/terminos-y-condiciones`;
 export const Route = createFileRoute("/terminos-y-condiciones")({
   head: () => ({
     meta: [
-      { title: "Términos y condiciones — PMTech Simulator" },
+      { title: "Términos y condiciones — Top PM Simulator" },
       {
         name: "description",
         content:
-          "Condiciones de uso, registro, planes, pagos y responsabilidades de PMTech Simulator. Lee estas condiciones antes de usar el servicio.",
+          "Condiciones de uso, registro, planes, pagos y responsabilidades de Top PM Simulator. Lee estas condiciones antes de usar el servicio.",
       },
-      { property: "og:title", content: "Términos y condiciones — PMTech Simulator" },
+      { property: "og:title", content: "Términos y condiciones — Top PM Simulator" },
       {
         property: "og:description",
-        content: "Condiciones generales de uso de PMTech Simulator.",
+        content: "Condiciones generales de uso de Top PM Simulator.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: PAGE_URL },
@@ -43,7 +43,7 @@ function TerminosPage() {
             Términos y condiciones de uso
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
-            Al registrarte y usar PMTech Simulator aceptas estas condiciones. Léelas con atención.
+            Al registrarte y usar Top PM Simulator aceptas estas condiciones. Léelas con atención.
           </p>
         </div>
 
@@ -51,7 +51,7 @@ function TerminosPage() {
           <section>
             <h2 className="font-display text-lg font-semibold text-foreground">1. Aceptación de las condiciones</h2>
             <p className="mt-3">
-              El acceso y uso de PMTech Simulator implica la aceptación expresa de los presentes términos y
+              El acceso y uso de Top PM Simulator implica la aceptación expresa de los presentes términos y
               condiciones, así como de nuestra Política de privacidad y Política de cookies. Si no estás de acuerdo, te
               rogamos que no uses el servicio.
             </p>
@@ -70,7 +70,7 @@ function TerminosPage() {
           <section>
             <h2 className="font-display text-lg font-semibold text-foreground">3. Descripción del servicio</h2>
             <p className="mt-3">
-              PMTech Simulator ofrece un simulador de preguntas, rutas de aprendizaje, analítica de progreso y,
+              Top PM Simulator ofrece un simulador de preguntas, rutas de aprendizaje, analítica de progreso y,
               opcionalmente, formación orientada a la preparación del examen PMP®. El contenido, resultados y
               recomendaciones tienen carácter formativo y orientativo; no sustituyen la preparación oficial ni
               garantizan la aprobación del examen.
@@ -110,7 +110,7 @@ function TerminosPage() {
             </p>
             <p className="mt-3">
               <strong className="text-foreground">Glacimonto</strong> y{" "}
-              <strong className="text-foreground">PMTech Simulator</strong> son marcas registradas de
+              <strong className="text-foreground">Top PM Simulator</strong> son marcas registradas de
               [NOMBRE COMPLETO DE LA EMPRESA]. PMP® y PMBOK® son marcas registradas del Project Management
               Institute (PMI)®, sin relación de afiliación ni patrocinio con esta plataforma.
             </p>

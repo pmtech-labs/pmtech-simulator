@@ -9,16 +9,16 @@ const PAGE_URL = `${SITE_URL}/politica-de-privacidad`;
 export const Route = createFileRoute("/politica-de-privacidad")({
   head: () => ({
     meta: [
-      { title: "Política de privacidad — PMTech Simulator" },
+      { title: "Política de privacidad — Top PM Simulator" },
       {
         name: "description",
         content:
-          "Cómo tratamos tus datos personales en PMTech Simulator: finalidad, legitimación, plazos de conservación, derechos y contacto del responsable.",
+          "Cómo tratamos tus datos personales en Top PM Simulator: finalidad, legitimación, plazos de conservación, derechos y contacto del responsable.",
       },
-      { property: "og:title", content: "Política de privacidad — PMTech Simulator" },
+      { property: "og:title", content: "Política de privacidad — Top PM Simulator" },
       {
         property: "og:description",
-        content: "Tratamiento de datos personales, derechos y protección de la privacidad en PMTech Simulator.",
+        content: "Tratamiento de datos personales, derechos y protección de la privacidad en Top PM Simulator.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: PAGE_URL },
@@ -52,7 +52,7 @@ function PrivacidadPage() {
           <section>
             <h2 className="font-display text-lg font-semibold text-foreground">1. Responsable del tratamiento</h2>
             <p className="mt-3">
-              El responsable del tratamiento de los datos personales recogidos a través de PMTech Simulator es:
+              El responsable del tratamiento de los datos personales recogidos a través de Top PM Simulator es:
             </p>
             <ul className="mt-3 list-disc space-y-1 pl-5">
               <li>

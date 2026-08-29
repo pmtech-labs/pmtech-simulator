@@ -22,9 +22,9 @@ export const Route = createFileRoute("/tutorial-examen")({
       {
         name: "description",
         content:
-          "Cronómetro, secciones con descansos, preguntas marcadas para revisión y entrega: así funciona el simulacro PMP de PMTech antes de empezar.",
+          "Cronómetro, secciones con descansos, preguntas marcadas para revisión y entrega: así funciona el simulacro PMP de Top PM Simulator antes de empezar.",
       },
-      { property: "og:title", content: "Tutorial de examen · PMTech Simulator" },
+      { property: "og:title", content: "Tutorial de examen · Top PM Simulator" },
       {
         property: "og:description",
         content: "Cómo funciona el simulacro: cronómetro, secciones, marcado y entrega.",

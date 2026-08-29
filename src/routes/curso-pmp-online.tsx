@@ -63,7 +63,7 @@ export const Route = createFileRoute("/curso-pmp-online")({
               url: URL,
               provider: {
                 "@type": "Organization",
-                name: "PMTech Simulator",
+                name: "Top PM Simulator",
                 url: "https://pmtech-simulator.lovable.app",
               },
             },

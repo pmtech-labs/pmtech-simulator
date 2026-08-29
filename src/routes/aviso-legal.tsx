@@ -9,16 +9,16 @@ const PAGE_URL = `${SITE_URL}/aviso-legal`;
 export const Route = createFileRoute("/aviso-legal")({
   head: () => ({
     meta: [
-      { title: "Aviso legal — PMTech Simulator" },
+      { title: "Aviso legal — Top PM Simulator" },
       {
         name: "description",
         content:
-          "Información legal sobre el titular de PMTech Simulator, datos de contacto, propiedad intelectual y legislación aplicable.",
+          "Información legal sobre el titular de Top PM Simulator, datos de contacto, propiedad intelectual y legislación aplicable.",
       },
-      { property: "og:title", content: "Aviso legal — PMTech Simulator" },
+      { property: "og:title", content: "Aviso legal — Top PM Simulator" },
       {
         property: "og:description",
-        content: "Información legal y datos del titular de PMTech Simulator.",
+        content: "Información legal y datos del titular de Top PM Simulator.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: PAGE_URL },
@@ -51,7 +51,7 @@ function AvisoLegalPage() {
           <section>
             <h2 className="font-display text-lg font-semibold text-foreground">1. Titular del sitio</h2>
             <p className="mt-3">
-              El presente sitio web, PMTech Simulator, es titularidad de:
+              El presente sitio web, Top PM Simulator, es titularidad de:
             </p>
             <ul className="mt-3 list-disc space-y-1 pl-5">
               <li>
@@ -81,7 +81,7 @@ function AvisoLegalPage() {
           <section>
             <h2 className="font-display text-lg font-semibold text-foreground">2. Objeto del sitio</h2>
             <p className="mt-3">
-              PMTech Simulator es una plataforma de preparación para el examen de certificación PMP® basada en el
+              Top PM Simulator es una plataforma de preparación para el examen de certificación PMP® basada en el
               ECO 2026 y PMBOK® 8. No está afiliada, avalada ni patrocinada por el Project Management Institute
               (PMI)®. PMP® y PMBOK® son marcas registradas de PMI.
             </p>
@@ -97,7 +97,7 @@ function AvisoLegalPage() {
             </p>
             <p className="mt-3">
               <strong className="text-foreground">Glacimonto</strong> y{" "}
-              <strong className="text-foreground">PMTech Simulator</strong> son marcas registradas de
+              <strong className="text-foreground">Top PM Simulator</strong> son marcas registradas de
               [NOMBRE COMPLETO DE LA EMPRESA]. Su uso no autorizado por parte de terceros queda expresamente
               prohibido.
             </p>

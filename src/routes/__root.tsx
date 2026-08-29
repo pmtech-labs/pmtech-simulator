@@ -79,14 +79,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Simulador PMP ECO 2026 · PMTech" },
+      { title: "Simulador PMP ECO 2026 · Top PM Simulator" },
       {
         name: "description",
         content:
           "Simulador de examen PMP calibrado al ECO 2026: casos, practicum y analítica por tarea en español.",
       },
-      { name: "author", content: "PMTech Labs" },
-      { property: "og:title", content: "Simulador PMP ECO 2026 · PMTech" },
+      { name: "author", content: "Glacimonto" },
+      { property: "og:title", content: "Simulador PMP ECO 2026 · Top PM Simulator" },
       {
         property: "og:description",
         content: "Simulaciones PMP con clusters de caso e ítems interactivos, en español.",

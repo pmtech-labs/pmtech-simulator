@@ -21,7 +21,7 @@ export function LandingHeader({ onHome = false }: { onHome?: boolean }) {
           </div>
           <div className="shrink-0 min-w-fit w-max">
             <p className="whitespace-nowrap font-display text-sm font-semibold leading-tight">
-              PMTech Simulator
+              Top PM Simulator
             </p>
             <p className="whitespace-nowrap text-[11px] leading-tight text-muted-foreground">
               ECO 2026 · PMBOK 8

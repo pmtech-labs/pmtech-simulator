@@ -1158,7 +1158,7 @@ function Results({
               </p>
               <p className="mt-3 rounded-lg border border-border bg-card p-3 text-xs leading-relaxed text-muted-foreground">
                 {summary.capstoneDiploma.disclaimer ||
-                  "PMI no publica una nota de corte oficial para el examen PMP. Este diploma reconoce tu progreso según un criterio de referencia propio de PMTech Simulator, no una nota de aprobado oficial de PMI."}
+                  "PMI no publica una nota de corte oficial para el examen PMP. Este diploma reconoce tu progreso según un criterio de referencia propio de Top PM Simulator, no una nota de aprobado oficial de PMI."}
               </p>
               <Link
                 to="/perfil"
@@ -1183,7 +1183,7 @@ function Results({
               </p>
               <p className="mt-3 rounded-lg border border-border bg-card p-3 text-xs leading-relaxed text-muted-foreground">
                 {summary.diploma.disclaimer ||
-                  "PMI no publica una nota de corte oficial para el examen PMP. Este diploma reconoce tu desempeño según un criterio de referencia propio de PMTech Simulator, no una nota de aprobado oficial de PMI."}
+                  "PMI no publica una nota de corte oficial para el examen PMP. Este diploma reconoce tu desempeño según un criterio de referencia propio de Top PM Simulator, no una nota de aprobado oficial de PMI."}
               </p>
               <Link
                 to="/perfil"
