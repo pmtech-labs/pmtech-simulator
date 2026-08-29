@@ -18,7 +18,7 @@ export function BrandMark({
   tone?: BrandTone;
   className?: string;
 }) {
-  const base = "h-full w-full object-contain";
+  const base = "h-full w-auto object-contain";
   return (
     <span className={cn("inline-block shrink-0", className)}>
       {tone !== "onDark" && (
@@ -56,7 +56,7 @@ export function BrandLockup({
   subtitle?: string | null;
   className?: string;
 }) {
-  const markSize = size === "sm" ? "h-7 w-7" : size === "lg" ? "h-11 w-11" : "h-9 w-9";
+  const markSize = size === "sm" ? "h-7 w-auto" : size === "lg" ? "h-11 w-auto" : "h-9 w-auto";
   const titleSize = size === "lg" ? "text-base" : "text-sm";
   const muted =
     tone === "onDark" ? "text-hero-muted/80" : "text-muted-foreground";
@@ -64,10 +64,10 @@ export function BrandLockup({
   return (
     <span className={cn("flex items-center gap-2.5", className)}>
       <BrandMark tone={tone} className={markSize} />
-      <span className="min-w-0">
+      <span className="min-w-fit">
         <span
           className={cn(
-            "block truncate font-display font-semibold leading-tight",
+            "block whitespace-nowrap font-display font-semibold leading-tight",
             titleSize,
             tone === "onDark" && "text-hero-foreground",
           )}
@@ -75,7 +75,7 @@ export function BrandLockup({
           Top PM Simulator
         </span>
         {subtitle && (
-          <span className={cn("block truncate text-[11px] leading-tight", muted)}>
+          <span className={cn("block whitespace-nowrap text-[11px] leading-tight", muted)}>
             {subtitle}
           </span>
         )}

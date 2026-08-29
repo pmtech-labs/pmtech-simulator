@@ -775,7 +775,7 @@ function Footer() {
     <footer className="border-t border-border">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex flex-col items-center gap-1 sm:items-start">
+          <div className="flex shrink-0 flex-col items-center gap-1 sm:items-start">
             <BrandLockup size="lg" subtitle="Un producto de Glacimonto" />
             <p className="text-xs text-muted-foreground">
               Preparación PMP® para España y LATAM · ECO 2026
