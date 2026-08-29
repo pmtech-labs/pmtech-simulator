@@ -2,6 +2,40 @@ import { cn } from "@/lib/utils";
 
 import markColor from "@/assets/brand-mark-color.png.asset.json";
 import markWhite from "@/assets/brand-mark-white.png.asset.json";
+import horizontalColor from "@/assets/brand-horizontal-color.png.asset.json";
+import horizontalWhite from "@/assets/brand-horizontal-white.png.asset.json";
+
+/**
+ * Logo horizontal completo (oso + GLACIMONTO + TOP PM SIMULATOR).
+ * Sustituye al bloque de marca con textos: no requiere copy adicional.
+ */
+export function BrandHorizontal({
+  tone = "auto",
+  className,
+}: {
+  tone?: BrandTone;
+  className?: string;
+}) {
+  const base = "h-full w-auto object-contain";
+  return (
+    <span className={cn("inline-block shrink-0", className)}>
+      {tone !== "onDark" && (
+        <img
+          src={horizontalColor.url}
+          alt="Top PM Simulator, por Glacimonto"
+          className={cn(base, tone === "auto" && "dark:hidden")}
+        />
+      )}
+      {tone !== "onLight" && (
+        <img
+          src={horizontalWhite.url}
+          alt="Top PM Simulator, por Glacimonto"
+          className={cn(base, tone === "auto" && "hidden dark:block")}
+        />
+      )}
+    </span>
+  );
+}
 
 export type BrandTone = "auto" | "onDark" | "onLight";
 
