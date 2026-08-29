@@ -26,6 +26,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import bearLogo from "@/assets/glacimonto-bear.png.asset.json";
 import { AuthNavStatus } from "@/components/AuthNavStatus";
 import { TryFreeButton } from "@/components/TryFreeButton";
 import { AboutUs } from "@/components/landing/AboutUs";

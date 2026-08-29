@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { CheckCircle2, GraduationCap, Loader2, UserPlus } from "lucide-react";
+import { CheckCircle2, Loader2, UserPlus } from "lucide-react";
 import { useState } from "react";
 
 import {
@@ -103,8 +103,8 @@ function RegistroPage() {
     <div className="grid min-h-screen place-items-center bg-background px-4 py-10">
       <div className="w-full max-w-md">
         <Link to="/" className="mb-6 flex items-center justify-center gap-2">
-          <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary">
-            <GraduationCap className="h-5 w-5 text-primary-foreground" />
+          <div className="grid h-9 w-9 place-items-center rounded-lg bg-white p-1">
+            <img src={bearLogo.url} alt="Top PM Simulator" className="h-full w-full object-contain" />
           </div>
           <span className="font-display text-base font-semibold">Top PM Simulator</span>
         </Link>
