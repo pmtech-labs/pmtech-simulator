@@ -26,7 +26,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import bearLogo from "@/assets/glacimonto-bear.png.asset.json";
+import { BrandLockup } from "@/components/BrandLogo";
 import { AuthNavStatus } from "@/components/AuthNavStatus";
 import { TryFreeButton } from "@/components/TryFreeButton";
 import { AboutUs } from "@/components/landing/AboutUs";
@@ -434,37 +434,57 @@ function ProblemSolution() {
 }
 
 function Features() {
+  const highlighted = FEATURES.slice(0, 6);
+  const rest = FEATURES.slice(6);
   return (
-    <section id="caracteristicas" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-      <Reveal>
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-            Lo que hace diferente a este simulador
-          </h2>
-          <p className="mt-3 text-muted-foreground">
-            No es marketing — es arquitectura. Cada punto de abajo existe en el producto, no en la
-            promesa.
-          </p>
-        </div>
-      </Reveal>
+    <section id="caracteristicas" className="bg-background">
+      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <Reveal>
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+              Lo que hace diferente a este simulador
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              No es marketing — es arquitectura. Cada punto de abajo existe en el producto, no en la
+              promesa.
+            </p>
+          </div>
+        </Reveal>
 
-      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {FEATURES.map((f, i) => (
-          <Reveal key={f.title} delay={(i % 3) * 90}>
-            <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
-              <div className="pointer-events-none absolute inset-x-0 -top-24 h-32 bg-gradient-to-b from-accent/15 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-              <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary transition-colors duration-300 group-hover:bg-accent/20">
-                <f.icon className="h-5 w-5 text-foreground transition-transform duration-300 group-hover:scale-110" />
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {highlighted.map((f, i) => (
+            <Reveal key={f.title} delay={(i % 3) * 90}>
+              <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-panel">
+                <div className="pointer-events-none absolute inset-x-0 -top-24 h-32 bg-gradient-to-b from-accent/15 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary transition-colors duration-300 group-hover:bg-accent/20">
+                  <f.icon className="h-5 w-5 text-foreground transition-transform duration-300 group-hover:scale-110" />
+                </div>
+                <h3 className="mt-4 text-base font-semibold">{f.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {f.description}
+                </p>
               </div>
-              <h3 className="mt-4 text-base font-semibold">{f.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.description}</p>
-            </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {rest.length > 0 && (
+          <Reveal delay={120}>
+            <ul className="mt-8 grid gap-x-8 gap-y-3 rounded-2xl border border-dashed border-border p-6 sm:grid-cols-3">
+              {rest.map((f) => (
+                <li key={f.title} className="flex items-start gap-2.5">
+                  <f.icon className="mt-0.5 h-4 w-4 shrink-0 text-accent-foreground" />
+                  <span className="text-sm font-medium leading-snug">{f.title}</span>
+                </li>
+              ))}
+            </ul>
           </Reveal>
-        ))}
+        )}
       </div>
     </section>
   );
 }
+
 
 function HowItWorks() {
   return (
@@ -748,17 +768,13 @@ function Footer() {
     <footer className="border-t border-border">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white p-1">
-              <img
-                src={bearLogo.url}
-                alt="Top PM Simulator"
-                className="h-full w-full object-contain"
-              />
-            </div>
-
-            <p className="font-display text-sm font-semibold">Top PM Simulator</p>
+          <div className="flex flex-col items-center gap-1 sm:items-start">
+            <BrandLockup size="lg" subtitle="Un producto de Glacimonto" />
+            <p className="text-xs text-muted-foreground">
+              Preparación PMP® para España y LATAM · ECO 2026
+            </p>
           </div>
+
           <div className="flex flex-col items-center gap-4 sm:items-end">
             <div className="flex items-center gap-3">
               <AuthNavStatus className="text-xs px-2.5 py-1.5" />
@@ -1054,8 +1070,10 @@ function LandingPage() {
         <Pricing />
         <Training />
         <PartnersBenefits />
-        <FAQ />
-        <Newsletter />
+        <div className="border-y border-border bg-secondary/40">
+          <FAQ />
+          <Newsletter />
+        </div>
         <FinalCta />
         <LeadWizard />
       </main>
