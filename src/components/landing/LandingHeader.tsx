@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
-import bearLogo from "@/assets/glacimonto-bear.png.asset.json";
+import { BrandMark } from "@/components/BrandLogo";
 import { AuthNavStatus } from "@/components/AuthNavStatus";
 import { TryFreeButton } from "@/components/TryFreeButton";
 import { HeaderNav, MobileNav } from "@/components/landing/HeaderNav";
