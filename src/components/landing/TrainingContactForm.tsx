@@ -177,7 +177,7 @@ export function TrainingContactForm() {
         terceros. También puedes escribirnos a{" "}
         <a
           href="mailto:contacto@glacimonto.com"
-          className="font-semibold text-accent underline-offset-2 hover:underline"
+          className="font-semibold text-accent-foreground underline-offset-2 hover:underline"
         >
           contacto@glacimonto.com
         </a>
