@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
-import { BrandMark } from "@/components/BrandLogo";
+import { BrandHorizontal } from "@/components/BrandLogo";
 import { AuthNavStatus } from "@/components/AuthNavStatus";
 import { TryFreeButton } from "@/components/TryFreeButton";
 import { HeaderNav, MobileNav } from "@/components/landing/HeaderNav";
@@ -16,16 +16,8 @@ export function LandingHeader({ onHome = false }: { onHome?: boolean }) {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-3 sm:px-8 lg:px-10">
-        <Link to="/" className="flex shrink-0 items-center gap-2.5 lg:mr-4">
-          <BrandMark className="h-9 w-auto" />
-          <div className="shrink-0 min-w-fit w-max">
-            <p className="whitespace-nowrap font-display text-sm font-semibold leading-tight">
-              Top PM Simulator
-            </p>
-            <p className="whitespace-nowrap text-[11px] leading-tight text-muted-foreground">
-              por Glacimonto · ECO 2026
-            </p>
-          </div>
+        <Link to="/" className="flex shrink-0 items-center lg:mr-4" aria-label="Top PM Simulator, inicio">
+          <BrandHorizontal className="h-9 w-auto sm:h-10" />
         </Link>
 
 
