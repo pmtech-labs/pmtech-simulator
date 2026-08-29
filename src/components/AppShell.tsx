@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-import { BrandMark } from "@/components/BrandLogo";
+import { BrandHorizontal } from "@/components/BrandLogo";
 import { useCurrentUser } from "@/hooks/useCandidateData";
 import { signOutCandidate } from "@/services/authService";
 import { clearExamProgress, describeProgress, loadExamProgress } from "@/lib/examResume";
