@@ -768,17 +768,13 @@ function Footer() {
     <footer className="border-t border-border">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white p-1">
-              <img
-                src={bearLogo.url}
-                alt="Top PM Simulator"
-                className="h-full w-full object-contain"
-              />
-            </div>
-
-            <p className="font-display text-sm font-semibold">Top PM Simulator</p>
+          <div className="flex flex-col items-center gap-1 sm:items-start">
+            <BrandLockup size="lg" subtitle="Un producto de Glacimonto" />
+            <p className="text-xs text-muted-foreground">
+              Preparación PMP® para España y LATAM · ECO 2026
+            </p>
           </div>
+
           <div className="flex flex-col items-center gap-4 sm:items-end">
             <div className="flex items-center gap-3">
               <AuthNavStatus className="text-xs px-2.5 py-1.5" />
