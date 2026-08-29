@@ -748,9 +748,14 @@ function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary">
-              <GraduationCap className="h-4 w-4 text-primary-foreground" />
+            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white p-1">
+              <img
+                src={bearLogo.url}
+                alt="Top PM Simulator"
+                className="h-full w-full object-contain"
+              />
             </div>
+
             <p className="font-display text-sm font-semibold">Top PM Simulator</p>
           </div>
           <div className="flex flex-col items-center gap-4 sm:items-end">
