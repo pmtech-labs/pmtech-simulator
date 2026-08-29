@@ -10,10 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
  * la ruta de destino. Mismo patrón que el guard de /admin, pero sin rol.
  */
 export function RequireAuth({ children }: { children: ReactNode }) {
-  // TEMP-SHOT-BYPASS
-  const { loading: _l, isAuthenticated: _a } = useAuth();
-  const loading = false;
-  const isAuthenticated = true;
+  const { loading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const href = useRouterState({ select: (s) => s.location.href });
 
