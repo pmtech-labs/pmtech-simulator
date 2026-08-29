@@ -122,7 +122,7 @@ function SidebarInner({
   return (
     <div className="flex h-full flex-col gap-6 bg-sidebar p-4">
       <div className="flex items-center gap-2.5 px-1">
-        <BrandMark tone="onDark" className="h-9 w-9" />
+        <BrandMark tone="onDark" className="h-9 w-auto" />
 
         <div className="min-w-0">
           <p className="truncate font-display text-sm font-semibold text-sidebar-accent-foreground">
