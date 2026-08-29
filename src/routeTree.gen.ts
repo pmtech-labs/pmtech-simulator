@@ -28,6 +28,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as Pmbok8RouteImport } from './routes/pmbok-8'
+import { Route as PmtechVsPrepcastRouteImport } from './routes/pmtech-vs-prepcast'
 import { Route as PoliticaDeCookiesRouteImport } from './routes/politica-de-cookies'
 import { Route as PoliticaDePrivacidadRouteImport } from './routes/politica-de-privacidad'
 import { Route as PracticaRouteImport } from './routes/practica'
@@ -143,6 +144,11 @@ const PerfilRoute = PerfilRouteImport.update({
 const Pmbok8Route = Pmbok8RouteImport.update({
   id: '/pmbok-8',
   path: '/pmbok-8',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PmtechVsPrepcastRoute = PmtechVsPrepcastRouteImport.update({
+  id: '/pmtech-vs-prepcast',
+  path: '/pmtech-vs-prepcast',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PoliticaDeCookiesRoute = PoliticaDeCookiesRouteImport.update({
@@ -273,6 +279,7 @@ export interface FileRoutesByFullPath {
   '/partners': typeof PartnersRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
+  '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
   '/politica-de-cookies': typeof PoliticaDeCookiesRoute
   '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/practica': typeof PracticaRoute
@@ -314,6 +321,7 @@ export interface FileRoutesByTo {
   '/partners': typeof PartnersRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
+  '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
   '/politica-de-cookies': typeof PoliticaDeCookiesRoute
   '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/practica': typeof PracticaRoute
@@ -357,6 +365,7 @@ export interface FileRoutesById {
   '/partners': typeof PartnersRoute
   '/perfil': typeof PerfilRoute
   '/pmbok-8': typeof Pmbok8Route
+  '/pmtech-vs-prepcast': typeof PmtechVsPrepcastRoute
   '/politica-de-cookies': typeof PoliticaDeCookiesRoute
   '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/practica': typeof PracticaRoute
@@ -401,6 +410,7 @@ export interface FileRouteTypes {
     | '/partners'
     | '/perfil'
     | '/pmbok-8'
+    | '/pmtech-vs-prepcast'
     | '/politica-de-cookies'
     | '/politica-de-privacidad'
     | '/practica'
@@ -442,6 +452,7 @@ export interface FileRouteTypes {
     | '/partners'
     | '/perfil'
     | '/pmbok-8'
+    | '/pmtech-vs-prepcast'
     | '/politica-de-cookies'
     | '/politica-de-privacidad'
     | '/practica'
@@ -484,6 +495,7 @@ export interface FileRouteTypes {
     | '/partners'
     | '/perfil'
     | '/pmbok-8'
+    | '/pmtech-vs-prepcast'
     | '/politica-de-cookies'
     | '/politica-de-privacidad'
     | '/practica'
@@ -527,6 +539,7 @@ export interface RootRouteChildren {
   PartnersRoute: typeof PartnersRoute
   PerfilRoute: typeof PerfilRoute
   Pmbok8Route: typeof Pmbok8Route
+  PmtechVsPrepcastRoute: typeof PmtechVsPrepcastRoute
   PoliticaDeCookiesRoute: typeof PoliticaDeCookiesRoute
   PoliticaDePrivacidadRoute: typeof PoliticaDePrivacidadRoute
   PracticaRoute: typeof PracticaRoute
@@ -675,6 +688,13 @@ declare module '@tanstack/react-router' {
       path: '/pmbok-8'
       fullPath: '/pmbok-8'
       preLoaderRoute: typeof Pmbok8RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pmtech-vs-prepcast': {
+      id: '/pmtech-vs-prepcast'
+      path: '/pmtech-vs-prepcast'
+      fullPath: '/pmtech-vs-prepcast'
+      preLoaderRoute: typeof PmtechVsPrepcastRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/politica-de-cookies': {
@@ -871,6 +891,7 @@ const rootRouteChildren: RootRouteChildren = {
   PartnersRoute: PartnersRoute,
   PerfilRoute: PerfilRoute,
   Pmbok8Route: Pmbok8Route,
+  PmtechVsPrepcastRoute: PmtechVsPrepcastRoute,
   PoliticaDeCookiesRoute: PoliticaDeCookiesRoute,
   PoliticaDePrivacidadRoute: PoliticaDePrivacidadRoute,
   PracticaRoute: PracticaRoute,
