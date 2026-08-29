@@ -17,7 +17,7 @@ export function LandingHeader({ onHome = false }: { onHome?: boolean }) {
     <header className="sticky top-0 z-40 border-b border-border bg-card/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-3 sm:px-8 lg:px-10">
         <Link to="/" className="flex shrink-0 items-center lg:mr-4" aria-label="Top PM Simulator, inicio">
-          <BrandHorizontal className="h-9 w-auto sm:h-10" />
+          <BrandHorizontal className="h-10 w-auto sm:h-11" />
         </Link>
 
 
