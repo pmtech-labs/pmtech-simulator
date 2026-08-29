@@ -56,7 +56,7 @@ export function BrandLockup({
   subtitle?: string | null;
   className?: string;
 }) {
-  const markSize = size === "sm" ? "h-7 w-7" : size === "lg" ? "h-11 w-11" : "h-9 w-9";
+  const markSize = size === "sm" ? "h-7 w-auto" : size === "lg" ? "h-11 w-auto" : "h-9 w-auto";
   const titleSize = size === "lg" ? "text-base" : "text-sm";
   const muted =
     tone === "onDark" ? "text-hero-muted/80" : "text-muted-foreground";
