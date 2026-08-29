@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Loader2, LogIn } from "lucide-react";
 import { useEffect, useState } from "react";
+import bearLogo from "@/assets/glacimonto-bear.png.asset.json";
 
 import { useAuth } from "@/hooks/useAuth";
 import { signInCandidate } from "@/services/authService";

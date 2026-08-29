@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { CheckCircle2, Loader2, UserPlus } from "lucide-react";
 import { useState } from "react";
+import bearLogo from "@/assets/glacimonto-bear.png.asset.json";
 
 import {
   provisionFreeLicense,
