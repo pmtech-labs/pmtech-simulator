@@ -26,7 +26,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import bearLogo from "@/assets/glacimonto-bear.png.asset.json";
+import { BrandLockup } from "@/components/BrandLogo";
 import { AuthNavStatus } from "@/components/AuthNavStatus";
 import { TryFreeButton } from "@/components/TryFreeButton";
 import { AboutUs } from "@/components/landing/AboutUs";
@@ -1070,8 +1070,10 @@ function LandingPage() {
         <Pricing />
         <Training />
         <PartnersBenefits />
-        <FAQ />
-        <Newsletter />
+        <div className="border-y border-border bg-secondary/40">
+          <FAQ />
+          <Newsletter />
+        </div>
         <FinalCta />
         <LeadWizard />
       </main>
