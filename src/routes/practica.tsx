@@ -143,8 +143,35 @@ function buildDrill(
         : base)
     : base;
   if (!pool.length) return [];
+
+  // Barajado aleatorio sin repetir preguntas.
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+
   const out: Question[] = [];
-  for (let i = 0; i < DRILL_SIZE; i++) out.push(pool[i % pool.length]);
+  const usedIds = new Set<string>();
+  const usedClusters = new Set<string>();
+
+  for (const q of shuffled) {
+    if (out.length >= DRILL_SIZE) break;
+    if (usedIds.has(q.id)) continue;
+
+    // Los casos se presentan completos: todas sus preguntas seguidas.
+    if (q.clusterId) {
+      if (usedClusters.has(q.clusterId)) continue;
+      const siblings = MOCK_QUESTIONS.filter((s) => s.clusterId === q.clusterId);
+      if (out.length + siblings.length > DRILL_SIZE) continue;
+      usedClusters.add(q.clusterId);
+      siblings.forEach((s) => {
+        usedIds.add(s.id);
+        out.push(s);
+      });
+      continue;
+    }
+
+    usedIds.add(q.id);
+    out.push(q);
+  }
+
   return out;
 }
 
