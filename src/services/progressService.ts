@@ -264,6 +264,21 @@ export async function getRecommendedSession(): Promise<RecommendedSession | null
   if (masteryRes.error) throw new Error(masteryRes.error.message);
   if (itemsRes.error) throw new Error(itemsRes.error.message);
 
+  // Sesiones recomendadas completadas recientemente: bajan de prioridad.
+  const completionsRes = await untypedDb()
+    .from(RECOMMENDED_COMPLETIONS_TABLE)
+    .select("task_id, completed_at, questions_answered, questions_correct")
+    .gte("completed_at", new Date(Date.now() - 7 * DAY_MS).toISOString());
+  const completedRecently = new Map<string, string>();
+  for (const row of completionsRes.data ?? []) {
+    const prev = completedRecently.get(row.task_id);
+    if (!prev || new Date(row.completed_at) > new Date(prev)) {
+      completedRecently.set(row.task_id, row.completed_at);
+    }
+  }
+
+
+
   const now = Date.now();
 
   interface TaskStats {
