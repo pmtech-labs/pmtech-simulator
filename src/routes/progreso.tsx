@@ -13,7 +13,7 @@ import { DOMAINS } from "@/data/mockData";
 import { useCurrentUser, useErrorTypeStats, useTaskMastery } from "@/hooks/useCandidateData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 import { buildStudyPlan } from "@/lib/studyPlan";
-import { getScoreTrend } from "@/services/progressService";
+import { getRecommendedSession, getScoreTrend } from "@/services/progressService";
 import { useQuery } from "@tanstack/react-query";
 
 
@@ -47,15 +47,16 @@ function ProgressPage() {
     queryFn: () => getScoreTrend(8),
     staleTime: 60_000,
   });
+  const { data: recommended } = useQuery({
+    queryKey: ["recommended-session"],
+    queryFn: getRecommendedSession,
+    staleTime: 60_000,
+  });
 
   const isPremium = user?.plan === "premium_6m" || user?.plan === "premium_1m";
   const errorStats = [...stats].sort((a, b) => b.occurrences - a.occurrences);
   const maxErrors = Math.max(...errorStats.map((s) => s.occurrences), 1);
   const studyPlan = buildStudyPlan(stats);
-  const weakTasks = [...taskMastery]
-    .filter((t) => t.attempts > 0)
-    .sort((a, b) => a.mastery - b.mastery)
-    .slice(0, 2);
 
   if (isLoading || !user) {
     return (
@@ -73,6 +74,45 @@ function ProgressPage() {
   return (
     <AppShell title="Mi progreso" subtitle="Analítica de brecha por dominio y tarea ECO">
       <div className="mx-auto max-w-5xl space-y-6">
+        <section className="rounded-2xl border border-accent bg-warning-soft p-5">
+          <div className="flex items-start gap-3">
+            <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-accent-foreground" />
+            <div className="min-w-0 flex-1">
+              <h2 className="text-sm font-semibold text-accent-foreground">Próxima sesión recomendada</h2>
+              {!recommended ? (
+                <p className="mt-1 text-sm leading-relaxed text-accent-foreground/90">
+                  Completa una práctica parcial o un simulacro para que podamos recomendarte la
+                  próxima sesión con tus datos reales.
+                </p>
+              ) : (
+                <>
+                  <p className="mt-1 text-sm leading-relaxed text-accent-foreground/90">
+                    Practica {recommended.questionCount} preguntas repartidas en{" "}
+                    {recommended.tasks.length} tareas priorizadas por recencia, fallos recientes y
+                    tendencia semanal. Duración estimada: {recommended.estimatedMinutes} minutos.
+                  </p>
+                  <ul className="mt-3 space-y-2">
+                    {recommended.tasks.map((t) => (
+                      <li
+                        key={t.taskId}
+                        className="rounded-xl border border-accent/40 bg-card/60 px-3 py-2"
+                      >
+                        <p className="text-sm font-medium text-accent-foreground">
+                          <span className="num mr-2 text-accent-foreground/70">{t.code}</span>
+                          {t.title}
+                        </p>
+                        <p className="mt-0.5 text-xs leading-snug text-accent-foreground/75">
+                          {t.reasons.join(" · ")}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
+          </div>
+        </section>
+
         <section>
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-base font-semibold">Dominio por área ECO</h2>
@@ -233,26 +273,6 @@ function ProgressPage() {
         <UnitAnalytics />
 
         <StudyPlanCard steps={studyPlan} />
-
-
-
-        <section className="rounded-2xl border border-accent bg-warning-soft p-5">
-
-          <div className="flex items-start gap-3">
-            <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-accent-foreground" />
-            <div>
-              <h2 className="text-sm font-semibold text-accent-foreground">Próxima sesión recomendada</h2>
-              <p className="mt-1 text-sm leading-relaxed text-accent-foreground/90">
-                {weakTasks.length === 0
-                  ? "Completa una práctica parcial o un simulacro para que podamos recomendarte la próxima sesión con tus datos reales."
-                  : `Practica ${weakTasks.length * 10} preguntas de ${weakTasks
-                      .map((t) => `${t.code} · ${t.title} (${t.mastery} %)`)
-                      .join(" y ")}. Duración estimada: ${weakTasks.length * 15} minutos.`}
-              </p>
-
-            </div>
-          </div>
-        </section>
       </div>
     </AppShell>
   );
