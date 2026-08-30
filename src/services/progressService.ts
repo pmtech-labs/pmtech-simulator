@@ -165,6 +165,169 @@ export async function getUnitProgress(): Promise<UnitProgress[]> {
   });
 }
 
+export interface RecommendedTask {
+  taskId: string;
+  code: string;
+  title: string;
+  domain: DomainCode;
+  mastery: number;
+  /** Motivos que explican por qué se prioriza la tarea. */
+  reasons: string[];
+  score: number;
+}
+
+export interface RecommendedSession {
+  tasks: RecommendedTask[];
+  questionCount: number;
+  estimatedMinutes: number;
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Próxima sesión recomendada: prioriza tareas ECO combinando dominio actual,
+ * fallos recientes (últimos 14 días), tendencia semanal y recencia del último
+ * intento (las tareas sin repasar recientemente ganan prioridad).
+ */
+export async function getRecommendedSession(): Promise<RecommendedSession | null> {
+  const { data: auth } = await supabase.auth.getUser();
+  const userId = auth.user?.id;
+  if (!userId) return null;
+
+  const [masteryRes, itemsRes] = await Promise.all([
+    supabase
+      .from("user_task_mastery")
+      .select(
+        "task_id, attempts, correct, mastery_pct, last_attempt_at, eco_tasks(task_number, title, eco_domains(code))",
+      ),
+    supabase
+      .from("exam_items")
+      .select("is_correct, questions(task_id), exams(started_at)")
+      .not("is_correct", "is", null)
+      .limit(5000),
+  ]);
+
+  if (masteryRes.error) throw new Error(masteryRes.error.message);
+  if (itemsRes.error) throw new Error(itemsRes.error.message);
+
+  const now = Date.now();
+
+  interface TaskStats {
+    recentFails: number; // fallos últimos 14 días
+    recentAnswered: number;
+    thisWeek: { answered: number; correct: number };
+    prevWeeks: { answered: number; correct: number };
+  }
+  const statsByTask = new Map<string, TaskStats>();
+
+  for (const raw of (itemsRes.data ?? []) as unknown as {
+    is_correct: boolean | null;
+    questions: { task_id: string | null } | null;
+    exams: { started_at: string | null } | null;
+  }[]) {
+    const taskId = raw.questions?.task_id;
+    const startedAt = raw.exams?.started_at;
+    if (!taskId || !startedAt) continue;
+    const ageDays = (now - new Date(startedAt).getTime()) / DAY_MS;
+    const s = statsByTask.get(taskId) ?? {
+      recentFails: 0,
+      recentAnswered: 0,
+      thisWeek: { answered: 0, correct: 0 },
+      prevWeeks: { answered: 0, correct: 0 },
+    };
+    const ok = raw.is_correct === true;
+    if (ageDays <= 14) {
+      s.recentAnswered += 1;
+      if (!ok) s.recentFails += 1;
+    }
+    if (ageDays <= 7) {
+      s.thisWeek.answered += 1;
+      if (ok) s.thisWeek.correct += 1;
+    } else if (ageDays <= 21) {
+      s.prevWeeks.answered += 1;
+      if (ok) s.prevWeeks.correct += 1;
+    }
+    statsByTask.set(taskId, s);
+  }
+
+  const scored: RecommendedTask[] = [];
+  for (const row of (masteryRes.data ?? []) as {
+    task_id: string;
+    attempts: number | null;
+    correct: number | null;
+    mastery_pct: number | null;
+    last_attempt_at: string | null;
+    eco_tasks: { task_number: number; title: string; eco_domains: { code: string } | null } | null;
+  }[]) {
+    const attempts = row.attempts ?? 0;
+    if (attempts === 0) continue;
+    const mastery = Math.round(
+      row.mastery_pct != null
+        ? Number(row.mastery_pct)
+        : attempts
+          ? ((row.correct ?? 0) / attempts) * 100
+          : 0,
+    );
+
+    const s = statsByTask.get(row.task_id);
+    const daysSince = row.last_attempt_at
+      ? (now - new Date(row.last_attempt_at).getTime()) / DAY_MS
+      : 30;
+
+    // Tendencia semanal: compara esta semana con las dos anteriores.
+    let trendDelta: number | null = null;
+    if (s && s.thisWeek.answered >= 3 && s.prevWeeks.answered >= 3) {
+      trendDelta =
+        (s.thisWeek.correct / s.thisWeek.answered - s.prevWeeks.correct / s.prevWeeks.answered) * 100;
+    }
+
+    // Puntuación de prioridad (mayor = más urgente).
+    let score = (100 - mastery) * 1.0;
+    const reasons: string[] = [`Dominio actual ${mastery} %`];
+
+    if (s && s.recentFails > 0) {
+      score += Math.min(s.recentFails, 8) * 4;
+      reasons.push(
+        `${s.recentFails} fallo${s.recentFails === 1 ? "" : "s"} en los últimos 14 días`,
+      );
+    }
+    if (trendDelta != null && trendDelta < -5) {
+      score += Math.min(Math.abs(trendDelta), 30);
+      reasons.push(`Tendencia a la baja esta semana (${Math.round(trendDelta)} pts)`);
+    }
+    if (daysSince >= 7) {
+      const recencyBoost = Math.min(daysSince, 30) * 0.8;
+      score += recencyBoost;
+      reasons.push(
+        daysSince >= 21
+          ? "Sin repasar desde hace más de 3 semanas"
+          : `Sin repasar desde hace ${Math.floor(daysSince)} días`,
+      );
+    }
+
+    const task = row.eco_tasks;
+    const domain = toUiDomain(task?.eco_domains?.code);
+    scored.push({
+      taskId: row.task_id,
+      code: `${domain === "people" ? "P" : domain === "process" ? "PR" : "BE"}-${task?.task_number ?? "?"}`,
+      title: task?.title ?? "Tarea ECO",
+      domain,
+      mastery,
+      reasons,
+      score,
+    });
+  }
+
+  if (scored.length === 0) return null;
+
+  const tasks = scored.sort((a, b) => b.score - a.score).slice(0, 3);
+  return {
+    tasks,
+    questionCount: tasks.length * 5,
+    estimatedMinutes: tasks.length * 8,
+  };
+}
+
 export interface ScoreTrendPoint {
   label: string;
   score: number;
