@@ -14,6 +14,7 @@ import { EarnedValueChart } from "@/components/exam/EarnedValueChart";
 import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
 import { MOCK_FINISH_SUMMARY, type UnitProgress } from "@/data/mockData";
 import { getUnitProgress } from "@/services/progressService";
+import { useErrorTypeStats } from "@/hooks/useCandidateData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
 import { FOCUS_TAG_LABELS, PERFORMANCE_DOMAIN_LABELS, PROCESS_GROUP_LABELS } from "@/lib/questionTags";
 
