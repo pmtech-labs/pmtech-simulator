@@ -3,11 +3,11 @@ import { AlertTriangle, BookOpen, Download, FileSpreadsheet, FileText, Filter, L
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
-import { MOCK_UNIT_PROGRESS, PROGRESS_TREND_LABELS, type UnitModeStats, type UnitProgress } from "@/data/mockData";
+import { PROGRESS_TREND_LABELS, type UnitModeStats, type UnitProgress } from "@/data/mockData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 import { DOMAIN_LABELS, buildCsv, downloadCsv, escapeHtml, openPrintablePdf } from "@/lib/export";
 import { cn } from "@/lib/utils";
-import { listPublishedUnits } from "@/services/curriculumService";
+import { getUnitProgress } from "@/services/progressService";
 import type { DomainCode } from "@/types/exam";
 
 const ALL_DOMAINS: DomainCode[] = ["people", "process", "business"];
@@ -20,8 +20,8 @@ const DOMAIN_SHORT: Record<DomainCode, string> = {
 type Activity = "both" | "unitQuiz" | "cumulative";
 
 const ACTIVITY_LABELS: Record<Exclude<Activity, "both">, string> = {
-  unitQuiz: "Practicar esta lección",
-  cumulative: "Simulacro acumulativo",
+  unitQuiz: "Prácticas parciales",
+  cumulative: "Simulacros (completo, medio o acumulativo)",
 };
 
 function accuracyTone(pct: number) {
@@ -134,7 +134,7 @@ function TrendChart({ rows, activity }: { rows: UnitProgress[]; activity: Activi
       </ul>
       {activity === "both" && (
         <p className="mt-2 text-[11px] text-muted-foreground">
-          Línea continua: práctica de la lección · Línea discontinua: simulacro acumulativo.
+          Línea continua: prácticas parciales · Línea discontinua: simulacros.
         </p>
       )}
     </>
@@ -146,21 +146,17 @@ export function UnitAnalytics() {
   const [activity, setActivity] = useState<Activity>("both");
 
   const unitsQuery = useQuery({
-    queryKey: ["published-units"],
-    queryFn: listPublishedUnits,
+    queryKey: ["unit-progress"],
+    queryFn: getUnitProgress,
     retry: false,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 60_000,
   });
 
-  const published = unitsQuery.data ?? [];
   const allRows: UnitProgress[] = useMemo(
-    () =>
-      MOCK_UNIT_PROGRESS.map((p) => {
-        const match = published.find((u) => u.sequence === p.sequence);
-        return match ? { ...p, title: match.title } : p;
-      }).sort((a, b) => a.sequence - b.sequence),
-    [published],
+    () => [...(unitsQuery.data ?? [])].sort((a, b) => a.sequence - b.sequence),
+    [unitsQuery.data],
   );
+
 
   const rows = useMemo(() => allRows.filter((u) => domains.includes(u.domain)), [allRows, domains]);
 
@@ -399,7 +395,7 @@ export function UnitAnalytics() {
           <h2 className="text-base font-semibold">Progreso por lección</h2>
         </div>
         <p className="mt-1 text-xs text-muted-foreground">
-          Resultados de los modos «Practicar esta lección» y «Simulacro acumulativo» con los filtros
+          Resultados reales de tus prácticas parciales y de tus simulacros, con los filtros
           aplicados.
         </p>
 

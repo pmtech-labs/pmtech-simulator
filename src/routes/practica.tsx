@@ -12,7 +12,9 @@ import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { EarnedValueChart } from "@/components/exam/EarnedValueChart";
 import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
-import { MOCK_ERROR_TYPE_STATS, MOCK_FINISH_SUMMARY, MOCK_UNIT_PROGRESS } from "@/data/mockData";
+import { MOCK_FINISH_SUMMARY, type UnitProgress } from "@/data/mockData";
+import { getUnitProgress } from "@/services/progressService";
+import { useErrorTypeStats } from "@/hooks/useCandidateData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
 import { FOCUS_TAG_LABELS, PERFORMANCE_DOMAIN_LABELS, PROCESS_GROUP_LABELS } from "@/lib/questionTags";
 
@@ -103,11 +105,13 @@ const NO_QUESTIONS_MESSAGE =
   "No hay preguntas disponibles para estos filtros. Prueba con otro enfoque o amplía los dominios seleccionados.";
 
 /** Tipos de error recientes del candidato en una lección (fallback: patrón global). */
-export function recentErrorTypes(sequence?: number): ErrorType[] {
-  const unit = sequence ? MOCK_UNIT_PROGRESS.find((u) => u.sequence === sequence) : undefined;
-  const source = unit?.errorTypes?.length
-    ? unit.errorTypes
-    : MOCK_ERROR_TYPE_STATS.slice(0, 3);
+export function recentErrorTypes(
+  sequence?: number,
+  units: UnitProgress[] = [],
+  globalStats: { errorType: ErrorType; occurrences: number }[] = [],
+): ErrorType[] {
+  const unit = sequence ? units.find((u) => u.sequence === sequence) : undefined;
+  const source = unit?.errorTypes?.length ? unit.errorTypes : globalStats;
   return [...source]
     .sort((a, b) => b.occurrences - a.occurrences)
     .slice(0, 3)
@@ -164,6 +168,16 @@ function PracticePage() {
     retry: false,
     staleTime: 5 * 60 * 1000,
   });
+
+  const unitProgressQuery = useQuery({
+    queryKey: ["unit-progress"],
+    queryFn: getUnitProgress,
+    retry: false,
+    staleTime: 60_000,
+  });
+  const unitProgress = unitProgressQuery.data ?? [];
+  const { data: errorStats = [] } = useErrorTypeStats();
+
 
   useEffect(() => {
     if (!drill || finished) return;
@@ -392,7 +406,7 @@ function PracticePage() {
                       <span className="text-muted-foreground">
                         Prioriza preguntas asociadas a tus fallos recientes
                         {currentUnit
-                          ? `: ${recentErrorTypes(currentUnit.sequence).map((t) => ERROR_TYPE_LABELS[t]).join(", ")}`
+                          ? `: ${recentErrorTypes(currentUnit.sequence, unitProgress, errorStats).map((t) => ERROR_TYPE_LABELS[t]).join(", ")}`
                           : ""}
                         .
                       </span>
