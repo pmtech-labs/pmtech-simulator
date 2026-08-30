@@ -168,6 +168,16 @@ function PracticePage() {
     staleTime: 5 * 60 * 1000,
   });
 
+  const unitProgressQuery = useQuery({
+    queryKey: ["unit-progress"],
+    queryFn: getUnitProgress,
+    retry: false,
+    staleTime: 60_000,
+  });
+  const unitProgress = unitProgressQuery.data ?? [];
+  const { data: errorStats = [] } = useErrorTypeStats();
+
+
   useEffect(() => {
     if (!drill || finished) return;
     const t = setInterval(() => setElapsed(Math.floor((Date.now() - startRef.current) / 1000)), 1000);
