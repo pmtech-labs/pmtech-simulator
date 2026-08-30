@@ -251,6 +251,17 @@ function PracticePage() {
     }
   };
 
+  // Arranque automático cuando se llega desde la recomendación de /progreso.
+  const autoStarted = useRef(false);
+  useEffect(() => {
+    if (!fromRecommendation || autoStarted.current) return;
+    autoStarted.current = true;
+    void start({ taskIds: recommendedTaskIds });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromRecommendation, recommendedTaskIds]);
+
+
+
   /** Corrige la pregunta actual contra el backend y guarda la explicación real. */
   const check = async () => {
     if (!session) return;
