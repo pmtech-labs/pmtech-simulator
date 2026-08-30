@@ -10,8 +10,15 @@ import { HelpLinks } from "@/components/support/HelpLinks";
 import { ResultReportButton } from "@/components/export/ResultReportButton";
 import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
+import { EarnedValueChart } from "@/components/exam/EarnedValueChart";
 import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
-import { MOCK_ERROR_TYPE_STATS, MOCK_FINISH_SUMMARY, MOCK_QUESTIONS, MOCK_UNIT_PROGRESS } from "@/data/mockData";
+import {
+  CLUSTER,
+  MOCK_ERROR_TYPE_STATS,
+  MOCK_FINISH_SUMMARY,
+  MOCK_QUESTIONS,
+  MOCK_UNIT_PROGRESS,
+} from "@/data/mockData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
 import { FOCUS_TAG_LABELS, PERFORMANCE_DOMAIN_LABELS, PROCESS_GROUP_LABELS } from "@/lib/questionTags";
 
