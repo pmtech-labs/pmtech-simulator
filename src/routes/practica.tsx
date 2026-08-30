@@ -12,19 +12,20 @@ import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { EarnedValueChart } from "@/components/exam/EarnedValueChart";
 import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
-import {
-  CLUSTER,
-  MOCK_ERROR_TYPE_STATS,
-  MOCK_FINISH_SUMMARY,
-  MOCK_QUESTIONS,
-  MOCK_UNIT_PROGRESS,
-} from "@/data/mockData";
+import { MOCK_ERROR_TYPE_STATS, MOCK_FINISH_SUMMARY, MOCK_UNIT_PROGRESS } from "@/data/mockData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
 import { FOCUS_TAG_LABELS, PERFORMANCE_DOMAIN_LABELS, PROCESS_GROUP_LABELS } from "@/lib/questionTags";
 
 import { DOMAIN_LABELS } from "@/lib/export";
 import { cn } from "@/lib/utils";
-import { isAnswerCorrect } from "@/services/examService";
+import {
+  finishExam,
+  isAnswerCorrect,
+  startExam,
+  submitAnswer,
+  type ApproachFilter,
+  type ExamSession,
+} from "@/services/examService";
 import { listPublishedUnits } from "@/services/curriculumService";
 import type { AnswerValue, DomainCode, ErrorType, Question } from "@/types/exam";
 
@@ -119,62 +120,6 @@ export function recentErrorTypes(sequence?: number): ErrorType[] {
     .map((e) => e.errorType);
 }
 
-function buildDrill(
-  domains: DomainCode[],
-  approach: ApproachOption,
-  errorTypes?: ErrorType[],
-  processGroup?: string,
-  performanceDomain?: string,
-  focusTag?: string,
-): Question[] {
-  const base = MOCK_QUESTIONS.filter(
-    (q) =>
-      domains.includes(q.domain) &&
-      matchesApproach(q.approach, approach) &&
-      (!processGroup || !q.processGroup || q.processGroup === processGroup) &&
-      (!performanceDomain || !q.performanceDomain || q.performanceDomain === performanceDomain) &&
-      (!focusTag || (q.focusTags ?? []).some((t) => t === focusTag)),
-  );
-
-
-  const pool = errorTypes?.length
-    ? (base.filter((q) => q.errorType && errorTypes.includes(q.errorType)).length
-        ? base.filter((q) => q.errorType && errorTypes.includes(q.errorType))
-        : base)
-    : base;
-  if (!pool.length) return [];
-
-  // Barajado aleatorio sin repetir preguntas.
-  const shuffled = [...pool].sort(() => Math.random() - 0.5);
-
-  const out: Question[] = [];
-  const usedIds = new Set<string>();
-  const usedClusters = new Set<string>();
-
-  for (const q of shuffled) {
-    if (out.length >= DRILL_SIZE) break;
-    if (usedIds.has(q.id)) continue;
-
-    // Los casos se presentan completos: todas sus preguntas seguidas.
-    if (q.clusterId) {
-      if (usedClusters.has(q.clusterId)) continue;
-      const siblings = MOCK_QUESTIONS.filter((s) => s.clusterId === q.clusterId);
-      if (out.length + siblings.length > DRILL_SIZE) continue;
-      usedClusters.add(q.clusterId);
-      siblings.forEach((s) => {
-        usedIds.add(s.id);
-        out.push(s);
-      });
-      continue;
-    }
-
-    usedIds.add(q.id);
-    out.push(q);
-  }
-
-  return out;
-}
-
 function fmtTime(seconds: number) {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
@@ -208,7 +153,9 @@ function PracticePage() {
 
 
   const [startError, setStartError] = useState<string | null>(null);
-  const [drill, setDrill] = useState<Question[] | null>(null);
+  const [starting, setStarting] = useState(false);
+  const [session, setSession] = useState<ExamSession | null>(null);
+  const drill: Question[] | null = session?.questions ?? null;
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, AnswerValue>>({});
   const [times, setTimes] = useState<Record<number, number>>({});
@@ -233,35 +180,70 @@ function PracticePage() {
   const toggleDomain = (d: DomainCode) =>
     setSelected((prev) => (prev.includes(d) ? prev.filter((v) => v !== d) : [...prev, d]));
 
-  const start = () => {
-    const sequence = unitsQuery.data?.find((u) => u.id === unitId)?.sequence;
-    const built = buildDrill(
-      mode === "domain_drill" ? selected : ALL_DOMAINS,
-      approachFilter,
-      errorReview && mode === "unit_quiz" ? recentErrorTypes(sequence) : undefined,
-      processGroupFilter || undefined,
-      performanceDomainFilter || undefined,
-      focusTagFilter || undefined,
-    );
-
-
-    if (!built.length) {
-      setStartError(NO_QUESTIONS_MESSAGE);
-      return;
-    }
+  const start = async () => {
+    setStarting(true);
     setStartError(null);
-    setDrill(built);
-    setIndex(0);
-    setAnswers({});
-    setTimes({});
-    setChecked({});
-    setFinished(false);
-    setElapsed(0);
-    startRef.current = Date.now();
+    try {
+      const built = await startExam({
+        mode: mode === "domain_drill" ? "domain_drill" : mode,
+        domains: mode === "domain_drill" ? selected : undefined,
+        unitId: mode === "domain_drill" ? undefined : unitId,
+        totalQuestions: DRILL_SIZE,
+        approachFilter: approachFilter === "all" ? undefined : (approachFilter as ApproachFilter),
+        processGroupFilter: processGroupFilter || undefined,
+        performanceDomainFilter: performanceDomainFilter || undefined,
+      });
+      if (!built.questions.length) {
+        setStartError(NO_QUESTIONS_MESSAGE);
+        return;
+      }
+      setSession(built);
+      setIndex(0);
+      setAnswers({});
+      setTimes({});
+      setChecked({});
+      setFinished(false);
+      setElapsed(0);
+      startRef.current = Date.now();
+    } catch (e) {
+      setStartError(e instanceof Error ? e.message : NO_QUESTIONS_MESSAGE);
+    } finally {
+      setStarting(false);
+    }
+  };
+
+  /** Corrige la pregunta actual contra el backend y guarda la explicación real. */
+  const check = async () => {
+    if (!session) return;
+    const current = session.questions[index];
+    const value = answers[index];
+    if (!current || !value) return;
+    setChecked((c) => ({ ...c, [index]: true }));
+    const feedback = await submitAnswer(session.examId, current.id, value, times[index] ?? 0);
+    if (!feedback.saved) return;
+    setSession((prev) =>
+      prev
+        ? {
+            ...prev,
+            questions: prev.questions.map((item) =>
+              item.id === current.id
+                ? {
+                    ...item,
+                    correctAnswer: feedback.correctAnswer ?? item.correctAnswer,
+                    errorType: feedback.errorType ?? item.errorType,
+                    explanation: feedback.explanation
+                      ? { ...item.explanation, correct: feedback.explanation }
+                      : item.explanation,
+                  }
+                : item,
+            ),
+          }
+        : prev,
+    );
   };
 
   const reset = () => {
-    setDrill(null);
+    setSession(null);
     setFinished(false);
   };
 
@@ -274,7 +256,10 @@ function PracticePage() {
 
   const next = () => {
     commitTime();
-    if (index === totalQuestions - 1) setFinished(true);
+    if (index === totalQuestions - 1) {
+      setFinished(true);
+      if (session) void finishExam(session.examId).catch(() => undefined);
+    }
     else setIndex((i) => i + 1);
   };
 
@@ -350,7 +335,6 @@ function PracticePage() {
                 <div className="mt-2 grid gap-2 sm:grid-cols-3">
                   {ALL_DOMAINS.map((d) => {
                     const active = selected.includes(d);
-                    const available = MOCK_QUESTIONS.filter((q) => q.domain === d).length;
                     return (
                       <button
                         key={d}
@@ -364,9 +348,6 @@ function PracticePage() {
                         )}
                       >
                         <p className="text-sm font-semibold">{DOMAIN_LABELS[d]}</p>
-                        <p className="num mt-1 text-xs text-muted-foreground">
-                          {available} preguntas disponibles
-                        </p>
                       </button>
                     );
                   })}
@@ -517,11 +498,12 @@ function PracticePage() {
 
             <div className="mt-5 flex flex-wrap items-center gap-3">
               <button
-                onClick={start}
-                disabled={!canStart}
+                onClick={() => void start()}
+                disabled={!canStart || starting}
                 className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
               >
-                Empezar práctica <ChevronRight className="h-4 w-4" />
+                {starting ? "Preparando práctica…" : "Empezar práctica"}{" "}
+                <ChevronRight className="h-4 w-4" />
               </button>
               <HelpLinks />
             </div>
@@ -644,6 +626,7 @@ function PracticePage() {
   const answer = answers[index];
   const isChecked = Boolean(checked[index]);
   const currentOk = isAnswerCorrect(q, answer);
+  const cluster = q.clusterId ? session?.clusters[q.clusterId] : undefined;
 
   return (
     <AppShell
@@ -670,15 +653,15 @@ function PracticePage() {
           <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">{q.taskCode}</span>
         </div>
 
-        {q.clusterId === CLUSTER.id && (
+        {cluster && (
           <div className="space-y-3 rounded-xl border border-border bg-card p-4">
-            <h2 className="text-sm font-semibold">{CLUSTER.title}</h2>
-            {CLUSTER.scenarioText.map((p, i) => (
+            <h2 className="text-sm font-semibold">{cluster.title}</h2>
+            {cluster.scenarioText.map((p, i) => (
               <p key={i} className="text-sm leading-relaxed text-muted-foreground">
                 {p}
               </p>
             ))}
-            {CLUSTER.evChart ? <EarnedValueChart chart={CLUSTER.evChart} /> : null}
+            {cluster.evChart ? <EarnedValueChart chart={cluster.evChart} /> : null}
           </div>
         )}
 
@@ -730,7 +713,7 @@ function PracticePage() {
           <div className="flex items-center gap-2">
             {!isChecked && (
               <button
-                onClick={() => setChecked((c) => ({ ...c, [index]: true }))}
+                onClick={() => void check()}
                 disabled={!answer}
                 className="rounded-lg border border-accent bg-warning-soft px-3 py-2 text-sm font-semibold text-accent-foreground disabled:opacity-40"
               >
