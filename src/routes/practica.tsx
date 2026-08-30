@@ -308,10 +308,32 @@ function PracticePage() {
     commitTime();
     if (index === totalQuestions - 1) {
       setFinished(true);
-      if (session) void finishExam(session.examId).catch(() => undefined);
+      if (session) {
+        void finishExam(session.examId).catch(() => undefined);
+        if (fromRecommendation) {
+          const answered = session.questions.length;
+          const correct = session.questions.filter((q, i) => isAnswerCorrect(q, answers[i])).length;
+          void recordRecommendedTaskCompletion({
+            taskIds: recommendedTaskIds,
+            examId: session.examId,
+            questionsAnswered: answered,
+            questionsCorrect: correct,
+          })
+            .catch(() => undefined)
+            .finally(() => {
+              // Refresca la recomendación y la analítica de /progreso.
+              void queryClient.invalidateQueries({ queryKey: ["recommended-session"] });
+              void queryClient.invalidateQueries({ queryKey: ["task-mastery"] });
+              void queryClient.invalidateQueries({ queryKey: ["score-trend"] });
+              void queryClient.invalidateQueries({ queryKey: ["unit-progress"] });
+              void queryClient.invalidateQueries({ queryKey: ["error-type-stats"] });
+            });
+        }
+      }
     }
     else setIndex((i) => i + 1);
   };
+
 
   const stats = useMemo(() => {
     if (!drill) return null;
