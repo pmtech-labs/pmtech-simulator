@@ -126,6 +126,33 @@ interface RawItem {
 }
 
 
+/**
+ * Elimina preguntas duplicadas y garantiza que las preguntas de un mismo caso
+ * se presenten siempre seguidas, respetando el orden de sección del backend.
+ */
+function orderItems(items: RawItem[]): RawItem[] {
+  const seen = new Set<string>();
+  const unique = items.filter((i) => (seen.has(i.id) ? false : (seen.add(i.id), true)));
+
+  const out: RawItem[] = [];
+  const placedClusters = new Set<string>();
+  for (const item of unique) {
+    if (item.cluster_id) {
+      if (placedClusters.has(item.cluster_id)) continue;
+      placedClusters.add(item.cluster_id);
+      out.push(...unique.filter((s) => s.cluster_id === item.cluster_id));
+      continue;
+    }
+    out.push(item);
+  }
+
+  // Las secciones siguen mandando: orden estable por número de sección.
+  return out
+    .map((item, idx) => ({ item, idx }))
+    .sort((a, b) => (a.item.section_number ?? 1) - (b.item.section_number ?? 1) || a.idx - b.idx)
+    .map(({ item }) => item);
+}
+
 const DB_DOMAIN_CODE: Record<DomainCode, string> = {
   people: "people",
   process: "process",
