@@ -102,12 +102,6 @@ const APPROACH_LABELS: Record<ApproachOption, string> = {
 const NO_QUESTIONS_MESSAGE =
   "No hay preguntas disponibles para estos filtros. Prueba con otro enfoque o amplía los dominios seleccionados.";
 
-function matchesApproach(approach: Question["approach"], filter: ApproachOption) {
-  if (filter === "all") return true;
-  if (filter === "agile_hybrid") return approach === "agile" || approach === "hybrid";
-  return approach === filter;
-}
-
 /** Tipos de error recientes del candidato en una lección (fallback: patrón global). */
 export function recentErrorTypes(sequence?: number): ErrorType[] {
   const unit = sequence ? MOCK_UNIT_PROGRESS.find((u) => u.sequence === sequence) : undefined;
@@ -193,6 +187,14 @@ function PracticePage() {
         processGroupFilter: processGroupFilter || undefined,
         performanceDomainFilter: performanceDomainFilter || undefined,
       });
+      // El filtro temático se aplica en cliente (el backend no lo soporta aún),
+      // conservando el orden y los casos completos.
+      if (focusTagFilter) {
+        const keep = built.questions.filter((item) =>
+          (item.focusTags ?? []).some((t) => t === focusTagFilter),
+        );
+        if (keep.length) built.questions = keep;
+      }
       if (!built.questions.length) {
         setStartError(NO_QUESTIONS_MESSAGE);
         return;
