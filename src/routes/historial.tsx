@@ -29,7 +29,7 @@ export const Route = createFileRoute("/historial")({
 });
 
 function HistoryPage() {
-  const { data: history = [], isLoading } = useExamHistory();
+  const { data: history = [], isLoading, error } = useExamHistory();
 
   return (
     <AppShell title="Historial de exámenes" subtitle="Todas tus sesiones registradas">
