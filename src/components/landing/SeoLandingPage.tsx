@@ -70,7 +70,7 @@ export function SeoLandingPage({
         <div className="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-accent/20 blur-3xl" />
         <div className="pointer-events-none absolute -right-24 top-16 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
         <div className="relative mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
             {eyebrow}
           </p>
           <h1 className="mt-4 max-w-3xl font-display text-3xl font-semibold leading-tight text-primary-foreground sm:text-4xl md:text-5xl">
