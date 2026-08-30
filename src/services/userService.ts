@@ -190,7 +190,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
       .limit(1)
       .maybeSingle(),
     getTaskMastery(),
-    getExamHistory(),
+    getExamHistory().catch(() => [] as ExamHistoryRow[]),
   ]);
 
   const license = licenseRes.data as
