@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { AlertTriangle, LineChart, Lock, Sparkles } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { AlertTriangle, LineChart, Lock, Play, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
 import {
