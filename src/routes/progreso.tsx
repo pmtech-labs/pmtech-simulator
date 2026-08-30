@@ -52,6 +52,10 @@ function ProgressPage() {
   const errorStats = [...stats].sort((a, b) => b.occurrences - a.occurrences);
   const maxErrors = Math.max(...errorStats.map((s) => s.occurrences), 1);
   const studyPlan = buildStudyPlan(stats);
+  const weakTasks = [...taskMastery]
+    .filter((t) => t.attempts > 0)
+    .sort((a, b) => a.mastery - b.mastery)
+    .slice(0, 2);
 
   if (isLoading || !user) {
     return (
