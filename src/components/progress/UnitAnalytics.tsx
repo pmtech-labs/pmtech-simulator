@@ -146,21 +146,17 @@ export function UnitAnalytics() {
   const [activity, setActivity] = useState<Activity>("both");
 
   const unitsQuery = useQuery({
-    queryKey: ["published-units"],
-    queryFn: listPublishedUnits,
+    queryKey: ["unit-progress"],
+    queryFn: getUnitProgress,
     retry: false,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 60_000,
   });
 
-  const published = unitsQuery.data ?? [];
   const allRows: UnitProgress[] = useMemo(
-    () =>
-      MOCK_UNIT_PROGRESS.map((p) => {
-        const match = published.find((u) => u.sequence === p.sequence);
-        return match ? { ...p, title: match.title } : p;
-      }).sort((a, b) => a.sequence - b.sequence),
-    [published],
+    () => [...(unitsQuery.data ?? [])].sort((a, b) => a.sequence - b.sequence),
+    [unitsQuery.data],
   );
+
 
   const rows = useMemo(() => allRows.filter((u) => domains.includes(u.domain)), [allRows, domains]);
 
