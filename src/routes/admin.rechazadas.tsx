@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { AdminShell, Pager } from "@/components/admin/AdminShell";
+import { QuestionMediaPreview } from "@/components/admin/QuestionMediaPreview";
 import { Button } from "@/components/ui/button";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import {
+  getAdminQuestionFn,
   listReviewedOutQuestionsFn,
   updateQuestionTextFn,
 } from "@/lib/adminQuestions.functions";
@@ -51,6 +53,7 @@ interface ReviewedRow {
   correction_count: number | null;
   correction_status: "corrected" | "unfixable" | null;
   correction_notes: string | null;
+  practicum_payload?: unknown;
 }
 
 function RejectedPage() {
@@ -182,6 +185,13 @@ function ReviewedCard({
     text: String(opt.text ?? opt.label ?? ""),
   }));
   const correct = JSON.stringify(q.correct_answer ?? "");
+  const needsMedia = ["graphic_based", "hotspot", "matching", "enhanced_matching"].includes(q.format);
+  const detail = useQuery({
+    queryKey: ["admin-question-detail", q.id],
+    queryFn: () => getAdminQuestionFn({ data: { id: q.id } }),
+    enabled: needsMedia && !q.practicum_payload,
+  });
+  const payload = q.practicum_payload ?? detail.data?.practicum_payload;
 
   const [stem, setStem] = useState(q.stem);
   const [explanation, setExplanation] = useState(q.explanation);
@@ -301,6 +311,13 @@ function ReviewedCard({
             />
           ) : (
             <p className="whitespace-pre-line text-sm font-medium">{q.stem}</p>
+          )}
+          {payload && (
+            <QuestionMediaPreview
+              format={q.format}
+              payload={payload}
+              correctAnswer={q.correct_answer}
+            />
           )}
         </div>
 
