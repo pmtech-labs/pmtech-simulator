@@ -39,6 +39,9 @@ interface PracticeSearch {
   enfoque?: string;
   desempeno?: string;
   foco?: string;
+  /** IDs de tareas ECO recomendadas (separados por coma) desde /progreso. */
+  tareas?: string;
+  origen?: "recomendacion";
 }
 
 export const Route = createFileRoute("/practica")({
@@ -53,7 +56,10 @@ export const Route = createFileRoute("/practica")({
     enfoque: typeof search.enfoque === "string" ? search.enfoque : undefined,
     desempeno: typeof search.desempeno === "string" ? search.desempeno : undefined,
     foco: typeof search.foco === "string" ? search.foco : undefined,
+    tareas: typeof search.tareas === "string" ? search.tareas : undefined,
+    origen: search.origen === "recomendacion" ? ("recomendacion" as const) : undefined,
   }),
+
   head: () => ({
     meta: [
       { title: "Práctica por dominios · Simulador PMP ECO 2026" },
