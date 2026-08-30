@@ -203,19 +203,27 @@ function PracticePage() {
   const toggleDomain = (d: DomainCode) =>
     setSelected((prev) => (prev.includes(d) ? prev.filter((v) => v !== d) : [...prev, d]));
 
-  const start = async () => {
+  const start = async (opts?: { taskIds?: string[] }) => {
+    const taskIds = opts?.taskIds ?? [];
     setStarting(true);
     setStartError(null);
     try {
       const built = await startExam({
-        mode: mode === "domain_drill" ? "domain_drill" : mode,
-        domains: mode === "domain_drill" ? selected : undefined,
-        unitId: mode === "domain_drill" ? undefined : unitId,
-        totalQuestions: DRILL_SIZE,
-        approachFilter: approachFilter === "all" ? undefined : (approachFilter as ApproachFilter),
-        processGroupFilter: processGroupFilter || undefined,
-        performanceDomainFilter: performanceDomainFilter || undefined,
+        mode: "domain_drill",
+        ...(taskIds.length
+          ? { taskIds, totalQuestions: taskIds.length * DRILL_SIZE }
+          : {
+              mode: mode === "domain_drill" ? "domain_drill" : mode,
+              domains: mode === "domain_drill" ? selected : undefined,
+              unitId: mode === "domain_drill" ? undefined : unitId,
+              totalQuestions: DRILL_SIZE,
+              approachFilter:
+                approachFilter === "all" ? undefined : (approachFilter as ApproachFilter),
+              processGroupFilter: processGroupFilter || undefined,
+              performanceDomainFilter: performanceDomainFilter || undefined,
+            }),
       });
+
       // El filtro temático se aplica en cliente (el backend no lo soporta aún),
       // conservando el orden y los casos completos.
       if (focusTagFilter) {
