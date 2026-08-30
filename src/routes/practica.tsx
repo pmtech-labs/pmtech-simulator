@@ -143,8 +143,35 @@ function buildDrill(
         : base)
     : base;
   if (!pool.length) return [];
+
+  // Barajado aleatorio sin repetir preguntas.
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+
   const out: Question[] = [];
-  for (let i = 0; i < DRILL_SIZE; i++) out.push(pool[i % pool.length]);
+  const usedIds = new Set<string>();
+  const usedClusters = new Set<string>();
+
+  for (const q of shuffled) {
+    if (out.length >= DRILL_SIZE) break;
+    if (usedIds.has(q.id)) continue;
+
+    // Los casos se presentan completos: todas sus preguntas seguidas.
+    if (q.clusterId) {
+      if (usedClusters.has(q.clusterId)) continue;
+      const siblings = MOCK_QUESTIONS.filter((s) => s.clusterId === q.clusterId);
+      if (out.length + siblings.length > DRILL_SIZE) continue;
+      usedClusters.add(q.clusterId);
+      siblings.forEach((s) => {
+        usedIds.add(s.id);
+        out.push(s);
+      });
+      continue;
+    }
+
+    usedIds.add(q.id);
+    out.push(q);
+  }
+
   return out;
 }
 
@@ -238,6 +265,8 @@ function PracticePage() {
     setFinished(false);
   };
 
+  const totalQuestions = drill?.length ?? DRILL_SIZE;
+
   const commitTime = () => {
     const spent = Math.max(1, Math.floor((Date.now() - startRef.current) / 1000) - Object.values(times).reduce((a, b) => a + b, 0));
     setTimes((prev) => ({ ...prev, [index]: (prev[index] ?? 0) + spent }));
@@ -245,7 +274,7 @@ function PracticePage() {
 
   const next = () => {
     commitTime();
-    if (index === DRILL_SIZE - 1) setFinished(true);
+    if (index === totalQuestions - 1) setFinished(true);
     else setIndex((i) => i + 1);
   };
 
@@ -286,7 +315,8 @@ function PracticePage() {
               <div>
                 <h2 className="text-sm font-semibold">Elige el modo de práctica</h2>
                 <p className="text-xs text-muted-foreground">
-                  Generaremos una serie de {DRILL_SIZE} preguntas con métricas de aciertos y tiempo por dominio.
+                  Generaremos una serie de hasta {DRILL_SIZE} preguntas, sin repeticiones y con los casos
+                  completos, con métricas de aciertos y tiempo por dominio.
                 </p>
               </div>
             </div>
@@ -505,12 +535,12 @@ function PracticePage() {
 
   if (finished && stats) {
     return (
-      <AppShell title="Resultado de la práctica" subtitle={`${DRILL_SIZE} preguntas · ${fmtTime(stats.seconds)}`}>
+      <AppShell title="Resultado de la práctica" subtitle={`${totalQuestions} preguntas · ${fmtTime(stats.seconds)}`}>
         <div className="mx-auto max-w-3xl space-y-5">
           <section className="rounded-2xl border border-border bg-card p-6 text-center">
             <p className="num font-display text-5xl font-bold">{stats.pct}%</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              {stats.correct} de {DRILL_SIZE} correctas · tiempo total {fmtTime(stats.seconds)}
+              {stats.correct} de {totalQuestions} correctas · tiempo total {fmtTime(stats.seconds)}
             </p>
             <p className="mx-auto mt-4 flex max-w-xl items-start gap-2 rounded-lg border border-border bg-muted/50 p-3 text-left text-xs leading-relaxed text-muted-foreground">
               <Info className="mt-0.5 h-4 w-4 shrink-0" />
@@ -521,10 +551,10 @@ function PracticePage() {
               <ResultReportButton
                 report={{
                   title: "Informe de práctica por dominios · PMP",
-                  subtitle: `Puntuación ${stats.pct}% · ${stats.correct} de ${DRILL_SIZE} correctas · tiempo total ${fmtTime(stats.seconds)}`,
+                  subtitle: `Puntuación ${stats.pct}% · ${stats.correct} de ${totalQuestions} correctas · tiempo total ${fmtTime(stats.seconds)}`,
                   scorePct: stats.pct,
                   correct: stats.correct,
-                  total: DRILL_SIZE,
+                  total: totalQuestions,
                   extraRows: [
                     { label: "Tiempo total", value: fmtTime(stats.seconds) },
                     ...stats.byDomain.map(([domain, m]) => ({
@@ -618,7 +648,7 @@ function PracticePage() {
   return (
     <AppShell
       title="Práctica por dominios"
-      subtitle={`Pregunta ${index + 1} de ${DRILL_SIZE}`}
+      subtitle={`Pregunta ${index + 1} de ${totalQuestions}`}
       actions={
         <span className="num hidden items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-sm font-semibold sm:inline-flex">
           <Clock className="h-4 w-4" /> {fmtTime(elapsed)}
@@ -629,7 +659,7 @@ function PracticePage() {
         <div className="h-1.5 overflow-hidden rounded-full bg-muted">
           <div
             className="h-full rounded-full bg-accent transition-all"
-            style={{ width: `${((index + 1) / DRILL_SIZE) * 100}%` }}
+            style={{ width: `${((index + 1) / totalQuestions) * 100}%` }}
           />
         </div>
 
@@ -712,7 +742,7 @@ function PracticePage() {
               disabled={!answer}
               className="inline-flex items-center gap-1 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
             >
-              {index === DRILL_SIZE - 1 ? "Ver resultados" : "Siguiente"} <ChevronRight className="h-4 w-4" />
+              {index === totalQuestions - 1 ? "Ver resultados" : "Siguiente"} <ChevronRight className="h-4 w-4" />
             </button>
           </div>
         </div>
