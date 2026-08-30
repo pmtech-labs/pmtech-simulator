@@ -640,6 +640,18 @@ function PracticePage() {
           <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">{q.taskCode}</span>
         </div>
 
+        {q.clusterId === CLUSTER.id && (
+          <div className="space-y-3 rounded-xl border border-border bg-card p-4">
+            <h2 className="text-sm font-semibold">{CLUSTER.title}</h2>
+            {CLUSTER.scenarioText.map((p, i) => (
+              <p key={i} className="text-sm leading-relaxed text-muted-foreground">
+                {p}
+              </p>
+            ))}
+            {CLUSTER.evChart ? <EarnedValueChart chart={CLUSTER.evChart} /> : null}
+          </div>
+        )}
+
         <QuestionGraphic question={q} />
         <p className="text-[15px] font-medium leading-relaxed">{q.stem}</p>
 
