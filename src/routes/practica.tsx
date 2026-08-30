@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { RequireAuth } from "@/components/auth/RequireAuth";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { BookOpen, CheckCircle2, ChevronRight, Clock, Info, Layers, RotateCcw, Target, XCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -13,7 +13,7 @@ import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { EarnedValueChart } from "@/components/exam/EarnedValueChart";
 import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
 import { MOCK_FINISH_SUMMARY, type UnitProgress } from "@/data/mockData";
-import { getUnitProgress } from "@/services/progressService";
+import { getUnitProgress, recordRecommendedTaskCompletion } from "@/services/progressService";
 import { useErrorTypeStats } from "@/hooks/useCandidateData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
 import { FOCUS_TAG_LABELS, PERFORMANCE_DOMAIN_LABELS, PROCESS_GROUP_LABELS } from "@/lib/questionTags";
@@ -39,6 +39,9 @@ interface PracticeSearch {
   enfoque?: string;
   desempeno?: string;
   foco?: string;
+  /** IDs de tareas ECO recomendadas (separados por coma) desde /progreso. */
+  tareas?: string;
+  origen?: "recomendacion";
 }
 
 export const Route = createFileRoute("/practica")({
@@ -53,7 +56,10 @@ export const Route = createFileRoute("/practica")({
     enfoque: typeof search.enfoque === "string" ? search.enfoque : undefined,
     desempeno: typeof search.desempeno === "string" ? search.desempeno : undefined,
     foco: typeof search.foco === "string" ? search.foco : undefined,
+    tareas: typeof search.tareas === "string" ? search.tareas : undefined,
+    origen: search.origen === "recomendacion" ? ("recomendacion" as const) : undefined,
   }),
+
   head: () => ({
     meta: [
       { title: "Práctica por dominios · Simulador PMP ECO 2026" },
@@ -126,6 +132,7 @@ function fmtTime(seconds: number) {
 
 function PracticePage() {
   const search = Route.useSearch();
+  const queryClient = useQueryClient();
   const [selected, setSelected] = useState<DomainCode[]>(
     search.dominio && ALL_DOMAINS.includes(search.dominio as DomainCode)
       ? [search.dominio as DomainCode]
@@ -148,6 +155,15 @@ function PracticePage() {
   const [focusTagFilter, setFocusTagFilter] = useState<string>(
     search.foco && search.foco in FOCUS_TAG_LABELS ? search.foco : "",
   );
+
+  /** Tareas ECO recomendadas desde /progreso (si se llega con `?tareas=`). */
+  const recommendedTaskIds = useMemo(
+    () => (search.tareas ? search.tareas.split(",").filter(Boolean) : []),
+    [search.tareas],
+  );
+  const fromRecommendation = search.origen === "recomendacion" && recommendedTaskIds.length > 0;
+
+
 
 
   const [startError, setStartError] = useState<string | null>(null);
@@ -188,19 +204,27 @@ function PracticePage() {
   const toggleDomain = (d: DomainCode) =>
     setSelected((prev) => (prev.includes(d) ? prev.filter((v) => v !== d) : [...prev, d]));
 
-  const start = async () => {
+  const start = async (opts?: { taskIds?: string[] }) => {
+    const taskIds = opts?.taskIds ?? [];
     setStarting(true);
     setStartError(null);
     try {
       const built = await startExam({
-        mode: mode === "domain_drill" ? "domain_drill" : mode,
-        domains: mode === "domain_drill" ? selected : undefined,
-        unitId: mode === "domain_drill" ? undefined : unitId,
-        totalQuestions: DRILL_SIZE,
-        approachFilter: approachFilter === "all" ? undefined : (approachFilter as ApproachFilter),
-        processGroupFilter: processGroupFilter || undefined,
-        performanceDomainFilter: performanceDomainFilter || undefined,
+        mode: "domain_drill",
+        ...(taskIds.length
+          ? { taskIds, totalQuestions: taskIds.length * DRILL_SIZE }
+          : {
+              mode: mode === "domain_drill" ? "domain_drill" : mode,
+              domains: mode === "domain_drill" ? selected : undefined,
+              unitId: mode === "domain_drill" ? undefined : unitId,
+              totalQuestions: DRILL_SIZE,
+              approachFilter:
+                approachFilter === "all" ? undefined : (approachFilter as ApproachFilter),
+              processGroupFilter: processGroupFilter || undefined,
+              performanceDomainFilter: performanceDomainFilter || undefined,
+            }),
       });
+
       // El filtro temático se aplica en cliente (el backend no lo soporta aún),
       // conservando el orden y los casos completos.
       if (focusTagFilter) {
@@ -227,6 +251,17 @@ function PracticePage() {
       setStarting(false);
     }
   };
+
+  // Arranque automático cuando se llega desde la recomendación de /progreso.
+  const autoStarted = useRef(false);
+  useEffect(() => {
+    if (!fromRecommendation || autoStarted.current) return;
+    autoStarted.current = true;
+    void start({ taskIds: recommendedTaskIds });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromRecommendation, recommendedTaskIds]);
+
+
 
   /** Corrige la pregunta actual contra el backend y guarda la explicación real. */
   const check = async () => {
@@ -274,10 +309,32 @@ function PracticePage() {
     commitTime();
     if (index === totalQuestions - 1) {
       setFinished(true);
-      if (session) void finishExam(session.examId).catch(() => undefined);
+      if (session) {
+        void finishExam(session.examId).catch(() => undefined);
+        if (fromRecommendation) {
+          const answered = session.questions.length;
+          const correct = session.questions.filter((q, i) => isAnswerCorrect(q, answers[i])).length;
+          void recordRecommendedTaskCompletion({
+            taskIds: recommendedTaskIds,
+            examId: session.examId,
+            questionsAnswered: answered,
+            questionsCorrect: correct,
+          })
+            .catch(() => undefined)
+            .finally(() => {
+              // Refresca la recomendación y la analítica de /progreso.
+              void queryClient.invalidateQueries({ queryKey: ["recommended-session"] });
+              void queryClient.invalidateQueries({ queryKey: ["task-mastery"] });
+              void queryClient.invalidateQueries({ queryKey: ["score-trend"] });
+              void queryClient.invalidateQueries({ queryKey: ["unit-progress"] });
+              void queryClient.invalidateQueries({ queryKey: ["error-type-stats"] });
+            });
+        }
+      }
     }
     else setIndex((i) => i + 1);
   };
+
 
   const stats = useMemo(() => {
     if (!drill) return null;

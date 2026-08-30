@@ -1129,6 +1129,7 @@ export type Database = {
           approach: Database["public"]["Enums"]["approach_type"]
           cluster_id: string | null
           correct_answer: Json
+          correction_at: string | null
           correction_count: number
           correction_notes: string | null
           correction_status: string | null
@@ -1165,6 +1166,7 @@ export type Database = {
           approach: Database["public"]["Enums"]["approach_type"]
           cluster_id?: string | null
           correct_answer: Json
+          correction_at?: string | null
           correction_count?: number
           correction_notes?: string | null
           correction_status?: string | null
@@ -1201,6 +1203,7 @@ export type Database = {
           approach?: Database["public"]["Enums"]["approach_type"]
           cluster_id?: string | null
           correct_answer?: Json
+          correction_at?: string | null
           correction_count?: number
           correction_notes?: string | null
           correction_status?: string | null
