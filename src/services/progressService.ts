@@ -374,6 +374,19 @@ export async function getRecommendedSession(): Promise<RecommendedSession | null
       );
     }
 
+    const completedAt = completedRecently.get(row.task_id);
+    if (completedAt) {
+      const daysAgo = Math.floor((now - new Date(completedAt).getTime()) / DAY_MS);
+      score -= Math.max(10, 40 - daysAgo * 5);
+      reasons.push(
+        daysAgo <= 0
+          ? "Sesión recomendada completada hoy"
+          : `Sesión recomendada completada hace ${daysAgo} día${daysAgo === 1 ? "" : "s"}`,
+      );
+    }
+
+
+
     const task = row.eco_tasks;
     const domain = toUiDomain(task?.eco_domains?.code);
     scored.push({
