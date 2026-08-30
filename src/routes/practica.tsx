@@ -10,8 +10,15 @@ import { HelpLinks } from "@/components/support/HelpLinks";
 import { ResultReportButton } from "@/components/export/ResultReportButton";
 import { DistractorAnalytics } from "@/components/exam/DistractorAnalytics";
 import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
+import { EarnedValueChart } from "@/components/exam/EarnedValueChart";
 import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
-import { MOCK_ERROR_TYPE_STATS, MOCK_FINISH_SUMMARY, MOCK_QUESTIONS, MOCK_UNIT_PROGRESS } from "@/data/mockData";
+import {
+  CLUSTER,
+  MOCK_ERROR_TYPE_STATS,
+  MOCK_FINISH_SUMMARY,
+  MOCK_QUESTIONS,
+  MOCK_UNIT_PROGRESS,
+} from "@/data/mockData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
 import { FOCUS_TAG_LABELS, PERFORMANCE_DOMAIN_LABELS, PROCESS_GROUP_LABELS } from "@/lib/questionTags";
 
@@ -632,6 +639,18 @@ function PracticePage() {
           </span>
           <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">{q.taskCode}</span>
         </div>
+
+        {q.clusterId === CLUSTER.id && (
+          <div className="space-y-3 rounded-xl border border-border bg-card p-4">
+            <h2 className="text-sm font-semibold">{CLUSTER.title}</h2>
+            {CLUSTER.scenarioText.map((p, i) => (
+              <p key={i} className="text-sm leading-relaxed text-muted-foreground">
+                {p}
+              </p>
+            ))}
+            {CLUSTER.evChart ? <EarnedValueChart chart={CLUSTER.evChart} /> : null}
+          </div>
+        )}
 
         <QuestionGraphic question={q} />
         <p className="text-[15px] font-medium leading-relaxed">{q.stem}</p>
