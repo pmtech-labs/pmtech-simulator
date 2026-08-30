@@ -13,6 +13,8 @@ import { DOMAINS } from "@/data/mockData";
 import { useCurrentUser, useErrorTypeStats, useTaskMastery } from "@/hooks/useCandidateData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 import { buildStudyPlan } from "@/lib/studyPlan";
+import { getScoreTrend } from "@/services/progressService";
+import { useQuery } from "@tanstack/react-query";
 
 
 export const Route = createFileRoute("/progreso")({
@@ -36,12 +38,15 @@ export const Route = createFileRoute("/progreso")({
   ),
 });
 
-const TREND = [52, 58, 57, 63, 66, 68];
-
 function ProgressPage() {
   const { data: user, isLoading } = useCurrentUser();
   const { data: taskMastery = [] } = useTaskMastery();
   const { data: stats = [] } = useErrorTypeStats();
+  const { data: trend = [] } = useQuery({
+    queryKey: ["score-trend"],
+    queryFn: () => getScoreTrend(8),
+    staleTime: 60_000,
+  });
 
   const isPremium = user?.plan === "premium_6m" || user?.plan === "premium_1m";
   const errorStats = [...stats].sort((a, b) => b.occurrences - a.occurrences);
@@ -96,19 +101,44 @@ function ProgressPage() {
             <LineChart className="h-4 w-4 text-muted-foreground" />
             <h2 className="text-base font-semibold">Evolución del nivel de preparación</h2>
           </div>
-          <svg viewBox="0 0 300 90" className="mt-4 w-full" role="img" aria-label="Evolución de preparación">
-            <polyline
-              points={TREND.map((v, i) => `${10 + i * 56},${80 - (v / 100) * 70}`).join(" ")}
-              fill="none"
-              stroke="var(--accent)"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-            />
-            {TREND.map((v, i) => (
-              <circle key={i} cx={10 + i * 56} cy={80 - (v / 100) * 70} r="3" fill="var(--accent)" />
-            ))}
-          </svg>
-          <p className="mt-1 text-xs text-muted-foreground">Últimas 6 semanas · +16 puntos</p>
+          {trend.length < 2 ? (
+            <p className="mt-3 text-sm text-muted-foreground">
+              Necesitas al menos dos exámenes finalizados (prácticas parciales o simulacros) para ver
+              tu evolución.
+            </p>
+          ) : (
+            <>
+              <svg viewBox="0 0 300 90" className="mt-4 w-full" role="img" aria-label="Evolución de preparación">
+                <polyline
+                  points={trend
+                    .map((t, i) => `${10 + (i * 280) / (trend.length - 1)},${80 - (t.score / 100) * 70}`)
+                    .join(" ")}
+                  fill="none"
+                  stroke="var(--accent)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                {trend.map((t, i) => (
+                  <circle
+                    key={i}
+                    cx={10 + (i * 280) / (trend.length - 1)}
+                    cy={80 - (t.score / 100) * 70}
+                    r="3"
+                    fill="var(--accent)"
+                  />
+                ))}
+              </svg>
+              <div className="num mt-1 flex justify-between text-[10px] text-muted-foreground">
+                {trend.map((t, i) => (
+                  <span key={i}>{t.label}</span>
+                ))}
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Últimos {trend.length} exámenes finalizados · {trend[trend.length - 1].score - trend[0].score >= 0 ? "+" : ""}
+                {trend[trend.length - 1].score - trend[0].score} puntos
+              </p>
+            </>
+          )}
         </section>
 
         <section className="relative rounded-2xl border border-border bg-card p-5">
