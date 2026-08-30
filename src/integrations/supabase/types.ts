@@ -1274,6 +1274,58 @@ export type Database = {
           },
         ]
       }
+      recommended_task_completions: {
+        Row: {
+          completed_at: string
+          exam_id: string | null
+          id: string
+          questions_answered: number
+          questions_correct: number
+          task_id: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          exam_id?: string | null
+          id?: string
+          questions_answered?: number
+          questions_correct?: number
+          task_id: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          exam_id?: string | null
+          id?: string
+          questions_answered?: number
+          questions_correct?: number
+          task_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommended_task_completions_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommended_task_completions_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "eco_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommended_task_completions_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "v_task_coverage"
+            referencedColumns: ["task_id"]
+          },
+        ]
+      }
       retargeting_signals: {
         Row: {
           created_at: string | null
