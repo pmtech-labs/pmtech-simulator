@@ -95,20 +95,42 @@ function ProgressPage() {
                     {recommended.tasks.map((t) => (
                       <li
                         key={t.taskId}
-                        className="rounded-xl border border-accent/40 bg-card/60 px-3 py-2"
+                        className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-accent/40 bg-card/60 px-3 py-2"
                       >
-                        <p className="text-sm font-medium text-accent-foreground">
-                          <span className="num mr-2 text-accent-foreground/70">{t.code}</span>
-                          {t.title}
-                        </p>
-                        <p className="mt-0.5 text-xs leading-snug text-accent-foreground/75">
-                          {t.reasons.join(" · ")}
-                        </p>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-accent-foreground">
+                            <span className="num mr-2 text-accent-foreground/70">{t.code}</span>
+                            {t.title}
+                          </p>
+                          <p className="mt-0.5 text-xs leading-snug text-accent-foreground/75">
+                            {t.reasons.join(" · ")}
+                          </p>
+                        </div>
+                        <Link
+                          to="/practica"
+                          search={{ tareas: t.taskId, origen: "recomendacion" as const }}
+                          className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
+                        >
+                          <Play className="h-3.5 w-3.5" />
+                          Practicar esta tarea
+                        </Link>
                       </li>
                     ))}
                   </ul>
+                  <Link
+                    to="/practica"
+                    search={{
+                      tareas: recommended.tasks.map((t) => t.taskId).join(","),
+                      origen: "recomendacion" as const,
+                    }}
+                    className="mt-3 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+                  >
+                    <Play className="h-4 w-4" />
+                    Iniciar sesión recomendada ({recommended.questionCount} preguntas)
+                  </Link>
                 </>
               )}
+
             </div>
           </div>
         </section>
