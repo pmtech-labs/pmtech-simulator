@@ -315,7 +315,8 @@ function PracticePage() {
               <div>
                 <h2 className="text-sm font-semibold">Elige el modo de práctica</h2>
                 <p className="text-xs text-muted-foreground">
-                  Generaremos una serie de {DRILL_SIZE} preguntas con métricas de aciertos y tiempo por dominio.
+                  Generaremos una serie de hasta {DRILL_SIZE} preguntas, sin repeticiones y con los casos
+                  completos, con métricas de aciertos y tiempo por dominio.
                 </p>
               </div>
             </div>
