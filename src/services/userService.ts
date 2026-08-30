@@ -133,11 +133,18 @@ export async function getErrorTypeStats(): Promise<ErrorTypeRow[]> {
 }
 
 export async function getExamHistory(): Promise<ExamHistoryRow[]> {
+  const { data: auth } = await supabase.auth.getUser();
+  const userId = auth.user?.id;
+  if (!userId) return [];
+
   const { data, error } = await supabase
     .from("exams")
     .select("id, mode, total_questions, score_pct, score_by_domain, started_at, finished_at, status")
+    .eq("user_id", userId)
     .order("started_at", { ascending: false });
-  if (error || !data) return [];
+  if (error) throw new Error(error.message);
+  if (!data) return [];
+
 
   return data.map((e) => {
     const raw = (e.score_by_domain ?? {}) as Record<string, number>;
@@ -183,7 +190,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
       .limit(1)
       .maybeSingle(),
     getTaskMastery(),
-    getExamHistory(),
+    getExamHistory().catch(() => [] as ExamHistoryRow[]),
   ]);
 
   const license = licenseRes.data as
