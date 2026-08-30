@@ -13,7 +13,7 @@ import { DOMAINS } from "@/data/mockData";
 import { useCurrentUser, useErrorTypeStats, useTaskMastery } from "@/hooks/useCandidateData";
 import { ERROR_TYPE_LABELS, ERROR_TYPE_SHORT } from "@/lib/errorTypes";
 import { buildStudyPlan } from "@/lib/studyPlan";
-import { getScoreTrend } from "@/services/progressService";
+import { getRecommendedSession, getScoreTrend } from "@/services/progressService";
 import { useQuery } from "@tanstack/react-query";
 
 
@@ -47,15 +47,16 @@ function ProgressPage() {
     queryFn: () => getScoreTrend(8),
     staleTime: 60_000,
   });
+  const { data: recommended } = useQuery({
+    queryKey: ["recommended-session"],
+    queryFn: getRecommendedSession,
+    staleTime: 60_000,
+  });
 
   const isPremium = user?.plan === "premium_6m" || user?.plan === "premium_1m";
   const errorStats = [...stats].sort((a, b) => b.occurrences - a.occurrences);
   const maxErrors = Math.max(...errorStats.map((s) => s.occurrences), 1);
   const studyPlan = buildStudyPlan(stats);
-  const weakTasks = [...taskMastery]
-    .filter((t) => t.attempts > 0)
-    .sort((a, b) => a.mastery - b.mastery)
-    .slice(0, 2);
 
   if (isLoading || !user) {
     return (
