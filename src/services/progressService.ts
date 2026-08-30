@@ -184,15 +184,69 @@ export interface RecommendedSession {
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+/** Tabla de registro de tareas recomendadas completadas (fuera de los tipos generados). */
+const RECOMMENDED_COMPLETIONS_TABLE = "recommended_task_completions";
+
+interface RecommendedCompletionRow {
+  task_id: string;
+  completed_at: string;
+  questions_answered: number;
+  questions_correct: number;
+}
+
+/** Cliente sin tipar para la tabla de registro (los tipos generados aún no la incluyen). */
+function untypedDb() {
+  return supabase as unknown as {
+    from: (table: string) => {
+      select: (cols: string) => {
+        gte: (
+          col: string,
+          value: string,
+        ) => Promise<{ data: RecommendedCompletionRow[] | null; error: { message: string } | null }>;
+      };
+      insert: (rows: Record<string, unknown>[]) => Promise<{ error: { message: string } | null }>;
+    };
+  };
+}
+
+export interface RecordRecommendedCompletionInput {
+  taskIds: string[];
+  examId?: string | null;
+  questionsAnswered: number;
+  questionsCorrect: number;
+}
+
 /**
- * Próxima sesión recomendada: prioriza tareas ECO combinando dominio actual,
- * fallos recientes (últimos 14 días), tendencia semanal y recencia del último
- * intento (las tareas sin repasar recientemente ganan prioridad).
+ * Registra que el candidato ha completado una sesión iniciada desde la
+ * recomendación de /progreso. Se usa para no volver a recomendar de inmediato
+ * la misma tarea y para mostrar el histórico de sesiones recomendadas.
  */
+export async function recordRecommendedTaskCompletion(
+  input: RecordRecommendedCompletionInput,
+): Promise<void> {
+  const { data: auth } = await supabase.auth.getUser();
+  const userId = auth.user?.id;
+  if (!userId || input.taskIds.length === 0) return;
+
+  const { error } = await untypedDb()
+    .from(RECOMMENDED_COMPLETIONS_TABLE)
+    .insert(
+      input.taskIds.map((taskId) => ({
+        user_id: userId,
+        task_id: taskId,
+        exam_id: input.examId ?? null,
+        questions_answered: input.questionsAnswered,
+        questions_correct: input.questionsCorrect,
+      })),
+    );
+  if (error) throw new Error(error.message);
+}
+
 export async function getRecommendedSession(): Promise<RecommendedSession | null> {
   const { data: auth } = await supabase.auth.getUser();
   const userId = auth.user?.id;
   if (!userId) return null;
+
 
   const [masteryRes, itemsRes] = await Promise.all([
     supabase
