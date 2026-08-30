@@ -228,7 +228,7 @@ export async function startExam(params: StartExamParams): Promise<ExamSession> {
   });
   if (error) throw new Error(await readStartExamError(error));
 
-  const items = (data.items ?? []) as RawItem[];
+  const items = orderItems((data.items ?? []) as RawItem[]);
   const meta = await fetchQuestionMeta(items.map((i) => i.id));
   const clusters: Record<string, CaseCluster> = {};
 
