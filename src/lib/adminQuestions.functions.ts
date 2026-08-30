@@ -244,7 +244,7 @@ export const listReviewedOutQuestionsFn = createServerFn({ method: "POST" })
     const { data: rows, error } = await supabaseAdmin
       .from("questions")
       .select(
-        "id, question_number, stem, options, correct_answer, explanation, status, format, item_type, difficulty, task_id, updated_at, correction_count, correction_status, correction_notes",
+        "id, question_number, stem, options, correct_answer, explanation, status, format, item_type, difficulty, task_id, updated_at, correction_count, correction_status, correction_notes, correction_at",
       )
       .in("status", statuses)
       .order("question_number", { ascending: true })

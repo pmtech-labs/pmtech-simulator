@@ -53,6 +53,7 @@ interface ReviewedRow {
   correction_count: number | null;
   correction_status: "corrected" | "unfixable" | null;
   correction_notes: string | null;
+  correction_at: string | null;
   practicum_payload?: unknown;
 }
 
@@ -292,6 +293,9 @@ function ReviewedCard({
         <div className="mt-2 rounded-md border border-success/30 bg-success-soft p-3 text-sm">
           <p className="text-[11px] font-semibold uppercase text-success">
             Qué se corrigió
+            {q.correction_at
+              ? ` · ${new Date(q.correction_at).toLocaleDateString("es-ES")}`
+              : ""}
           </p>
           <p className="mt-1 whitespace-pre-line">{q.correction_notes}</p>
         </div>
