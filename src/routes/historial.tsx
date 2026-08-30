@@ -52,11 +52,17 @@ function HistoryPage() {
               ))}
             </div>
           )}
-          {!isLoading && !history.length && (
+          {!isLoading && error && (
+            <p className="p-6 text-center text-sm text-destructive">
+              No se ha podido cargar tu historial: {error instanceof Error ? error.message : "error desconocido"}
+            </p>
+          )}
+          {!isLoading && !error && !history.length && (
             <p className="p-6 text-center text-sm text-muted-foreground">
               Todavía no has realizado ningún examen. Empieza una simulación desde el panel.
             </p>
           )}
+
           {history.map((e) => (
             <div
               key={e.id}
