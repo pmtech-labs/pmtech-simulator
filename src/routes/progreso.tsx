@@ -239,9 +239,13 @@ function ProgressPage() {
             <div>
               <h2 className="text-sm font-semibold text-accent-foreground">Próxima sesión recomendada</h2>
               <p className="mt-1 text-sm leading-relaxed text-accent-foreground/90">
-                20 preguntas de <strong>Entorno de negocio · Tareas 2 y 6</strong> (48 % y 52 % de
-                dominio) más un cluster de caso híbrido. Duración estimada: 35 minutos.
+                {weakTasks.length === 0
+                  ? "Completa una práctica parcial o un simulacro para que podamos recomendarte la próxima sesión con tus datos reales."
+                  : `Practica ${weakTasks.length * 10} preguntas de ${weakTasks
+                      .map((t) => `${t.code} · ${t.title} (${t.mastery} %)`)
+                      .join(" y ")}. Duración estimada: ${weakTasks.length * 15} minutos.`}
               </p>
+
             </div>
           </div>
         </section>
