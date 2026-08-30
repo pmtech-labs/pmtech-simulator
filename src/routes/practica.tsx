@@ -155,6 +155,15 @@ function PracticePage() {
     search.foco && search.foco in FOCUS_TAG_LABELS ? search.foco : "",
   );
 
+  /** Tareas ECO recomendadas desde /progreso (si se llega con `?tareas=`). */
+  const recommendedTaskIds = useMemo(
+    () => (search.tareas ? search.tareas.split(",").filter(Boolean) : []),
+    [search.tareas],
+  );
+  const fromRecommendation = search.origen === "recomendacion" && recommendedTaskIds.length > 0;
+
+
+
 
   const [startError, setStartError] = useState<string | null>(null);
   const [starting, setStarting] = useState(false);
