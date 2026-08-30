@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { RequireAuth } from "@/components/auth/RequireAuth";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { BookOpen, CheckCircle2, ChevronRight, Clock, Info, Layers, RotateCcw, Target, XCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -13,7 +13,7 @@ import { ExplanationPanel } from "@/components/exam/ExplanationPanel";
 import { EarnedValueChart } from "@/components/exam/EarnedValueChart";
 import { QuestionGraphic, QuestionInput } from "@/components/exam/QuestionInput";
 import { MOCK_FINISH_SUMMARY, type UnitProgress } from "@/data/mockData";
-import { getUnitProgress } from "@/services/progressService";
+import { getUnitProgress, recordRecommendedTaskCompletion } from "@/services/progressService";
 import { useErrorTypeStats } from "@/hooks/useCandidateData";
 import { ERROR_TYPE_LABELS } from "@/lib/errorTypes";
 import { FOCUS_TAG_LABELS, PERFORMANCE_DOMAIN_LABELS, PROCESS_GROUP_LABELS } from "@/lib/questionTags";
@@ -132,6 +132,7 @@ function fmtTime(seconds: number) {
 
 function PracticePage() {
   const search = Route.useSearch();
+  const queryClient = useQueryClient();
   const [selected, setSelected] = useState<DomainCode[]>(
     search.dominio && ALL_DOMAINS.includes(search.dominio as DomainCode)
       ? [search.dominio as DomainCode]
