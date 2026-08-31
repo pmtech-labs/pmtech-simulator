@@ -174,6 +174,8 @@ function PracticePage() {
   const [answers, setAnswers] = useState<Record<number, AnswerValue>>({});
   const [times, setTimes] = useState<Record<number, number>>({});
   const [checked, setChecked] = useState<Record<number, boolean>>({});
+  /** Resultado autoritativo del backend por índice de pregunta. */
+  const [results, setResults] = useState<Record<number, boolean>>({});
   const [finished, setFinished] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const startRef = useRef(Date.now());
@@ -242,6 +244,7 @@ function PracticePage() {
       setAnswers({});
       setTimes({});
       setChecked({});
+      setResults({});
       setFinished(false);
       setElapsed(0);
       startRef.current = Date.now();
@@ -263,15 +266,21 @@ function PracticePage() {
 
 
 
-  /** Corrige la pregunta actual contra el backend y guarda la explicación real. */
-  const check = async () => {
-    if (!session) return;
+  /**
+   * Envía la respuesta al backend (siempre, se pulse o no "Comprobar") y guarda
+   * la clave, el tipo de error y la explicación real. Devuelve si fue correcta.
+   */
+  const submitCurrent = async (reveal: boolean): Promise<boolean | undefined> => {
+    if (!session) return undefined;
     const current = session.questions[index];
     const value = answers[index];
-    if (!current || !value) return;
-    setChecked((c) => ({ ...c, [index]: true }));
+    if (!current || !value) return undefined;
+    if (reveal) setChecked((c) => ({ ...c, [index]: true }));
     const feedback = await submitAnswer(session.examId, current.id, value, times[index] ?? 0);
-    if (!feedback.saved) return;
+    if (!feedback.saved) return undefined;
+    if (feedback.isCorrect !== undefined) {
+      setResults((r) => ({ ...r, [index]: Boolean(feedback.isCorrect) }));
+    }
     setSession((prev) =>
       prev
         ? {
@@ -305,15 +314,22 @@ function PracticePage() {
     setTimes((prev) => ({ ...prev, [index]: (prev[index] ?? 0) + spent }));
   };
 
-  const next = () => {
+  const next = async () => {
     commitTime();
+    // La respuesta se registra siempre, aunque el candidato no pulse "Comprobar".
+    let lastOk: boolean | undefined;
+    if (!checked[index]) lastOk = await submitCurrent(false);
+
     if (index === totalQuestions - 1) {
       setFinished(true);
       if (session) {
-        void finishExam(session.examId).catch(() => undefined);
+        await finishExam(session.examId).catch(() => undefined);
         if (fromRecommendation) {
           const answered = session.questions.length;
-          const correct = session.questions.filter((q, i) => isAnswerCorrect(q, answers[i])).length;
+          const merged = { ...results, ...(lastOk !== undefined ? { [index]: lastOk } : {}) };
+          const correct = session.questions.filter(
+            (q, i) => merged[i] ?? isAnswerCorrect(q, answers[i]),
+          ).length;
           void recordRecommendedTaskCompletion({
             taskIds: recommendedTaskIds,
             examId: session.examId,
@@ -342,7 +358,7 @@ function PracticePage() {
     let correct = 0;
     let seconds = 0;
     drill.forEach((q, i) => {
-      const ok = isAnswerCorrect(q, answers[i]);
+      const ok = results[i] ?? isAnswerCorrect(q, answers[i]);
       const t = times[i] ?? 0;
       if (ok) correct++;
       seconds += t;
@@ -353,7 +369,7 @@ function PracticePage() {
       byDomain.set(q.domain, entry);
     });
     return { correct, seconds, pct: Math.round((correct / drill.length) * 100), byDomain: [...byDomain.entries()] };
-  }, [drill, answers, times]);
+  }, [drill, answers, times, results]);
 
   if (!drill) {
     const units = unitsQuery.data ?? [];
@@ -653,7 +669,7 @@ function PracticePage() {
           <section className="space-y-4">
             <h2 className="text-sm font-semibold">Revisión</h2>
             {drill.map((q, i) => {
-              const ok = isAnswerCorrect(q, answers[i]);
+              const ok = results[i] ?? isAnswerCorrect(q, answers[i]);
               return (
                 <div key={`${q.id}-${i}`} className="space-y-3 rounded-2xl border border-border bg-card p-4 sm:p-5">
                   <div className="flex items-start gap-2">
@@ -698,7 +714,7 @@ function PracticePage() {
   const q = drill[index];
   const answer = answers[index];
   const isChecked = Boolean(checked[index]);
-  const currentOk = isAnswerCorrect(q, answer);
+  const currentOk = results[index] ?? isAnswerCorrect(q, answer);
   const cluster = q.clusterId ? session?.clusters[q.clusterId] : undefined;
 
   return (
@@ -786,7 +802,7 @@ function PracticePage() {
           <div className="flex items-center gap-2">
             {!isChecked && (
               <button
-                onClick={() => void check()}
+                onClick={() => void submitCurrent(true)}
                 disabled={!answer}
                 className="rounded-lg border border-accent bg-warning-soft px-3 py-2 text-sm font-semibold text-accent-foreground disabled:opacity-40"
               >
@@ -794,7 +810,7 @@ function PracticePage() {
               </button>
             )}
             <button
-              onClick={next}
+              onClick={() => void next()}
               disabled={!answer}
               className="inline-flex items-center gap-1 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
             >
