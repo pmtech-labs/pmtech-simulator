@@ -314,15 +314,22 @@ function PracticePage() {
     setTimes((prev) => ({ ...prev, [index]: (prev[index] ?? 0) + spent }));
   };
 
-  const next = () => {
+  const next = async () => {
     commitTime();
+    // La respuesta se registra siempre, aunque el candidato no pulse "Comprobar".
+    let lastOk: boolean | undefined;
+    if (!checked[index]) lastOk = await submitCurrent(false);
+
     if (index === totalQuestions - 1) {
       setFinished(true);
       if (session) {
-        void finishExam(session.examId).catch(() => undefined);
+        await finishExam(session.examId).catch(() => undefined);
         if (fromRecommendation) {
           const answered = session.questions.length;
-          const correct = session.questions.filter((q, i) => isAnswerCorrect(q, answers[i])).length;
+          const merged = { ...results, ...(lastOk !== undefined ? { [index]: lastOk } : {}) };
+          const correct = session.questions.filter(
+            (q, i) => merged[i] ?? isAnswerCorrect(q, answers[i]),
+          ).length;
           void recordRecommendedTaskCompletion({
             taskIds: recommendedTaskIds,
             examId: session.examId,
