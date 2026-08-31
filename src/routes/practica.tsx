@@ -244,6 +244,7 @@ function PracticePage() {
       setAnswers({});
       setTimes({});
       setChecked({});
+      setResults({});
       setFinished(false);
       setElapsed(0);
       startRef.current = Date.now();
