@@ -266,15 +266,21 @@ function PracticePage() {
 
 
 
-  /** Corrige la pregunta actual contra el backend y guarda la explicación real. */
-  const check = async () => {
-    if (!session) return;
+  /**
+   * Envía la respuesta al backend (siempre, se pulse o no "Comprobar") y guarda
+   * la clave, el tipo de error y la explicación real. Devuelve si fue correcta.
+   */
+  const submitCurrent = async (reveal: boolean): Promise<boolean | undefined> => {
+    if (!session) return undefined;
     const current = session.questions[index];
     const value = answers[index];
-    if (!current || !value) return;
-    setChecked((c) => ({ ...c, [index]: true }));
+    if (!current || !value) return undefined;
+    if (reveal) setChecked((c) => ({ ...c, [index]: true }));
     const feedback = await submitAnswer(session.examId, current.id, value, times[index] ?? 0);
-    if (!feedback.saved) return;
+    if (!feedback.saved) return undefined;
+    if (feedback.isCorrect !== undefined) {
+      setResults((r) => ({ ...r, [index]: Boolean(feedback.isCorrect) }));
+    }
     setSession((prev) =>
       prev
         ? {
