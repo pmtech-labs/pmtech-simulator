@@ -278,6 +278,8 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   const [onlyFlagged, setOnlyFlagged] = useState(false);
   const [breakSeconds, setBreakSeconds] = useState(BREAK_SECONDS);
   const questionStart = useRef(Date.now());
+  /** Respuesta ya registrada en el backend por pregunta (evita reenvíos). */
+  const savedRef = useRef<Record<string, string>>({});
   /** Marca de tiempo de fin del examen (ms). Evita desfases si la pestaña se suspende. */
   const deadline = useRef<number>(Date.now() + seconds * 1000);
 
