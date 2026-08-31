@@ -369,7 +369,7 @@ function PracticePage() {
       byDomain.set(q.domain, entry);
     });
     return { correct, seconds, pct: Math.round((correct / drill.length) * 100), byDomain: [...byDomain.entries()] };
-  }, [drill, answers, times]);
+  }, [drill, answers, times, results]);
 
   if (!drill) {
     const units = unitsQuery.data ?? [];
@@ -669,7 +669,7 @@ function PracticePage() {
           <section className="space-y-4">
             <h2 className="text-sm font-semibold">Revisión</h2>
             {drill.map((q, i) => {
-              const ok = isAnswerCorrect(q, answers[i]);
+              const ok = results[i] ?? isAnswerCorrect(q, answers[i]);
               return (
                 <div key={`${q.id}-${i}`} className="space-y-3 rounded-2xl border border-border bg-card p-4 sm:p-5">
                   <div className="flex items-start gap-2">
@@ -714,7 +714,7 @@ function PracticePage() {
   const q = drill[index];
   const answer = answers[index];
   const isChecked = Boolean(checked[index]);
-  const currentOk = isAnswerCorrect(q, answer);
+  const currentOk = results[index] ?? isAnswerCorrect(q, answer);
   const cluster = q.clusterId ? session?.clusters[q.clusterId] : undefined;
 
   return (
@@ -802,7 +802,7 @@ function PracticePage() {
           <div className="flex items-center gap-2">
             {!isChecked && (
               <button
-                onClick={() => void check()}
+                onClick={() => void submitCurrent(true)}
                 disabled={!answer}
                 className="rounded-lg border border-accent bg-warning-soft px-3 py-2 text-sm font-semibold text-accent-foreground disabled:opacity-40"
               >
@@ -810,7 +810,7 @@ function PracticePage() {
               </button>
             )}
             <button
-              onClick={next}
+              onClick={() => void next()}
               disabled={!answer}
               className="inline-flex items-center gap-1 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
             >
