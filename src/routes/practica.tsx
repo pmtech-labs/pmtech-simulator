@@ -358,7 +358,7 @@ function PracticePage() {
     let correct = 0;
     let seconds = 0;
     drill.forEach((q, i) => {
-      const ok = isAnswerCorrect(q, answers[i]);
+      const ok = results[i] ?? isAnswerCorrect(q, answers[i]);
       const t = times[i] ?? 0;
       if (ok) correct++;
       seconds += t;
