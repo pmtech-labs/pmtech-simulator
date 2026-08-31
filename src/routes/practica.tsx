@@ -174,6 +174,8 @@ function PracticePage() {
   const [answers, setAnswers] = useState<Record<number, AnswerValue>>({});
   const [times, setTimes] = useState<Record<number, number>>({});
   const [checked, setChecked] = useState<Record<number, boolean>>({});
+  /** Resultado autoritativo del backend por índice de pregunta. */
+  const [results, setResults] = useState<Record<number, boolean>>({});
   const [finished, setFinished] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const startRef = useRef(Date.now());
