@@ -278,6 +278,8 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   const [onlyFlagged, setOnlyFlagged] = useState(false);
   const [breakSeconds, setBreakSeconds] = useState(BREAK_SECONDS);
   const questionStart = useRef(Date.now());
+  /** Respuesta ya registrada en el backend por pregunta (evita reenvíos). */
+  const savedRef = useRef<Record<string, string>>({});
   /** Marca de tiempo de fin del examen (ms). Evita desfases si la pestaña se suspende. */
   const deadline = useRef<number>(Date.now() + seconds * 1000);
 
@@ -333,9 +335,10 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   }, [phase]);
 
   const send = useCallback(
-    async (question: Question, value: AnswerValue) => {
-      const spent = Math.round((Date.now() - questionStart.current) / 1000);
+    async (question: Question, value: AnswerValue, spentOverride?: number) => {
+      const spent = spentOverride ?? Math.round((Date.now() - questionStart.current) / 1000);
       const res = await submitAnswer(session.examId, question.id, value, spent);
+      if (res.saved) savedRef.current[question.id] = JSON.stringify(value);
       if (res.timeExpired) {
         setSeconds(0);
         return res;
@@ -368,13 +371,23 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
   };
 
   const saveSilently = async () => {
-    if (!answer || feedback[q.id]) return;
+    if (!answer || savedRef.current[q.id] === JSON.stringify(answer)) return;
     await send(q, answer);
+  };
+
+  /** Envía al backend cualquier respuesta que aún no se haya registrado. */
+  const saveAllPending = async () => {
+    for (const item of questions) {
+      const value = answers[item.id];
+      if (!value) continue;
+      if (savedRef.current[item.id] === JSON.stringify(value)) continue;
+      await send(item, value, item.id === q.id ? undefined : 0);
+    }
   };
 
   async function finalize() {
     setFinishing(true);
-    if (!formative) await saveSilently();
+    await saveAllPending();
     try {
       const result = await finishExam(session.examId);
       setSummary(result);
@@ -416,7 +429,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
     setConfirmCloseSectionOpen(false);
     setClosingSection(true);
     setSectionError(null);
-    await saveSilently();
+    await saveAllPending();
     try {
       const res = await finalizeSection(session.examId, section.sectionNumber);
       setClosedSections((prev) =>
@@ -698,6 +711,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
                   <li key={item.id}>
                     <button
                       onClick={() => {
+                        void saveSilently();
                         setIndex(globalIdx);
                         setPhase("exam");
                       }}
@@ -875,7 +889,10 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
             current={index}
             answers={answers}
             flagged={flagged}
-            onSelect={setIndex}
+            onSelect={(i) => {
+              void saveSilently();
+              setIndex(i);
+            }}
             activeSection={multiSection ? section.sectionNumber : undefined}
             closedSections={closedSections}
             onlyFlagged={onlyFlagged}
@@ -911,6 +928,7 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
               closedSections={closedSections}
               onlyFlagged={onlyFlagged}
               onSelect={(i) => {
+                void saveSilently();
                 setIndex(i);
                 setNavOpen(false);
               }}
@@ -1057,7 +1075,10 @@ function ExamRunner({ session, resume }: { session: ExamSession; resume?: ExamPr
           <div className="flex items-center gap-2">
             <button
               disabled={index <= firstIndexOfSection}
-              onClick={() => setIndex((i) => i - 1)}
+              onClick={() => {
+                void saveSilently();
+                setIndex((i) => i - 1);
+              }}
               className="inline-flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-sm font-medium disabled:opacity-40"
             >
               <ChevronLeft className="h-4 w-4" /> Anterior
