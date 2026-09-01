@@ -86,7 +86,7 @@ export const Route = createFileRoute("/curso-pmp-online")({
                   name: "Inicio",
                   item: "https://toppmsimulator.glacimonto.com",
                 },
-                { "@type": "ListItem", position: 2, name: "Curso PMP online", item: URL },
+                { "@type": "ListItem", position: 2, name: "Curso PMP® online", item: URL },
               ],
             },
           ],
