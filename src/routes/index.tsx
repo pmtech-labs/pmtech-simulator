@@ -745,30 +745,6 @@ function FAQ() {
   );
 }
 
-function FinalCta() {
-  return (
-    <section className="mx-auto max-w-5xl px-4 pb-20 sm:px-6">
-      <Reveal>
-        <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-14 text-center text-primary-foreground sm:px-12">
-          <div className="pointer-events-none absolute -left-20 -top-20 h-56 w-56 rounded-full bg-accent/25 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -right-10 h-56 w-56 rounded-full bg-accent/15 blur-3xl" />
-          <ClipboardList className="mx-auto h-10 w-10 text-accent" />
-          <h2 className="mt-4 font-display text-2xl font-bold sm:text-3xl">
-            Deja de practicar para un examen que ya no existe
-          </h2>
-          <p className="mx-auto mt-3 max-w-lg text-sm text-primary-foreground/70">
-            Empieza hoy con el único simulador en español calibrado al ECO 2026 desde el primer
-            día.
-          </p>
-          <TryFreeButton
-            size="lg"
-            className="mt-6 px-6 py-3 transition-all duration-300 hover:shadow-[0_18px_40px_-16px_var(--accent)]"
-          />
-        </div>
-      </Reveal>
-    </section>
-  );
-}
 
 function Footer() {
   return (
@@ -1078,7 +1054,6 @@ function LandingPage() {
           <FAQ />
           <Newsletter />
         </div>
-        <FinalCta />
         <LeadWizard />
       </main>
       <Footer />
