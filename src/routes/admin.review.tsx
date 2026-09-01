@@ -114,7 +114,7 @@ function ReviewPage() {
       // que se deduplica por id: de lo contrario la misma pregunta (p. ej. #499)
       // reaparecía en varias páginas y las claves duplicadas de React rompían el
       // desplegable del enunciado.
-      const byId = new Map<string, (typeof first.rows)[number]>();
+      const byId = new Map<string, AdminQuestion>();
       const first = await listQuestions(filters, 1, CHUNK);
       for (const r of first.rows) byId.set(r.id, r);
       let p = 2;
