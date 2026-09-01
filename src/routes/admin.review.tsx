@@ -110,21 +110,27 @@ function ReviewPage() {
     queryKey: ["admin-questions", filters],
     queryFn: async () => {
       const CHUNK = 200;
+      // La paginación del servidor no garantiza un orden estable entre lotes, así
+      // que se deduplica por id: de lo contrario la misma pregunta (p. ej. #499)
+      // reaparecía en varias páginas y las claves duplicadas de React rompían el
+      // desplegable del enunciado.
+      const byId = new Map<string, (typeof first.rows)[number]>();
       const first = await listQuestions(filters, 1, CHUNK);
-      const rows = [...first.rows];
-      const total = first.total ?? rows.length;
+      for (const r of first.rows) byId.set(r.id, r);
       let p = 2;
-      while (rows.length < total && first.rows.length === CHUNK) {
+      let lastCount = first.rows.length;
+      while (lastCount === CHUNK && p <= 50) {
         const next = await listQuestions(filters, p, CHUNK);
-        if (next.rows.length === 0) break;
-        rows.push(...next.rows);
-        if (next.rows.length < CHUNK) break;
+        lastCount = next.rows.length;
+        if (lastCount === 0) break;
+        for (const r of next.rows) byId.set(r.id, r);
         p += 1;
-        if (p > 50) break;
       }
+      const rows = Array.from(byId.values());
       return { rows, total: rows.length };
     },
   });
+
 
   const allRows = questions.data?.rows ?? [];
 
