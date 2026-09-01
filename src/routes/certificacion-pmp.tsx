@@ -14,7 +14,7 @@ const DESCRIPTION =
 const FAQS: SeoFaq[] = [
   {
     q: "¿Qué es la certificación PMP®?",
-    a: "El Project Management Professional (PMP®)® es la credencial de dirección de proyectos del Project Management Institute. Acredita que sabes dirigir proyectos en entornos predictivos, ágiles e híbridos y es la certificación de gestión de proyectos más reconocida en España y Latinoamérica.",
+    a: "El Project Management Professional (PMP®) es la credencial de dirección de proyectos del Project Management Institute. Acredita que sabes dirigir proyectos en entornos predictivos, ágiles e híbridos y es la certificación de gestión de proyectos más reconocida en España y Latinoamérica.",
   },
   {
     q: "¿Cuánto vale la certificación PMP®?",

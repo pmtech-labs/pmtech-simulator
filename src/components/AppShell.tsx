@@ -313,7 +313,7 @@ export function AppShell({
 
           <footer className="border-t border-border px-4 py-4 text-[11px] leading-relaxed text-muted-foreground sm:px-6 lg:px-8">
             Top PM Simulator es un producto independiente. No está afiliado, avalado ni patrocinado
-            por el Project Management Institute (PMI®)®. PMP® y PMBOK® son marcas registradas del PMI®.
+            por el Project Management Institute (PMI®). PMP® y PMBOK® son marcas registradas del PMI®.
           </footer>
         </div>
       </div>

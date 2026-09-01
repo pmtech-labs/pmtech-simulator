@@ -112,7 +112,7 @@ function TerminosPage() {
               <strong className="text-foreground">Glacimonto</strong> y{" "}
               <strong className="text-foreground">Top PM Simulator</strong> son marcas registradas de
               [NOMBRE COMPLETO DE LA EMPRESA]. PMP® y PMBOK® son marcas registradas del Project Management
-              Institute (PMI®)®, sin relación de afiliación ni patrocinio con esta plataforma.
+              Institute (PMI®), sin relación de afiliación ni patrocinio con esta plataforma.
             </p>
           </section>
 

@@ -863,7 +863,7 @@ function Footer() {
         </div>
         <p className="mt-8 text-center text-[11px] leading-relaxed text-muted-foreground">
           Top PM Simulator es un producto independiente. No está afiliado, avalado ni
-          patrocinado por el Project Management Institute (PMI®)®. PMP® y PMBOK® son marcas
+          patrocinado por el Project Management Institute (PMI®). PMP® y PMBOK® son marcas
           registradas del PMI®.
         </p>
       </div>

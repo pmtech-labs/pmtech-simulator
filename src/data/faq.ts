@@ -18,7 +18,7 @@ export const FAQ_BLOCKS: FaqBlock[] = [
       {
         id: "afiliado-pmi",
         q: "¿Está afiliado o avalado por PMI®?",
-        a: "No. Top PM Simulator es un producto independiente, no afiliado ni respaldado por el Project Management Institute (PMI®)®. PMP® y PMBOK® son marcas registradas de PMI®.",
+        a: "No. Top PM Simulator es un producto independiente, no afiliado ni respaldado por el Project Management Institute (PMI®). PMP® y PMBOK® son marcas registradas de PMI®.",
       },
       {
         id: "garantia-aprobado",
