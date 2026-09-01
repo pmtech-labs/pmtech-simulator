@@ -25,19 +25,19 @@ const GROUPS: NavGroup[] = [
   {
     label: "Recursos",
     items: [
-      { label: "Certificación PMP", to: "/certificacion-pmp" },
-      { label: "Examen PMP", to: "/examen-pmp" },
+      { label: "Certificación PMP®", to: "/certificacion-pmp" },
+      { label: "Examen PMP®", to: "/examen-pmp" },
       { label: "Requisitos y precio", to: "/requisitos-pmp" },
-      { label: "Curso PMP online", to: "/curso-pmp-online" },
-      { label: "PMBOK 7 vs 8", to: "/pmbok-8" },
-      { label: "Glosario PMP", to: "/glosario" },
+      { label: "Curso PMP® online", to: "/curso-pmp-online" },
+      { label: "PMBOK® 7 vs 8", to: "/pmbok-8" },
+      { label: "Glosario PMP®", to: "/glosario" },
       { label: "Preguntas frecuentes", to: "/faq" },
     ],
   },
   {
     label: "Comparativas",
     items: [
-      { label: "vs PMI Study Hall", to: "/top-pm-simulator-vs-pmi-study-hall" },
+      { label: "vs PMI® Study Hall", to: "/top-pm-simulator-vs-pmi-study-hall" },
       { label: "vs PrepCast", to: "/top-pm-simulator-vs-prepcast" },
     ],
   },

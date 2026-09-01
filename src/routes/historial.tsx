@@ -12,13 +12,13 @@ export const Route = createFileRoute("/historial")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Historial de exámenes · Simulador PMP ECO 2026" },
+      { title: "Historial de exámenes · Simulador PMP® ECO 2026" },
       {
         name: "description",
-        content: "Consulta todas tus simulaciones PMP realizadas, puntuación, duración y modo de examen.",
+        content: "Consulta todas tus simulaciones PMP® realizadas, puntuación, duración y modo de examen.",
       },
-      { property: "og:title", content: "Historial de exámenes PMP" },
-      { property: "og:description", content: "Todas tus simulaciones PMP con puntuación y duración." },
+      { property: "og:title", content: "Historial de exámenes PMP®" },
+      { property: "og:description", content: "Todas tus simulaciones PMP® con puntuación y duración." },
     ],
   }),
   component: () => (

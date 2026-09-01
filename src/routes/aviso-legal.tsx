@@ -83,7 +83,7 @@ function AvisoLegalPage() {
             <p className="mt-3">
               Top PM Simulator es una plataforma de preparación para el examen de certificación PMP® basada en el
               ECO 2026 y PMBOK® 8. No está afiliada, avalada ni patrocinada por el Project Management Institute
-              (PMI)®. PMP® y PMBOK® son marcas registradas de PMI.
+              (PMI®). PMP® y PMBOK® son marcas registradas de PMI®.
             </p>
           </section>
 

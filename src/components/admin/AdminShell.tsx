@@ -52,7 +52,7 @@ export function AdminShell({
           </span>
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-sidebar-foreground">Panel interno</p>
-            <p className="truncate text-[11px] text-sidebar-foreground/60">Simulador PMP</p>
+            <p className="truncate text-[11px] text-sidebar-foreground/60">Simulador PMP®</p>
           </div>
         </div>
         <nav className="flex gap-1 overflow-x-auto px-3 pb-3 lg:flex-col lg:overflow-visible">

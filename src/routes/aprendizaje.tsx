@@ -293,7 +293,7 @@ function LearningPathPage() {
         <div className="flex gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed text-foreground">
           <Info className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
           <p>
-            Las <strong>lecciones</strong> son nuestro propio temario de estudio, pensado para que practiques con progresión — no son un concepto oficial de PMI. Lo que sí es oficial son las <strong>26 tareas del ECO 2026</strong> (agrupadas en 3 dominios: Personas, Proceso, Entorno de Negocio), y cada lección está mapeada a una o varias de ellas. Si estudiaste con material antiguo organizado por “áreas de conocimiento” (Alcance, Cronograma, Coste…), ese modelo ya no se usa desde PMBOK 7 — aquí no lo vas a encontrar porque no es la estructura vigente del examen.
+            Las <strong>lecciones</strong> son nuestro propio temario de estudio, pensado para que practiques con progresión — no son un concepto oficial de PMI®. Lo que sí es oficial son las <strong>26 tareas del ECO 2026</strong> (agrupadas en 3 dominios: Personas, Proceso, Entorno de Negocio), y cada lección está mapeada a una o varias de ellas. Si estudiaste con material antiguo organizado por “áreas de conocimiento” (Alcance, Cronograma, Coste…), ese modelo ya no se usa desde PMBOK® 7 — aquí no lo vas a encontrar porque no es la estructura vigente del examen.
           </p>
         </div>
         <section className="rounded-2xl border border-border bg-card p-5">

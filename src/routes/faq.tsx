@@ -18,13 +18,13 @@ export const Route = createFileRoute("/faq")({
       {
         name: "description",
         content:
-          "Resolvemos 15 dudas sobre el simulador PMP (ECO 2026, explicaciones y tipos de error), sobre planes y pagos (plan gratuito, upgrades y duración) y sobre la certificación PMP y el diploma de logro.",
+          "Resolvemos 15 dudas sobre el simulador PMP® (ECO 2026, explicaciones y tipos de error), sobre planes y pagos (plan gratuito, upgrades y duración) y sobre la certificación PMP® y el diploma de logro.",
       },
       { property: "og:title", content: "Preguntas frecuentes — Top PM Simulator" },
       {
         property: "og:description",
         content:
-          "Todo sobre el simulador, los planes (incluido el plan gratuito) y la certificación PMP, respondido en español.",
+          "Todo sobre el simulador, los planes (incluido el plan gratuito) y la certificación PMP®, respondido en español.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: PAGE_URL },
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/faq")({
       { name: "twitter:title", content: "Preguntas frecuentes — Top PM Simulator" },
       {
         name: "twitter:description",
-        content: "Simulador, planes y certificación PMP: 15 preguntas frecuentes respondidas.",
+        content: "Simulador, planes y certificación PMP®: 15 preguntas frecuentes respondidas.",
       },
     ],
     links: [{ rel: "canonical", href: PAGE_URL }],
@@ -68,7 +68,7 @@ function FaqPage() {
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
             Todo lo que suelen preguntarnos sobre el simulador, los planes (incluido el plan
-            gratuito) y la certificación PMP.
+            gratuito) y la certificación PMP®.
           </p>
         </div>
 

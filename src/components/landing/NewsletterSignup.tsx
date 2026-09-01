@@ -124,7 +124,7 @@ export function NewsletterSignup() {
       )}
 
       <ul className="mt-4 grid gap-1.5 text-[11px] leading-relaxed text-muted-foreground">
-        <li>· Cambios del ECO 2026 y del PMBOK explicados en claro</li>
+        <li>· Cambios del ECO 2026 y del PMBOK® explicados en claro</li>
         <li>· Metodologías predictivas, ágiles e híbridas aplicadas</li>
         <li>· Casos reales de proyectos y errores que se repiten</li>
         <li>· Preguntas comentadas de examen y recursos de estudio</li>

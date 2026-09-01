@@ -17,13 +17,13 @@ export const Route = createFileRoute("/checkout")({
   }),
   head: () => ({
     meta: [
-      { title: "Contratar licencia · Simulador PMP ECO 2026" },
+      { title: "Contratar licencia · Simulador PMP® ECO 2026" },
       {
         name: "description",
         content:
-          "Resumen de tu licencia del simulador PMP: plan, duración y contenidos incluidos antes de completar la contratación.",
+          "Resumen de tu licencia del simulador PMP®: plan, duración y contenidos incluidos antes de completar la contratación.",
       },
-      { property: "og:title", content: "Contratar licencia · Simulador PMP" },
+      { property: "og:title", content: "Contratar licencia · Simulador PMP®" },
       { property: "og:description", content: "Resumen del plan elegido antes de la contratación." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

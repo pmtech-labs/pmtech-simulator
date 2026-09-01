@@ -96,7 +96,7 @@ export function computeDistractorStats(items: AnalyticsItem[]): DistractorStats 
           optionLabel: opt?.label ?? id,
           reason:
             distractor?.text ??
-            "Esta opción no responde al enfoque que el PMBOK considera prioritario en esta situación.",
+            "Esta opción no responde al enfoque que el PMBOK® considera prioritario en esta situación.",
           reference: question.explanation.reference,
           errorType: question.errorType,
         });

@@ -9,13 +9,13 @@ export const Route = createFileRoute("/reset-password")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Nueva contraseña · Simulador PMP" },
+      { title: "Nueva contraseña · Simulador PMP®" },
       {
         name: "description",
-        content: "Define una nueva contraseña para tu cuenta del simulador PMP.",
+        content: "Define una nueva contraseña para tu cuenta del simulador PMP®.",
       },
       { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: "Nueva contraseña · Simulador PMP" },
+      { property: "og:title", content: "Nueva contraseña · Simulador PMP®" },
       { property: "og:description", content: "Define una nueva contraseña de acceso." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

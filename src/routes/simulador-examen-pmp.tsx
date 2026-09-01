@@ -7,13 +7,13 @@ import {
 } from "@/components/landing/SeoLandingPage";
 
 const URL = "https://toppmsimulator.glacimonto.com/simulador-examen-pmp";
-const TITLE = "Simulador de examen PMP en español · Preguntas ECO 2026";
+const TITLE = "Simulador de examen PMP® en español · Preguntas ECO 2026";
 const DESCRIPTION =
-  "Simulador PMP en español con preguntas situacionales tipo examen, simulacro completo de 180 preguntas, diagnóstico por tipo de error y mastery por tarea del ECO.";
+  "Simulador PMP® en español con preguntas situacionales tipo examen, simulacro completo de 180 preguntas, diagnóstico por tipo de error y mastery por tarea del ECO.";
 
 const FAQS: SeoFaq[] = [
   {
-    q: "¿Hay un simulador de examen PMP gratis en español?",
+    q: "¿Hay un simulador de examen PMP® gratis en español?",
     a: "Sí: puedes crear una cuenta y hacer simulacros de diagnóstico sin pagar. Los simulacros completos de 180 preguntas y la analítica avanzada forman parte de los planes de pago.",
   },
   {
@@ -60,7 +60,7 @@ export const Route = createFileRoute("/simulador-examen-pmp")({
             title: TITLE,
             description: DESCRIPTION,
             faqs: FAQS,
-            breadcrumbName: "Simulador de examen PMP",
+            breadcrumbName: "Simulador de examen PMP®",
           }),
         ),
       },
@@ -73,7 +73,7 @@ function Page() {
   return (
     <SeoLandingPage
       eyebrow="Simulacros en español"
-      h1="Simulador de examen PMP en español con diagnóstico de tus errores"
+      h1="Simulador de examen PMP® en español con diagnóstico de tus errores"
       intro="La mayoría de simuladores te dice cuántas fallaste. Este te dice por qué fallaste: clasifica cada error en ocho patrones de razonamiento y convierte esa información en un plan de estudio priorizado."
       highlights={[
         "Preguntas situacionales escritas en español neutro, no traducidas",
@@ -119,22 +119,22 @@ function Page() {
       related={[
         {
           to: "/examen-pmp",
-          label: "Formato del examen PMP",
+          label: "Formato del examen PMP®",
           description: "Duración, secciones y nota de corte.",
         },
         {
           to: "/certificacion-pmp",
-          label: "Guía de la certificación PMP",
+          label: "Guía de la certificación PMP®",
           description: "Requisitos, coste y calendario de estudio.",
         },
         {
           to: "/curso-pmp-online",
-          label: "Curso PMP online de 35 horas",
-          description: "El requisito de formación del PMI, cubierto.",
+          label: "Curso PMP® online de 35 horas",
+          description: "El requisito de formación del PMI®, cubierto.",
         },
         {
           to: "/pmbok-8",
-          label: "PMBOK 7 vs PMBOK 8",
+          label: "PMBOK® 7 vs PMBOK® 8",
           description: "Qué versión estudiar para el examen actual.",
         },
       ]}

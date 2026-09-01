@@ -73,7 +73,7 @@ export function DomainMasteryLegend({ triggerClassName }: DomainMasteryLegendPro
         <DialogHeader>
           <DialogTitle>¿Qué significa cada % de dominio?</DialogTitle>
           <DialogDescription>
-            Clasificación sencilla, sin jerga de PMI, para que sepas en qué área debes
+            Clasificación sencilla, sin jerga de PMI®, para que sepas en qué área debes
             reforzar.
           </DialogDescription>
         </DialogHeader>

@@ -19,14 +19,14 @@ export const Route = createFileRoute("/login")({
   }),
   head: () => ({
     meta: [
-      { title: "Iniciar sesión · Simulador PMP ECO 2026" },
+      { title: "Iniciar sesión · Simulador PMP® ECO 2026" },
       {
         name: "description",
         content:
-          "Accede a tu cuenta del simulador PMP en español para continuar con tus simulaciones y tu diagnóstico de errores.",
+          "Accede a tu cuenta del simulador PMP® en español para continuar con tus simulaciones y tu diagnóstico de errores.",
       },
-      { property: "og:title", content: "Iniciar sesión · Simulador PMP" },
-      { property: "og:description", content: "Accede a tu preparación PMP calibrada al ECO 2026." },
+      { property: "og:title", content: "Iniciar sesión · Simulador PMP®" },
+      { property: "og:description", content: "Accede a tu preparación PMP® calibrada al ECO 2026." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -75,7 +75,7 @@ function LoginPage() {
         <div className="rounded-2xl border border-border bg-card p-6">
           <h1 className="text-lg font-semibold">Iniciar sesión</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Accede para continuar con tu preparación PMP.
+            Accede para continuar con tu preparación PMP®.
           </p>
 
           <form onSubmit={onSubmit} className="mt-5 space-y-3">

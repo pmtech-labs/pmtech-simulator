@@ -7,16 +7,16 @@ import { RequireAuth } from "@/components/auth/RequireAuth";
 export const Route = createFileRoute("/instrucciones")({
   head: () => ({
     meta: [
-      { title: "Instrucciones de uso · Top PM Simulator PMP" },
+      { title: "Instrucciones de uso · Top PM Simulator PMP®" },
       {
         name: "description",
         content:
-          "Cómo aprovechar el simulador PMP de Top PM Simulator: plan de estudio recomendado, uso del contenido de tu licencia y cómo reportar problemas en una pregunta.",
+          "Cómo aprovechar el simulador PMP® de Top PM Simulator: plan de estudio recomendado, uso del contenido de tu licencia y cómo reportar problemas en una pregunta.",
       },
       { property: "og:title", content: "Instrucciones de uso · Top PM Simulator" },
       {
         property: "og:description",
-        content: "Plan de estudio recomendado y normas de uso del simulador PMP calibrado al ECO 2026.",
+        content: "Plan de estudio recomendado y normas de uso del simulador PMP® calibrado al ECO 2026.",
       },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -50,7 +50,7 @@ function InstructionsPage() {
           <h3 className="mt-6 text-sm font-semibold">Plan de estudio recomendado:</h3>
           <ol className="mt-3 space-y-3 text-sm leading-relaxed">
             {[
-              "Lee la Guía del PMBOK® (8ª edición) y la guía práctica ágil de PMI.",
+              "Lee la Guía del PMBOK® (8ª edición) y la guía práctica ágil de PMI®.",
               "Recorre tu Ruta de Aprendizaje Top PM Simulator, lección a lección, practicando cada una.",
               "Resuelve exámenes por dominio (Personas / Proceso / Entorno de Negocio) para reforzar tus puntos débiles según tu diagnóstico de errores.",
               "Haz un simulacro completo en condiciones reales (180 preguntas, 240 minutos, 3 secciones) para acostumbrarte al formato real del examen.",
@@ -73,7 +73,7 @@ function InstructionsPage() {
           <p className="mt-3 text-sm leading-relaxed">
             ¿Dudas con la terminología?{" "}
             <Link to="/glosario" className="font-medium text-primary hover:underline">
-              Consulta el Glosario PMP
+              Consulta el Glosario PMP®
             </Link>{" "}
             con definiciones breves de los términos predictivos, ágiles y generales.
           </p>

@@ -14,16 +14,16 @@ export const Route = createFileRoute("/glosario")({
     meta: [
       { property: "og:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
       { name: "twitter:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
-      { title: "Glosario PMP: términos clave del examen · Top PM Simulator" },
+      { title: "Glosario PMP®: términos clave del examen · Top PM Simulator" },
       {
         name: "description",
         content:
-          "Glosario PMP con definiciones propias y claras de los términos predictivos, ágiles y generales que necesitas para el examen ECO 2026.",
+          "Glosario PMP® con definiciones propias y claras de los términos predictivos, ágiles y generales que necesitas para el examen ECO 2026.",
       },
-      { property: "og:title", content: "Glosario PMP · Top PM Simulator" },
+      { property: "og:title", content: "Glosario PMP® · Top PM Simulator" },
       {
         property: "og:description",
-        content: "Definiciones breves y en español de los términos clave del examen PMP, filtrables por enfoque.",
+        content: "Definiciones breves y en español de los términos clave del examen PMP®, filtrables por enfoque.",
       },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -86,8 +86,8 @@ function GlossaryPage() {
 
   return (
     <AppShell
-      title="Glosario PMP"
-      subtitle="Términos clave del examen PMP (ECO 2026)"
+      title="Glosario PMP®"
+      subtitle="Términos clave del examen PMP® (ECO 2026)"
     >
       <div className="mx-auto max-w-4xl">
       <header className="space-y-2">
@@ -96,7 +96,7 @@ function GlossaryPage() {
           <span>Recursos Top PM Simulator</span>
         </div>
         <p className="text-sm text-muted-foreground">
-          Definiciones breves y en palabras propias de los términos que más aparecen en el examen PMP
+          Definiciones breves y en palabras propias de los términos que más aparecen en el examen PMP®
           (ECO 2026). No son citas del PMBOK® ni de ninguna otra fuente con derechos de autor.
         </p>
       </header>

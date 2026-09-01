@@ -32,35 +32,35 @@ const FILTERS: { value: ResultFilter; label: string }[] = [
 const TESTIMONIALS: Testimonial[] = [
   {
     quote:
-      "He aprobado con la máxima calificación en los tres dominios del examen. Quería darte las gracias otra vez, tus consejos me ayudaron mucho a entrar en la mentalidad PMP.",
+      "He aprobado con la máxima calificación en los tres dominios del examen. Quería darte las gracias otra vez, tus consejos me ayudaron mucho a entrar en la mentalidad PMP®.",
     author: "C. S.",
     result: "Certificado PMP® · máxima calificación en los 3 dominios",
     tags: ["people", "process", "business"],
   },
   {
     quote:
-      "He aprobado el examen del PMP. Ha sido clave sobre todo lo de saber interpretar las preguntas, porque lo que es teoría pura y dura no ha entrado prácticamente nada.",
+      "He aprobado el examen del PMP®. Ha sido clave sobre todo lo de saber interpretar las preguntas, porque lo que es teoría pura y dura no ha entrado prácticamente nada.",
     author: "R. A.",
     result: "Certificado PMP® · mejora en interpretación de escenarios",
     tags: ["process"],
   },
   {
     quote:
-      "Acabo de recibir mi resultado del PMP y lo he aprobado con la calificación más alta en las tres áreas. Las clases fueron fundamentales para la preparación, así como el apoyo en la revisión de mi aplicación.",
+      "Acabo de recibir mi resultado del PMP® y lo he aprobado con la calificación más alta en las tres áreas. Las clases fueron fundamentales para la preparación, así como el apoyo en la revisión de mi aplicación.",
     author: "G. B.",
     result: "Certificado PMP® · máxima calificación en los 3 dominios",
     tags: ["people", "process", "business"],
   },
   {
     quote:
-      "He aprobado el examen de certificación PMP y tú tienes gran parte de culpa, gracias a las clases y todos esos consejos. Empecé tarde y las vi en diferido, pero aun así fueron súper útiles.",
+      "He aprobado el examen de certificación PMP® y tú tienes gran parte de culpa, gracias a las clases y todos esos consejos. Empecé tarde y las vi en diferido, pero aun así fueron súper útiles.",
     author: "M. B.",
     result: "Certificado PMP® · avance rápido en Personas",
     tags: ["people"],
   },
   {
     quote:
-      "Al fin he obtenido la certificación PMP. No tengo ninguna duda de que lo recomendaré como un curso riguroso y de alta calidad.",
+      "Al fin he obtenido la certificación PMP®. No tengo ninguna duda de que lo recomendaré como un curso riguroso y de alta calidad.",
     author: "R. P.",
     result: "Certificado PMP® · visión de entorno de negocio",
     tags: ["business"],
@@ -92,7 +92,7 @@ const ADVANTAGES = [
   {
     icon: Calendar,
     value: "+10",
-    label: "años preparando el examen PMP",
+    label: "años preparando el examen PMP®",
   },
   {
     icon: Users,

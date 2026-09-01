@@ -279,7 +279,7 @@ export function UnitAnalytics() {
       .join("");
 
     const ok = openPrintablePdf(
-      "Progreso por lección · Simulador PMP",
+      "Progreso por lección · Simulador PMP®",
       `Filtros: ${filterLabel}`,
       `<h2>Resumen por lección</h2>
 <table><thead><tr><th>#</th><th>Lección</th><th>Dominio</th><th>Actividad</th><th>Intentos</th><th>Preguntas</th><th>Aciertos</th><th>Tiempo medio</th></tr></thead><tbody>${tableRows}</tbody></table>

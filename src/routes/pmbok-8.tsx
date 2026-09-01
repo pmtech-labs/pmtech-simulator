@@ -7,21 +7,21 @@ import {
 } from "@/components/landing/SeoLandingPage";
 
 const URL = "https://toppmsimulator.glacimonto.com/pmbok-8";
-const TITLE = "PMBOK 7 vs PMBOK 8: qué estudiar para el examen PMP";
+const TITLE = "PMBOK® 7 vs PMBOK® 8: qué estudiar para el examen PMP®";
 const DESCRIPTION =
-  "Diferencias entre PMBOK 7 y PMBOK 8, qué papel juega el ECO en el examen PMP y qué material conviene estudiar realmente para aprobar en 2026.";
+  "Diferencias entre PMBOK® 7 y PMBOK® 8, qué papel juega el ECO en el examen PMP® y qué material conviene estudiar realmente para aprobar en 2026.";
 
 const FAQS: SeoFaq[] = [
   {
-    q: "¿El examen PMP se basa en el PMBOK?",
+    q: "¿El examen PMP® se basa en el PMBOK®?",
     a: "No directamente. El examen se construye sobre el Examination Content Outline (ECO), que define dominios y tareas. El PMBOK® Guide es material de referencia, no el temario oficial.",
   },
   {
-    q: "¿Qué cambió con el PMBOK 7?",
+    q: "¿Qué cambió con el PMBOK® 7?",
     a: "Pasó de un enfoque basado en procesos y áreas de conocimiento a uno basado en 12 principios y 8 dominios de desempeño, orientado a resultados y válido para enfoques predictivos, ágiles e híbridos.",
   },
   {
-    q: "¿Necesito estudiar el PMBOK entero?",
+    q: "¿Necesito estudiar el PMBOK® entero?",
     a: "No es la forma más eficiente. Conviene usarlo como referencia para resolver dudas concretas y centrar el estudio en las 26 tareas del ECO y en práctica situacional.",
   },
   {
@@ -60,7 +60,7 @@ export const Route = createFileRoute("/pmbok-8")({
             title: TITLE,
             description: DESCRIPTION,
             faqs: FAQS,
-            breadcrumbName: "PMBOK 7 vs PMBOK 8",
+            breadcrumbName: "PMBOK® 7 vs PMBOK® 8",
           }),
         ),
       },
@@ -73,26 +73,26 @@ function Page() {
   return (
     <SeoLandingPage
       eyebrow="Material de estudio"
-      h1="PMBOK 7 vs PMBOK 8: qué necesitas estudiar de verdad para el PMP"
+      h1="PMBOK® 7 vs PMBOK® 8: qué necesitas estudiar de verdad para el PMP®"
       intro="Cada actualización de la guía genera la misma duda: ¿tengo que volver a empezar? La respuesta corta es no. El examen se construye sobre el ECO, y entender esa diferencia te ahorra semanas de lectura innecesaria."
       highlights={[
-        "El ECO define el examen; el PMBOK es material de consulta",
+        "El ECO define el examen; el PMBOK® es material de consulta",
         "Del enfoque por procesos a los principios y dominios de desempeño",
         "Qué leer y en qué orden según tu punto de partida",
         "Por qué el Agile Practice Guide pesa más de lo que parece",
       ]}
       sections={[
         {
-          h2: "La diferencia clave: ECO frente a PMBOK",
+          h2: "La diferencia clave: ECO frente a PMBOK®",
           paragraphs: [
-            "El Examination Content Outline es el documento que el PMI usa para construir las preguntas: tres dominios y 26 tareas. El PMBOK® Guide es una guía de buenas prácticas que sirve de apoyo, pero ninguna pregunta se escribe 'desde' un capítulo concreto de la guía.",
+            "El Examination Content Outline es el documento que el PMI® usa para construir las preguntas: tres dominios y 26 tareas. El PMBOK® Guide es una guía de buenas prácticas que sirve de apoyo, pero ninguna pregunta se escribe 'desde' un capítulo concreto de la guía.",
             "Traducido a estudio: si organizas tu preparación por tareas del ECO y practicas decisiones situacionales, cubres el examen. Si la organizas por capítulos de la guía, acabas sabiendo definiciones y fallando escenarios.",
           ],
         },
         {
           h2: "Qué cambió del enfoque clásico al actual",
           table: {
-            headers: ["Aspecto", "Enfoque clásico (PMBOK 6)", "Enfoque actual"],
+            headers: ["Aspecto", "Enfoque clásico (PMBOK® 6)", "Enfoque actual"],
             rows: [
               ["Estructura", "49 procesos y 10 áreas", "12 principios y 8 dominios de desempeño"],
               ["Orientación", "Entradas, herramientas y salidas", "Resultados y entrega de valor"],
@@ -124,22 +124,22 @@ function Page() {
       related={[
         {
           to: "/examen-pmp",
-          label: "Formato del examen PMP",
+          label: "Formato del examen PMP®",
           description: "Cómo se distribuyen los dominios del ECO.",
         },
         {
           to: "/simulador-examen-pmp",
-          label: "Simulador PMP en español",
+          label: "Simulador PMP® en español",
           description: "Convierte la teoría en decisiones practicadas.",
         },
         {
           to: "/certificacion-pmp",
-          label: "Guía de la certificación PMP",
+          label: "Guía de la certificación PMP®",
           description: "Requisitos, coste y plan de preparación.",
         },
         {
           to: "/curso-pmp-online",
-          label: "Curso PMP online de 35 horas",
+          label: "Curso PMP® online de 35 horas",
           description: "Contenido alineado al ECO 2026.",
         },
       ]}

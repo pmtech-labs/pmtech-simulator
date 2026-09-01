@@ -7,30 +7,30 @@ import {
 } from "@/components/landing/SeoLandingPage";
 
 const URL = "https://toppmsimulator.glacimonto.com/top-pm-simulator-vs-pmi-study-hall";
-const TITLE = "Top PM Simulator vs PMI Study Hall: comparativa 2026";
+const TITLE = "Top PM Simulator vs PMI® Study Hall: comparativa 2026";
 const DESCRIPTION =
-  "Comparativa honesta entre Top PM Simulator y PMI Study Hall: idioma, precio, número de preguntas, diagnóstico de errores y a qué candidato le conviene cada uno.";
+  "Comparativa honesta entre Top PM Simulator y PMI® Study Hall: idioma, precio, número de preguntas, diagnóstico de errores y a qué candidato le conviene cada uno.";
 
 const FAQS: SeoFaq[] = [
   {
-    q: "¿PMI Study Hall está en español?",
-    a: "Study Hall es un producto del propio PMI y su contenido está en inglés. Puedes usar el traductor del navegador, pero las preguntas situacionales pierden matices al traducirse y esos matices son justo lo que decide la respuesta correcta.",
+    q: "¿PMI® Study Hall está en español?",
+    a: "Study Hall es un producto del propio PMI® y su contenido está en inglés. Puedes usar el traductor del navegador, pero las preguntas situacionales pierden matices al traducirse y esos matices son justo lo que decide la respuesta correcta.",
   },
   {
     q: "¿Cuál se parece más al examen real?",
-    a: "Study Hall tiene la ventaja de venir del PMI, que es quien escribe el examen. Top PM Simulator replica el formato oficial (180 preguntas, tres secciones cronometradas, descansos de 10 minutos) y añade diagnóstico por tipo de error, que Study Hall no ofrece.",
+    a: "Study Hall tiene la ventaja de venir del PMI®, que es quien escribe el examen. Top PM Simulator replica el formato oficial (180 preguntas, tres secciones cronometradas, descansos de 10 minutos) y añade diagnóstico por tipo de error, que Study Hall no ofrece.",
   },
   {
     q: "¿Puedo usar los dos a la vez?",
-    a: "Sí, y es una combinación razonable si dominas el inglés: Top PM Simulator para entender por qué fallas y corregir el patrón, Study Hall para calibrar el estilo de redacción del PMI en las últimas semanas.",
+    a: "Sí, y es una combinación razonable si dominas el inglés: Top PM Simulator para entender por qué fallas y corregir el patrón, Study Hall para calibrar el estilo de redacción del PMI® en las últimas semanas.",
   },
   {
     q: "¿Cuál es más barato?",
-    a: "Study Hall se vende por suscripción trimestral en dólares y su precio varía según seas miembro del PMI. Top PM Simulator tiene un plan gratuito de diagnóstico y planes de pago en euros; consulta la página de precios para el importe vigente.",
+    a: "Study Hall se vende por suscripción trimestral en dólares y su precio varía según seas miembro del PMI®. Top PM Simulator tiene un plan gratuito de diagnóstico y planes de pago en euros; consulta la página de precios para el importe vigente.",
   },
   {
-    q: "¿Study Hall es obligatorio para aprobar el PMP?",
-    a: "No. El PMI no exige ningún simulador concreto. Lo obligatorio son las 35 horas de formación y cumplir los requisitos de experiencia.",
+    q: "¿Study Hall es obligatorio para aprobar el PMP®?",
+    a: "No. El PMI® no exige ningún simulador concreto. Lo obligatorio son las 35 horas de formación y cumplir los requisitos de experiencia.",
   },
 ];
 
@@ -60,7 +60,7 @@ export const Route = createFileRoute("/top-pm-simulator-vs-pmi-study-hall")({
             title: TITLE,
             description: DESCRIPTION,
             faqs: FAQS,
-            breadcrumbName: "Top PM Simulator vs PMI Study Hall",
+            breadcrumbName: "Top PM Simulator vs PMI® Study Hall",
           }),
         ),
       },
@@ -73,10 +73,10 @@ function Page() {
   return (
     <SeoLandingPage
       eyebrow="Comparativa"
-      h1="Top PM Simulator vs PMI Study Hall: cuál te conviene según tu perfil"
-      intro="Study Hall es el simulador oficial del PMI y está en inglés. Top PM Simulator está escrito en español neutro y diagnostica el motivo de cada fallo. Esta comparativa explica en qué gana cada uno sin marketing."
+      h1="Top PM Simulator vs PMI® Study Hall: cuál te conviene según tu perfil"
+      intro="Study Hall es el simulador oficial del PMI® y está en inglés. Top PM Simulator está escrito en español neutro y diagnostica el motivo de cada fallo. Esta comparativa explica en qué gana cada uno sin marketing."
       highlights={[
-        "Idioma: español neutro nativo frente a inglés del PMI",
+        "Idioma: español neutro nativo frente a inglés del PMI®",
         "Diagnóstico por tipo de error frente a puntuación por dominio",
         "Formato oficial replicado: 180 preguntas y tres secciones",
         "Recomendación clara según tu nivel de inglés y tu fecha de examen",
@@ -84,7 +84,7 @@ function Page() {
       comparison={{
         title: "Comparativa interactiva por área",
         ourName: "Top PM Simulator",
-        competitorName: "PMI Study Hall",
+        competitorName: "PMI® Study Hall",
         rows: [
           {
             feature: "Idioma del contenido",
@@ -97,10 +97,10 @@ function Page() {
           {
             feature: "Origen del contenido",
             category: "Funciones",
-            ours: { verdict: "partial", label: "Formadores PMP independientes" },
+            ours: { verdict: "partial", label: "Formadores PMP® independientes" },
             theirs: { verdict: "yes", label: "Project Management Institute" },
             detail:
-              "Study Hall lo publica el propio PMI, la organización que escribe el examen, así que su estilo de enunciado es el más fiel posible. Top PM Simulator lo elabora un equipo independiente de formadores certificados PMP, alineado con el ECO 2026.",
+              "Study Hall lo publica el propio PMI®, la organización que escribe el examen, así que su estilo de enunciado es el más fiel posible. Top PM Simulator lo elabora un equipo independiente de formadores certificados PMP®, alineado con el ECO 2026.",
           },
           {
             feature: "Exportación de resultados",
@@ -163,7 +163,7 @@ function Page() {
       sections={[
 
         {
-          h2: "Dónde gana PMI Study Hall",
+          h2: "Dónde gana PMI® Study Hall",
           bullets: [
             "Lo escribe la misma organización que redacta el examen, así que el estilo de enunciado es el más fiel posible.",
             "Su banco lleva años depurándose con datos de candidatos reales de todo el mundo.",
@@ -192,7 +192,7 @@ function Page() {
         {
           h2: "Aviso de independencia",
           paragraphs: [
-            "Top PM Simulator es un producto independiente y no está afiliado, avalado ni patrocinado por el Project Management Institute. PMP, PMBOK y PMI Study Hall son marcas registradas de sus respectivos titulares. La información de esta comparativa se basa en las características públicas de ambos productos y puede cambiar; verifica siempre los datos oficiales antes de comprar.",
+            "Top PM Simulator es un producto independiente y no está afiliado, avalado ni patrocinado por el Project Management Institute. PMP®, PMBOK® y PMI® Study Hall son marcas registradas de sus respectivos titulares. La información de esta comparativa se basa en las características públicas de ambos productos y puede cambiar; verifica siempre los datos oficiales antes de comprar.",
           ],
         },
       ]}
@@ -201,21 +201,21 @@ function Page() {
         {
           to: "/top-pm-simulator-vs-prepcast",
           label: "Top PM Simulator vs PrepCast",
-          description: "La otra comparativa clásica entre simuladores PMP.",
+          description: "La otra comparativa clásica entre simuladores PMP®.",
         },
         {
           to: "/simulador-examen-pmp",
-          label: "Simulador de examen PMP",
+          label: "Simulador de examen PMP®",
           description: "Modos de práctica y diagnóstico de errores.",
         },
         {
           to: "/examen-pmp",
-          label: "Formato del examen PMP",
+          label: "Formato del examen PMP®",
           description: "Duración, secciones y nota de corte.",
         },
         {
           to: "/certificacion-pmp",
-          label: "Guía de la certificación PMP",
+          label: "Guía de la certificación PMP®",
           description: "Requisitos, coste y calendario de estudio.",
         },
       ]}

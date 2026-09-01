@@ -20,14 +20,14 @@ export const Route = createFileRoute("/registro")({
   }),
   head: () => ({
     meta: [
-      { title: "Crear cuenta · Simulador PMP ECO 2026" },
+      { title: "Crear cuenta · Simulador PMP® ECO 2026" },
       {
         name: "description",
         content:
-          "Crea tu cuenta gratuita en el simulador PMP en español y descubre por qué fallas, no solo cuánto.",
+          "Crea tu cuenta gratuita en el simulador PMP® en español y descubre por qué fallas, no solo cuánto.",
       },
-      { property: "og:title", content: "Crear cuenta · Simulador PMP" },
-      { property: "og:description", content: "Regístrate y empieza tu diagnóstico PMP ECO 2026." },
+      { property: "og:title", content: "Crear cuenta · Simulador PMP®" },
+      { property: "og:description", content: "Regístrate y empieza tu diagnóstico PMP® ECO 2026." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -211,7 +211,7 @@ function RegistroPage() {
                       className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-primary"
                     />
                     <span>
-                      Quiero recibir el boletín semanal PMP y novedades del producto{" "}
+                      Quiero recibir el boletín semanal PMP® y novedades del producto{" "}
                       <span className="text-muted-foreground">(opcional)</span>
                     </span>
                   </label>

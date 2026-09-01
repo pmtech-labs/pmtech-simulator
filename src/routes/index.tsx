@@ -53,22 +53,22 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "Simulador PMP en español · Examen ECO 2026 y PMBOK 8",
+        title: "Simulador PMP® en español · Examen ECO 2026 y PMBOK® 8",
       },
       {
         name: "description",
         content:
-          "Simulador PMP en español que diagnostica por qué fallas: 8 tipos de error, mastery por las 26 tareas del ECO 2026, ruta de 14 lecciones y plan de estudio personalizado.",
+          "Simulador PMP® en español que diagnostica por qué fallas: 8 tipos de error, mastery por las 26 tareas del ECO 2026, ruta de 14 lecciones y plan de estudio personalizado.",
 
       },
       {
         property: "og:title",
-        content: "Simulador PMP en español · Examen ECO 2026 y PMBOK 8",
+        content: "Simulador PMP® en español · Examen ECO 2026 y PMBOK® 8",
       },
       {
         property: "og:description",
         content:
-          "Casos reales, diagnóstico por tipo de error y motor adaptativo — más formación PMP de 35 horas y boletín de gestión de proyectos.",
+          "Casos reales, diagnóstico por tipo de error y motor adaptativo — más formación PMP® de 35 horas y boletín de gestión de proyectos.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: SITE_URL },
@@ -80,11 +80,11 @@ export const Route = createFileRoute("/")({
       { property: "og:site_name", content: "Top PM Simulator" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: OG_IMAGE },
-      { name: "twitter:title", content: "Simulador PMP en español · ECO 2026" },
+      { name: "twitter:title", content: "Simulador PMP® en español · ECO 2026" },
       {
         name: "twitter:description",
         content:
-          "Prepara el examen PMP con simulacros calibrados al ECO 2026 y diagnóstico real de tus errores.",
+          "Prepara el examen PMP® con simulacros calibrados al ECO 2026 y diagnóstico real de tus errores.",
       },
     ],
     links: [{ rel: "canonical", href: SITE_URL }],
@@ -99,7 +99,7 @@ export const Route = createFileRoute("/")({
               name: "Top PM Simulator",
               url: SITE_URL,
               description:
-                "Simulador de examen PMP y formación en dirección de proyectos en español, calibrado al ECO 2026.",
+                "Simulador de examen PMP® y formación en dirección de proyectos en español, calibrado al ECO 2026.",
               areaServed: ["ES", "MX", "CO", "AR", "CL", "PE"],
               sameAs: [
                 "https://www.linkedin.com/in/isaaclopezpena/",
@@ -126,7 +126,7 @@ export const Route = createFileRoute("/")({
               "@type": "Course",
               name: "Preparación PMP® — 35 horas de formación",
               description:
-                "Formación oficial de 35 horas de contacto para cumplir el requisito de PMI y preparar el examen PMP según el ECO 2026.",
+                "Formación oficial de 35 horas de contacto para cumplir el requisito de PMI® y preparar el examen PMP® según el ECO 2026.",
               provider: {
                 "@type": "Organization",
                 name: "Top PM Simulator",
@@ -152,7 +152,7 @@ export const Route = createFileRoute("/")({
 
 
 const STATS = [
-  { value: "+10", label: "años preparando el examen PMP" },
+  { value: "+10", label: "años preparando el examen PMP®" },
   { value: "+1000", label: "profesionales certificados" },
   { value: "+3500", label: "preguntas en el banco" },
 ];
@@ -230,7 +230,7 @@ const PARTNER_BENEFITS = [
   },
   {
     icon: Rocket,
-    title: "Simulador nativo ECO 2026 / PMBOK 8",
+    title: "Simulador nativo ECO 2026 / PMBOK® 8",
     description:
       "No es un banco antiguo remapeado: tus alumnos practican exactamente lo que se les va a preguntar desde julio de 2026.",
   },
@@ -292,7 +292,7 @@ function Hero() {
             <Reveal>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-3 py-1 text-xs font-semibold text-hero-foreground shadow-lift backdrop-blur">
                 <Sparkles className="h-3.5 w-3.5 animate-pulse text-accent" />
-                ECO 2026 · PMBOK 8
+                ECO 2026 · PMBOK® 8
               </span>
             </Reveal>
 
@@ -303,7 +303,7 @@ function Hero() {
                   por qué fallas
                   <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-gradient-to-r from-accent via-accent/70 to-transparent" />
                 </span>{" "}
-                en el PMP, no solo cuánto
+                en el PMP®, no solo cuánto
               </h1>
             </Reveal>
 
@@ -363,7 +363,7 @@ function Hero() {
               <figure className="group relative overflow-hidden rounded-2xl border border-hero-foreground/15 bg-hero-foreground/5 shadow-2xl transition-transform duration-500 hover:scale-[1.02]">
                 <img
                   src={heroDashboard}
-                  alt="Panel de analítica del simulador PMP con dominio por tareas ECO y patrón de errores"
+                  alt="Panel de analítica del simulador PMP® con dominio por tareas ECO y patrón de errores"
                   width={1408}
                   height={1008}
                   fetchPriority="high"
@@ -395,7 +395,7 @@ function ProblemSolution() {
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                   Los simuladores te devuelven un porcentaje y la letra correcta. Pero suspender el
-                  PMP casi nunca es falta de teoría: es elegir la acción válida en el momento
+                  PMP® casi nunca es falta de teoría: es elegir la acción válida en el momento
                   equivocado, decidir por alguien que no te corresponde o aplicar lógica predictiva
                   en un contexto ágil. Un número de aciertos no distingue nada de eso — y repetir
                   preguntas que ya conoces infla tu nota y te da una falsa sensación de estar listo.
@@ -799,7 +799,7 @@ function Footer() {
               </a>
 
               <a href="#formacion" className="hover:text-foreground">
-                Formación PMP
+                Formación PMP®
               </a>
               <a href="#garantias" className="hover:text-foreground">
                 Garantías
@@ -815,31 +815,31 @@ function Footer() {
               </Link>
 
               <Link to="/certificacion-pmp" className="hover:text-foreground">
-                Certificación PMP
+                Certificación PMP®
               </Link>
               <Link to="/examen-pmp" className="hover:text-foreground">
-                Examen PMP
+                Examen PMP®
               </Link>
               <Link to="/simulador-examen-pmp" className="hover:text-foreground">
-                Simulador PMP
+                Simulador PMP®
               </Link>
               <Link to="/requisitos-pmp" className="hover:text-foreground">
                 Requisitos y precio
               </Link>
               <Link to="/curso-pmp-online" className="hover:text-foreground">
-                Curso PMP online
+                Curso PMP® online
               </Link>
               <Link to="/partners" className="hover:text-foreground">
                 Partners y empresas
               </Link>
               <Link to="/glosario" className="hover:text-foreground">
-                Glosario PMP
+                Glosario PMP®
               </Link>
               <Link to="/pmbok-8" className="hover:text-foreground">
-                PMBOK 7 vs 8
+                PMBOK® 7 vs 8
               </Link>
               <Link to="/top-pm-simulator-vs-pmi-study-hall" className="hover:text-foreground">
-                vs PMI Study Hall
+                vs PMI® Study Hall
               </Link>
             <Link to="/top-pm-simulator-vs-prepcast" className="hover:text-foreground">
                 vs PrepCast
@@ -863,8 +863,8 @@ function Footer() {
         </div>
         <p className="mt-8 text-center text-[11px] leading-relaxed text-muted-foreground">
           Top PM Simulator es un producto independiente. No está afiliado, avalado ni
-          patrocinado por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas
-          registradas del PMI.
+          patrocinado por el Project Management Institute (PMI®). PMP® y PMBOK® son marcas
+          registradas del PMI®.
         </p>
       </div>
     </footer>
@@ -880,7 +880,7 @@ function Training() {
             <figure className="group mb-8 overflow-hidden rounded-2xl border border-border shadow-panel">
               <img
                 src={trainingSession}
-                alt="Sesión de formación PMP en directo con un grupo de profesionales"
+                alt="Sesión de formación PMP® en directo con un grupo de profesionales"
                 loading="lazy"
                 width={1200}
                 height={912}
@@ -895,15 +895,15 @@ function Training() {
               ¿Pensabas prepararte por tu cuenta?
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-              PMI exige 35 horas de formación en dirección de proyectos para poder
-              presentarte al examen PMP. Estudiar solo con un libro es posible, pero la
+              PMI® exige 35 horas de formación en dirección de proyectos para poder
+              presentarte al examen PMP®. Estudiar solo con un libro es posible, pero la
               mayoría de suspensos vienen de no saber interpretar el enfoque del examen, no
               de falta de experiencia.
             </p>
             <ul className="mt-6 space-y-3 text-sm">
               {[
-                "35 horas de contacto acreditables para tu solicitud a PMI",
-                "Sesiones en directo en español, orientadas al ECO 2026 y PMBOK 8",
+                "35 horas de contacto acreditables para tu solicitud a PMI®",
+                "Sesiones en directo en español, orientadas al ECO 2026 y PMBOK® 8",
                 "Simulador incluido durante toda la formación",
                 "Revisión de tu solicitud y de tu experiencia antes de aplicar",
                 "Modalidad individual o in-company para equipos",
@@ -972,10 +972,10 @@ function PartnersBenefits() {
               Centros de formación y empresas
             </span>
             <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl">
-              ¿Formas equipos o alumnos para el PMP?
+              ¿Formas equipos o alumnos para el PMP®?
             </h2>
             <p className="mt-3 text-primary-foreground/80">
-              Licencias por volumen, panel de seguimiento y el único simulador en español nativo ECO 2026 / PMBOK 8.
+              Licencias por volumen, panel de seguimiento y el único simulador en español nativo ECO 2026 / PMBOK® 8.
             </p>
           </div>
         </Reveal>
@@ -1045,7 +1045,7 @@ function Newsletter() {
             Aunque todavía no te certifiques, sigue aprendiendo
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            Un boletín para quien dirige proyectos de verdad: cambios del PMBOK y del ECO,
+            Un boletín para quien dirige proyectos de verdad: cambios del PMBOK® y del ECO,
             metodologías predictivas, ágiles e híbridas, casos reales, plantillas y errores
             que se repiten en cualquier organización.
           </p>

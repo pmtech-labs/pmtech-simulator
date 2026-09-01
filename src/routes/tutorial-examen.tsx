@@ -11,18 +11,18 @@ const STEPS = [
   "Al agotarse el tiempo, el examen se entrega automáticamente.",
   'Puedes marcar cualquier pregunta "para revisión" sin que eso reste puntos.',
   "Antes de entregar, verás una pantalla con el resumen de preguntas respondidas, en blanco y marcadas para revisión.",
-  "En preguntas con varias respuestas correctas, debes marcar TODAS las correctas — marcar solo algunas cuenta como fallo, igual que en el examen real de PMI.",
+  "En preguntas con varias respuestas correctas, debes marcar TODAS las correctas — marcar solo algunas cuenta como fallo, igual que en el examen real de PMI®.",
   "Al entregar, verás tu resultado, qué respondiste bien y mal, y la explicación de cada pregunta.",
 ];
 
 export const Route = createFileRoute("/tutorial-examen")({
   head: () => ({
     meta: [
-      { title: "Tutorial de examen · Cómo funciona el simulacro PMP" },
+      { title: "Tutorial de examen · Cómo funciona el simulacro PMP®" },
       {
         name: "description",
         content:
-          "Cronómetro, secciones con descansos, preguntas marcadas para revisión y entrega: así funciona el simulacro PMP de Top PM Simulator antes de empezar.",
+          "Cronómetro, secciones con descansos, preguntas marcadas para revisión y entrega: así funciona el simulacro PMP® de Top PM Simulator antes de empezar.",
       },
       { property: "og:title", content: "Tutorial de examen · Top PM Simulator" },
       {
@@ -72,7 +72,7 @@ function ExamTutorialPage() {
 
         <p className="flex items-start gap-2 rounded-2xl border border-accent bg-warning-soft p-4 text-xs leading-relaxed text-accent-foreground">
           <Info className="mt-0.5 h-4 w-4 shrink-0" />
-          Ten en cuenta: PMI no publica una nota de corte oficial para el examen real — usa bandas
+          Ten en cuenta: PMI® no publica una nota de corte oficial para el examen real — usa bandas
           de desempeño por dominio, no un porcentaje público. Tu resultado aquí es una estimación
           razonada de tu preparación, no una garantía.
         </p>

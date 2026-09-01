@@ -110,7 +110,7 @@ export function ExportCenter({ exams: source = [] }: { exams?: ExamHistoryRow[] 
       .join("");
 
     const ok = openPrintablePdf(
-      "Informe de rendimiento PMP · ECO 2026",
+      "Informe de rendimiento PMP® · ECO 2026",
       `Generado el ${today} · Filtro de dominios: ${filterLabel}`,
       `<h2>Historial de exámenes (${exams.length})</h2>
 <table><thead><tr><th>Fecha</th><th>Modo</th><th>Preguntas</th><th>Duración</th><th>Score</th><th>Estado</th><th>Dominios</th></tr></thead><tbody>${rows}</tbody></table>

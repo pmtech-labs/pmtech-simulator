@@ -54,10 +54,10 @@ export const MOCK_QUESTIONS: Question[] = [
         "SPI = EV/PV = 498.000/600.000 = 0,83 y CPI = EV/AC = 498.000/615.000 = 0,81. Ambos índices por debajo de 1 indican simultáneamente retraso y sobrecoste. El comportamiento esperado del director de proyecto es diagnosticar la causa raíz con el equipo antes de comprometer acciones, y después presentar al patrocinador alternativas cuantificadas (intensificación o ejecución rápida) con su impacto en coste y riesgo, ya que la fecha es una restricción dura.",
       distractors: [
         { optionId: "B", text: "Confunde la fórmula del CPI: 498.000/615.000 = 0,81, no es superior a 1. Además, añadir recursos sin análisis de causa raíz es intensificar a ciegas y agrava la desviación de coste (ley de Brooks)." },
-        { optionId: "C", text: "No existe ninguna tolerancia estándar del ±20 % en el PMBOK; los umbrales de control se definen en el plan de gestión de costes. Esperar dos meses más ante una tendencia negativa sostenida incumple la monitorización proactiva." },
+        { optionId: "C", text: "No existe ninguna tolerancia estándar del ±20 % en el PMBOK®; los umbrales de control se definen en el plan de gestión de costes. Esperar dos meses más ante una tendencia negativa sostenida incumple la monitorización proactiva." },
         { optionId: "D", text: "Escalar pidiendo presupuesto antes de analizar causas invierte el orden correcto: el director de proyecto resuelve primero en su ámbito y escala con datos y opciones, no con una petición abierta." },
       ],
-      reference: "PMBOK · Medición del desempeño (EVM) · ECO 2026 Proceso T5",
+      reference: "PMBOK® · Medición del desempeño (EVM) · ECO 2026 Proceso T5",
     },
   },
   {
@@ -87,7 +87,7 @@ export const MOCK_QUESTIONS: Question[] = [
         { optionId: "B", text: "Sacrificar calidad para recuperar plazo traslada el coste al futuro y contradice el principio de calidad integrada; nunca es la respuesta preferida en el examen." },
         { optionId: "D", text: "Ocultar información al patrocinador rompe la gestión de interesados y la transparencia; la comunicación debe ser proactiva y continua." },
       ],
-      reference: "PMBOK · Principios de calidad e interesados · ECO 2026 Proceso T8",
+      reference: "PMBOK® · Principios de calidad e interesados · ECO 2026 Proceso T8",
     },
   },
   {
@@ -130,7 +130,7 @@ export const MOCK_QUESTIONS: Question[] = [
         { optionId: "l1", text: "Mitigar no elimina la exposición financiera cuando el impacto supera la tolerancia: hace falta trasladar el riesgo a un tercero." },
         { optionId: "l3", text: "Una oportunidad no se 'mitiga'; las estrategias de amenaza no aplican a eventos de impacto positivo." },
       ],
-      reference: "PMBOK · Respuestas a riesgos · ECO 2026 Proceso T3",
+      reference: "PMBOK® · Respuestas a riesgos · ECO 2026 Proceso T3",
     },
   },
   {
@@ -160,7 +160,7 @@ export const MOCK_QUESTIONS: Question[] = [
         { optionId: "C", text: "Escalar en primera instancia elude la responsabilidad del director de proyecto y añade una connotación disciplinaria innecesaria." },
         { optionId: "D", text: "Reasignar personas es evitar el conflicto: la causa raíz permanece y el equipo pierde capacidad." },
       ],
-      reference: "PMBOK · Gestión del conflicto · ECO 2026 Personas T1",
+      reference: "PMBOK® · Gestión del conflicto · ECO 2026 Personas T1",
     },
   },
   {
@@ -190,7 +190,7 @@ export const MOCK_QUESTIONS: Question[] = [
         { optionId: "B", text: "Ejecutar cambios sin aprobación es un cambio no autorizado ('gold plating' normativo) y rompe el control integrado de cambios." },
         { optionId: "D", text: "Pedir una exención de una política de cumplimiento no es una vía aceptable; el cumplimiento prevalece sobre la línea base." },
       ],
-      reference: "PMBOK · Control integrado de cambios · ECO 2026 Entorno T2",
+      reference: "PMBOK® · Control integrado de cambios · ECO 2026 Entorno T2",
     },
   },
 ];
@@ -247,7 +247,7 @@ export const MOCK_FINISH_SUMMARY = {
    * Debe mostrarse literalmente, sin parafrasear.
    */
   disclaimer:
-    "Este resultado es una estimación basada en un simulador y no predice ni garantiza el resultado del examen oficial PMP®. PMI no avala ni revisa este contenido.",
+    "Este resultado es una estimación basada en un simulador y no predice ni garantiza el resultado del examen oficial PMP®. PMI® no avala ni revisa este contenido.",
   interpretationNote:
     "Un 40 % de las preguntas de esta simulación ya las habías respondido antes. Tu puntuación real en el examen oficial podría ser inferior: repite con un banco de preguntas nuevo para obtener una medida fiable de tu preparación.",
 };

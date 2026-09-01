@@ -17,8 +17,8 @@ export const FAQ_BLOCKS: FaqBlock[] = [
     items: [
       {
         id: "afiliado-pmi",
-        q: "¿Está afiliado o avalado por PMI?",
-        a: "No. Top PM Simulator es un producto independiente, no afiliado ni respaldado por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas registradas de PMI.",
+        q: "¿Está afiliado o avalado por PMI®?",
+        a: "No. Top PM Simulator es un producto independiente, no afiliado ni respaldado por el Project Management Institute (PMI®). PMP® y PMBOK® son marcas registradas de PMI®.",
       },
       {
         id: "garantia-aprobado",
@@ -27,7 +27,7 @@ export const FAQ_BLOCKS: FaqBlock[] = [
       },
       {
         id: "actualizado-eco-2026",
-        q: "¿Está actualizado a los últimos cambios del examen (ECO 2026 / PMBOK 8)?",
+        q: "¿Está actualizado a los últimos cambios del examen (ECO 2026 / PMBOK® 8)?",
         a: "Sí, desde el primer día. El banco de preguntas está calibrado a las 26 tareas del ECO vigente desde julio de 2026, con los pesos reales de dominio (Personas 33%, Proceso 41%, Entorno de negocio 26%) y el split de enfoque (40% predictivo / 60% ágil-híbrido). Muchos simuladores en español todavía siguen calibrados al examen anterior.",
       },
       {
@@ -90,16 +90,16 @@ export const FAQ_BLOCKS: FaqBlock[] = [
   },
   {
     id: "certificacion-pmp",
-    title: "Sobre la certificación PMP",
+    title: "Sobre la certificación PMP®",
     items: [
       {
         id: "diploma",
         q: "¿Recibo algún diploma o certificado?",
-        a: "Sí. Al completar un simulacro completo con un buen desempeño, se emite automáticamente un diploma de logro con tu resultado por dominio. Una aclaración importante: PMI no publica una nota de corte oficial para el examen PMP (usa bandas de desempeño por dominio, no un porcentaje público) — el diploma reconoce tu desempeño según un criterio de referencia propio de Top PM Simulator, no una nota de aprobado oficial de PMI.",
+        a: "Sí. Al completar un simulacro completo con un buen desempeño, se emite automáticamente un diploma de logro con tu resultado por dominio. Una aclaración importante: PMI® no publica una nota de corte oficial para el examen PMP® (usa bandas de desempeño por dominio, no un porcentaje público) — el diploma reconoce tu desempeño según un criterio de referencia propio de Top PM Simulator, no una nota de aprobado oficial de PMI®.",
       },
       {
         id: "otros-materiales",
-        q: "¿Sirve si estoy usando otro material de estudio (Rita Mulcahy, PMBOK, etc.)?",
+        q: "¿Sirve si estoy usando otro material de estudio (Rita Mulcahy, PMBOK®, etc.)?",
         a: "Sí, es el complemento natural. El simulador no sustituye la formación estructurada — está pensado para practicar y diagnosticar errores sobre lo que ya estás estudiando.",
       },
     ],
