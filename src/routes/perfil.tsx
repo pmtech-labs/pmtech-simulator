@@ -20,13 +20,13 @@ export const Route = createFileRoute("/perfil")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Perfil y licencia · Simulador PMP ECO 2026" },
+      { title: "Perfil y licencia · Simulador PMP® ECO 2026" },
       {
         name: "description",
         content:
           "Gestiona tu cuenta, revisa tus estadísticas por dominio ECO y el estado de tu licencia básica o premium.",
       },
-      { property: "og:title", content: "Perfil y licencia · Simulador PMP" },
+      { property: "og:title", content: "Perfil y licencia · Simulador PMP®" },
       { property: "og:description", content: "Cuenta, estadísticas por dominio y estado de licencia." },
     ],
   }),

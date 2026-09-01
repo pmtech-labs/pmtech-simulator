@@ -132,7 +132,7 @@ function CurriculumPage() {
   return (
     <AdminShell
       title="Currículo de lecciones"
-      description="Temario propio del curso (distinto de la taxonomía ECO de PMI)"
+      description="Temario propio del curso (distinto de la taxonomía ECO de PMI®)"
       email={email}
       actions={
         <button

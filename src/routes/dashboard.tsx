@@ -20,13 +20,13 @@ export const Route = createFileRoute("/dashboard")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Panel del alumno · Simulador PMP ECO 2026" },
+      { title: "Panel del alumno · Simulador PMP® ECO 2026" },
       {
         name: "description",
         content:
-          "Panel de preparación PMP calibrado al ECO 2026: nivel de preparación, simulaciones de 180 preguntas y práctica por dominios.",
+          "Panel de preparación PMP® calibrado al ECO 2026: nivel de preparación, simulaciones de 180 preguntas y práctica por dominios.",
       },
-      { property: "og:title", content: "Panel del alumno · Simulador PMP ECO 2026" },
+      { property: "og:title", content: "Panel del alumno · Simulador PMP® ECO 2026" },
       {
         property: "og:description",
         content: "Tu progreso, simulaciones completas y práctica por dominios ECO 2026.",
@@ -240,7 +240,7 @@ function Dashboard() {
   return (
     <AppShell
       title={`Hola, ${u.name.split(" ")[0]}`}
-      subtitle="Tu preparación para el examen PMP (ECO 2026)"
+      subtitle="Tu preparación para el examen PMP® (ECO 2026)"
     >
       <div className="mx-auto max-w-6xl space-y-6">
         <div className="flex justify-end">

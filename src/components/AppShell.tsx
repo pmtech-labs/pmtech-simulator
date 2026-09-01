@@ -43,7 +43,7 @@ const NAV = [
   { to: "/practica", label: "Prácticas parciales", icon: Dumbbell },
   { to: "/historial", label: "Historial", icon: History },
   { to: "/progreso", label: "Mi progreso", icon: BarChart3 },
-  { to: "/glosario", label: "Glosario PMP", icon: BookMarked },
+  { to: "/glosario", label: "Glosario PMP®", icon: BookMarked },
 ] as const;
 
 /** Enlaces de soporte/cuenta: van al pie del sidebar, separados del estudio diario. */
@@ -313,7 +313,7 @@ export function AppShell({
 
           <footer className="border-t border-border px-4 py-4 text-[11px] leading-relaxed text-muted-foreground sm:px-6 lg:px-8">
             Top PM Simulator es un producto independiente. No está afiliado, avalado ni patrocinado
-            por el Project Management Institute (PMI)®. PMP® y PMBOK® son marcas registradas del PMI.
+            por el Project Management Institute (PMI®)®. PMP® y PMBOK® son marcas registradas del PMI®.
           </footer>
         </div>
       </div>
@@ -337,7 +337,7 @@ export function AppShell({
                   ? `Ya usaste los ${user?.fullSimLimit} simulacros completos incluidos en tu plan actual. Pasa al plan de 6 meses para simulacros ilimitados.`
                   : inProgress
                     ? `Dejaste sin terminar “${inProgress.label}” con ${inProgress.answered} de ${inProgress.total} preguntas respondidas. Puedes retomarla donde la dejaste o empezar una nueva desde cero.`
-                    : "Vas a comenzar una sesión de simulación PMP con tiempo limitado. Asegúrate de tener disponibilidad antes de empezar."}
+                    : "Vas a comenzar una sesión de simulación PMP® con tiempo limitado. Asegúrate de tener disponibilidad antes de empezar."}
             </DialogDescription>
           </DialogHeader>
           {!simBlocked && (

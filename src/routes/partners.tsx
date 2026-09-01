@@ -25,17 +25,17 @@ export const Route = createFileRoute("/partners")({
     meta: [
       { property: "og:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
       { name: "twitter:image", content: "https://toppmsimulator.glacimonto.com/og-image.jpg" },
-      { title: "Partners · Simulador PMP para centros de formación y empresas" },
+      { title: "Partners · Simulador PMP® para centros de formación y empresas" },
       {
         name: "description",
         content:
-          "Licencias por volumen del único simulador PMP nativo ECO 2026 / PMBOK 8: contenido adaptativo, practicum interactivo y seguimiento del progreso de tus alumnos. Propuesta en 48 h.",
+          "Licencias por volumen del único simulador PMP® nativo ECO 2026 / PMBOK® 8: contenido adaptativo, practicum interactivo y seguimiento del progreso de tus alumnos. Propuesta en 48 h.",
       },
-      { property: "og:title", content: "Partners · Simulador PMP para centros y empresas" },
+      { property: "og:title", content: "Partners · Simulador PMP® para centros y empresas" },
       {
         property: "og:description",
         content:
-          "Mejora la tasa de aprobados de tus alumnos con el simulador PMP nativo ECO 2026. Licencias de 6 meses con descuento por volumen desde 10 unidades.",
+          "Mejora la tasa de aprobados de tus alumnos con el simulador PMP® nativo ECO 2026. Licencias de 6 meses con descuento por volumen desde 10 unidades.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/partners")({
 const DIFERENCIADORES = [
   {
     icon: Sparkles,
-    title: "Nativo ECO 2026 / PMBOK 8",
+    title: "Nativo ECO 2026 / PMBOK® 8",
     body: "Construido desde cero sobre el examen vigente desde el 9 de julio de 2026 — no es un banco antiguo remapeado. Tus alumnos practican exactamente lo que se les va a preguntar.",
   },
   {
@@ -117,7 +117,7 @@ const CASOS = [
   {
     icon: GraduationCap,
     title: "Centros de formación y escuelas de negocio",
-    body: "Añade el simulador a tu curso de preparación PMP como valor incluido o como upsell con margen.",
+    body: "Añade el simulador a tu curso de preparación PMP® como valor incluido o como upsell con margen.",
   },
   {
     icon: Building2,
@@ -145,7 +145,7 @@ const FAQ_PARTNERS = [
     a: "Ofrecemos marca conjunta y comunicaciones a alumnos con tu identidad en los planes de centro.",
   },
   {
-    q: "¿Qué pasa si cambia el estándar del PMI?",
+    q: "¿Qué pasa si cambia el estándar del PMI®?",
     a: "Las actualizaciones de contenido están incluidas en la licencia: mantenemos el banco alineado al ECO vigente.",
   },
 ];
@@ -171,11 +171,11 @@ function PartnersPage() {
           </span>
           <h1 className="mt-5 font-display text-3xl font-bold leading-tight sm:text-5xl">
             Sube la tasa de aprobados de tus alumnos{" "}
-            <span className="text-accent">con el simulador PMP que nadie más tiene</span>
+            <span className="text-accent">con el simulador PMP® que nadie más tiene</span>
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
             Licencias por volumen del único simulador en español construido nativamente para el
-            examen actual (ECO 2026 / PMBOK 8), con motor adaptativo y practicum interactivo real.
+            examen actual (ECO 2026 / PMBOK® 8), con motor adaptativo y practicum interactivo real.
             Te preparamos la propuesta en menos de 48 horas.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -335,7 +335,7 @@ function PartnersPage() {
             <p className="text-sm font-medium text-muted-foreground">Todas las licencias incluyen</p>
             <ul className="mt-4 space-y-2.5 text-sm">
               {[
-                "Banco completo ECO 2026 / PMBOK 8",
+                "Banco completo ECO 2026 / PMBOK® 8",
                 "Simulacros completos de 180 preguntas",
                 "Practicum interactivo completo (hotspot, gráficos, casos)",
                 "Motor adaptativo y analítica por tarea ECO",

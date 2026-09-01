@@ -76,13 +76,13 @@ export const Route = createFileRoute("/examen")({
 
   head: () => ({
     meta: [
-      { title: "Simulación de examen · Simulador PMP ECO 2026" },
+      { title: "Simulación de examen · Simulador PMP® ECO 2026" },
       {
         name: "description",
         content:
-          "Motor de examen PMP en secciones cronometradas con descansos, clusters de caso y preguntas situacionales reales.",
+          "Motor de examen PMP® en secciones cronometradas con descansos, clusters de caso y preguntas situacionales reales.",
       },
-      { property: "og:title", content: "Simulación de examen PMP ECO 2026" },
+      { property: "og:title", content: "Simulación de examen PMP® ECO 2026" },
       {
         property: "og:description",
         content: "Secciones cronometradas, descansos y formato de examen real.",
@@ -1179,7 +1179,7 @@ function Results({
               </p>
               <p className="mt-3 rounded-lg border border-border bg-card p-3 text-xs leading-relaxed text-muted-foreground">
                 {summary.capstoneDiploma.disclaimer ||
-                  "PMI no publica una nota de corte oficial para el examen PMP. Este diploma reconoce tu progreso según un criterio de referencia propio de Top PM Simulator, no una nota de aprobado oficial de PMI."}
+                  "PMI® no publica una nota de corte oficial para el examen PMP®. Este diploma reconoce tu progreso según un criterio de referencia propio de Top PM Simulator, no una nota de aprobado oficial de PMI®."}
               </p>
               <Link
                 to="/perfil"
@@ -1204,7 +1204,7 @@ function Results({
               </p>
               <p className="mt-3 rounded-lg border border-border bg-card p-3 text-xs leading-relaxed text-muted-foreground">
                 {summary.diploma.disclaimer ||
-                  "PMI no publica una nota de corte oficial para el examen PMP. Este diploma reconoce tu desempeño según un criterio de referencia propio de Top PM Simulator, no una nota de aprobado oficial de PMI."}
+                  "PMI® no publica una nota de corte oficial para el examen PMP®. Este diploma reconoce tu desempeño según un criterio de referencia propio de Top PM Simulator, no una nota de aprobado oficial de PMI®."}
               </p>
               <Link
                 to="/perfil"
@@ -1230,7 +1230,7 @@ function Results({
             </Link>
             <ResultReportButton
               report={{
-                title: "Informe de resultado · Simulación PMP",
+                title: "Informe de resultado · Simulación PMP®",
                 subtitle: `Puntuación ${summary.scorePct}% · ${correct} de ${questions.length} correctas`,
                 scorePct: summary.scorePct,
                 correct,

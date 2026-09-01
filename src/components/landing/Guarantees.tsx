@@ -38,7 +38,7 @@ const GUARANTEES = [
   {
     icon: RefreshCcw,
     title: "Contenido actualizado",
-    text: "Revisamos el banco con cada cambio del ECO y del PMBOK. Las actualizaciones están incluidas mientras tu licencia esté activa.",
+    text: "Revisamos el banco con cada cambio del ECO y del PMBOK®. Las actualizaciones están incluidas mientras tu licencia esté activa.",
   },
 ];
 

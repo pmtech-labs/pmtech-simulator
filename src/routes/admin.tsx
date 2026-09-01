@@ -10,7 +10,7 @@ export const Route = createFileRoute("/admin")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Panel interno · Simulador PMP" },
+      { title: "Panel interno · Simulador PMP®" },
       { name: "robots", content: "noindex, nofollow" },
       { name: "description", content: "Herramientas internas de gestión del banco de preguntas." },
       { property: "og:title", content: "Panel interno" },

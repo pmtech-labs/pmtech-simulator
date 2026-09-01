@@ -9,7 +9,7 @@ import {
 const URL = "https://toppmsimulator.glacimonto.com/top-pm-simulator-vs-prepcast";
 const TITLE = "Top PM Simulator vs PrepCast: comparativa en español 2026";
 const DESCRIPTION =
-  "Top PM Simulator frente al PM Exam Simulator de PrepCast: idioma, banco de preguntas, informes, diagnóstico de errores y qué opción encaja mejor con tu preparación PMP.";
+  "Top PM Simulator frente al PM Exam Simulator de PrepCast: idioma, banco de preguntas, informes, diagnóstico de errores y qué opción encaja mejor con tu preparación PMP®.";
 
 const FAQS: SeoFaq[] = [
   {
@@ -73,8 +73,8 @@ function Page() {
   return (
     <SeoLandingPage
       eyebrow="Comparativa"
-      h1="Top PM Simulator vs PrepCast: qué simulador PMP te hace aprobar antes"
-      intro="PrepCast es una referencia veterana en simuladores PMP, pero solo en inglés. Top PM Simulator apuesta por el español neutro y por explicarte el motivo exacto de cada fallo. Aquí tienes las diferencias reales."
+      h1="Top PM Simulator vs PrepCast: qué simulador PMP® te hace aprobar antes"
+      intro="PrepCast es una referencia veterana en simuladores PMP®, pero solo en inglés. Top PM Simulator apuesta por el español neutro y por explicarte el motivo exacto de cada fallo. Aquí tienes las diferencias reales."
       highlights={[
         "Español neutro nativo frente a banco íntegro en inglés",
         "Diagnóstico por tipo de error frente a informes de puntuación",
@@ -190,7 +190,7 @@ function Page() {
         {
           h2: "Aviso de independencia",
           paragraphs: [
-            "Top PM Simulator es un producto independiente y no está afiliado, avalado ni patrocinado por el Project Management Institute ni por OSP International LLC (PrepCast). PMP y PMBOK son marcas registradas del PMI; PrepCast es marca de su titular. Los datos de esta comparativa proceden de información pública y pueden cambiar.",
+            "Top PM Simulator es un producto independiente y no está afiliado, avalado ni patrocinado por el Project Management Institute ni por OSP International LLC (PrepCast). PMP® y PMBOK® son marcas registradas del PMI®; PrepCast es marca de su titular. Los datos de esta comparativa proceden de información pública y pueden cambiar.",
           ],
         },
       ]}
@@ -198,22 +198,22 @@ function Page() {
       related={[
         {
           to: "/top-pm-simulator-vs-pmi-study-hall",
-          label: "Top PM Simulator vs PMI Study Hall",
-          description: "Comparativa con el simulador oficial del PMI.",
+          label: "Top PM Simulator vs PMI® Study Hall",
+          description: "Comparativa con el simulador oficial del PMI®.",
         },
         {
           to: "/simulador-examen-pmp",
-          label: "Simulador de examen PMP",
+          label: "Simulador de examen PMP®",
           description: "Modos de práctica y diagnóstico de errores.",
         },
         {
           to: "/curso-pmp-online",
-          label: "Curso PMP online de 35 horas",
-          description: "El requisito de formación del PMI, cubierto.",
+          label: "Curso PMP® online de 35 horas",
+          description: "El requisito de formación del PMI®, cubierto.",
         },
         {
           to: "/requisitos-pmp",
-          label: "Requisitos y precio del PMP",
+          label: "Requisitos y precio del PMP®",
           description: "Qué necesitas y cuánto cuesta certificarte.",
         },
       ]}

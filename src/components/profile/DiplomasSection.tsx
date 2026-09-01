@@ -4,7 +4,7 @@ import { Award, Loader2, Trophy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const DIPLOMA_DISCLAIMER =
-  "PMI no publica una nota de corte oficial para el examen PMP. Este diploma reconoce tu desempeño según un criterio de referencia propio de Top PM Simulator, no una nota de aprobado oficial de PMI.";
+  "PMI® no publica una nota de corte oficial para el examen PMP®. Este diploma reconoce tu desempeño según un criterio de referencia propio de Top PM Simulator, no una nota de aprobado oficial de PMI®.";
 
 interface DiplomaRow {
   id: string;

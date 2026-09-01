@@ -6,8 +6,8 @@ import { toast } from "sonner";
 import { submitTrainingLead } from "@/lib/leads.functions";
 
 const INTERESTS = [
-  { value: "35_horas", label: "35 horas de formación (requisito PMI)" },
-  { value: "bootcamp", label: "Bootcamp intensivo de preparación PMP" },
+  { value: "35_horas", label: "35 horas de formación (requisito PMI®)" },
+  { value: "bootcamp", label: "Bootcamp intensivo de preparación PMP®" },
   { value: "in_company", label: "Formación para mi empresa (in-company)" },
   { value: "no_especificado", label: "Aún no lo tengo claro, quiero asesoramiento" },
 ] as const;
@@ -48,7 +48,7 @@ export function TrainingContactForm() {
         <GraduationCap className="mx-auto h-9 w-9 text-accent" />
         <h3 className="mt-3 font-display text-lg font-semibold">Solicitud recibida</h3>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Gracias, {form.fullName.split(" ")[0]}. Un formador PMP revisará tu caso y te
+          Gracias, {form.fullName.split(" ")[0]}. Un formador PMP® revisará tu caso y te
           contactará en menos de 24 horas laborables con las opciones y fechas disponibles.
         </p>
       </div>

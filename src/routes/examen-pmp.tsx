@@ -7,22 +7,22 @@ import {
 } from "@/components/landing/SeoLandingPage";
 
 const URL = "https://toppmsimulator.glacimonto.com/examen-pmp";
-const TITLE = "Examen PMP: duración, preguntas y nota de corte 2026";
+const TITLE = "Examen PMP®: duración, preguntas y nota de corte 2026";
 const DESCRIPTION =
-  "Cómo es el examen PMP por dentro: 180 preguntas, 240 minutos, tres secciones con descansos, tipos de pregunta y cuál es la nota de corte real del PMI.";
+  "Cómo es el examen PMP® por dentro: 180 preguntas, 240 minutos, tres secciones con descansos, tipos de pregunta y cuál es la nota de corte real del PMI®.";
 
 const FAQS: SeoFaq[] = [
   {
-    q: "¿Cuántas preguntas tiene el examen PMP?",
+    q: "¿Cuántas preguntas tiene el examen PMP®?",
     a: "180 preguntas, de las cuales 10 son de prueba y no puntúan. Se reparten en tres secciones de 60 preguntas con dos descansos opcionales de 10 minutos.",
   },
   {
-    q: "¿Cuánto dura el examen PMP?",
+    q: "¿Cuánto dura el examen PMP®?",
     a: "240 minutos de reloj de examen, más los dos descansos de 10 minutos que no consumen tiempo de prueba. En total, unas 4 horas y 20 minutos en el centro o ante la cámara.",
   },
   {
-    q: "¿Cuál es la nota de corte del PMP?",
-    a: "El PMI no publica un porcentaje oficial. El examen usa puntuación psicométrica y devuelve un nivel por dominio (Above Target, Target, Below Target, Needs Improvement). Como referencia práctica, quienes superan el 70-75 % en simulacros realistas suelen aprobar.",
+    q: "¿Cuál es la nota de corte del PMP®?",
+    a: "El PMI® no publica un porcentaje oficial. El examen usa puntuación psicométrica y devuelve un nivel por dominio (Above Target, Target, Below Target, Needs Improvement). Como referencia práctica, quienes superan el 70-75 % en simulacros realistas suelen aprobar.",
   },
   {
     q: "¿Puedo volver a una sección anterior?",
@@ -60,7 +60,7 @@ export const Route = createFileRoute("/examen-pmp")({
             title: TITLE,
             description: DESCRIPTION,
             faqs: FAQS,
-            breadcrumbName: "Examen PMP",
+            breadcrumbName: "Examen PMP®",
           }),
         ),
       },
@@ -73,7 +73,7 @@ function Page() {
   return (
     <SeoLandingPage
       eyebrow="Formato del examen"
-      h1="Examen PMP: cuántas preguntas tiene, cuánto dura y cómo se aprueba"
+      h1="Examen PMP®: cuántas preguntas tiene, cuánto dura y cómo se aprueba"
       intro="El formato del examen condiciona tu estrategia tanto como el temario. Aquí tienes la estructura exacta de las tres secciones, el reparto por dominios del ECO y qué significan realmente los niveles del informe de resultados."
       highlights={[
         "180 preguntas en tres secciones de 60, con dos descansos de 10 minutos",
@@ -109,7 +109,7 @@ function Page() {
         {
           h2: "Cómo se puntúa y qué significa la nota de corte",
           paragraphs: [
-            "El PMI no publica un umbral fijo de aciertos. Cada pregunta tiene un peso distinto según su dificultad estadística, y el informe final devuelve un nivel por dominio en lugar de un porcentaje.",
+            "El PMI® no publica un umbral fijo de aciertos. Cada pregunta tiene un peso distinto según su dificultad estadística, y el informe final devuelve un nivel por dominio en lugar de un porcentaje.",
             "En la práctica, los candidatos que mantienen entre un 70 % y un 75 % de aciertos en simulacros bien calibrados —no en bancos de preguntas fáciles— aprueban con margen. Un 85 % en un simulacro trivial no dice nada útil.",
           ],
         },
@@ -127,27 +127,27 @@ function Page() {
       related={[
         {
           to: "/simulador-examen-pmp",
-          label: "Simulador de examen PMP",
+          label: "Simulador de examen PMP®",
           description: "Replica las tres secciones cronometradas con descansos.",
         },
         {
           to: "/certificacion-pmp",
-          label: "Guía de la certificación PMP",
+          label: "Guía de la certificación PMP®",
           description: "Requisitos, coste y plan de preparación completo.",
         },
         {
           to: "/pmbok-8",
-          label: "PMBOK 7 y PMBOK 8",
+          label: "PMBOK® 7 y PMBOK® 8",
           description: "Qué cambia y qué necesitas estudiar de verdad.",
         },
         {
           to: "/requisitos-pmp",
           label: "Requisitos y precio",
-          description: "Elegibilidad, auditoría y tasas del PMI.",
+          description: "Elegibilidad, auditoría y tasas del PMI®.",
         },
       ]}
       ctaTitle="Practica el examen tal y como es"
-      ctaText="Tres secciones cronometradas, navegador bloqueado entre bloques y feedback solo al final: el simulacro completo reproduce las condiciones reales del PMP."
+      ctaText="Tres secciones cronometradas, navegador bloqueado entre bloques y feedback solo al final: el simulacro completo reproduce las condiciones reales del PMP®."
     />
   );
 }

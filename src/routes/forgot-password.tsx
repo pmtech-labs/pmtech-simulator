@@ -8,13 +8,13 @@ export const Route = createFileRoute("/forgot-password")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Recuperar contraseña · Simulador PMP" },
+      { title: "Recuperar contraseña · Simulador PMP®" },
       {
         name: "description",
-        content: "Solicita un enlace para restablecer la contraseña de tu cuenta del simulador PMP.",
+        content: "Solicita un enlace para restablecer la contraseña de tu cuenta del simulador PMP®.",
       },
       { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: "Recuperar contraseña · Simulador PMP" },
+      { property: "og:title", content: "Recuperar contraseña · Simulador PMP®" },
       {
         property: "og:description",
         content: "Solicita un enlace seguro para restablecer tu contraseña.",

@@ -65,7 +65,7 @@ export function openPrintablePdf(title: string, subtitle: string, bodyHtml: stri
 <h1>${escapeHtml(title)}</h1>
 <p class="muted">${escapeHtml(subtitle)}</p>
 ${bodyHtml}
-<footer>Top PM Simulator · Producto independiente, no afiliado al Project Management Institute (PMI)®.</footer>
+<footer>Top PM Simulator · Producto independiente, no afiliado al Project Management Institute (PMI®)®.</footer>
 </body></html>`);
   win.document.close();
   win.focus();

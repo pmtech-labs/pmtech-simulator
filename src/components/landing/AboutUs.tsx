@@ -58,7 +58,7 @@ export function AboutUs() {
             de Proyectos en la <strong className="text-foreground">Cámara de Comercio de Madrid</strong>{" "}
             desde 2016, además de EOI, EALDE y Cerem. Entre nosotros sumamos un Máster en Project
             Management por la <strong className="text-foreground">George Washington University</strong>{" "}
-            y certificaciones PMP® y PMO-CP® del propio PMI, junto a PSM®, CSM®, SCPO®, KMP®, ITIL®,
+            y certificaciones PMP® y PMO-CP® del propio PMI®, junto a PSM®, CSM®, SCPO®, KMP®, ITIL®,
             ISO 20000 y BIM®.
           </p>
 

@@ -27,7 +27,7 @@ export const Route = createFileRoute("/progreso")({
         content:
           "Analítica granular de dominio por tarea ECO 2026, evolución histórica y recomendación de próxima sesión de estudio.",
       },
-      { property: "og:title", content: "Mi progreso · Analítica PMP por tarea ECO" },
+      { property: "og:title", content: "Mi progreso · Analítica PMP® por tarea ECO" },
       { property: "og:description", content: "Dominio por tarea ECO 2026 y recomendaciones de estudio." },
     ],
   }),

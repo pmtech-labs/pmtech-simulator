@@ -62,13 +62,13 @@ export const Route = createFileRoute("/practica")({
 
   head: () => ({
     meta: [
-      { title: "Práctica por dominios · Simulador PMP ECO 2026" },
+      { title: "Práctica por dominios · Simulador PMP® ECO 2026" },
       {
         name: "description",
         content:
           "Mini-simulaciones de 5 preguntas filtradas por dominio del ECO 2026 con métricas de aciertos y tiempo por dominio.",
       },
-      { property: "og:title", content: "Práctica por dominios PMP" },
+      { property: "og:title", content: "Práctica por dominios PMP®" },
       {
         property: "og:description",
         content: "Entrena Personas, Procesos o Entorno de negocio con métricas de precisión y tiempo.",
@@ -464,7 +464,7 @@ function PracticePage() {
                 </label>
                 <p className="mt-2 flex items-start gap-2 text-xs text-muted-foreground">
                   <Info className="h-4 w-4 shrink-0" />
-                  <span>Nuestro temario propio — mapeado a las tareas ECO 2026, no un concepto oficial de PMI.</span>
+                  <span>Nuestro temario propio — mapeado a las tareas ECO 2026, no un concepto oficial de PMI®.</span>
                 </p>
                 {mode === "unit_quiz" && (
                   <label className="mt-3 flex items-start gap-2 rounded-xl border border-border p-3 text-xs">
@@ -621,7 +621,7 @@ function PracticePage() {
             <div className="mt-4 flex justify-center">
               <ResultReportButton
                 report={{
-                  title: "Informe de práctica por dominios · PMP",
+                  title: "Informe de práctica por dominios · PMP®",
                   subtitle: `Puntuación ${stats.pct}% · ${stats.correct} de ${totalQuestions} correctas · tiempo total ${fmtTime(stats.seconds)}`,
                   scorePct: stats.pct,
                   correct: stats.correct,
