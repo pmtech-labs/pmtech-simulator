@@ -275,18 +275,25 @@ function ConnectorForm({
     setApiKey("");
     try {
       if (connector) {
-        await updateConnector({
-          id: connector.id,
+        const changes = {
           ...(name !== connector.name ? { name } : {}),
           ...(modelId !== connector.model_id ? { model_id: modelId } : {}),
           ...(baseUrl !== (connector.api_base_url ?? "") ? { api_base_url: baseUrl } : {}),
           ...(key ? { api_key: key } : {}),
-        });
+        };
+        if (Object.keys(changes).length === 0) {
+          toast.info("No has modificado ningún campo.");
+          setSaving(false);
+          onClose();
+          return;
+        }
+        await updateConnector({ id: connector.id, ...changes });
         toast.success(
           key
             ? "Conector actualizado y clave rotada. La clave anterior deja de estar disponible; los jobs ya completados no se ven afectados (siguen trazados al mismo conector, solo cambia la clave que se usará a partir de ahora)."
             : "Conector actualizado. La API key guardada se mantiene sin cambios.",
         );
+
       } else {
         await createConnector({
           name,
