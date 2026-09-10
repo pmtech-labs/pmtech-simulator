@@ -58,7 +58,7 @@ export function QuestionDetailDialog({ questionId, onOpenChange }: Props) {
 
         {q && (
           <div className="space-y-4 text-sm">
-            {q.latest_rejection_reason && (
+            {q.latest_rejection_reason && q.status !== "published" && (
               <div className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
                 <span className="font-medium">Comentario del revisor: </span>
                 {q.latest_rejection_reason}

@@ -796,7 +796,7 @@ function QuestionRow({
             <ChevronDown className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", open && "rotate-180")} />
             <span className="line-clamp-2">{q.stem}</span>
           </button>
-          {q.latest_rejection_reason && (
+          {q.latest_rejection_reason && q.status !== "published" && (
             <p
               title={q.latest_rejection_reason}
               className="mt-1 line-clamp-2 rounded-md bg-destructive/10 px-2 py-1 text-[11px] text-destructive"
@@ -889,7 +889,7 @@ function QuestionRow({
             <p className="num mb-2 text-xs font-semibold text-muted-foreground">
               Pregunta #{q.question_number}
             </p>
-            {q.latest_rejection_reason && (
+            {q.latest_rejection_reason && q.status !== "published" && (
               <div className="mb-3 rounded-md bg-muted p-3 text-sm text-muted-foreground">
                 <span className="font-medium">Motivo del rechazo: </span>
                 {q.latest_rejection_reason}
