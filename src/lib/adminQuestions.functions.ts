@@ -60,18 +60,16 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
       domainName = domain?.name ?? null;
     }
 
-    let latestRejectionReason: string | null = null;
+    let rejectionHistory: { reason: string; rejected_at: string; rejected_by: string | null }[] = [];
     if (q.status === "retired" || q.status === "rejected") {
-      const { data: rejection } = await db
+      const { data: rejections } = await db
         .from("question_rejections")
-        .select("reason")
+        .select("reason, rejected_at, rejected_by")
         .eq("question_id", data.id)
-        .order("rejected_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      latestRejectionReason = rejection?.reason ?? null;
+        .order("rejected_at", { ascending: false });
+      rejectionHistory = rejections ?? [];
     }
-
+    const latestRejectionReason = rejectionHistory[0]?.reason ?? null;
 
     return {
       ...q,
@@ -80,6 +78,7 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
       cluster_title: cluster?.data?.title ?? null,
       cluster_scenario: cluster?.data?.scenario_text ?? null,
       latest_rejection_reason: latestRejectionReason,
+      rejection_history: rejectionHistory,
       tag_codes: (tagRows ?? []).map((t) => t.tag_code),
     };
   });
@@ -91,12 +90,13 @@ export const getAdminQuestionFn = createServerFn({ method: "POST" })
  */
 export const setQuestionsStatusFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { ids: string[]; status: string; reason?: string }) =>
+  .inputValidator((input: { ids: string[]; status: string; reason?: string; force?: boolean }) =>
     z
       .object({
         ids: z.array(z.string().uuid()).min(1),
         status: z.enum(["draft", "published", "retired", "rejected"]),
         reason: z.string().trim().min(1).max(2000).optional(),
+        force: z.boolean().optional(),
       })
       .parse(input),
   )
@@ -133,6 +133,51 @@ export const setQuestionsStatusFn = createServerFn({ method: "POST" })
       }
     }
     const targetIds = Array.from(idSet);
+
+    // Salvaguarda: rechazada/retirada → borrador exige una corrección posterior
+    // al último comentario del revisor, salvo confirmación explícita (force).
+    if (data.status === "draft" && !data.force) {
+      const { data: current, error: curErr } = await supabaseAdmin
+        .from("questions")
+        .select("id, question_number, status, correction_at")
+        .in("id", targetIds);
+      if (curErr) throw new Error(curErr.message);
+      const outIds = (current ?? [])
+        .filter((r) => r.status === "rejected" || r.status === "retired")
+        .map((r) => r.id);
+      if (outIds.length > 0) {
+        const { data: rej, error: rejErr } = await supabaseAdmin
+          .from("question_rejections")
+          .select("question_id, rejected_at")
+          .in("question_id", outIds);
+        if (rejErr) throw new Error(rejErr.message);
+        const lastRejection = new Map<string, string>();
+        for (const r of rej ?? []) {
+          if (!r.question_id) continue;
+          const prev = lastRejection.get(r.question_id);
+          if (!prev || r.rejected_at > prev) lastRejection.set(r.question_id, r.rejected_at);
+        }
+        const unfixed = (current ?? []).filter((r) => {
+          if (!outIds.includes(r.id)) return false;
+          const last = lastRejection.get(r.id);
+          if (!last) return false;
+          return !r.correction_at || new Date(r.correction_at) <= new Date(last);
+        });
+        if (unfixed.length > 0) {
+          return {
+            updated: 0,
+            cascaded: false,
+            cascaded_clusters: [] as Array<{ cluster_id: string; question_ids: string[] }>,
+            requiresConfirmation: true as const,
+            unfixed_numbers: unfixed.map((u) => u.question_number),
+            message:
+              unfixed.length === 1
+                ? "Esta pregunta no tiene una corrección registrada posterior al último comentario del revisor. ¿Confirmas que quieres pasarla a borrador de todas formas?"
+                : `Las preguntas ${unfixed.map((u) => `#${u.question_number}`).join(", ")} no tienen una corrección registrada posterior al último comentario del revisor. ¿Confirmas que quieres pasarlas a borrador de todas formas?`,
+          };
+        }
+      }
+    }
 
     // Snapshot previo: necesario para registrar el motivo del rechazo.
     let snapshots: Array<{
@@ -270,22 +315,24 @@ export const listReviewedOutQuestionsFn = createServerFn({ method: "POST" })
         : Promise.resolve({ data: [] as Array<{ id: string; title: string; task_number: number }> }),
     ]);
 
-    const reasonById = new Map<string, { reason: string; rejected_at: string }>();
-    for (const r of rejections ?? []) {
-      if (r.question_id && !reasonById.has(r.question_id)) {
-        reasonById.set(r.question_id, { reason: r.reason, rejected_at: r.rejected_at });
-      }
+    const historyById = new Map<string, { reason: string; rejected_at: string }[]>();
+    for (const r of [...(rejections ?? [])].sort((a, b) => (a.rejected_at < b.rejected_at ? 1 : -1))) {
+      if (!r.question_id) continue;
+      const arr = historyById.get(r.question_id) ?? [];
+      arr.push({ reason: r.reason, rejected_at: r.rejected_at });
+      historyById.set(r.question_id, arr);
     }
     const taskById = new Map((tasks ?? []).map((t) => [t.id, t]));
 
     return (rows ?? []).map((r) => {
       const task = taskById.get(r.task_id);
-      const rejection = reasonById.get(r.id);
+      const history = historyById.get(r.id) ?? [];
       return {
         ...r,
         task_title: task ? `${task.task_number}. ${task.title}` : null,
-        latest_rejection_reason: rejection?.reason ?? null,
-        latest_rejection_at: rejection?.rejected_at ?? null,
+        latest_rejection_reason: history[0]?.reason ?? null,
+        latest_rejection_at: history[0]?.rejected_at ?? null,
+        rejection_history: history,
       };
     });
   });

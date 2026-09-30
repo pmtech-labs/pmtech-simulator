@@ -50,6 +50,7 @@ interface ReviewedRow {
   task_title: string | null;
   latest_rejection_reason: string | null;
   latest_rejection_at: string | null;
+  rejection_history: { reason: string; rejected_at: string; rejected_by?: string | null }[];
   correction_count: number | null;
   correction_status: "corrected" | "unfixable" | null;
   correction_notes: string | null;
@@ -81,9 +82,19 @@ function RejectedPage() {
   const currentPage = Math.min(page, lastPage);
   const pagedList = list.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
+  const [pendingConfirm, setPendingConfirm] = useState<{ id: string; message: string } | null>(
+    null,
+  );
+
   const restore = useMutation({
-    mutationFn: (id: string) => updateQuestionsStatus([id], "draft"),
-    onSuccess: () => {
+    mutationFn: (vars: { id: string; force?: boolean }) =>
+      updateQuestionsStatus([vars.id], "draft", undefined, vars.force),
+    onSuccess: (res, vars) => {
+      if (res && "requiresConfirmation" in res && res.requiresConfirmation) {
+        setPendingConfirm({ id: vars.id, message: res.message });
+        return;
+      }
+      setPendingConfirm(null);
       toast.success("Pregunta devuelta a borrador");
       qc.invalidateQueries({ queryKey: ["admin-reviewed-out"] });
       qc.invalidateQueries({ queryKey: ["admin-questions"] });
@@ -277,15 +288,19 @@ function ReviewedCard({
         </div>
       </header>
 
-      {q.latest_rejection_reason && (
-        <div className="mt-3 rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm">
-          <p className="text-[11px] font-semibold uppercase text-destructive">
-            Comentario del revisor
-            {q.latest_rejection_at
-              ? ` · ${new Date(q.latest_rejection_at).toLocaleDateString("es-ES")}`
-              : ""}
-          </p>
-          <p className="mt-1 whitespace-pre-line">{q.latest_rejection_reason}</p>
+      {q.rejection_history.length > 0 && q.status !== "published" && (
+        <div className="mt-3 space-y-2">
+          <span className="text-sm font-medium">
+            Historial de revisión ({q.rejection_history.length}):
+          </span>
+          {q.rejection_history.map((r, i) => (
+            <div key={i} className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
+              <div className="mb-1 text-xs font-medium text-foreground/70">
+                {new Date(r.rejected_at).toLocaleString("es-ES")}
+              </div>
+              <p className="whitespace-pre-line">{r.reason}</p>
+            </div>
+          ))}
         </div>
       )}
 

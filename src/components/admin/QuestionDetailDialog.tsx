@@ -58,10 +58,19 @@ export function QuestionDetailDialog({ questionId, onOpenChange }: Props) {
 
         {q && (
           <div className="space-y-4 text-sm">
-            {q.latest_rejection_reason && q.status !== "published" && (
-              <div className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
-                <span className="font-medium">Comentario del revisor: </span>
-                {q.latest_rejection_reason}
+            {q.rejection_history.length > 0 && q.status !== "published" && (
+              <div className="space-y-2">
+                <span className="text-sm font-medium">
+                  Historial de revisión ({q.rejection_history.length}):
+                </span>
+                {q.rejection_history.map((r, i) => (
+                  <div key={i} className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
+                    <div className="mb-1 text-xs font-medium text-foreground/70">
+                      {new Date(r.rejected_at).toLocaleString("es-ES")}
+                    </div>
+                    <p className="whitespace-pre-line">{r.reason}</p>
+                  </div>
+                ))}
               </div>
             )}
             {q.cluster_scenario && (
