@@ -7,6 +7,16 @@ import { toast } from "sonner";
 import { AdminShell, Pager } from "@/components/admin/AdminShell";
 import { QuestionMediaPreview } from "@/components/admin/QuestionMediaPreview";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useAdminEmail } from "@/hooks/useAdminEmail";
 import {
   getAdminQuestionFn,
@@ -149,7 +159,7 @@ function RejectedPage() {
               <ReviewedCard
                 key={q.id}
                 q={q}
-                onRestore={() => restore.mutate(q.id)}
+                onRestore={() => restore.mutate({ id: q.id })}
                 restoring={restore.isPending}
               />
             ))}
@@ -174,6 +184,30 @@ function RejectedPage() {
           </div>
         )}
       </div>
+      <AlertDialog
+        open={Boolean(pendingConfirm)}
+        onOpenChange={(open) => {
+          if (!open) setPendingConfirm(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Pasar a borrador sin corrección?</AlertDialogTitle>
+            <AlertDialogDescription>{pendingConfirm?.message}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={restore.isPending}
+              onClick={() => {
+                if (pendingConfirm) restore.mutate({ id: pendingConfirm.id, force: true });
+              }}
+            >
+              Sí, pasar a borrador
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </AdminShell>
   );
 }
