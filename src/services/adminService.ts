@@ -50,6 +50,8 @@ export interface AdminQuestion {
   question_number: number;
   /** Motivo de rechazo más reciente, si la pregunta está retirada. */
   latest_rejection_reason?: string | null;
+  /** Histórico completo de comentarios del revisor (más reciente primero). */
+  rejection_history?: { reason: string; rejected_at: string; rejected_by?: string | null }[];
   stem: string;
   options: unknown;
   correct_answer: unknown;
@@ -346,9 +348,19 @@ export async function listQuestions(
   return toPaged<AdminQuestion>(payload, pageSize);
 }
 
-export async function updateQuestionsStatus(ids: string[], status: string, reason?: string) {
+export async function updateQuestionsStatus(
+  ids: string[],
+  status: string,
+  reason?: string,
+  force?: boolean,
+) {
   return setQuestionsStatusFn({
-    data: { ids, status, ...(reason?.trim() ? { reason: reason.trim() } : {}) },
+    data: {
+      ids,
+      status,
+      ...(reason?.trim() ? { reason: reason.trim() } : {}),
+      ...(force ? { force: true } : {}),
+    },
   });
 }
 
