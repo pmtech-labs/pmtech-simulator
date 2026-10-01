@@ -249,9 +249,23 @@ function ReviewPage() {
   const [clusterTarget, setClusterTarget] = useState<ClusterActionTarget | null>(null);
 
   const changeStatus = useMutation({
-    mutationFn: ({ ids, status, reason }: { ids: string[]; status: string; reason?: string }) =>
-      updateQuestionsStatus(ids, status, reason),
+    mutationFn: async ({ ids, status, reason }: { ids: string[]; status: string; reason?: string }) => {
+      const first = (await updateQuestionsStatus(ids, status, reason)) as
+        | { requiresConfirmation?: boolean; message?: string }
+        | undefined;
+      if (first?.requiresConfirmation) {
+        if (!window.confirm(first.message ?? "¿Confirmas el cambio a borrador?")) {
+          return { cancelled: true as const };
+        }
+        return updateQuestionsStatus(ids, status, reason, true);
+      }
+      return first;
+    },
     onSuccess: (res, v) => {
+      if ((res as { cancelled?: boolean } | undefined)?.cancelled) {
+        toast.info("Cambio cancelado: la pregunta sigue sin cambios.");
+        return;
+      }
       const cascaded = (res as { cascaded?: boolean; cascaded_clusters?: Array<{ question_ids: string[] }> } | undefined);
       if (cascaded?.cascaded) {
         const clusters = cascaded.cascaded_clusters ?? [];
